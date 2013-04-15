@@ -1,0 +1,14 @@
+Subiuse un ficheiro ao seu DokuWiki. Aquí van os detalles:
+
+Ficheiro     : @MEDIA@
+Data         : @DATE@
+Navegador    : @BROWSER@
+Enderezo IP  : @IPADDRESS@
+Nome do host : @HOSTNAME@
+Tamaño       : @SIZE@
+Tipo MIME    : @MIME@
+Usuaria/o    : @USER@
+
+-- 
+Este correo foi xerado polo DokuWiki en
+@DOKUWIKIURL@

@@ -1,0 +1,7 @@
+div.dokuwiki div.tbtdest {
+  font-family:monospace;
+}
+div.dokuwiki span.tbtbutton {
+  border-width:2px !important;
+  cursor:pointer;
+}

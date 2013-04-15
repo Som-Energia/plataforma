@@ -1,0 +1,3 @@
+====== Xestor de recuperación ======
+
+Esta páxina axudarao a se recuperar automaticamente dun ataque de spam. Para encontrar unha listaxe de páxinas que conteñan spam, primeiro debe inserir unha cadea de procura (por ex. un URL de spam) e despois confirmar que as páxinas encontradas conteñen realmente spam, antes de reverter as edicións.

@@ -1,0 +1,274 @@
+@CHARSET "UTF-8";
+
+/* plugin:box */
+div.box {
+  width: 50%;
+  margin: 1em auto;
+  border: 1px solid;
+  padding: 4px;
+  overflow: hidden;
+}
+
+/* rounded corners styles from Stu Nicholls snazzy borders, http://www.cssplay.co.uk/boxes/snazzy.html */
+.xtop, .xbottom {background:transparent; font-size:0; line-height: 1px;}
+.xb1, .xb2, .xb3, .xb4 {display:block; overflow:hidden; border-style: solid;}
+.xb2, .xb3 {height:1px;}
+.xb2, .xb3, .xb4 {border-width:0 1px;}
+.xb1 {height: 0; margin:0 5px; border-width:1px 0 0 0;}
+.xb2 {margin:0 3px; border-width:0 2px;}
+.xb3 {margin:0 2px;}
+.xb4 {height:2px; margin:0 1px;}
+
+div.box .xtop, div.box .xbottom {display: none;}
+div.box.round > .xtop, div.box.round > .xbottom {display: block;}
+
+div.box.round { border: none; padding: 0;}
+div.box.round > .xbox {display:block; border-width:0 1px; border-style: solid; padding: 0 4px; }
+
+div.box p.box_title, div.box p.box_caption {
+  font-size: 90%;
+  margin: 0;
+  padding: 2px 6px;
+  line-height: 1.2;
+}
+
+div.box p.box_title { margin-bottom: 4px;}
+div.box p.box_caption { margin-top: 4px;}
+
+div.box .box_content {
+  margin: 0;
+  padding: 0 6px;
+  border-width: 1px;
+  border-style: dashed;
+  line-height: 1.2;
+}
+
+/* floating alignment */
+
+div.box.left {
+  float: left;
+  margin-right: 1em;
+}
+ 
+div.box.right {
+  float: right;
+  margin-left: 1em;
+}
+
+/* colours */
+/* default */
+div.box, div.box .box_content, div.box .xbox, div.box .xb1, div.box .xb2, div.box .xb3, div.box .xb4 {
+  border-color:  __dark__;
+}
+
+div.box, div.box .xbox, div.box .xb1, div.box .xb2, div.box .xb3, div.box .xb4 {
+  background: __light__;
+}
+
+div.box p.box_title, div.box p.box_caption { background: __medium__;}
+div.box .box_content { background: __lighter__;}
+
+/* blue */
+div.box.blue, div.box.blue > * > .box_content, div.box.blue > .xbox, 
+div.box.blue > * > .xb1, div.box.blue > * > .xb2, div.box.blue > * > .xb3, div.box.blue > * > .xb4 {
+  border-color:  #bbbbdd;
+}
+
+div.box.blue, div.box.blue > .xbox, 
+div.box.blue > * > .xb1, div.box.blue > * > .xb2, div.box.blue > * > .xb3, div.box.blue > * > .xb4 {
+  background: #e4ecf8;
+}
+
+div.box.blue > * > p.box_title, div.box.blue > * > p.box_caption {background: #cad0ee;}
+div.box.blue > * > .box_content {background: #f4f8fd;}
+
+/* red */
+div.box.red, div.box.red > * > .box_content, div.box.red > .xbox, 
+div.box.red > * > .xb1, div.box.red > * > .xb2, div.box.red > * > .xb3, div.box.red > * > .xb4 {
+  border-color:  #ddbbbb;
+}
+
+div.box.red, div.box.red > .xbox, 
+div.box.red > * > .xb1, div.box.red > * > .xb2, div.box.red > * > .xb3, div.box.red > * > .xb4 {
+  background: #f8ece4;
+}
+
+div.box.red > * > p.box_title, div.box.red > * > p.box_caption {background: #eed0ca;}
+div.box.red > * > .box_content {background: #fdf4ec;}
+
+/* green */
+div.box.green, div.box.green > * > .box_content, div.box.green > .xbox, 
+div.box.green > * > .xb1, div.box.green > * > .xb2, div.box.green > * > .xb3, div.box.green > * > .xb4 {
+  border-color:  #bbddbb;
+}
+
+div.box.green, div.box.green > .xbox, 
+div.box.green > * > .xb1, div.box.green > * > .xb2, div.box.green > * > .xb3, div.box.green > * > .xb4 {
+  background: #e4f8f2;
+}
+
+div.box.green > * > p.box_title, div.box.green > * > p.box_caption {background: #c4e4d4;}
+div.box.green > * > .box_content {background: #ecfaf6;}
+
+/* orange */
+div.box.orange, div.box.orange > * > .box_content, div.box.orange > .xbox, 
+div.box.orange > * > .xb1, div.box.orange > * > .xb2, div.box.orange > * > .xb3, div.box.orange > * > .xb4 {
+  border-color:  #da3;
+}
+
+div.box.orange, div.box.orange > .xbox, 
+div.box.orange > * > .xb1, div.box.orange > * > .xb2, div.box.orange > * > .xb3, div.box.orange > * > .xb4 {
+  background: #f4e8ca;
+}
+
+div.box.orange > * > p.box_title, div.box.orange > * > p.box_caption {background: #f0d499;}
+div.box.orange > * > .box_content {background: #f8f0da;}
+
+/* must come last to override coloured background when using rounded corners */
+
+div.box.round {
+  background: transparent !important;
+}
+
+/* IE fixes for unsupported child selector \*/
+
+* html div.box div.box, * html div.box div.box .box_content, * html div.box div.box .xbox, 
+* html div.box div.box .xb1, * html div.box div.box .xb2, 
+* html div.box div.box .xb3, * html div.box div.box .xb4 {
+  border-color:  __dark__;
+}
+
+* html div.box div.box, * html div.box div.box .xbox, 
+* html div.box div.box .xb1, * html div.box div.box .xb2, 
+* html div.box div.box .xb3, * html div.box div.box .xb4 {
+  background: __light__;
+}
+
+* html div.box div.box p.box_title, * html div.box div.box p.box_caption { background: __medium__;}
+* html div.box div.box .box_content { background: __lighter__;}
+
+* html div.box.round .xtop, * html div.box.round .xbottom {display: block;}
+* html div.box.round .xbox {display:block; border-width:0 1px; border-style: solid; padding: 0 4px; }
+
+/* blue */
+* html div.box.blue .box_content, * html div.box.blue .xbox, 
+* html div.box.blue .xb1, * html div.box.blue .xb2, * html div.box.blue .xb3, * html div.box.blue .xb4 {
+  border-color:  #bbbbdd;
+}
+
+* html div.box.blue .xbox, 
+* html div.box.blue .xb1, * html div.box.blue .xb2, * html div.box.blue .xb3, * html div.box.blue .xb4 {
+  background: #e4ecf8;
+}
+
+* html div.box.blue p.box_title, * html div.box.blue p.box_caption {background: #cad0ee;}
+* html div.box.blue .box_content {background: #f4f8fd;}
+
+/* nested blue */
+* html div.box div.box.blue .box_content, * html div.box div.box.blue .xbox, 
+* html div.box div.box.blue .xb1, * html div.box div.box.blue .xb2, 
+* html div.box div.box.blue .xb3, * html div.box div.box.blue .xb4 {
+  border-color:  #bbbbdd;
+}
+
+* html div.box div.box.blue .xbox, 
+* html div.box div.box.blue .xb1, * html div.box div.box.blue .xb2, 
+* html div.box div.box.blue .xb3, * html div.box div.box.blue .xb4 {
+  background: #e4ecf8;
+}
+
+* html div.box div.box.blue p.box_title, 
+* html div.box div.box.blue p.box_caption {background: #cad0ee;}
+* html div.box div.box.blue .box_content {background: #f4f8fd;}
+
+/* red */
+* html div.box.red .box_content, * html div.box.red .xbox, 
+* html div.box.red .xb1, * html div.box.red .xb2, * html div.box.red .xb3, * html div.box.red .xb4 {
+  border-color:  #ddbbbb;
+}
+
+* html div.box.red .xbox, 
+* html div.box.red .xb1, * html div.box.red .xb2, * html div.box.red .xb3, * html div.box.red .xb4 {
+  background: #f8ece4;
+}
+
+* html div.box.red p.box_title, * html div.box.red p.box_caption {background: #eed0ca;}
+* html div.box.red .box_content {background: #fdf4ec;}
+
+/* nested red */
+* html div.box div.box.red .box_content, * html div.box div.box.red .xbox, 
+* html div.box div.box.red .xb1, * html div.box div.box.red .xb2, 
+* html div.box div.box.red .xb3, * html div.box div.box.red .xb4 {
+  border-color:  #ddbbbb;
+}
+
+* html div.box div.box.red .xbox, 
+* html div.box div.box.red .xb1, * html div.box div.box.red .xb2, 
+* html div.box div.box.red .xb3, * html div.box div.box.red .xb4 {
+  background: #f8ece4;
+}
+
+* html div.box div.box.red p.box_title, * html div.box div.box.red p.box_caption {background: #eed0ca;}
+* html div.box div.box.red .box_content {background: #fdf4ec;}
+
+/* green */
+* html div.box.green .box_content, * html div.box.green .xbox, 
+* html div.box.green .xb1, * html div.box.green .xb2, * html div.box.green .xb3, * html div.box.green .xb4 {
+  border-color:  #bbddbb;
+}
+
+* html div.box.green .xbox, 
+* html div.box.green .xb1, * html div.box.green .xb2, * html div.box.green .xb3, * html div.box.green .xb4 {
+  background: #e4f8f2;
+}
+
+* html div.box.green p.box_title, * html div.box.green p.box_caption {background: #c4e4d4;}
+* html div.box.green .box_content {background: #ecfaf6;}
+
+/* nested green */
+* html div.box div.box.green .box_content, * html div.box div.box.green .xbox, 
+* html div.box div.box.green .xb1, * html div.box div.box.green .xb2, 
+* html div.box div.box.green .xb3, * html div.box div.box.green .xb4 {
+  border-color:  #bbddbb;
+}
+
+* html div.box div.box.green .xbox, 
+* html div.box div.box.green .xb1, * html div.box div.box.green .xb2, 
+* html div.box div.box.green .xb3, * html div.box div.box.green .xb4 {
+  background: #e4f8f2;
+}
+
+* html div.box div.box.green p.box_title, * html div.box div.box.green p.box_caption {background: #c4e4d4;}
+* html div.box div.box.green .box_content {background: #ecfaf6;}
+
+/* orange */
+* html div.box.orange .box_content, * html div.box.orange .xbox, 
+* html div.box.orange .xb1, * html div.box.orange .xb2, * html div.box.orange .xb3, * html div.box.orange .xb4 {
+  border-color:  #da3;
+}
+
+* html div.box.orange .xbox, 
+* html div.box.orange .xb1, * html div.box.orange .xb2, * html div.box.orange .xb3, * html div.box.orange .xb4 {
+  background: #f4e8ca;
+}
+
+* html div.box.orange p.box_title, * html div.box.orange p.box_caption {background: #f0d499;}
+* html div.box.orange .box_content {background: #f8f0da;}
+
+/* nestedorange */
+* html div.box div.box.orange .box_content, * html div.box div.box.orange .xbox, 
+* html div.box div.box.orange .xb1, * html div.box div.box.orange .xb2, 
+* html div.box div.box.orange .xb3, * html div.box div.box.orange .xb4 {
+  border-color:  #da3;
+}
+
+* html div.box div.box.orange .xbox, 
+* html div.box div.box.orange .xb1, * html div.box div.box.orange .xb2, 
+* html div.box div.box.orange .xb3, * html div.box div.box.orange .xb4 {
+  background: #f4e8ca;
+}
+
+* html div.box div.box.orange p.box_title, * html div.box div.box.orange p.box_caption {background: #f0d499;}
+* html div.box div.box.orange .box_content {background: #f8f0da;}
+
+/* end plugin:box */

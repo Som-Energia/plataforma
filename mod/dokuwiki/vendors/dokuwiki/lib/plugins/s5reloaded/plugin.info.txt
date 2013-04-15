@@ -1,0 +1,8 @@
+# General Plugin Info do not edit
+base   s5reloaded
+author Tomas Alonso
+email  t.alonso@oan.es
+date   2010-07-18
+name   S5 Reloaded Slideshow Plugin including Presentacular
+desc   Display a Wiki page as S5 reloaded slideshow presentation with advanced effects using Presentacular
+url    http://www.dokuwiki.org/plugin:s5reloaded

@@ -1,0 +1,6 @@
+====== Hai unha versión máis nova ======
+
+Hai unha versión máis nova do documento que editou. Isto sucede cando outra persoa usuaria alterou o documento mentres vostede o estaba a editar.
+
+Examine as diferenzas que se mostran abaixo detalladamente e despois decida a versión que quere manter. Se selecciona ''Gardar'', gardarase a súa versión. Prema en ''Cancelar'' para manter a versión actual.
+

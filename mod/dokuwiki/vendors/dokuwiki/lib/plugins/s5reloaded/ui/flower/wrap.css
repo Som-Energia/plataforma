@@ -1,0 +1,410 @@
+/********************************************************************
+Screen and Print Styles for the Wrap Plugin
+********************************************************************/
+
+/* tables in columns and boxes should span the whole width */
+.wrap_column table,
+.wrap_left table, .wrap_right table, .wrap_center table,
+.wrap_box table,
+.wrap_info table, .wrap_important table, .wrap_alert table, .wrap_tip table, .wrap_help table, .wrap_todo table, .wrap_download table {
+    width: 100%;
+}
+/* emulate a headline */
+.wrap_column em strong,
+.wrap_left em strong, .wrap_right em strong, .wrap_center em strong,
+.wrap_box em strong,
+.wrap_info em strong, .wrap_important em strong, .wrap_alert em strong, .wrap_tip em strong, .wrap_help em strong, .wrap_todo em strong, .wrap_download em strong {
+    font-size: 130%;
+    font-weight: bold;
+    font-style: normal;
+    display: block;
+}
+/* emulate a bigger headline with a bottom border */
+.wrap_column em strong em.u,
+.wrap_left em strong em.u, .wrap_right em strong em.u, .wrap_center em strong em.u,
+.wrap_box em strong em.u,
+.wrap_info em strong em.u, .wrap_important em strong em.u, .wrap_alert em strong em.u, .wrap_tip em strong em.u, .wrap_help em strong em.u, .wrap_todo em strong em.u, .wrap_download em strong em.u {
+    font-size: 115%;
+    border-bottom: 1px solid __border__;
+    font-style: normal;
+    text-decoration: none;
+    display: block;
+}
+/* different bigger headline for safety notes */
+.wrap_danger em strong em.u, .wrap_warning em strong em.u, .wrap_caution em strong em.u, .wrap_notice em strong em.u, .wrap_safety em strong em.u {
+    font-size: 115%;
+    font-style: normal;
+    text-decoration: none;
+    display: block;
+    text-transform: uppercase;
+    border-bottom-width: 0;
+}
+/* change border colour of emulated headlines inside boxes to something more neutral
+   (to match all the different background colours) */
+.wrap_box em strong em.u,
+.wrap_info em strong em.u, .wrap_important em strong em.u, .wrap_alert em strong em.u, .wrap_tip em strong em.u, .wrap_help em strong em.u, .wrap_todo em strong em.u, .wrap_download em strong em.u {
+    border-bottom-color: #999;
+}
+
+
+/* columns
+********************************************************************/
+
+.wrap_left,
+.wrap_column {
+    float: left;
+    margin-right: 1.5em;
+}
+.wrap_right {
+    float: right;
+    margin-left: 1.5em;
+}
+.wrap_center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+/*
+.wrap_column,
+.wrap_left,
+.wrap_right {
+    overflow: hidden;
+}
+*/
+.wrap_container {
+    margin-right: -1.5em;
+}
+
+
+/* alignments
+********************************************************************/
+
+.wrap_leftalign {
+    text-align: left;
+}
+.wrap_centeralign {
+    text-align: center;
+}
+.wrap_rightalign {
+    text-align: right;
+}
+.wrap_justify {
+    text-align: justify;
+}
+
+
+/* box
+********************************************************************/
+
+/* see styles for boxes and notes with icons in style.css */
+
+/*____________ rounded corners ____________*/
+/* (only for modern browsers) */
+
+div.wrap_round {
+    border-radius: 20px;
+    -moz-border-radius: 20px;
+    -webkit-border-radius: 20px;
+    -khtml-border-radius: 20px;
+}
+span.wrap_round {
+    border-radius: 2px;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 2px;
+    -khtml-border-radius: 2px;
+}
+
+
+/* mark
+********************************************************************/
+
+div.wrap_lo {
+    color: __text_neu__;
+    font-size: 85%;
+}
+div.wrap_em {
+    color: #c00;
+    font-weight: bold;
+}
+
+/* see styles for highlighted text in style.css */
+
+
+/* typography
+********************************************************************/
+
+/*____________ fonts ____________*/
+
+div.wrap_sansserif {
+    font-family: Verdana,Tahoma,Geneva,"DejaVu Sans","Bitstream Vera Sans","Liberation Sans", Arial,Helvetica,FreeSans,"Liberation Sans","Nimbus Sans L", sans-serif;
+}
+div.wrap_serif {
+    font-family: Georgia,Garamond,"Palatino Linotype","Book Antiqua",Palatino,Palladio,"URW Palladio L","Liberation Serif",Didot,Gentium,"Bitstream Charter","Century Schoolbook L", "Times New Roman",Times,"Nimbus Roman No9 L","FreeSerif", serif;
+}
+div.wrap_monospace {
+    font-family: Courier,"Courier New",FreeMono,"Nimbus Mono L","Liberation Mono", "Lucida Console",Monaco,"DejaVu Sans Mono","Bitstream Vera Sans Mono", monospace;
+}
+
+/*____________ font size ____________*/
+
+div.wrap_bigger {
+    font-size: 125%;
+}
+div.wrap_muchbigger {
+    font-size: 200%;
+}
+div.wrap_smaller {
+    font-size: 75%;
+}
+
+/*____________ font colours ____________*/
+
+div.wrap_fgred {
+    color: #900;
+}
+div.wrap_fggreen {
+    color: #090;
+}
+div.wrap_fgblue {
+    color: #009;
+}
+div.wrap_fgcyan {
+    color: #099;
+}
+div.wrap_fgviolet {
+    color: #909;
+}
+div.wrap_fgyellow {
+    color: #990;
+}
+div.wrap_fggrey {
+    color: #666;
+}
+div.wrap_fgblack {
+    color: #000;
+}
+
+/* see styles for background colours and white font colour in style.css */
+
+
+/* miscellaneous
+********************************************************************/
+
+/*____________ indent ____________*/
+
+div.wrap_indent {
+    padding-left: 1.5em;
+}
+
+/*____________ outdent ____________*/
+
+div.wrap_outdent {
+    margin-left: -1.5em;
+}
+
+/*____________ word wrapping in pre ____________*/
+
+divdiv.wrap_prewrap pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;/* for IE < 8 */
+    /* white-space: -moz-pre-wrap; for FF < 3 */
+}
+
+/*____________ spoiler ____________*/
+
+divdiv.wrap_spoiler {
+    margin-bottom: 1.5em;
+}
+/* see rest of spoiler styles in style.css */
+
+/*____________ clear float ____________*/
+
+div.wrap_clear {
+    clear: both;
+    line-height: 0;
+    height: 0;
+    font-size: 1px;
+    visibility: hidden;
+    overflow: hidden;
+}
+
+/*____________ hide ____________*/
+
+div.wrap_hide {
+    display: none;
+}
+
+
+/* STYLE.CSS */
+
+/* box
+********************************************************************/
+
+.wrap_box {
+    background: __background_alt__;
+    color: __text__;
+/*
+    overflow: hidden;
+*/
+}
+div.wrap_box,
+div.wrap_danger, div.wrap_warning, div.wrap_caution, div.wrap_notice, div.wrap_safety {
+    padding: 1em 1em .5em;
+    margin-bottom: 1.5em;
+}
+span.wrap_box,
+span.wrap_danger, span.wrap_warning, span.wrap_caution, span.wrap_notice, span.wrap_safety {
+    padding: 0 .3em;
+}
+
+/*____________ notes with icons ____________*/
+
+/* general styles for all note divs */
+div.wrap_info, div.wrap_important, div.wrap_alert, div.wrap_tip, div.wrap_help, div.wrap_todo, div.wrap_download {
+    padding: 1em 1em .5em 70px;
+    margin-bottom: 1.5em;
+    min-height: 68px;
+    background-position: 10px 50%;
+    background-repeat: no-repeat;
+    color: #000;
+}
+/* special treatment for IE6 */
+* html div.wrap_info, * html div.wrap_important, * html div.wrap_alert, * html div.wrap_tip, * html div.wrap_help, * html div.wrap_todo, * html div.wrap_download {
+    height: 68px;
+}
+/* general styles for all note spans */
+span.wrap_info, span.wrap_important, span.wrap_alert, span.wrap_tip, span.wrap_help, span.wrap_todo, span.wrap_download {
+    padding: 0 2px 0 20px;
+    min-height: 20px;
+    background-position: 2px 50%;
+    background-repeat: no-repeat;
+    color: #000;
+}
+/* special treatment for IE6 */
+* html span.wrap_info, * html span.wrap_important, * html span.wrap_alert, * html span.wrap_tip, * html span.wrap_help, * html span.wrap_todo, * html span.wrap_download {
+    height: 20px;
+}
+
+/*____________ info ____________*/
+.wrap_info { background-color: #d1d7df; }
+div.wrap_info { background-image: url(../../../wrap/images/note/48/info.png); }
+span.wrap_info { background-image: url(../../../wrap/images/note/16/info.png); }
+
+/*____________ important ____________*/
+.wrap_important { background-color: #ffd39f; }
+div.wrap_important { background-image: url(../../../wrap/images/note/48/important.png); }
+span.wrap_important { background-image: url(../../../wrap/images/note/16/important.png); }
+
+/*____________ alert ____________*/
+.wrap_alert { background-color: #ffbcaf; }
+div.wrap_alert { background-image: url(../../../wrap/images/note/48/alert.png); }
+span.wrap_alert { background-image: url(../../../wrap/images/note/16/alert.png); }
+
+/*____________ tip ____________*/
+.wrap_tip { background-color: #fff79f; }
+div.wrap_tip { background-image: url(../../../wrap/images/note/48/tip.png); }
+span.wrap_tip { background-image: url(../../../wrap/images/note/16/tip.png); }
+
+/*____________ help ____________*/
+.wrap_help { background-color: #dcc2ef; }
+div.wrap_help { background-image: url(../../../wrap/images/note/48/help.png); }
+span.wrap_help { background-image: url(../../../wrap/images/note/16/help.png); }
+
+/*____________ todo ____________*/
+.wrap_todo { background-color: #c2efdd; }
+div.wrap_todo { background-image: url(../../../wrap/images/note/48/todo.png); }
+span.wrap_todo { background-image: url(../../../wrap/images/note/16/todo.png); }
+
+/*____________ download ____________*/
+.wrap_download { background-color: #d6efc2; }
+div.wrap_download { background-image: url(../../../wrap/images/note/48/download.png); }
+span.wrap_download { background-image: url(../../../wrap/images/note/16/download.png); }
+
+
+/*____________ safety notes ____________*/
+
+.wrap_danger {
+    background-color: #c00;
+    color: #fff;
+}
+.wrap_warning {
+    background-color: #f60;
+    color: #000;
+}
+.wrap_caution {
+    background-color: #ff0;
+    color: #000;
+}
+.wrap_notice {
+    background-color: #06f;
+    color: #fff;
+}
+.wrap_safety {
+    background-color: #090;
+    color: #fff;
+}
+
+
+/* mark
+********************************************************************/
+
+div.wrap_hi {
+    background-color: #ff9;
+}
+
+/* typography
+********************************************************************/
+
+/*____________ font colours ____________*/
+
+div.wrap_fgwhite {
+    color: #fff;
+}
+
+/*____________ background colours ____________*/
+
+div.wrap_bgred {
+    background-color: #fcc;
+}
+div.wrap_bggreen {
+    background-color: #cfc;
+}
+div.wrap_bgblue {
+    background-color: #ccf;
+}
+div.wrap_bgcyan {
+    background-color: #9ff;
+}
+div.wrap_bgviolet {
+    background-color: #f9f;
+}
+div.wrap_bgyellow {
+    background-color: #ff9;
+}
+div.wrap_bggrey {
+    background-color: #ccc;
+}
+div.wrap_bgwhite {
+    background-color: #fff;
+}
+div.wrap_bgblack {
+    background-color: #000;
+}
+
+
+/* miscellaneous
+********************************************************************/
+
+/*____________ spoiler ____________*/
+
+div.wrap_spoiler {
+    background-color: __background__ !important;
+    color: __background__ !important;
+    border: 1px dotted red;
+}
+
+/*____________ only print ____________*/
+
+div.wrap_onlyprint {
+    display: none;
+}

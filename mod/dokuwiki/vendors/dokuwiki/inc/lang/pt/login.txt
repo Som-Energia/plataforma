@@ -1,0 +1,7 @@
+====== Entrar ======
+
+Não está actualmente em sessão!\\ Introduza os seus dados de utilizador para entrar em sessão.
+
+**Nota**: Precisa de ter //cookies// activos no seu navegador.
+
+----

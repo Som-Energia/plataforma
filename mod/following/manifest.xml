@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin_manifest>
+        <field key="author" value="Cash Costello" />
+        <field key="version" value="1.7" />
+        <field key="description" value="Following ala Twitter" />
+        <field key="website" value="http://www.cashcostello.com/" />
+        <field key="copyright" value="Cash Costello 2008-2009" />
+        <field key="licence" value="GNU General Public License version 2" />
+        <field key="elgg_version" value="2009072201" />
+</plugin_manifest>

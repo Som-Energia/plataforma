@@ -1,0 +1,255 @@
+2010-07-17  Aurélien Bompard <aurelien@bompard.org>
+
+	* action.php, syntax.php: Better handling of the cache system  The
+	template used for the ODT export is now added in the page's
+	dependencies, so the cached ODT page will not be used if the
+	template has been updated.
+
+2010-05-24  Aurélien Bompard <aurelien@bompard.org>
+
+	* lang/ru/lang.php, lang/ru/settings.php: Add translation by Yuri
+	Timofeev
+
+2010-05-12  Aurélien Bompard <aurelien@bompard.org>
+
+	* lang/zh/lang.php, lang/zh/settings.php: Add Chinese translation by
+	lainme
+
+2010-04-04  Aurélien Bompard <aurelien@bompard.org>
+
+	* ChangeLog, ChangeLog.txt: Add .txt to the ChangeLog for our
+	Windows-based friends
+
+2010-04-04  Aurélien Bompard <aurelien@bompard.org>
+
+	* ChangeLog: Cleanup changelog
+
+2010-04-04  Aurélien Bompard <aurelien@bompard.org>
+
+	* renderer.php: Fix a small syntax error
+
+2010-04-04  Aurélien Bompard <aurelien@bompard.org>
+
+	* renderer.php: Better tag replacement in the template ODT file
+
+2010-04-04  Aurélien Bompard <aurelien@bompard.org>
+
+	* README.txt, info.txt: Prepare for a new release
+
+2010-04-04  Aurélien Bompard <aurelien@bompard.org>
+
+	* renderer.php: Add options to cut off a part of the ODT template
+	In an ODT file, the only styles that will be saved are the styles
+	which are applied to some content in the document. If you want to
+	create an empty ODT document for this plugin, and still want to
+	define styles which will be applied to the wiki content, you have to
+	write some dummy text, apply the styles to this text, and surround
+	the text in the DOKUWIKI-ODT-CUT-START and DOKUWIKI-ODT-CUT-STOP
+	tags. This way, the styles will be retained in the ODT file, but the
+	dummy text will be removed on export.
+
+2010-04-04  Aurélien Bompard <aurelien@bompard.org>
+
+	* renderer.php: Better tag replacement in the template ODT file
+
+2010-04-04  Aurélien Bompard <aurelien@bompard.org>
+
+	* renderer.php: Better tag replacement in the template ODT file
+
+2010-04-04  Aurélien Bompard <aurelien@bompard.org>
+
+	* renderer.php: replace with unicode entities instead of HTML (not
+	always defined)
+
+2009-08-15  Martin Braure de Calignon <braure@free.fr>
+
+	* syntax.php: Fix button link to export old revisions
+
+2009-07-02  Aurélien Bompard <aurelien@bompard.org>
+
+	* ChangeLog, info.txt: prepare for release
+
+2009-07-02  Aurélien Bompard <aurelien@bompard.org>
+
+	* ChangeLog, renderer.php: Fixes from Andy Webber (thanks !)
+
+2009-06-07  Aurélien Bompard <aurelien@bompard.org>
+
+	* ChangeLog, renderer.php: use $['savedir'] as suggested on the wiki
+	page
+
+2009-06-07  Aurélien Bompard <aurelien@bompard.org>
+
+	* ChangeLog, info.txt: release
+
+2009-06-07  Aurélien Bompard <aurelien@bompard.org>
+
+	* renderer.php: add patch by Korsani
+
+2009-06-07  Aurélien Bompard <aurelien@bompard.org>
+
+	* renderer.php: typo
+
+2009-02-11  Aurélien Bompard <aurelien@bompard.org>
+
+	* info.txt, renderer.php: Make the renderer class a singleton  Only
+	make a single instance of the renderer. This is needed for Dokuwiki
+	>= rc2009-02-06. For details, see:
+	http://bugs.splitbrain.org/index.php?do=details&task_id=1598
+
+2009-02-09  Aurélien Bompard <aurelien@bompard.org>
+
+	* renderer.php: Revert "Create zipper on-demand"  This reverts
+	commit 5e746e84b62fb0fdcd5607d7f9abc636a7710e2e.
+
+2009-02-08  Aurélien Bompard <aurelien@bompard.org>
+
+	* renderer.php: Create zipper on-demand
+
+2009-01-15  Aurélien Bompard <aurelien@bompard.org>
+
+	* ChangeLog, info.txt: prepare for new release
+
+2009-01-15  Aurélien Bompard <aurelien@bompard.org>
+
+	* ChangeLog, renderer.php: don't compress mimetype declaration
+
+2008-11-11  Aurélien Bompard <aurelien@bompard.org>
+
+	* renderer.php: more safeguards. wiki:syntax now passes validators
+
+2008-09-28  Aurélien Bompard <aurelien@bompard.org>
+
+	* lang/ja/lang.php, lang/ja/settings.php: Add Japanese translation
+	from Ikuo Obataya. Thanks !
+
+2008-05-07  Aurélien Bompard <aurelien@bompard.org>
+
+	* ChangeLog, info.txt: new release
+
+2008-05-07  Aurélien Bompard <aurelien@bompard.org>
+
+	* ChangeLog: update ChangeLog
+
+2008-05-07  Aurélien Bompard <aurelien@bompard.org>
+
+	* lang/es/lang.php, lang/es/settings.php: complete spanish
+	translation
+
+2008-05-07  Aurélien Bompard <aurelien@bompard.org>
+
+	* renderer.php, syntax.php: leftover from history cleaning
+
+2008-05-07  Aurélien Bompard <aurelien@bompard.org>
+
+	* lang/es/lang.php: spanish translation, 1st part
+
+2008-05-06  Aurélien Bompard <aurelien@bompard.org>
+
+	* ChangeLog: add changelog in changelog...
+
+2008-05-05  Aurélien Bompard <aurelien@bompard.org>
+
+	* ChangeLog: add ChangeLog (thanks to http://josefsson.org/git2cl/)
+
+
+2008-05-05  Aurélien Bompard <aurelien@bompard.org>
+
+	* README.txt, info.txt: update metadata for new release
+
+2008-05-05  Aurélien Bompard <aurelien@bompard.org>
+
+	* renderer.php: use new headers/caching system if available
+
+2008-04-22  Aurélien Bompard <aurelien@bompard.org>
+
+	* renderer.php: choose appropriate ZipLib file
+
+2008-04-21  Aurélien Bompard <aurelien@bompard.org>
+
+	* renderer.php: dokuwiki's future temp dir is data/tmp, not
+	data/temp
+
+2008-04-08  Aurélien Bompard <aurelien@bompard.org>
+
+	* README.txt, TODO, TODO.txt, info.txt: ready for release
+
+2008-04-08  Aurélien Bompard <aurelien@bompard.org>
+
+	* lang/it/lang.php: add italian translation
+
+2008-04-07  Aurélien Bompard <aurelien@bompard.org>
+
+	* README.txt, TODO, info.txt: get ready for release
+
+2008-03-08  Aurélien Bompard <aurelien@bompard.org>
+
+	* .gitignore: ignore Makefile
+
+2008-03-06  Aurélien Bompard <aurelien@bompard.org>
+
+	* renderer.php: fix quotes
+
+2008-03-06  root <root@shiva.c-s.fr>
+
+	* renderer.php: extract template before checking for the styles
+
+2008-03-04  Aurélien Bompard <aurelien@bompard.org>
+
+	* syntax.php: leftover
+
+2008-03-05  root <root@shiva.c-s.fr>
+
+	* syntax.php: Revert "leftover"  This reverts commit
+	93d7c67d705f3a6a5847554b15384dc5a1a50de6.
+
+2008-03-05  root <root@shiva.c-s.fr>
+
+	* renderer.php: fix <code> tag in list items
+
+2008-03-04  Aurélien Bompard <aurelien@bompard.org>
+
+	* syntax.php: leftover
+
+2008-03-04  Aurélien Bompard <aurelien@bompard.org>
+
+	* renderer.php: cleanup for patch
+
+2008-03-04  Aurélien Bompard <aurelien@bompard.org>
+
+	* README.txt, info.txt: even better doc
+
+2008-03-04  Aurélien Bompard <aurelien@bompard.org>
+
+	* README.txt: better doc
+
+2008-03-04  Aurélien Bompard <aurelien@bompard.org>
+
+	* README.txt: doc
+
+2008-03-03  Aurélien Bompard <aurelien@bompard.org>
+
+	* renderer.php: spit into the fields plugin
+
+2008-03-01  Aurélien Bompard <aurelien@bompard.org>
+
+	* TODO, renderer.php, styles.xml, syntax.php: closer to upstream
+
+2008-03-01  Aurélien Bompard <aurelien@bompard.org>
+
+	* TODO, admin.php, conf/default.php, conf/metadata.php,
+	lang/de/lang.php, lang/en/lang.php, lang/en/settings.php,
+	lang/fr/lang.php, lang/fr/settings.php, renderer.php: niiice :)
+
+2008-02-29  Aurélien Bompard <aurelien@bompard.org>
+
+	* admin.php, lang/en/lang.php: bla
+
+2008-02-28  Aurélien Bompard <aurelien@bompard.org>
+
+	* admin.php, lang/en/lang.php: niice
+
+2008-05-07  Aurélien Bompard <aurelien@bompard.org>
+
+	* initial commit from existing repo
+

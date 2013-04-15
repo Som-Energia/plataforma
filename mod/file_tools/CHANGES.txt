@@ -1,0 +1,46 @@
+= Version History =
+1.0 (2012-07-31):
+
+- added: option to show folder content in the widget
+- fixed: depricated notices
+- fixed: max file upload size now listens to PHP setting
+- fixed: page_handler logic
+- fixed: edit a file moving to main folder
+- fixed: dropping files on the tree works again
+- fixed: layout of group settings
+- fixed: encoding problem in zip upload
+- fixed: problem with zip upload not creating folders
+- fixed: gracefully fallback for upload form
+- fixed: JS error when your site is in a subfolder (thanks to SehLax http://community.elgg.org/profile/SehLax)
+- changed: only show empty queue when needed
+- changed: better handling of file extensions
+- changed: file title is download link in full view
+- changed: layout of start.php to be more inline with Elgg
+- removed: unused javascript function
+
+1.0 beta (2012-05-23):
+
+- added: group_files widget (from widget_manager)
+- added: index_file widget (from widget_maanger)
+- changed: plugin made Elgg 1.8.3 compatible
+
+0.3.1 (2012-01-31):
+
+- fixed: incorrect forward after zip upload in group 
+- fixed: incorrect access for zip uploaded files
+- fixed: incorrect forward after multiupload
+
+0.3 (2012-01-24):
+
+- added: default sorting options for site and group admins
+- added: more loading indicator moments (sorting, folder change)
+- changed: only postfix file when zip downloading if file already exists in zip
+- removed: some obsolete js and css
+- fixed: invalid file_tree widget title link
+- fixed: some untranslatable language keys
+- fixed: 2 functions that were not namespaced (to prevent conflicts)
+- fixed: preferred date time notation in folder details
+
+0.2 (2012-01-20):
+
+- initial release

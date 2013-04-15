@@ -1,0 +1,31 @@
+Elgg dokuwiki integration
+------------------------
+
+Adds wikis for groups, and integrates the user and permission system of elgg.
+
+NOTES:
+------------------------
+- Although the goal is to be able to use vanilla dokuwiki with maybe some extensions,
+  at the moment we provide a slightly modified version.
+- doku.php globals are not known, and had to be redeclared.
+- $_REQUEST not defined... dont know the reason but its something of elgg. -> yes elgg is mangling it... **had to comment it on elgg core**
+- acl is hardcoded, added a getACL method on the auth class to be able to generate
+  the acl on the fly... also setACL and modified the admin plugin to be able to use the auth backend.
+- uses an 'elgg' auth module, and a special dokuwiki template.
+- dokuwiki defines the javascript $ symbol, which conflicts with elgg usage of jquery, so had to change all usage inside dokuwiki (just a few instances).
+
+LICENSE:
+-----------------------
+- elgg plugin uses GPLv2. dokuwiki and mods (all under vendors/dokuwiki) go with original license to original copyright holders.
+
+REPO:
+-----------------------
+You can follow code changes or submit tickets at: https://github.com/lorea/dokuwiki
+
+TODO:
+------------------------
+- Maybe just one big wiki for the whole site using namespaces?
+
+---
+devel@lorea.cc
+

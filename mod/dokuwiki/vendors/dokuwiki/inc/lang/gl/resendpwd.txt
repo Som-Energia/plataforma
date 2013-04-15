@@ -1,0 +1,3 @@
+====== Enviar un contrasinal novo ======
+
+Insira o seu nome de persoa usuaria no seguinte formulario para obter un contrasinal novo para a súa conta neste wiki. Enviarase unha ligazón de confirmación ao seu enderezo de correo rexistrado.

@@ -1,0 +1,2 @@
+Edite a páxina e prema en ''Gardar''. Vexa a páxina [[wiki:syntax|sintaxe]] para aprender a sintaxe da Wiki. Edite a páxina só se pode **mellorala**. Se quere facer probas, aprenda como efectuar os seus primeiros pasos no [[playground:playground|campo de xogo]].
+

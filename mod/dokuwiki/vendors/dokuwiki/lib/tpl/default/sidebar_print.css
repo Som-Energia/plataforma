@@ -1,0 +1,9 @@
+/**
+ * Extra styles for sidebar template
+ *
+ * @author Christopher Smith <chris@jalakai.co.uk>
+ */
+
+/* prevent the sidebar being included when printing wiki pages */
+    #sidebar {display:none;}
+

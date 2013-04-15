@@ -1,0 +1,31 @@
+MANDARINA
+
+Tema para S5, creado originalmente por jEsuSdA 8)
+http://www.jesusda.com
+
+Más temas en: http://www.jesusda.com/projects/presentaciones_s5
+
+
+
+Para customizar este tema modifica el archivo CSS:
+
+s5-ultraviolet/ui/default/pretty.css
+
+
+
+Los archivos gráficos referentes al tema están en la carpeta:
+
+/ui/default/pics
+ 
+
+Puedes personalizar el favicon copiando el tuyo en la carpeta:
+
+/ui/default/pics
+
+con el nombre favicon.ico
+
+
+
+Para cualquier sugerencia e idea, por favor, contacta conmigo a través de mi web. ;)
+
+--jEsuSdA 8)
