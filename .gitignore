@@ -2,3 +2,4 @@
 .svn/*
 engine/settings.php
 .htaccess
+.idea/*
