@@ -175,7 +175,7 @@ $english = array(
 	'ConfigurationException:NoSiteID' => "No site ID has been specified.",
 	'SecurityException:APIAccessDenied' => "Sorry, API access has been disabled by the administrator.",
 	'SecurityException:NoAuthMethods' => "No authentication methods were found that could authenticate this API request.",
-	'SecurityException:ForwardFailedToRedirect' => 'Redirect could not be issued due to headers already being sent. Halting execution for security. Search http://docs.elgg.org/ for more information.',
+	'SecurityException:ForwardFailedToRedirect' => 'Redirect could not be issued due to headers already being sent. Halting execution for security. Output started in file %s at line %d. Search http://docs.elgg.org/ for more information.',
 	'InvalidParameterException:APIMethodOrFunctionNotSet' => "Method or function not set in call in expose_method()",
 	'InvalidParameterException:APIParametersArrayStructure' => "Parameters array structure is incorrect for call to expose method '%s'",
 	'InvalidParameterException:UnrecognisedHttpMethod' => "Unrecognised http method %s for api method '%s'",
@@ -359,6 +359,7 @@ $english = array(
 	'friendspicker:chararray' => 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
 
 	'avatar' => 'Avatar',
+	'avatar:noaccess' => "You're not allowed to edit this user's avatar",
 	'avatar:create' => 'Create your avatar',
 	'avatar:edit' => 'Edit avatar',
 	'avatar:preview' => 'Preview',
@@ -405,7 +406,8 @@ $english = array(
 	'profile:editdefault:delete:fail' => 'Removed default profile item field failed',
 	'profile:editdefault:delete:success' => 'Profile field deleted',
 	'profile:defaultprofile:reset' => 'Profile fields reset to the system default',
-	'profile:resetdefault' => 'Reset default profile',
+	'profile:resetdefault' => 'Reset profile fields to system defaults',
+	'profile:resetdefault:confirm' => 'Are you sure you want to delete your custom profile fields?',
 	'profile:explainchangefields' => "You can replace the existing profile fields with your own using the form below. \n\n Give the new profile field a label, for example, 'Favorite team', then select the field type (eg. text, url, tags), and click the 'Add' button. To re-order the fields drag on the handle next to the field label. To edit a field label - click on the label's text to make it editable. \n\n At any time you can revert back to the default profile set up, but you will lose any information already entered into custom fields on profile pages.",
 	'profile:editdefault:success' => 'New profile field added',
 	'profile:editdefault:fail' => 'Default profile could not be saved',
@@ -663,6 +665,7 @@ $english = array(
 
 
 	'admin:notices:could_not_delete' => 'Could not delete notice.',
+	'item:object:admin_notice' => 'Admin notice',
 
 	'admin:options' => 'Admin options',
 
@@ -688,7 +691,7 @@ $english = array(
 	'admin:plugins:label:author' => "Author",
 	'admin:plugins:label:copyright' => "Copyright",
 	'admin:plugins:label:categories' => 'Categories',
-	'admin:plugins:label:licence' => "Licence",
+	'admin:plugins:label:licence' => "License",
 	'admin:plugins:label:website' => "URL",
 	'admin:plugins:label:repository' => "Code",
 	'admin:plugins:label:bugtracker' => "Report issue",
@@ -1139,7 +1142,7 @@ If you requested this, click on the link below. Otherwise ignore this email.
 
 	'comments:count' => "%s comments",
 
-	'riveraction:annotation:generic_comment' => '%s commented on %s',
+	'river:comment:object:default' => '%s commented on %s',
 
 	'generic_comments:add' => "Leave a comment",
 	'generic_comments:post' => "Post comment",
@@ -1153,6 +1156,7 @@ If you requested this, click on the link below. Otherwise ignore this email.
 	'generic_comment:failure' => "An unexpected error occurred when adding your comment.",
 	'generic_comment:none' => 'No comments',
 	'generic_comment:title' => 'Comment by %s',
+	'generic_comment:on' => '%s on %s',
 
 	'generic_comment:email:subject' => 'You have a new comment!',
 	'generic_comment:email:body' => "You have a new comment on your item \"%s\" from %s. It reads:
@@ -1186,10 +1190,11 @@ You cannot reply to this email.",
  * Action gatekeeper
  */
 	'actiongatekeeper:missingfields' => 'Form is missing __token or __ts fields',
-	'actiongatekeeper:tokeninvalid' => "We encountered an error (token mismatch). This probably means that the page you were using expired.",
+	'actiongatekeeper:tokeninvalid' => "The page you were using had expired. Please try again.",
 	'actiongatekeeper:timeerror' => 'The page you were using has expired. Please refresh and try again.',
 	'actiongatekeeper:pluginprevents' => 'A extension has prevented this form from being submitted.',
 	'actiongatekeeper:uploadexceeded' => 'The size of file(s) uploaded exceeded the limit set by your site administrator',
+	'actiongatekeeper:crosssitelogin' => "Sorry, logging in from a different domain is not permitted. Please try again.",
 
 
 /**
@@ -1208,7 +1213,7 @@ You cannot reply to this email.",
  * Javascript
  */
 
-	'js:security:token_refresh_failed' => 'Cannot contact %s. You may experience problems saving content.',
+	'js:security:token_refresh_failed' => 'Failed to contact %s. You may experience problems saving content. Please refresh this page.',
 	'js:security:token_refreshed' => 'Connection to %s restored!',
 
 /**

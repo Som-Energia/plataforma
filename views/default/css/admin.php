@@ -446,7 +446,8 @@ input {
 .elgg-input-text,
 .elgg-input-tags,
 .elgg-input-url,
-.elgg-input-plaintext {
+.elgg-input-plaintext,
+.elgg-input-longtext {
 	width: 98%;
 }
 textarea {
@@ -623,6 +624,10 @@ a.elgg-button {
 .ui-autocomplete a:hover {
 	text-decoration: none;
 	color: #4690D6;
+}
+.ui-autocomplete a.ui-state-hover {
+	background-color: #eee;
+	display: block;
 }
 
 /* ***************************************
@@ -999,7 +1004,7 @@ a.elgg-button {
 	ENTITY MENU
 *************************************** */
 <?php // height depends on line height/font size ?>
-.elgg-menu-entity, elgg-menu-annotation {
+.elgg-menu-entity, .elgg-menu-annotation {
 	float: right;
 	margin-left: 15px;
 	font-size: 90%;

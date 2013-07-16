@@ -170,7 +170,7 @@ function get_group_members($group_guid, $limit = 10, $offset = 0, $site_guid = 0
 		'relationship' => 'member',
 		'relationship_guid' => $group_guid,
 		'inverse_relationship' => TRUE,
-		'types' => 'user',
+		'type' => 'user',
 		'limit' => $limit,
 		'offset' => $offset,
 		'count' => $count,
@@ -240,9 +240,11 @@ function leave_group($group_guid, $user_guid) {
  */
 function get_users_membership($user_guid) {
 	$options = array(
+		'type' => 'group',
 		'relationship' => 'member',
 		'relationship_guid' => $user_guid,
-		'inverse_relationship' => FALSE
+		'inverse_relationship' => false,
+		'limit' => false,
 	);
 	return elgg_get_entities_from_relationship($options);
 }

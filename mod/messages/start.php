@@ -51,6 +51,9 @@ function messages_init() {
 	elgg_register_plugin_hook_handler('notify:entity:message', 'object', 'messages_notification_msg');
 	register_notification_object('object', 'messages', elgg_echo('messages:new'));
 
+	// delete messages sent by a user when user is deleted
+	elgg_register_event_handler('delete', 'user', 'messages_purge');
+
 	// ecml
 	elgg_register_plugin_hook_handler('get_views', 'ecml', 'messages_ecml_views_hook');
 
@@ -74,23 +77,30 @@ function messages_init() {
  */
 function messages_page_handler($page) {
 
+	$current_user = elgg_get_logged_in_user_entity();
+	if (!$current_user) {
+		register_error(elgg_echo('noaccess'));
+		$_SESSION['last_forward_from'] = current_page_url();
+		forward('');
+	}
+
 	elgg_load_library('elgg:messages');
 
-	elgg_push_breadcrumb(elgg_echo('messages'), 'messages/inbox/' . elgg_get_logged_in_user_entity()->username);
+	elgg_push_breadcrumb(elgg_echo('messages'), 'messages/inbox/' . $current_user->username);
 
 	if (!isset($page[0])) {
 		$page[0] = 'inbox';
 	}
 
-	// supporting the old inbox url /messages/<username>
-	$user = get_user_by_username($page[0]);
-	if ($user) {
+	// Support the old inbox url /messages/<username>, but only if it matches the logged in user.
+	// Otherwise having a username like "read" on the system could confuse this function.
+	if ($current_user->username === $page[0]) {
 		$page[1] = $page[0];
 		$page[0] = 'inbox';
 	}
 
 	if (!isset($page[1])) {
-		$page[1] = elgg_get_logged_in_user_entity()->username;
+		$page[1] = $current_user->username;
 	}
 
 	$base_dir = elgg_get_plugins_path() . 'messages/pages/messages';
@@ -418,6 +428,39 @@ function messages_user_hover_menu($hook, $type, $return, $params) {
 	return $return;
 }
 
+/**
+ * Delete messages from a user who is being deleted
+ *
+ * @param string   $event Event name
+ * @param string   $type  Event type
+ * @param ElggUser $user  User being deleted
+ */
+function messages_purge($event, $type, $user) {
+
+	if (!$user->getGUID()) {
+		return;
+	}
+
+	// make sure we delete them all
+	$entity_disable_override = access_get_show_hidden_status();
+	access_show_hidden_entities(true);
+	$ia = elgg_set_ignore_access(true);
+
+	$options = array(
+		'type' => 'object',
+		'subtype' => 'messages',
+		'metadata_name' => 'fromId',
+		'metadata_value' => $user->getGUID(),
+		'limit' => 0,
+	);
+	$batch = new ElggBatch('elgg_get_entities_from_metadata', $options);
+	foreach ($batch as $e) {
+		$e->delete();
+	}
+
+	elgg_set_ignore_access($ia);
+	access_show_hidden_entities($entity_disable_override);
+}
 
 /**
  * Register messages with ECML.

@@ -125,7 +125,7 @@ function elgg_get_filepath_cache() {
  * @access private
  */
 function elgg_filepath_cache_reset() {
-	return elgg_reset_system_cache();
+	elgg_reset_system_cache();
 }
 /**
  * @access private
@@ -143,13 +143,13 @@ function elgg_filepath_cache_load($type) {
  * @access private
  */
 function elgg_enable_filepath_cache() {
-	return elgg_enable_system_cache();
+	elgg_enable_system_cache();
 }
 /**
  * @access private
  */
 function elgg_disable_filepath_cache() {
-	return elgg_disable_system_cache();
+	elgg_disable_system_cache();
 }
 
 /* Simplecache */
@@ -208,6 +208,7 @@ function elgg_get_simplecache_url($type, $view) {
 	global $CONFIG;
 	$lastcache = (int)$CONFIG->lastcache;
 	$viewtype = elgg_get_viewtype();
+	elgg_register_simplecache_view("$type/$view");// see #5302
 	if (elgg_is_simplecache_enabled()) {
 		$url = elgg_get_site_url() . "cache/$type/$viewtype/$view.$lastcache.$type";
 	} else {
@@ -222,7 +223,7 @@ function elgg_get_simplecache_url($type, $view) {
 /**
  * Regenerates the simple cache.
  *
- * @warning This does not invalidate the cache, but actively resets it.
+ * @warning This does not invalidate the cache, but actively rebuilds it.
  *
  * @param string $viewtype Optional viewtype to regenerate. Defaults to all valid viewtypes.
  *
@@ -444,7 +445,7 @@ function _elgg_cache_init() {
 	if ($CONFIG->system_cache_enabled && !$CONFIG->i18n_loaded_from_cache) {
 		reload_all_translations();
 		foreach ($CONFIG->translations as $lang => $map) {
-			elgg_save_system_cache("$lang.php", serialize($map));
+			elgg_save_system_cache("$lang.lang", serialize($map));
 		}
 	}
 }

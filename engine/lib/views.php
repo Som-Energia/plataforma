@@ -1107,7 +1107,7 @@ function elgg_view_entity_annotations(ElggEntity $entity, $full_view = true) {
  * This is a shortcut for {@elgg_view page/elements/title}.
  *
  * @param string $title The page title
- * @param array $vars   View variables (was submenu be displayed? (deprecated))
+ * @param array  $vars  View variables (was submenu be displayed? (deprecated))
  *
  * @return string The HTML (etc)
  */
@@ -1179,7 +1179,7 @@ function elgg_view_comments($entity, $add_comment = true, array $vars = array())
  *
  * @param string $image The icon and other information
  * @param string $body  Description content
- * @param array $vars   Additional parameters for the view
+ * @param array  $vars  Additional parameters for the view
  *
  * @return string
  * @since 1.8.0
@@ -1236,15 +1236,17 @@ function elgg_view_river_item($item, array $vars = array()) {
 		// subject is disabled or subject/object deleted
 		return '';
 	}
+
+	// @todo this needs to be cleaned up
 	// Don't hide objects in closed groups that a user can see.
 	// see http://trac.elgg.org/ticket/4789
-//	else {
-//		// hide based on object's container
-//		$visibility = ElggGroupItemVisibility::factory($object->container_guid);
-//		if ($visibility->shouldHideItems) {
-//			return '';
-//		}
-//	}
+	//	else {
+	//		// hide based on object's container
+	//		$visibility = ElggGroupItemVisibility::factory($object->container_guid);
+	//		if ($visibility->shouldHideItems) {
+	//			return '';
+	//		}
+	//	}
 
 	$vars['item'] = $item;
 
@@ -1308,7 +1310,7 @@ function elgg_view_form($action, $form_vars = array(), $body_vars = array()) {
 /**
  * View an item in a list
  *
- * @param object $item ElggEntity or ElggAnnotation
+ * @param ElggEntity|ElggAnnotation $item
  * @param array  $vars Additional parameters for the rendering
  *
  * @return string
@@ -1451,17 +1453,13 @@ function elgg_get_views($dir, $base) {
  */
 function elgg_view_tree($view_root, $viewtype = "") {
 	global $CONFIG;
-	static $treecache;
+	static $treecache = array();
 
 	// Get viewtype
 	if (!$viewtype) {
 		$viewtype = elgg_get_viewtype();
 	}
 
-	// Has the treecache been initialised?
-	if (!isset($treecache)) {
-		$treecache = array();
-	}
 	// A little light internal caching
 	if (!empty($treecache[$view_root])) {
 		return $treecache[$view_root];
@@ -1640,7 +1638,7 @@ function elgg_views_boot() {
 	}
 
 	// set default icon sizes - can be overridden in settings.php or with plugin
-	if (!$CONFIG->icon_sizes) {
+	if (!isset($CONFIG->icon_sizes)) {
 		$icon_sizes = array(
 			'topbar' => array('w' => 16, 'h' => 16, 'square' => TRUE, 'upscale' => TRUE),
 			'tiny' => array('w' => 25, 'h' => 25, 'square' => TRUE, 'upscale' => TRUE),

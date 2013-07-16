@@ -14,7 +14,7 @@ $subscribed = elgg_extract('subscribed', $vars);
 if (!elgg_is_logged_in()) {
 	return true;
 }
-$t = new ElggMenuItem();
+
 // membership status
 $is_member = $group->isMember($user);
 $is_owner = $group->getOwnerEntity() == $user;
@@ -41,7 +41,7 @@ if ($is_owner) {
 }
 
 // notification info
-if (elgg_is_active_plugin('notifications')) {
+if (elgg_is_active_plugin('notifications') && $is_member) {
 	if ($subscribed) {
 		elgg_register_menu_item('groups:my_status', array(
 			'name' => 'subscription_status',

@@ -12,15 +12,19 @@
 /**
  * Query cache for all queries.
  *
- * Each query and its results are stored in this array as:
+ * Each query and its results are stored in this cache as:
  * <code>
- * $DB_QUERY_CACHE[$query] => array(result1, result2, ... resultN)
+ * $DB_QUERY_CACHE[query hash] => array(result1, result2, ... resultN)
  * </code>
+ * @see elgg_query_runner() for details on the hash.
  *
- * @global array $DB_QUERY_CACHE
+ * @warning Elgg used to set this as an empty array to turn off the cache
+ *
+ * @global ElggLRUCache|null $DB_QUERY_CACHE
+ * @access private
  */
 global $DB_QUERY_CACHE;
-$DB_QUERY_CACHE = array();
+$DB_QUERY_CACHE = null;
 
 /**
  * Queries to be executed upon shutdown.
@@ -38,6 +42,7 @@ $DB_QUERY_CACHE = array();
  * </code>
  *
  * @global array $DB_DELAYED_QUERIES
+ * @access private
  */
 global $DB_DELAYED_QUERIES;
 $DB_DELAYED_QUERIES = array();
@@ -48,7 +53,8 @@ $DB_DELAYED_QUERIES = array();
  * Each database link created with establish_db_link($name) is stored in
  * $dblink as $dblink[$name] => resource.  Use get_db_link($name) to retrieve it.
  *
- * @global array $dblink
+ * @global resource[] $dblink
+ * @access private
  */
 global $dblink;
 $dblink = array();
@@ -59,6 +65,7 @@ $dblink = array();
  * Each call to the database increments this counter.
  *
  * @global integer $dbcalls
+ * @access private
  */
 global $dbcalls;
 $dbcalls = 0;
@@ -72,11 +79,12 @@ $dbcalls = 0;
  * resource. eg "read", "write", or "readwrite".
  *
  * @return void
+ * @throws DatabaseException
  * @access private
  */
 function establish_db_link($dblinkname = "readwrite") {
 	// Get configuration, and globalise database link
-	global $CONFIG, $dblink, $DB_QUERY_CACHE, $dbcalls;
+	global $CONFIG, $dblink, $DB_QUERY_CACHE;
 
 	if ($dblinkname != "readwrite" && isset($CONFIG->db[$dblinkname])) {
 		if (is_array($CONFIG->db[$dblinkname])) {
@@ -120,7 +128,8 @@ function establish_db_link($dblinkname = "readwrite") {
 
 	// Set up cache if global not initialized and query cache not turned off
 	if ((!$DB_QUERY_CACHE) && (!$db_cache_off)) {
-		$DB_QUERY_CACHE = new ElggStaticVariableCache('db_query_cache');
+		// @todo if we keep this cache in 1.9, expose the size as a config parameter
+		$DB_QUERY_CACHE = new ElggLRUCache(200);		
 	}
 }
 
@@ -134,7 +143,7 @@ function establish_db_link($dblinkname = "readwrite") {
  * @access private
  */
 function setup_db_connections() {
-	global $CONFIG, $dblink;
+	global $CONFIG;
 
 	if (!empty($CONFIG->db->split)) {
 		establish_db_link('read');
@@ -197,7 +206,7 @@ function db_delayedexecution_shutdown_hook() {
  *
  * @param string $dblinktype The type of link we want: "read", "write" or "readwrite".
  *
- * @return object Database link
+ * @return resource Database link
  * @access private
  */
 function get_db_link($dblinktype) {
@@ -216,7 +225,7 @@ function get_db_link($dblinktype) {
 /**
  * Execute an EXPLAIN for $query.
  *
- * @param str   $query The query to explain
+ * @param string $query The query to explain
  * @param mixed $link  The database link resource to user.
  *
  * @return mixed An object of the query's result, or FALSE
@@ -240,14 +249,14 @@ function explain_query($query, $link) {
  * {@link $dbcalls} is incremented and the query is saved into the {@link $DB_QUERY_CACHE}.
  *
  * @param string $query  The query
- * @param link   $dblink The DB link
+ * @param resource   $dblink The DB link
  *
- * @return The result of mysql_query()
+ * @return resource result of mysql_query()
  * @throws DatabaseException
  * @access private
  */
 function execute_query($query, $dblink) {
-	global $CONFIG, $dbcalls;
+	global $dbcalls;
 
 	if ($query == NULL) {
 		throw new DatabaseException(elgg_echo('DatabaseException:InvalidQuery'));
@@ -275,7 +284,7 @@ function execute_query($query, $dblink) {
  * the raw result from {@link mysql_query()}.
  *
  * @param string   $query   The query to execute
- * @param resource $dblink  The database link to use or the link type (read | write)
+ * @param resource|string $dblink  The database link to use or the link type (read | write)
  * @param string   $handler A callback function to pass the results array to
  *
  * @return true
@@ -386,7 +395,7 @@ function get_data_row($query, $callback = "") {
  * @access private
  */
 function elgg_query_runner($query, $callback = null, $single = false) {
-	global $CONFIG, $DB_QUERY_CACHE;
+	global $DB_QUERY_CACHE;
 
 	// Since we want to cache results of running the callback, we need to
 	// need to namespace the query with the callback and single result request.
@@ -395,11 +404,9 @@ function elgg_query_runner($query, $callback = null, $single = false) {
 
 	// Is cached?
 	if ($DB_QUERY_CACHE) {
-		$cached_query = $DB_QUERY_CACHE[$hash];
-
-		if ($cached_query !== FALSE) {
+		if (isset($DB_QUERY_CACHE[$hash])) {
 			elgg_log("DB query $query results returned from cache (hash: $hash)", 'NOTICE');
-			return $cached_query;
+			return $DB_QUERY_CACHE[$hash];			
 		}
 	}
 
@@ -410,7 +417,7 @@ function elgg_query_runner($query, $callback = null, $single = false) {
 
 		// test for callback once instead of on each iteration.
 		// @todo check profiling to see if this needs to be broken out into
-		// explicit cases instead of checking in the interation.
+		// explicit cases instead of checking in the iteration.
 		$is_callable = is_callable($callback);
 		while ($row = mysql_fetch_object($result)) {
 			if ($is_callable) {
@@ -451,18 +458,12 @@ function elgg_query_runner($query, $callback = null, $single = false) {
  * @access private
  */
 function insert_data($query) {
-	global $CONFIG, $DB_QUERY_CACHE;
 
 	elgg_log("DB query $query", 'NOTICE');
 	
 	$dblink = get_db_link('write');
 
-	// Invalidate query cache
-	if ($DB_QUERY_CACHE) {
-		$DB_QUERY_CACHE->clear();
-	}
-
-	elgg_log("Query cache invalidated", 'NOTICE');
+	_elgg_invalidate_query_cache();
 
 	if (execute_query("$query", $dblink)) {
 		return mysql_insert_id($dblink);
@@ -472,7 +473,7 @@ function insert_data($query) {
 }
 
 /**
- * Update a row in the database.
+ * Update the database.
  *
  * @note Altering the DB invalidates all queries in {@link $DB_QUERY_CACHE}.
  *
@@ -482,17 +483,12 @@ function insert_data($query) {
  * @access private
  */
 function update_data($query) {
-	global $CONFIG, $DB_QUERY_CACHE;
 
 	elgg_log("DB query $query", 'NOTICE');
 
 	$dblink = get_db_link('write');
 
-	// Invalidate query cache
-	if ($DB_QUERY_CACHE) {
-		$DB_QUERY_CACHE->clear();
-		elgg_log("Query cache invalidated", 'NOTICE');
-	}
+	_elgg_invalidate_query_cache();
 
 	if (execute_query("$query", $dblink)) {
 		return TRUE;
@@ -502,7 +498,7 @@ function update_data($query) {
 }
 
 /**
- * Remove a row from the database.
+ * Remove data from the database.
  *
  * @note Altering the DB invalidates all queries in {@link $DB_QUERY_CACHE}.
  *
@@ -512,17 +508,12 @@ function update_data($query) {
  * @access private
  */
 function delete_data($query) {
-	global $CONFIG, $DB_QUERY_CACHE;
 
 	elgg_log("DB query $query", 'NOTICE');
 
 	$dblink = get_db_link('write');
 
-	// Invalidate query cache
-	if ($DB_QUERY_CACHE) {
-		$DB_QUERY_CACHE->clear();
-		elgg_log("Query cache invalidated", 'NOTICE');
-	}
+	_elgg_invalidate_query_cache();
 
 	if (execute_query("$query", $dblink)) {
 		return mysql_affected_rows($dblink);
@@ -531,6 +522,22 @@ function delete_data($query) {
 	return FALSE;
 }
 
+/**
+ * Invalidate the query cache
+ * 
+ * @access private
+ */
+function _elgg_invalidate_query_cache() {
+	global $DB_QUERY_CACHE;
+	if ($DB_QUERY_CACHE instanceof ElggLRUCache) {
+		$DB_QUERY_CACHE->clear();
+		elgg_log("Query cache invalidated", 'NOTICE');
+	} elseif ($DB_QUERY_CACHE) {
+		// In case someone sets the cache to an array and primes it with data 
+		$DB_QUERY_CACHE = array();
+		elgg_log("Query cache invalidated", 'NOTICE');
+	}
+}
 
 /**
  * Return tables matching the database prefix {@link $CONFIG->dbprefix}% in the currently
@@ -638,7 +645,7 @@ function run_sql_script($scriptlocation) {
 			$statement = str_replace("prefix_", $CONFIG->dbprefix, $statement);
 			if (!empty($statement)) {
 				try {
-					$result = update_data($statement);
+					update_data($statement);
 				} catch (DatabaseException $e) {
 					$errors[] = $e->getMessage();
 				}

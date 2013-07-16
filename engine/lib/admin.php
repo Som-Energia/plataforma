@@ -134,11 +134,11 @@ function elgg_delete_admin_notice($id) {
 }
 
 /**
- * List all admin messages.
+ * Get admin notices. An admin must be logged in since the notices are private.
  *
  * @param int $limit Limit
  *
- * @return array List of admin notices
+ * @return array Array of admin notices
  * @since 1.8.0
  */
 function elgg_get_admin_notices($limit = 10) {
@@ -158,11 +158,13 @@ function elgg_get_admin_notices($limit = 10) {
  * @since 1.8.0
  */
 function elgg_admin_notice_exists($id) {
+	$old_ia = elgg_set_ignore_access(true);
 	$notice = elgg_get_entities_from_metadata(array(
 		'type' => 'object',
 		'subtype' => 'admin_notice',
 		'metadata_name_value_pair' => array('name' => 'admin_notice_id', 'value' => $id)
 	));
+	elgg_set_ignore_access($old_ia);
 
 	return ($notice) ? TRUE : FALSE;
 }
@@ -346,7 +348,7 @@ function elgg_admin_add_plugin_settings_menu() {
 	$active_plugins = elgg_get_plugins('active');
 	if (!$active_plugins) {
 		// nothing added because no items
-		return FALSE;
+		return;
 	}
 
 	foreach ($active_plugins as $plugin) {
@@ -380,6 +382,7 @@ function elgg_admin_add_plugin_settings_menu() {
  */
 function elgg_admin_sort_page_menu($hook, $type, $return, $params) {
 	$configure_items = $return['configure'];
+	/* @var ElggMenuItem[] $configure_items */
 	foreach ($configure_items as $menu_item) {
 		if ($menu_item->getName() == 'settings') {
 			$settings = $menu_item;
@@ -387,6 +390,7 @@ function elgg_admin_sort_page_menu($hook, $type, $return, $params) {
 	}
 
 	// keep the basic and advanced settings at the top
+	/* @var ElggMenuItem $settings */
 	$children = $settings->getChildren();
 	$site_settings = array_splice($children, 0, 2);
 	usort($children, array('ElggMenuBuilder', 'compareByText'));
@@ -423,7 +427,7 @@ function admin_pagesetup() {
 		elgg_register_menu_item('admin_footer', array(
 			'name' => 'community_forums',
 			'text' => elgg_echo('admin:footer:community_forums'),
-			'href' => 'http://community.elgg.org/pg/groups/world/',
+			'href' => 'http://community.elgg.org/groups/all/',
 		));
 
 		elgg_register_menu_item('admin_footer', array(
@@ -466,14 +470,18 @@ function admin_page_handler($page) {
 	$vars = array('page' => $page);
 
 	// special page for plugin settings since we create the form for them
-	if ($page[0] == 'plugin_settings' && isset($page[1]) &&
-		(elgg_view_exists("settings/{$page[1]}/edit") || elgg_view_exists("plugins/{$page[1]}/settings"))) {
+	if ($page[0] == 'plugin_settings') {
+		if (isset($page[1]) && (elgg_view_exists("settings/{$page[1]}/edit") || 
+			elgg_view_exists("plugins/{$page[1]}/settings"))) {
 
-		$view = 'admin/plugin_settings';
-		$plugin = elgg_get_plugin_from_id($page[1]);
-		$vars['plugin'] = $plugin;
+			$view = 'admin/plugin_settings';
+			$plugin = elgg_get_plugin_from_id($page[1]);
+			$vars['plugin'] = $plugin;
 
-		$title = elgg_echo("admin:{$page[0]}");
+			$title = elgg_echo("admin:{$page[0]}");
+		} else {
+			forward('', '404');
+		}
 	} else {
 		$view = 'admin/' . implode('/', $page);
 		$title = elgg_echo("admin:{$page[0]}");
@@ -552,7 +560,7 @@ function admin_plugin_screenshot_page_handler($pages) {
  *	* COPYRIGHT.txt
  *	* LICENSE.txt
  *
- * @param type $page
+ * @param array $pages
  * @return bool
  * @access private
  */
@@ -615,7 +623,11 @@ function admin_markdown_page_handler($pages) {
 /**
  * Adds default admin widgets to the admin dashboard.
  *
- * @return void
+ * @param string $event
+ * @param string $type
+ * @param ElggUser $user
+ *
+ * @return null|true
  * @access private
  */
 function elgg_add_admin_widgets($event, $type, $user) {
@@ -637,6 +649,7 @@ function elgg_add_admin_widgets($event, $type, $user) {
 			$guid = elgg_create_widget($user->getGUID(), $handler, 'admin');
 			if ($guid) {
 				$widget = get_entity($guid);
+				/* @var ElggWidget $widget */
 				$widget->move($column, $position);
 			}
 		}

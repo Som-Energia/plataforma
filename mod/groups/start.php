@@ -148,7 +148,7 @@ function groups_setup_sidebar_menus() {
 			$count = elgg_get_entities_from_relationship(array(
 				'type' => 'user',
 				'relationship' => 'membership_request',
-				'relationship_guid' => $guid,
+				'relationship_guid' => $page_owner->getGUID(),
 				'inverse_relationship' => true,
 				'count' => true,
 			));
@@ -572,7 +572,7 @@ function groups_write_acl_plugin_hook($hook, $entity_type, $returnvalue, $params
 					'relationship' => 'member',
 					'relationship_guid' => $user_guid,
 					'inverse_relationship' => FALSE,
-					'limit' => 999
+					'limit' => false
 				));
 
 		if ($groups) {
@@ -1013,7 +1013,7 @@ function discussion_reply_notifications($event, $type, $annotation) {
 				'relationship' => 'notify' . $method,
 				'relationship_guid' => $topic->getContainerGUID(),
 				'inverse_relationship' => true,
-				'types' => 'user',
+				'type' => 'user',
 				'limit' => 0,
 			));
 

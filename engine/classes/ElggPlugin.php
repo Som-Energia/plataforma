@@ -145,7 +145,7 @@ class ElggPlugin extends ElggObject {
 	/**
 	 * Sets the location of this plugin.
 	 *
-	 * @param path $id The path to the plugin's dir.
+	 * @param string $id The path to the plugin's dir.
 	 * @return bool
 	 */
 	public function setID($id) {
@@ -303,10 +303,7 @@ class ElggPlugin extends ElggObject {
 			$return = array();
 
 			foreach ($private_settings as $setting) {
-				$name = substr($setting->name, $ps_prefix_len);
-				$value = $setting->value;
-
-				$return[$name] = $value;
+				$return[$setting->name] = $setting->value;
 			}
 
 			return $return;
@@ -600,6 +597,8 @@ class ElggPlugin extends ElggObject {
 	 * Checks if this plugin can be activated on the current
 	 * Elgg installation.
 	 *
+	 * @todo remove $site_guid param or implement it
+	 *
 	 * @param mixed $site_guid Optional site guid
 	 * @return bool
 	 */
@@ -650,8 +649,8 @@ class ElggPlugin extends ElggObject {
 			// Note: this will not run re-run the init hooks!
 			if ($return) {
 				if ($this->canReadFile('activate.php')) {
-					$flags = ELGG_PLUGIN_INCLUDE_START | ELGG_PLUGIN_REGISTER_CLASSES
-							| ELGG_PLUGIN_REGISTER_LANGUAGES | ELGG_PLUGIN_REGISTER_VIEWS;
+					$flags = ELGG_PLUGIN_INCLUDE_START | ELGG_PLUGIN_REGISTER_CLASSES |
+							ELGG_PLUGIN_REGISTER_LANGUAGES | ELGG_PLUGIN_REGISTER_VIEWS;
 
 					$this->start($flags);
 

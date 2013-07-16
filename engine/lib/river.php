@@ -380,10 +380,10 @@ function _elgg_prefetch_river_entities(array $river_items) {
 	// prefetch objects and subjects
 	$guids = array();
 	foreach ($river_items as $item) {
-		if ($item->subject_guid && !retrieve_cached_entity($item->subject_guid)) {
+		if ($item->subject_guid && !_elgg_retrieve_cached_entity($item->subject_guid)) {
 			$guids[$item->subject_guid] = true;
 		}
-		if ($item->object_guid && !retrieve_cached_entity($item->object_guid)) {
+		if ($item->object_guid && !_elgg_retrieve_cached_entity($item->object_guid)) {
 			$guids[$item->object_guid] = true;
 		}
 	}
@@ -402,7 +402,7 @@ function _elgg_prefetch_river_entities(array $river_items) {
 	$guids = array();
 	foreach ($river_items as $item) {
 		$object = $item->getObjectEntity();
-		if ($object->container_guid && !retrieve_cached_entity($object->container_guid)) {
+		if ($object->container_guid && !_elgg_retrieve_cached_entity($object->container_guid)) {
 			$guids[$object->container_guid] = true;
 		}
 	}
@@ -500,6 +500,7 @@ function elgg_get_river_type_subtype_where_sql($table, $types, $subtypes, $pairs
 		return '';
 	}
 
+	$wheres = array();
 	$types_wheres = array();
 	$subtypes_wheres = array();
 
@@ -644,7 +645,7 @@ function update_river_access_by_object($object_guid, $access_id) {
 }
 
 /**
- * Page handler for activiy
+ * Page handler for activity
  *
  * @param array $page
  * @return bool
@@ -662,10 +663,6 @@ function elgg_river_page_handler($page) {
 		$page_type = 'mine';
 	}
 	set_input('page_type', $page_type);
-
-	// content filter code here
-	$entity_type = '';
-	$entity_subtype = '';
 
 	require_once("{$CONFIG->path}pages/river.php");
 	return true;

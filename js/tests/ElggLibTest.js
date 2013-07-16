@@ -78,6 +78,7 @@ ElggLibTest.prototype.testNormalizeUrl = function() {
 		['https://example.com', 'https://example.com'],
 		['http://example-time.com', 'http://example-time.com'],
 		['//example.com', '//example.com'],
+		['mod/my_plugin/graphics/image.jpg', elgg.config.wwwroot + 'mod/my_plugin/graphics/image.jpg'],
 
 		['ftp://example.com/file', 'ftp://example.com/file'],
 		['mailto:brett@elgg.org', 'mailto:brett@elgg.org'],
@@ -124,6 +125,16 @@ ElggLibTest.prototype.testParseUrl = function() {
 
 	].forEach(function(args) {
 		assertEquals(args[1], elgg.parse_url(args[0]));
+	});
+};
+
+ElggLibTest.prototype.testParseStr = function() {
+
+	[
+		["A+%2B+B=A+%2B+B", {"A + B": "A + B"}]
+
+	].forEach(function(args) {
+		assertEquals(args[1], elgg.parse_str(args[0]));
 	});
 };
 

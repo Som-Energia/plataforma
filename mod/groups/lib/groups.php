@@ -79,7 +79,7 @@ function groups_search_page() {
 	$params = array(
 		'metadata_name' => 'interests',
 		'metadata_value' => $tag,
-		'types' => 'group',
+		'type' => 'group',
 		'full_view' => FALSE,
 	);
 	$content = elgg_list_entities_from_metadata($params);
@@ -152,7 +152,7 @@ function groups_handle_mine_page() {
 
 	elgg_register_title_button();
 
-	$content = elgg_list_entities_from_relationship_count(array(
+	$content = elgg_list_entities_from_relationship(array(
 		'type' => 'group',
 		'relationship' => 'member',
 		'relationship_guid' => elgg_get_page_owner_guid(),
@@ -370,7 +370,7 @@ function groups_handle_members_page($guid) {
 		'relationship' => 'member',
 		'relationship_guid' => $group->guid,
 		'inverse_relationship' => true,
-		'types' => 'user',
+		'type' => 'user',
 		'limit' => 20,
 	));
 
@@ -561,6 +561,8 @@ function groups_prepare_form_vars($group = null) {
 		if ($group->access_id != ACCESS_PUBLIC && $group->access_id != ACCESS_LOGGED_IN) {
 			// group only access - this is done to handle access not created when group is created
 			$values['vis'] = ACCESS_PRIVATE;
+		} else {
+			$values['vis'] = $group->access_id;
 		}
 
 		$values['entity'] = $group;

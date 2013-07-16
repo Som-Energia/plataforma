@@ -191,19 +191,19 @@ function update_metadata($id, $name, $value, $value_type, $owner_guid, $access_i
 	}
 
 	// Add the metastring
-	$value = add_metastring($value);
-	if (!$value) {
+	$value_id = add_metastring($value);
+	if (!$value_id) {
 		return false;
 	}
 
-	$name = add_metastring($name);
-	if (!$name) {
+	$name_id = add_metastring($name);
+	if (!$name_id) {
 		return false;
 	}
 
 	// If ok then add it
 	$query = "UPDATE {$CONFIG->dbprefix}metadata"
-		. " set name_id='$name', value_id='$value', value_type='$value_type', access_id=$access_id,"
+		. " set name_id='$name_id', value_id='$value_id', value_type='$value_type', access_id=$access_id,"
 		. " owner_guid=$owner_guid where id=$id";
 
 	$result = update_data($query);
@@ -277,10 +277,18 @@ $access_id = ACCESS_PRIVATE, $allow_multiple = false) {
  *                                   all metadata that match the query instead of returning
  *                                   ElggMetadata objects.
  *
- * @return mixed
+ * @return ElggMetadata[]|mixed
  * @since 1.8.0
  */
 function elgg_get_metadata(array $options = array()) {
+
+	// @todo remove support for count shortcut - see #4393
+	// support shortcut of 'count' => true for 'metadata_calculation' => 'count'
+	if (isset($options['count']) && $options['count']) {
+		$options['metadata_calculation'] = 'count';
+		unset($options['count']);
+	}
+
 	$options['metastring_type'] = 'metadata';
 	return elgg_get_metastring_based_objects($options);
 }
@@ -292,21 +300,22 @@ function elgg_get_metadata(array $options = array()) {
  *          This requires at least one constraint: metadata_owner_guid(s),
  *          metadata_name(s), metadata_value(s), or guid(s) must be set.
  *
- * @warning This returns null on no ops.
- *
  * @param array $options An options array. {@see elgg_get_metadata()}
- * @return mixed Null if the metadata name is invalid. Bool on success or fail.
+ * @return bool|null true on success, false on failure, null if no metadata to delete.
  * @since 1.8.0
  */
 function elgg_delete_metadata(array $options) {
 	if (!elgg_is_valid_options_for_batch_operation($options, 'metadata')) {
 		return false;
 	}
+	$options['metastring_type'] = 'metadata';
+	$result = elgg_batch_metastring_based_objects($options, 'elgg_batch_delete_callback', false);
 
+	// This moved last in case an object's constructor sets metadata. Currently the batch
+	// delete process has to create the entity to delete its metadata. See #5214
 	elgg_get_metadata_cache()->invalidateByOptions('delete', $options);
 
-	$options['metastring_type'] = 'metadata';
-	return elgg_batch_metastring_based_objects($options, 'elgg_batch_delete_callback', false);
+	return $result;
 }
 
 /**
@@ -314,10 +323,8 @@ function elgg_delete_metadata(array $options) {
  *
  * @warning Unlike elgg_get_metadata() this will not accept an empty options array!
  *
- * @warning This returns null on no ops.
- *
  * @param array $options An options array. {@See elgg_get_metadata()}
- * @return mixed
+ * @return bool|null true on success, false on failure, null if no metadata disabled.
  * @since 1.8.0
  */
 function elgg_disable_metadata(array $options) {
@@ -336,10 +343,11 @@ function elgg_disable_metadata(array $options) {
  *
  * @warning Unlike elgg_get_metadata() this will not accept an empty options array!
  *
- * @warning This returns null on no ops.
+ * @warning In order to enable metadata, you must first use
+ * {@link access_show_hidden_entities()}.
  *
  * @param array $options An options array. {@See elgg_get_metadata()}
- * @return mixed
+ * @return bool|null true on success, false on failure, null if no metadata enabled.
  * @since 1.8.0
  */
 function elgg_enable_metadata(array $options) {
@@ -412,7 +420,7 @@ function elgg_enable_metadata(array $options) {
  *
  *  metadata_owner_guids => NULL|ARR guids for metadata owners
  *
- * @return mixed If count, int. If not count, array. false on errors.
+ * @return ElggEntity[]|mixed If count, int. If not count, array. false on errors.
  * @since 1.7.0
  */
 function elgg_get_entities_from_metadata(array $options = array()) {
@@ -461,7 +469,7 @@ function elgg_get_entities_from_metadata(array $options = array()) {
  * @param array|null $order_by_metadata Array of names / direction
  * @param array|null $owner_guids       Array of owner GUIDs
  *
- * @return FALSE|array False on fail, array('joins', 'wheres')
+ * @return false|array False on fail, array('joins', 'wheres')
  * @since 1.7.0
  * @access private
  */
@@ -608,6 +616,8 @@ $owner_guids = NULL) {
 			// if the operand is IN don't quote it because quoting should be done already.
 			if (is_numeric($pair['value'])) {
 				$value = sanitise_string($pair['value']);
+			} else if (is_bool($pair['value'])) {
+				$value = (int) $pair['value'];
 			} else if (is_array($pair['value'])) {
 				$values_array = array();
 
@@ -774,10 +784,10 @@ function string_to_tag_array($string) {
 		$ar = explode(",", $string);
 		$ar = array_map('trim', $ar);
 		$ar = array_filter($ar, 'is_not_null');
+		$ar = array_map('strip_tags', $ar);
 		return $ar;
 	}
 	return false;
-
 }
 
 /**
@@ -909,8 +919,8 @@ function elgg_get_metadata_cache() {
  * Invalidate the metadata cache based on options passed to various *_metadata functions
  *
  * @param string $action  Action performed on metadata. "delete", "disable", or "enable"
- *
- * @param array $options  Options passed to elgg_(delete|disable|enable)_metadata
+ * @param array  $options Options passed to elgg_(delete|disable|enable)_metadata
+ * @return void
  */
 function elgg_invalidate_metadata_cache($action, array $options) {
 	// remove as little as possible, optimizing for common cases

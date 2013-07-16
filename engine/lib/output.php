@@ -12,29 +12,34 @@
  *
  * @param string $text The input string
  *
- * @return string The output stirng with formatted links
- **/
+ * @return string The output string with formatted links
+ */
 function parse_urls($text) {
+
+	// URI specification: http://www.ietf.org/rfc/rfc3986.txt
+	// This varies from the specification in the following ways:
+	//  * Supports non-ascii characters
+	//  * Does not allow parentheses and single quotes
+	//  * Cuts off commas, exclamation points, and periods off as last character
+
 	// @todo this causes problems with <attr = "val">
 	// must be in <attr="val"> format (no space).
 	// By default htmlawed rewrites tags to this format.
 	// if PHP supported conditional negative lookbehinds we could use this:
 	// $r = preg_replace_callback('/(?<!=)(?<![ ])?(?<!["\'])((ht|f)tps?:\/\/[^\s\r\n\t<>"\'\!\(\),]+)/i',
-	//
-	// we can put , in the list of excluded char but need to keep . because of domain names.
-	// it is removed in the callback.
-	$r = preg_replace_callback('/(?<!=)(?<!["\'])((ht|f)tps?:\/\/[^\s\r\n\t<>"\'\!\(\),]+)/i',
+	$r = preg_replace_callback('/(?<![=\/"\'])((ht|f)tps?:\/\/[^\s\r\n\t<>"\'\(\)]+)/i',
 	create_function(
 		'$matches',
 		'
 			$url = $matches[1];
-			$period = \'\';
-			if (substr($url, -1, 1) == \'.\') {
-				$period = \'.\';
-				$url = trim($url, \'.\');
+			$punc = \'\';
+			$last = substr($url, -1, 1);
+			if (in_array($last, array(".", "!", ","))) {
+				$punc = $last;
+				$url = rtrim($url, ".!,");
 			}
 			$urltext = str_replace("/", "/<wbr />", $url);
-			return "<a href=\"$url\">$urltext</a>$period";
+			return "<a href=\"$url\" rel=\"nofollow\">$urltext</a>$punc";
 		'
 	), $text);
 
@@ -224,7 +229,6 @@ function elgg_normalize_url($url) {
 	$php_5_3_0_to_5_3_2 = version_compare(PHP_VERSION, '5.3.0', '>=') &&
 			version_compare(PHP_VERSION, '5.3.3', '<');
 
-	$validated = false;
 	if ($php_5_2_13_and_below || $php_5_3_0_to_5_3_2) {
 		$tmp_address = str_replace("-", "", $url);
 		$validated = filter_var($tmp_address, FILTER_VALIDATE_URL);
@@ -285,9 +289,9 @@ function elgg_get_friendly_title($title) {
 		return $result;
 	}
 
-	// handle some special cases
-	$title = str_replace('&amp;', 'and', $title);
-
+	// titles are often stored HTML encoded
+	$title = html_entity_decode($title, ENT_QUOTES, 'UTF-8');
+	
 	$title = ElggTranslit::urlize($title);
 
 	return $title;
@@ -419,7 +423,7 @@ function _elgg_html_decode($string) {
 /**
  * Unit tests for Output
  *
- * @param sting  $hook   unit_test
+ * @param string  $hook   unit_test
  * @param string $type   system
  * @param mixed  $value  Array of tests
  * @param mixed  $params Params

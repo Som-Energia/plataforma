@@ -3,17 +3,17 @@
  * Elgg core search.
  *
  * @package Elgg
- * @subpackage Core
+ * @subpackage Search
  */
 
 /**
- * Return default results for searches on objects.
+ * Get objects that match the search parameters.
  *
- * @param unknown_type $hook
- * @param unknown_type $type
- * @param unknown_type $value
- * @param unknown_type $params
- * @return unknown_type
+ * @param string $hook   Hook name
+ * @param string $type   Hook type
+ * @param array  $value  Empty array
+ * @param array  $params Search parameters
+ * @return array
  */
 function search_objects_hook($hook, $type, $value, $params) {
 
@@ -23,7 +23,7 @@ function search_objects_hook($hook, $type, $value, $params) {
 	$params['joins'] = array($join);
 	$fields = array('title', 'description');
 
-	$where = search_get_where_sql('oe', $fields, $params, FALSE);
+	$where = search_get_where_sql('oe', $fields, $params);
 
 	$params['wheres'] = array($where);
 	$params['count'] = TRUE;
@@ -35,6 +35,7 @@ function search_objects_hook($hook, $type, $value, $params) {
 	}
 	
 	$params['count'] = FALSE;
+	$params['order_by'] = search_get_order_by_sql('e', 'oe', $params['sort'], $params['order']);
 	$entities = elgg_get_entities($params);
 
 	// add the volatile data for why these entities have been returned.
@@ -53,13 +54,13 @@ function search_objects_hook($hook, $type, $value, $params) {
 }
 
 /**
- * Return default results for searches on groups.
+ * Get groups that match the search parameters.
  *
- * @param unknown_type $hook
- * @param unknown_type $type
- * @param unknown_type $value
- * @param unknown_type $params
- * @return unknown_type
+ * @param string $hook   Hook name
+ * @param string $type   Hook type
+ * @param array  $value  Empty array
+ * @param array  $params Search parameters
+ * @return array
  */
 function search_groups_hook($hook, $type, $value, $params) {
 	$db_prefix = elgg_get_config('dbprefix');
@@ -68,12 +69,9 @@ function search_groups_hook($hook, $type, $value, $params) {
 
 	$join = "JOIN {$db_prefix}groups_entity ge ON e.guid = ge.guid";
 	$params['joins'] = array($join);
-	
 	$fields = array('name', 'description');
 
-	// force into boolean mode because we've having problems with the
-	// "if > 50% match 0 sets are returns" problem.
-	$where = search_get_where_sql('ge', $fields, $params, FALSE);
+	$where = search_get_where_sql('ge', $fields, $params);
 
 	$params['wheres'] = array($where);
 
@@ -89,6 +87,7 @@ function search_groups_hook($hook, $type, $value, $params) {
 	}
 	
 	$params['count'] = FALSE;
+	$params['order_by'] = search_get_order_by_sql('e', 'ge', $params['sort'], $params['order']);
 	$entities = elgg_get_entities($params);
 
 	// add the volatile data for why these entities have been returned.
@@ -107,15 +106,15 @@ function search_groups_hook($hook, $type, $value, $params) {
 }
 
 /**
- * Return default results for searches on users.
+ * Get users that match the search parameters.
  *
- * @todo add profile field MD searching
- *
- * @param unknown_type $hook
- * @param unknown_type $type
- * @param unknown_type $value
- * @param unknown_type $params
- * @return unknown_type
+ * Searches on username, display name, and profile fields
+ * 
+ * @param string $hook   Hook name
+ * @param string $type   Hook type
+ * @param array  $value  Empty array
+ * @param array  $params Search parameters
+ * @return array
  */
 function search_users_hook($hook, $type, $value, $params) {
 	$db_prefix = elgg_get_config('dbprefix');
@@ -159,6 +158,7 @@ function search_users_hook($hook, $type, $value, $params) {
 	}
 	
 	$params['count'] = FALSE;
+	$params['order_by'] = search_get_order_by_sql('e', 'ue', $params['sort'], $params['order']);
 	$entities = elgg_get_entities($params);
 
 	// add the volatile data for why these entities have been returned.
@@ -175,11 +175,20 @@ function search_users_hook($hook, $type, $value, $params) {
 		$entity->setVolatileData('search_matched_title', $title);
 
 		$matched = '';
-		foreach ($profile_fields as $md) {
-			$text = $entity->$md;
-			if (stristr($text, $query)) {
-				$matched .= elgg_echo("profile:{$md}") . ': '  
-						. search_get_highlighted_relevant_substrings($text, $query);
+		foreach ($profile_fields as $md_name) {
+			$metadata = $entity->$md_name;
+			if (is_array($metadata)) {
+				foreach ($metadata as $text) {
+					if (stristr($text, $query)) {
+						$matched .= elgg_echo("profile:{$md_name}") . ': '
+								. search_get_highlighted_relevant_substrings($text, $query);
+					}
+				}
+			} else {
+				if (stristr($metadata, $query)) {
+					$matched .= elgg_echo("profile:{$md_name}") . ': '
+							. search_get_highlighted_relevant_substrings($metadata, $query);
+				}
 			}
 		}
 
@@ -193,13 +202,13 @@ function search_users_hook($hook, $type, $value, $params) {
 }
 
 /**
- * Return default results for searches on tags.
+ * Get entities with tags that match the search parameters.
  *
- * @param unknown_type $hook
- * @param unknown_type $type
- * @param unknown_type $value
- * @param unknown_type $params
- * @return unknown_type
+ * @param string $hook   Hook name
+ * @param string $type   Hook type
+ * @param array  $value  Empty array
+ * @param array  $params Search parameters
+ * @return array
  */
 function search_tags_hook($hook, $type, $value, $params) {
 	$db_prefix = elgg_get_config('dbprefix');
@@ -261,6 +270,7 @@ function search_tags_hook($hook, $type, $value, $params) {
 	}
 	
 	$params['count'] = FALSE;
+	$params['order_by'] = search_get_order_by_sql('e', null, $params['sort'], $params['order']);
 	$entities = elgg_get_entities($params);
 
 	// add the volatile data for why these entities have been returned.
@@ -327,11 +337,11 @@ function search_tags_hook($hook, $type, $value, $params) {
 /**
  * Register tags as a custom search type.
  *
- * @param unknown_type $hook
- * @param unknown_type $type
- * @param unknown_type $value
- * @param unknown_type $params
- * @return unknown_type
+ * @param string $hook   Hook name
+ * @param string $type   Hook type
+ * @param array  $value  Array of custom search types
+ * @param array  $params Search parameters
+ * @return array
  */
 function search_custom_types_tags_hook($hook, $type, $value, $params) {
 	$value[] = 'tags';
@@ -340,13 +350,13 @@ function search_custom_types_tags_hook($hook, $type, $value, $params) {
 
 
 /**
- * Return default results for searches on comments.
+ * Get comments that match the search parameters.
  *
- * @param unknown_type $hook
- * @param unknown_type $type
- * @param unknown_type $value
- * @param unknown_type $params
- * @return unknown_type
+ * @param string $hook   Hook name
+ * @param string $type   Hook type
+ * @param array  $value  Empty array
+ * @param array  $params Search parameters
+ * @return array
  */
 function search_comments_hook($hook, $type, $value, $params) {
 	$db_prefix = elgg_get_config('dbprefix');
@@ -398,6 +408,11 @@ function search_comments_hook($hook, $type, $value, $params) {
 		return array ('entities' => array(), 'count' => 0);
 	}
 	
+	$order_by = search_get_order_by_sql('e', null, $params['sort'], $params['order']);
+	if ($order_by) {
+		$order_by = "ORDER BY $order_by";
+	}
+	
 	$q = "SELECT DISTINCT a.*, msv.string as comment FROM {$db_prefix}annotations a
 		JOIN {$db_prefix}metastrings msn ON a.name_id = msn.id
 		JOIN {$db_prefix}metastrings msv ON a.value_id = msv.id
@@ -407,7 +422,8 @@ function search_comments_hook($hook, $type, $value, $params) {
 			AND $e_access
 			AND $a_access
 			$container_and
-
+		
+		$order_by
 		LIMIT $offset, $limit
 		";
 
@@ -450,11 +466,11 @@ function search_comments_hook($hook, $type, $value, $params) {
 /**
  * Register comments as a custom search type.
  *
- * @param unknown_type $hook
- * @param unknown_type $type
- * @param unknown_type $value
- * @param unknown_type $params
- * @return unknown_type
+ * @param string $hook   Hook name
+ * @param string $type   Hook type
+ * @param array  $value  Array of custom search types
+ * @param array  $params Search parameters
+ * @return array
  */
 function search_custom_types_comments_hook($hook, $type, $value, $params) {
 	$value[] = 'comments';

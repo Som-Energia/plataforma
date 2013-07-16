@@ -77,28 +77,24 @@ class ElggSite extends ElggEntity {
 					$msg = elgg_echo('IOException:FailedToLoadGUID', array(get_class(), $guid->guid));
 					throw new IOException($msg);
 				}
-
-			// Is $guid is an ElggSite? Use a copy constructor
 			} else if ($guid instanceof ElggSite) {
+				// $guid is an ElggSite so this is a copy constructor
 				elgg_deprecated_notice('This type of usage of the ElggSite constructor was deprecated. Please use the clone method.', 1.7);
 
 				foreach ($guid->attributes as $key => $value) {
 					$this->attributes[$key] = $value;
 				}
-
-			// Is this is an ElggEntity but not an ElggSite = ERROR!
 			} else if ($guid instanceof ElggEntity) {
+				// @todo remove and just use else clause
 				throw new InvalidParameterException(elgg_echo('InvalidParameterException:NonElggSite'));
-
-			// See if this is a URL
 			} else if (strpos($guid, "http") !== false) {
+				// url so retrieve by url
 				$guid = get_site_by_url($guid);
 				foreach ($guid->attributes as $key => $value) {
 					$this->attributes[$key] = $value;
 				}
-
-			// Is it a GUID
 			} else if (is_numeric($guid)) {
+				// $guid is a GUID so load
 				if (!$this->load($guid)) {
 					throw new IOException(elgg_echo('IOException:FailedToLoadGUID', array(get_class(), $guid)));
 				}
@@ -128,7 +124,7 @@ class ElggSite extends ElggEntity {
 
 		$this->attributes = $attrs;
 		$this->attributes['tables_loaded'] = 2;
-		cache_entity($this);
+		_elgg_cache_entity($this);
 
 		return true;
 	}
@@ -362,6 +358,11 @@ class ElggSite extends ElggEntity {
 	public function checkWalledGarden() {
 		global $CONFIG;
 
+		// command line calls should not invoke the walled garden check
+		if (PHP_SAPI === 'cli') {
+			return;
+		}
+
 		if ($CONFIG->walled_garden) {
 			if ($CONFIG->default_access == ACCESS_PUBLIC) {
 				$CONFIG->default_access = ACCESS_LOGGED_IN;
@@ -376,7 +377,9 @@ class ElggSite extends ElggEntity {
 				elgg_register_plugin_hook_handler('index', 'system', 'elgg_walled_garden_index', 1);
 
 				if (!$this->isPublicPage()) {
-					$_SESSION['last_forward_from'] = current_page_url();
+					if (!elgg_is_xhr()) {
+						$_SESSION['last_forward_from'] = current_page_url();
+					}
 					register_error(elgg_echo('loggedinrequired'));
 					forward();
 				}
@@ -437,8 +440,6 @@ class ElggSite extends ElggEntity {
 
 		// include a hook for plugin authors to include public pages
 		$plugins = elgg_trigger_plugin_hook('public_pages', 'walled_garden', NULL, array());
-
-		// lookup admin-specific public pages
 
 		// allow public pages
 		foreach (array_merge($defaults, $plugins) as $public) {
