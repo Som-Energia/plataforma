@@ -64,9 +64,11 @@ Motivo: %s.",
 		'spam_login_filter:use_mail_blacklist' => "Usar lista negra de e-mails",
 		'spam_login_filter:blacklisted_mails' => "E-mails em lista negra - Um por linha",
 		
-		'spam_login_filter:use_ip_blacklist_cache' => "Usar cache de lista negra de ips",
+		'spam_login_filter:protected_pages' => "Use lista negra de ips para proteger páginas específicas",
 		
-		'spam_login_filter:use_ip_blacklist_cache_description' => "IPs em lista negra podem navegar no site, porém receberão o erro '403 error - Access denied' na página de registro.",
+		'spam_login_filter:protected_pages:help' => "Informe um endereço por linha.
+            ex.: Para proteger a página de registro, digite 'register' em uma linha
+            IPs em lista negra podem navegar pelo site, porém verão um erro de '403 - Acesso Negado' nestas páginas.",
 		
 		//Configuration form - Titles
 		'spam_login_filter:title_stopforumspam' => "Stopforumspam",
@@ -74,7 +76,26 @@ Motivo: %s.",
 		'spam_login_filter:title_domain_blacklist' => "Lista negra de domínios",
 		'spam_login_filter:title_email_blacklist' => "Lista negra de e-mails",
 		'spam_login_filter:title_plugin_notifications' => "Notificações do plugin",
-		'spam_login_filter:title_ip_blacklist' => "Lista negra de ips"
+		'spam_login_filter:title_ip_blacklist' => "Lista negra de ips",
+		'spam_login_filter:whitelist' => "Lista branca",
+        'spam_login_filter:events' => "Eventos",
+		
+		
+		// Whitelist
+        'spam_login_filter:whitelist:ip' => "Lista branca de endereços IP",
+        'spam_login_filter:whitelist:ip:help' => "Digite um IP por linha. IPs informados aqui não terão seu acesso ao site negado.",
+        'spam_login_filter:whitelist:email' => "Lista branca de endereços de email",
+        'spam_login_filter:whitelist:email:help' => "Digite um email por linha. Emails informados aqui não terão seu acesso negado ao se registrar ou autenticar no site.",
+        'spam_login_filter:whitelist:email:domain' => "Lista branca de domínios de email",
+        'spam_login_filter:whitelist:email:domain:help' => "Digite um domínio por linha. Emails que usam os dominíos informados aqui não terão seu acesso negado ao se registrar ou autenticar no site.",
+        
+        //Events
+        'spam_login_filter:check_login' => "Verificar por spammers durante o login?",
+        'spam_login_filter:check_login:help' => "Isto pode ajudar a identificar spammers que não estavam na lista negra ao se registrarem, mas que voltam depois para fazer seu trabalho sujo",
+		'spam_login_filter:label:user_metadata' => "Metadados de Usuários",
+		'spam_login_filter:user_metadata:help' => "Verificar metadados por valores banidos - digite um metadado por linha",
+		'spam_login_filter:label:banned_metadata' => "Impedir o login se o metadado contem::",
+		'spam_login_filter:banned_metadata:help' => "Este recurso usa uma checagem do tipo 'contem', então seja bem específico.  ex.: se você informar 'empresa' como um metadado a ser checado, e banir a palavra 'inter' aqui, ele bloqueará qualquer um que tenha, por exemplo, o valor 'xyz international' se o usuário informar esse valor como o nome de sua empresa",
 	
 	);
 	add_translation('pt_br', $portugues_brasileiro); 

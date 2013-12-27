@@ -2,8 +2,8 @@
 <plugin_manifest xmlns="http://www.elgg.org/plugin_manifest/1.8">
 	<name>Spam Login Filter</name>
 	<author>Ray J</author>
-	<version>1.8.2</version>	
-	<description>Validate login against blacklist databases.</description>
+	<version>1.8.5</version>	
+	<description>Validate login against blacklist databases. You need the tracker plugin to use the "report as spammer" feature.</description>
 	<website>http://www.elgg.org/</website>
 	<copyright>(C) Ray J - 2011</copyright>
 	<license>GNU Public License version 2</license>
@@ -11,9 +11,8 @@
 		<type>elgg_release</type>
 		<version>1.8</version>
 	</requires>
-	<requires>
+	<suggests>
 		<type>plugin</type>
 		<name>tracker</name>
-		<version>1.8b</version>
-	</requires>
+	</suggests>
 </plugin_manifest>

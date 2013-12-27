@@ -13,8 +13,8 @@
 		
 		//Admin menu
 		'admin:administer_utilities:manageip' => "Manage blocked IPs",
-		'spam_login_filter:admin:ip_date_created' => 'Created %s',
-		'spam_login_filter:admin:delete_ip' => 'Delete',
+		'spam_login_filter:admin:ip_address' => 'IP Address',
+		'spam_login_filter:admin:ip_date_created' => 'Created',
 		'spam_login_filter:admin:confirm_delete_ip' => 'Delete %s?',
 		
 		'spam_login_filter:messages:deleted_ip' => 'IP Deleted.',
@@ -25,7 +25,7 @@
 		'spam_login_filter:admin:no_ips' => 'The IP list is empty.',
 
 		//Report to stopforumspam
-		'spam_login_filter:empty_ip_error' => "User´s IP address is empty.",
+		'spam_login_filter:empty_ip_error' => "User's IP address is empty.",
 		'spam_login_filter:empty_api_key_error' => "stopforumspam API key is empty.",
 		'spam_login_filter:unable_report' => "Unable to contact stopforumspam.com.",
 		'spam_login_filter:user_deleted' => "User deleted.",
@@ -33,7 +33,7 @@
 		
 		//Configuration form - Fassim settings
 		'spam_login_filter:use_fassim' => "Use fassim.com",
-		'spam_login_filter:fassim_api_key' => "Fassim API Key",		
+		'spam_login_filter:fassim_api_key' => "Fassim API Key",
 		'spam_login_filter:fassim_check_email' => "Check email?",
 		'spam_login_filter:fassim_check_ip' => "Check IP?",
 		'spam_login_filter:fassim_block_proxies' => "Block anonymous proxies?",
@@ -64,9 +64,11 @@ Reason: %s.",
 		'spam_login_filter:use_mail_blacklist' => "Use especific mail blacklist",
 		'spam_login_filter:blacklisted_mails' => "Blacklisted mails - One per line",
 		
-		'spam_login_filter:use_ip_blacklist_cache' => "Use IP blacklist cache",
+		'spam_login_filter:protected_pages' => "Use IP blacklist cache to protect specific pages",
 		
-		'spam_login_filter:use_ip_blacklist_cache_description' => "Blacklisted IPs can navigate into site, but will see the error '403 error - Access denied' in registration page.",
+		'spam_login_filter:protected_pages:help' => "Enter one path per line.
+            eg. To protect the registration page enter 'register' on a line
+            Blacklisted IPs can navigate to the site, but will see the error '403 error - Access denied' in protected pages.",
 		
 		//Configuration form - Titles
 		'spam_login_filter:title_stopforumspam' => "Stopforumspam",
@@ -74,9 +76,26 @@ Reason: %s.",
 		'spam_login_filter:title_domain_blacklist' => "Domain Blacklist",
 		'spam_login_filter:title_email_blacklist' => "Email Blacklist",
 		'spam_login_filter:title_plugin_notifications' => "Plugin Notifications",
-		'spam_login_filter:title_ip_blacklist' => "IP Blacklist"
+		'spam_login_filter:title_ip_blacklist' => "IP Blacklist",
+        'spam_login_filter:whitelist' => "Whitelists",
+        'spam_login_filter:events' => "Events",
+        
+        
+        // Whitelist
+        'spam_login_filter:whitelist:ip' => "Whitelist IP addresses",
+        'spam_login_filter:whitelist:ip:help' => "Enter one IP per line.  IP addresses listed here will not be denied access.",
+        'spam_login_filter:whitelist:email' => "Whitelist email addresses",
+        'spam_login_filter:whitelist:email:help' => "Enter one email per line.  Email addresses listed here will not be denied at registration/login.",
+        'spam_login_filter:whitelist:email:domain' => "Whitelist email domains",
+        'spam_login_filter:whitelist:email:domain:help' => "Enter one domain per line.  Email addresses with domains listed here will not be denied at registration/login.",
+        
+        //Events
+        'spam_login_filter:check_login' => "Check for spammers on login?",
+        'spam_login_filter:check_login:help' => "This can help catch spammers who weren't in the database at the time of registration, but come back to do their dirty work",
+		'spam_login_filter:label:user_metadata' => "User Metadata",
+		'spam_login_filter:user_metadata:help' => "Check metadata for banned values - enter one metadata name per line",
+		'spam_login_filter:label:banned_metadata' => "Block login if metadata contains:",
+		'spam_login_filter:banned_metadata:help' => "This uses a 'contains' check, so be specific.  eg. if you list 'company' as a checked metadata above, and list 'inter' here, it will block anybody who has 'arck interactive' listed as a value for company",
 			
 	);
 	add_translation("en",$english);
-
-?>

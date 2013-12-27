@@ -1,6 +1,4 @@
 <?php
-	// block non-admin users - require since this action is not registered
-	admin_gatekeeper();
 	
 	$forward = REFERER;
 	$deleted = false;
@@ -20,48 +18,50 @@
 		forward($forward);
 	}
 	else {
-		if(elgg_get_plugin_setting("use_ip_blacklist_cache") == "yes"){
+		if(elgg_get_plugin_setting('use_ip_blacklist_cache', 'spam_login_filter') == "yes"){
 			// Blacklist the IP
-			//Check if the ip exists			
+			//Check if the ip exists
 			$options = array(
 				"type" => "object",
 				"subtype" => "spam_login_filter_ip",
-				"metadata_names" => "ip_address",
-				"metadata_values" => $ip_address,
+				"metadata_name_value_pairs" => array(
+					"name" => "ip_address",
+					"value" => $ip_address,
+				),
 				"count" => TRUE
 			);
 
-			elgg_set_ignore_access(true);
+			$ia = elgg_set_ignore_access(true);
 			
 			$spam_login_filter_ip_list = elgg_get_entities_from_metadata($options);
 			
-			if ($spam_login_filter_ip_list == 0) {
+			if (!$spam_login_filter_ip_list) {
 				//Create the banned ip
 				$ip = new ElggObject();
 				$ip->subtype = 'spam_login_filter_ip';
 				$ip->access_id = ACCESS_PRIVATE;
 				$ip->ip_address = $ip_address;
-				$ip->owner_guid = $CONFIG->site_id;
+				$ip->owner_guid = elgg_get_site_entity()->guid;
+				$ip->container_guid = elgg_get_site_entity()->guid;
 				$ip->save();
 			}
 			
-			elgg_set_ignore_access(false);
+			elgg_set_ignore_access($ia);
 		}
 	}
 	
 	
 	//Report to stopforumspam.com
-	if(elgg_get_plugin_setting("use_stopforumspam") == "yes"){
+	if(elgg_get_plugin_setting('use_stopforumspam', 'spam_login_filter') == "yes"){
 		if (empty($api_key)){
 			register_error(elgg_echo('spam_login_filter:empty_api_key_error'));
 			forward($forward);
 		}
 
 		if (!empty($ip_address) && !empty($api_key)){
-			return;
 			//Report the spammer
 			$url = 'http://www.stopforumspam.com/add.php?username='.$username.'&ip_addr='.$ip_address.'&email='.$email.'&api_key='.$api_key;
-			$return = file_get_conditional_contents($url);
+			$return = spam_login_filter_file_get_conditional_contents($url);
 			
 			if ($return == false)
 			{
@@ -69,7 +69,7 @@
 				forward($forward);
 			}
 		}
-	}	
+	}
 
 	if (($obj instanceof ElggUser) && ($obj->canEdit())) {
 		if ($obj->delete()) {
