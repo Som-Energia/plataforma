@@ -1,0 +1,32 @@
+Changes:
+
+      ########  ###        ########   ### ###       #####    #####     #####TM
+     #########  ###              ###    #######    #######  ###   ##  ##
+    ###         ########   #########   ###   ###  ###   ##  ########   ######
+    ###         ###  ###  ####  ####   ###   ###    ######  ###          #####
+     #########  ###  ###   ########    ###   ###       ###  ###              ##   ###
+       #######  ###  ###     ####      ###   ###    #####    ######    #######    ### 
+
+                               
+
+Elgg Plugin GutwaCaptcha 1.8.15b 
+
+Time: Tuesday, October 08, 2013
+
+Added: sound or audio files for:
+
++  DE, German - German language
+
++  FR, French - French language					   
+							   
+							   
+							   
+Elgg Plugin GutwaCaptcha 1.8.15a 
+
+Time: Thursday,October 03, 2013 at 2:25 PM
+
+Fix
+
+Stop direct access -> Prevent spammers and Captcha breakers or hackers companies or scripts or software from accessing sound play file
+Fixed the register page -> now Elgg Captcha is compatible with Profile Manager for Elgg 1.8
+
