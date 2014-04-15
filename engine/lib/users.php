@@ -553,6 +553,11 @@ function get_user($guid) {
 function get_user_by_username($username) {
 	global $CONFIG, $USERNAME_TO_GUID_MAP_CACHE;
 
+	// Fixes #6052. Username is frequently sniffed from the path info, which,
+	// unlike $_GET, is not URL decoded. If the username was not URL encoded,
+	// this is harmless.
+	$username = rawurldecode($username);
+
 	$username = sanitise_string($username);
 	$access = get_access_sql_suffix('e');
 
@@ -709,7 +714,7 @@ function force_user_password_reset($user_guid, $password) {
 	if ($user instanceof ElggUser) {
 		$ia = elgg_set_ignore_access();
 
-		$user->salt = generate_random_cleartext_password();
+		$user->salt = _elgg_generate_password_salt();
 		$hash = generate_user_password($user, $password);		
 		$user->password = $hash;
 		$result = (bool)$user->save();
@@ -759,19 +764,26 @@ function execute_new_password_request($user_guid, $conf_code) {
 }
 
 /**
- * Simple function that will generate a random clear text password
- * suitable for feeding into generate_user_password().
- *
- * @see generate_user_password
+ * Generate a random 12 character clear text password.
  *
  * @return string
  */
 function generate_random_cleartext_password() {
-	return substr(md5(microtime() . rand()), 0, 8);
+	return ElggCrypto::getRandomString(12, ElggCrypto::CHARS_PASSWORD);
 }
 
 /**
- * Generate a password for a user, currently uses MD5.
+ * Generate an 8 character Base64 URL salt for the password
+ *
+ * @return string
+ * @access private
+ */
+function _elgg_generate_password_salt() {
+	return ElggCrypto::getRandomString(8);
+}
+
+/**
+ * Hash a password for storage. Currently salted MD5.
  *
  * @param ElggUser $user     The user this is being generated for.
  * @param string   $password Password in clear text
@@ -952,7 +964,7 @@ $allow_multiple_emails = false, $friend_guid = 0, $invitecode = '') {
 	$user->email = $email;
 	$user->name = $name;
 	$user->access_id = ACCESS_PUBLIC;
-	$user->salt = generate_random_cleartext_password(); // Note salt generated before password!
+	$user->salt = _elgg_generate_password_salt();
 	$user->password = generate_user_password($user, $password);
 	$user->owner_guid = 0; // Users aren't owned by anyone, even if they are admin created.
 	$user->container_guid = 0; // Users aren't contained by anyone, even if they are admin created.
@@ -1091,6 +1103,7 @@ function friends_page_handler($segments, $handler) {
  * @access private
  */
 function collections_page_handler($page_elements) {
+	gatekeeper();
 	elgg_set_context('friends');
 	$base = elgg_get_config('path');
 	if (isset($page_elements[0])) {

@@ -55,7 +55,7 @@ function groups_handle_all_page() {
 	}
 
 	$filter = elgg_view('groups/group_sort_menu', array('selected' => $selected_tab));
-	
+
 	$sidebar = elgg_view('groups/sidebar/find');
 	$sidebar .= elgg_view('groups/sidebar/featured');
 
@@ -73,7 +73,8 @@ function groups_search_page() {
 	elgg_push_breadcrumb(elgg_echo('search'));
 
 	$tag = get_input("tag");
-	$title = elgg_echo('groups:search:title', array($tag));
+	$display_query = _elgg_get_display_query($tag);
+	$title = elgg_echo('groups:search:title', array($display_query));
 
 	// groups plugin saves tags as "interests" - see groups_fields_setup() in start.php
 	$params = array(
@@ -115,7 +116,9 @@ function groups_handle_owned_page() {
 	}
 	elgg_push_breadcrumb($title);
 
-	elgg_register_title_button();
+	if (elgg_get_plugin_setting('limited_groups', 'groups') != 'yes' || elgg_is_admin_logged_in()) {
+		elgg_register_title_button();
+	}
 
 	$content = elgg_list_entities(array(
 		'type' => 'group',
@@ -150,7 +153,9 @@ function groups_handle_mine_page() {
 	}
 	elgg_push_breadcrumb($title);
 
-	elgg_register_title_button();
+	if (elgg_get_plugin_setting('limited_groups', 'groups') != 'yes' || elgg_is_admin_logged_in()) {
+		elgg_register_title_button();
+	}
 
 	$content = elgg_list_entities_from_relationship(array(
 		'type' => 'group',
@@ -181,7 +186,7 @@ function groups_handle_mine_page() {
  */
 function groups_handle_edit_page($page, $guid = 0) {
 	gatekeeper();
-	
+
 	if ($page == 'add') {
 		elgg_set_page_owner_guid(elgg_get_logged_in_user_guid());
 		$title = elgg_echo('groups:add');
@@ -204,7 +209,7 @@ function groups_handle_edit_page($page, $guid = 0) {
 			$content = elgg_echo('groups:noaccess');
 		}
 	}
-	
+
 	$params = array(
 		'content' => $content,
 		'title' => $title,
@@ -255,8 +260,8 @@ function groups_handle_profile_page($guid) {
 	elgg_push_context('group_profile');
 
 	$group = get_entity($guid);
-	if (!$group) {
-		forward('groups/all');
+	if (!elgg_instanceof($group, 'group')) {
+		forward('', '404');
 	}
 
 	elgg_push_breadcrumb($group->name);
@@ -266,7 +271,7 @@ function groups_handle_profile_page($guid) {
 	$content = elgg_view('groups/profile/layout', array('entity' => $group));
 	$sidebar = '';
 
-	if (group_gatekeeper(false)) {	
+	if (group_gatekeeper(false)) {
 		if (elgg_is_active_plugin('search')) {
 			$sidebar .= elgg_view('groups/sidebar/search', array('entity' => $group));
 		}
@@ -275,18 +280,18 @@ function groups_handle_profile_page($guid) {
 		$subscribed = false;
 		if (elgg_is_active_plugin('notifications')) {
 			global $NOTIFICATION_HANDLERS;
-			
+
 			foreach ($NOTIFICATION_HANDLERS as $method => $foo) {
 				$relationship = check_entity_relationship(elgg_get_logged_in_user_guid(),
 						'notify' . $method, $guid);
-				
+
 				if ($relationship) {
 					$subscribed = true;
 					break;
 				}
 			}
 		}
-		
+
 		$sidebar .= elgg_view('groups/sidebar/my_status', array(
 			'entity' => $group,
 			'subscribed' => $subscribed
@@ -334,7 +339,7 @@ function groups_handle_activity_page($guid) {
 	if (!$content) {
 		$content = '<p>' . elgg_echo('groups:activity:none') . '</p>';
 	}
-	
+
 	$params = array(
 		'content' => $content,
 		'title' => $title,
@@ -366,12 +371,15 @@ function groups_handle_members_page($guid) {
 	elgg_push_breadcrumb($group->name, $group->getURL());
 	elgg_push_breadcrumb(elgg_echo('groups:members'));
 
+	$db_prefix = elgg_get_config('dbprefix');
 	$content = elgg_list_entities_from_relationship(array(
 		'relationship' => 'member',
 		'relationship_guid' => $group->guid,
 		'inverse_relationship' => true,
 		'type' => 'user',
 		'limit' => 20,
+		'joins' => array("JOIN {$db_prefix}users_entity u ON e.guid=u.guid"),
+		'order_by' => 'u.name ASC',
 	));
 
 	$params = array(
@@ -424,7 +432,7 @@ function groups_handle_invite_page($guid) {
 
 /**
  * Manage requests to join a group
- * 
+ *
  * @param int $guid Group entity GUID
  */
 function groups_handle_requests_page($guid) {
@@ -440,7 +448,7 @@ function groups_handle_requests_page($guid) {
 	if ($group && $group->canEdit()) {
 		elgg_push_breadcrumb($group->name, $group->getURL());
 		elgg_push_breadcrumb($title);
-		
+
 		$requests = elgg_get_entities_from_relationship(array(
 			'type' => 'user',
 			'relationship' => 'membership_request',

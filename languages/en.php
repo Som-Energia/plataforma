@@ -105,6 +105,8 @@ $english = array(
 	'ElggPlugin:Dependencies:Priority:Before' => 'Before %s',
 	'ElggPlugin:Dependencies:Priority:Uninstalled' => '%s is not installed',
 	'ElggPlugin:Dependencies:Suggests:Unsatisfied' => 'Missing',
+	
+	'ElggPlugin:Dependencies:ActiveDependent' => 'There are other plugins that list %s as a dependency.  You must disable the following plugins before disabling this one: %s',
 
 	'ElggPlugin:InvalidAndDeactivated' => '%s is an invalid plugin and has been deactivated.',
 
@@ -599,6 +601,18 @@ $english = array(
 	'admin:site:opt:linktext' => "Configure site...",
 	'admin:site:access:warning' => "Changing the access setting only affects the permissions on content created in the future.",
 
+	'admin:site:secret:intro' => 'Elgg uses a key to create security tokens for various purposes.',
+	'admin:site:secret_regenerated' => "Your site secret has been regenerated.",
+	'admin:site:secret:regenerate' => "Regenerate site secret",
+	'admin:site:secret:regenerate:help' => "Note: Regenerating your site secret may inconvenience some users by invalidating tokens used in \"remember me\" cookies, e-mail validation requests, invitation codes, etc.",
+	'site_secret:current_strength' => 'Key Strength',
+	'site_secret:strength:weak' => "Weak",
+	'site_secret:strength_msg:weak' => "We strongly recommend that you regenerate your site secret.",
+	'site_secret:strength:moderate' => "Moderate",
+	'site_secret:strength_msg:moderate' => "We recommend you regenerate your site secret for the best site security.",
+	'site_secret:strength:strong' => "Strong",
+	'site_secret:strength_msg:strong' => "Your site secret is sufficiently strong. There is no need to regenerate it.",
+
 	'admin:dashboard' => 'Dashboard',
 	'admin:widget:online_users' => 'Online users',
 	'admin:widget:online_users:help' => 'Lists the users currently on the site',
@@ -903,6 +917,7 @@ $english = array(
 	'total' => 'Total',
 
 	'learnmore' => "Click here to learn more.",
+	'unknown_error' => 'Unknown error',
 
 	'content' => "content",
 	'content:latest' => 'Latest activity',
@@ -1061,7 +1076,7 @@ Once you have logged in, we highly recommend that you change your password.
 	'upgrade:unlock' => 'Unlock upgrade',
 	'upgrade:unlock:confirm' => "The database is locked for another upgrade. Running concurrent upgrades is dangerous. You should only continue if you know there is not another upgrade running. Unlock?",
 	'upgrade:locked' => "Cannot upgrade. Another upgrade is running. To clear the upgrade lock, visit the Admin section.",
-	'upgrade:unlock:success' => "Upgrade unlocked suscessfully.",
+	'upgrade:unlock:success' => "Upgrade unlocked successfully.",
 	'upgrade:unable_to_upgrade' => 'Unable to upgrade.',
 	'upgrade:unable_to_upgrade_info' =>
 		'This installation cannot be upgraded because legacy views
@@ -1076,6 +1091,8 @@ Once you have logged in, we highly recommend that you change your password.
 
 	'update:twitter_api:deactivated' => 'Twitter API (previously Twitter Service) was deactivated during the upgrade. Please activate it manually if required.',
 	'update:oauth_api:deactivated' => 'OAuth API (previously OAuth Lib) was deactivated during the upgrade.  Please activate it manually if required.',
+	'upgrade:site_secret_warning:moderate' => "You are encouraged to regenerate your site key to improve system security. See Configure &gt; Settings &gt; Advanced",
+	'upgrade:site_secret_warning:weak' => "You are strongly encouraged to regenerate your site key to improve system security. See Configure &gt; Settings &gt; Advanced",
 
 	'deprecated:function' => '%s() was deprecated by %s()',
 

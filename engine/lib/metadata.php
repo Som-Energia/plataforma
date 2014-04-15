@@ -333,9 +333,13 @@ function elgg_disable_metadata(array $options) {
 	}
 
 	elgg_get_metadata_cache()->invalidateByOptions('disable', $options);
+	
+	// if we can see hidden (disabled) we need to use the offset
+	// otherwise we risk an infinite loop if there are more than 50
+	$inc_offset = access_get_show_hidden_status();
 
 	$options['metastring_type'] = 'metadata';
-	return elgg_batch_metastring_based_objects($options, 'elgg_batch_disable_callback', false);
+	return elgg_batch_metastring_based_objects($options, 'elgg_batch_disable_callback', $inc_offset);
 }
 
 /**
@@ -402,9 +406,11 @@ function elgg_enable_metadata(array $options) {
  *                                         'operand' => '=',
  *                                         'case_sensitive' => TRUE
  *                                        )
- * 	                             Currently if multiple values are sent via
+ *                               Currently if multiple values are sent via
  *                               an array (value => array('value1', 'value2')
  *                               the pair's operand will be forced to "IN".
+ *                               If passing "IN" as the operand and a string as the value, 
+ *                               the value must be a properly quoted and escaped string.
  *
  * 	metadata_name_value_pairs_operator => NULL|STR The operator to use for combining
  *                                        (name = value) OPERATOR (name = value); default AND

@@ -386,13 +386,20 @@ function add_subtype($type, $subtype, $class = "") {
  * @see update_subtype()
  */
 function remove_subtype($type, $subtype) {
-	global $CONFIG;
+	global $CONFIG, $SUBTYPE_CACHE;
 
 	$type = sanitise_string($type);
 	$subtype = sanitise_string($subtype);
 
-	return delete_data("DELETE FROM {$CONFIG->dbprefix}entity_subtypes"
+	$success = delete_data("DELETE FROM {$CONFIG->dbprefix}entity_subtypes"
 		. " WHERE type = '$type' AND subtype = '$subtype'");
+	
+	if ($success) {
+		// invalidate the cache
+		$SUBTYPE_CACHE = null;
+	}
+	
+	return (bool) $success;
 }
 
 /**
@@ -791,7 +798,7 @@ function get_entity($guid) {
 
 	if ($shared_cache) {
 		$cached_entity = $shared_cache->load($guid);
-		// @todo store ACLs in memcache http://trac.elgg.org/ticket/3018#comment:3
+		// @todo store ACLs in memcache https://github.com/elgg/elgg/issues/3018#issuecomment-13662617
 		if ($cached_entity) {
 			// @todo use ACL and cached entity access_id to determine if user can see it
 			return $cached_entity;
@@ -1473,8 +1480,10 @@ function elgg_list_entities(array $options = array(), $getter = 'elgg_get_entiti
 	global $autofeed;
 	$autofeed = true;
 
+	$offset_key = isset($options['offset_key']) ? $options['offset_key'] : 'offset';
+
 	$defaults = array(
-		'offset' => (int) max(get_input('offset', 0), 0),
+		'offset' => (int) max(get_input($offset_key, 0), 0),
 		'limit' => (int) max(get_input('limit', 10), 0),
 		'full_view' => TRUE,
 		'list_type_toggle' => FALSE,

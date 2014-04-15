@@ -142,6 +142,10 @@ function groups_setup_sidebar_menus() {
 	$page_owner = elgg_get_page_owner_entity();
 
 	if (elgg_in_context('group_profile')) {
+		if (!elgg_instanceof($page_owner, 'group')) {
+			forward('', '404');
+		}
+
 		if (elgg_is_logged_in() && $page_owner->canEdit() && !$page_owner->isPublicMembership()) {
 			$url = elgg_get_site_url() . "groups/requests/{$page_owner->getGUID()}";
 
@@ -564,21 +568,6 @@ function groups_write_acl_plugin_hook($hook, $entity_type, $returnvalue, $params
 			$returnvalue[$page_owner->group_acl] = elgg_echo('groups:group') . ': ' . $page_owner->name;
 
 			unset($returnvalue[ACCESS_FRIENDS]);
-		}
-	} else {
-		// if the user owns the group, remove all access collections manually
-		// this won't be a problem once the group itself owns the acl.
-		$groups = elgg_get_entities_from_relationship(array(
-					'relationship' => 'member',
-					'relationship_guid' => $user_guid,
-					'inverse_relationship' => FALSE,
-					'limit' => false
-				));
-
-		if ($groups) {
-			foreach ($groups as $group) {
-				unset($returnvalue[$group->group_acl]);
-			}
 		}
 	}
 

@@ -6,6 +6,12 @@
  * @subpackage Test
  */
 class ElggCoreEntityTest extends ElggCoreUnitTest {
+
+	/**
+	 * @var ElggEntityTest
+	 */
+	protected $entity;
+
 	/**
 	 * Called before each test method.
 	 */
@@ -135,6 +141,20 @@ class ElggCoreEntityTest extends ElggCoreUnitTest {
 		// clean up
 		$this->assertTrue($this->entity->delete());
 		remove_subtype('site', 'testing');
+	}
+
+	public function testSubtypeAddRemove() {
+		$test_subtype = 'test_1389988642';
+		$object = new ElggObject();
+		$object->subtype = $test_subtype;
+		$object->save();
+
+		$this->assertIdentical($object->subtype, get_subtype_id('object', $test_subtype));
+
+		$object->delete();
+		remove_subtype('object', $test_subtype);
+
+		$this->assertFalse(get_subtype_id('object', $test_subtype));
 	}
 
 	public function testElggEntityCache() {
@@ -271,7 +291,7 @@ class ElggCoreEntityTest extends ElggCoreUnitTest {
 		$this->save_entity();
 
 		// test deleting incorrectly
-		// @link http://trac.elgg.org/ticket/2273
+		// @link https://github.com/elgg/elgg/issues/2273
 		$this->assertNull($this->entity->deleteMetadata('impotent'));
 		$this->assertEqual($this->entity->important, 'indeed!');
 

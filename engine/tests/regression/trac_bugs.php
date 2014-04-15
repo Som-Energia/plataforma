@@ -1,7 +1,7 @@
 <?php
 /**
- * Elgg Regression Tests -- Trac Bugfixes
- * Any bugfixes from Trac that require testing belong here.
+ * Elgg Regression Tests -- GitHub Bugfixes
+ * Any bugfixes from GitHub that require testing belong here.
  *
  * @package Elgg
  * @subpackage Test
@@ -201,8 +201,8 @@ class ElggCoreRegressionBugsTest extends ElggCoreUnitTest {
 	}
 
 	/**
-	 * http://trac.elgg.org/ticket/3210 - Don't remove -s in friendly titles
-	 * http://trac.elgg.org/ticket/2276 - improve char encoding
+	 * https://github.com/elgg/elgg/issues/3210 - Don't remove -s in friendly titles
+	 * https://github.com/elgg/elgg/issues/2276 - improve char encoding
 	 */
 	public function test_friendly_title() {
 		$cases = array(
@@ -216,7 +216,7 @@ class ElggCoreRegressionBugsTest extends ElggCoreUnitTest {
 			=> "a-a-a-a-a-a-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
 			
 			// separators trimmed
-			"-_ hello _-" 
+			"-_ hello _-"
 			=> "hello",
 
 			// accents removed, lower case, other multibyte chars are URL encoded
@@ -286,11 +286,14 @@ class ElggCoreRegressionBugsTest extends ElggCoreUnitTest {
 			'web archive anchor <a href="http://web.archive.org/web/20000229040250/http://www.google.com/">google</a>' =>
 				'web archive anchor <a href="http://web.archive.org/web/20000229040250/http://www.google.com/">google</a>',
 
-			'single quotes already anchor <a href=\'http://www.yahoo.com\'>yahoo</a>' => 
+			'single quotes already anchor <a href=\'http://www.yahoo.com\'>yahoo</a>' =>
 				'single quotes already anchor <a href=\'http://www.yahoo.com\'>yahoo</a>',
 
 			'unquoted already anchor <a href=http://www.yahoo.com>yahoo</a>' =>
 				'unquoted already anchor <a href=http://www.yahoo.com>yahoo</a>',
+
+			'parens in uri http://thedailywtf.com/Articles/A-(Long-Overdue)-BuildMaster-Introduction.aspx' =>
+				'parens in uri <a href="http://thedailywtf.com/Articles/A-(Long-Overdue)-BuildMaster-Introduction.aspx" rel="nofollow">http:/<wbr />/<wbr />thedailywtf.com/<wbr />Articles/<wbr />A-(Long-Overdue)-BuildMaster-Introduction.aspx</a>'
 		);
 		foreach ($cases as $input => $output) {
 			$this->assertEqual($output, parse_urls($input));
@@ -299,7 +302,7 @@ class ElggCoreRegressionBugsTest extends ElggCoreUnitTest {
 	
 	/**
 	 * Ensure additional select columns do not end up in entity attributes.
-	 * 
+	 *
 	 * https://github.com/Elgg/Elgg/issues/5538
 	 */
 	public function test_extra_columns_dont_appear_in_attributes() {
@@ -329,4 +332,91 @@ class ElggCoreRegressionBugsTest extends ElggCoreUnitTest {
 		
 		$group->delete();
 	}
+
+	/**
+	 * Ensure that ElggBatch doesn't go into infinite loop when disabling annotations recursively when show hidden is enabled.
+	 *
+	 * https://github.com/Elgg/Elgg/issues/5952
+	 */
+	public function test_disabling_annotations_infinite_loop() {
+
+		//let's have some entity
+		$group = new ElggGroup();
+		$group->name = 'test_group';
+		$group->access_id = ACCESS_PUBLIC;
+		$this->assertTrue($group->save() !== false);
+
+		$total = 51;
+		//add some annotations
+		for ($cnt = 0; $cnt < $total; $cnt++) {
+			$group->annotate('test_annotation', 'value_' . $total);
+		}
+
+		//disable them
+		$show_hidden = access_get_show_hidden_status();
+		access_show_hidden_entities(true);
+		$options = array(
+			'guid' => $group->guid,
+			'limit' => $total, //using strict limit to avoid real infinite loop and just see ElggBatch limiting on it before finishing the work
+		);
+		elgg_disable_annotations($options);
+		access_show_hidden_entities($show_hidden);
+
+		//confirm all being disabled
+		$annotations = $group->getAnnotations(array(
+			'limit' => $total,
+		));
+		foreach ($annotations as $annotation) {
+			$this->assertTrue($annotation->enabled == 'no');
+		}
+
+		//delete group and annotations
+		$group->delete();
+	}
+
+	public function test_ElggXMLElement_does_not_load_external_entities() {
+		$elLast = libxml_disable_entity_loader(false);
+
+		// build payload that should trigger loading of external entity
+		$payload = file_get_contents(dirname(dirname(__FILE__)) . '/test_files/xxe/request.xml');
+		$path = realpath(dirname(dirname(__FILE__)) . '/test_files/xxe/external_entity.txt');
+		$path = str_replace('\\', '/', $path);
+		if ($path[0] != '/') {
+			$path = '/' . $path;
+		}
+		$path = 'file://' . $path;
+		$payload = sprintf($payload, $path);
+
+		// make sure we can actually this in this environment
+		$element = new SimpleXMLElement($payload);
+		$can_load_entity = preg_match('/secret/', (string)$element->methodName);
+
+		$this->skipUnless($can_load_entity, "XXE vulnerability cannot be tested on this system");
+
+		if ($can_load_entity) {
+			$el = new ElggXMLElement($payload);
+			$chidren = $el->getChildren();
+			$content = $chidren[0]->getContent();
+			$this->assertNoPattern('/secret/', $content);
+		}
+
+		libxml_disable_entity_loader($elLast);
+	}
+
+	/**
+	 * elgg_admin_sort_page_menu() should not expect that the supplied menu has a certain hierarchy
+	 *
+	 * https://github.com/Elgg/Elgg/issues/6379
+	 */
+	function test_admin_sort_page_menu() {
+
+		elgg_push_context('admin');
+
+		elgg_register_plugin_hook_handler('prepare', 'menu:page', 'elgg_admin_sort_page_menu');
+		$result = elgg_trigger_plugin_hook('prepare', 'menu:page', array(), array());
+		$this->assertTrue(is_array($result), "Admin page menu fails to prepare for viewing");
+
+		elgg_pop_context();
+	}
+
 }

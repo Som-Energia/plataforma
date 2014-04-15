@@ -218,7 +218,7 @@ function elgg_register_ajax_view($view) {
 
 /**
  * Unregister a view for ajax calls
- * 
+ *
  * @param string $view The view name
  * @return void
  * @since 1.8.3
@@ -369,7 +369,7 @@ function elgg_view_exists($view, $viewtype = '', $recurse = true) {
  * view, $view_name plugin hook.
  *
  * @warning Any variables in $_SESSION will override passed vars
- * upon name collision.  See {@trac #2124}.
+ * upon name collision.  See https://github.com/Elgg/Elgg/issues/2124
  *
  * @param string  $view     The name and location of the view to use
  * @param array   $vars     Variables to pass to the view.
@@ -795,7 +795,7 @@ function elgg_view_menu($menu_name, array $vars = array()) {
  *  - bool 'full_view' Whether to show a full or condensed view.
  *
  * @tip This function can automatically appends annotations to entities if in full
- * view and a handler is registered for the entity:annotate.  See {@trac 964} and
+ * view and a handler is registered for the entity:annotate.  See https://github.com/Elgg/Elgg/issues/964 and
  * {@link elgg_view_entity_annotations()}.
  *
  * @param ElggEntity $entity The entity to display
@@ -1013,6 +1013,7 @@ $list_type_toggle = true, $pagination = true) {
 			'list_type' => $list_type,
 			'list_type_toggle' => false,
 			'offset' => $offset,
+			'limit' => null,
 		);
 
 		$vars = array_merge($defaults, $vars);
@@ -1032,6 +1033,11 @@ $list_type_toggle = true, $pagination = true) {
 			'list_type_toggle' => $list_type_toggle,
 			'list_class' => 'elgg-list-entity',
 		);
+	}
+
+	if (!$vars["limit"] && !$vars["offset"]) {
+		// no need for pagination if listing is unlimited
+		$vars["pagination"] = false;
 	}
 
 	if ($vars['list_type'] != 'list') {
@@ -1060,12 +1066,19 @@ $list_type_toggle = true, $pagination = true) {
 function elgg_view_annotation_list($annotations, array $vars = array()) {
 	$defaults = array(
 		'items' => $annotations,
+		'offset' => null,
+		'limit' => null,
 		'list_class' => 'elgg-list-annotation elgg-annotation-list', // @todo remove elgg-annotation-list in Elgg 1.9
 		'full_view' => true,
 		'offset_key' => 'annoff',
 	);
-
+	
 	$vars = array_merge($defaults, $vars);
+	
+	if (!$vars["limit"] && !$vars["offset"]) {
+		// no need for pagination if listing is unlimited
+		$vars["pagination"] = false;
+	}
 
 	return elgg_view('page/components/list', $vars);
 }
@@ -1239,7 +1252,7 @@ function elgg_view_river_item($item, array $vars = array()) {
 
 	// @todo this needs to be cleaned up
 	// Don't hide objects in closed groups that a user can see.
-	// see http://trac.elgg.org/ticket/4789
+	// see https://github.com/elgg/elgg/issues/4789
 	//	else {
 	//		// hide based on object's container
 	//		$visibility = ElggGroupItemVisibility::factory($object->container_guid);
@@ -1334,12 +1347,12 @@ function elgg_view_list_item($item, array $vars = array()) {
 
 /**
  * View one of the elgg sprite icons
- * 
+ *
  * Shorthand for <span class="elgg-icon elgg-icon-$name"></span>
- * 
+ *
  * @param string $name  The specific icon to display
  * @param string $class Additional class: float, float-alt, or custom class
- * 
+ *
  * @return string The html for displaying an icon
  */
 function elgg_view_icon($name, $class = '') {
