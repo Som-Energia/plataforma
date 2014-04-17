@@ -1,68 +1,63 @@
 <?php
 
 /**
- * Most recently viewed images - world view only right now
+ * Most recently viewed images - world view only
  *
  */
 
-// Load Elgg engine
-include_once dirname(dirname(dirname(dirname(dirname(__FILE__))))) . "/engine/start.php";
+// set up breadcrumbs
+elgg_push_breadcrumb(elgg_echo('photos'), 'photos/siteimagesall');
+elgg_push_breadcrumb(elgg_echo('tidypics:recentlyviewed'));
 
-// world view - set page owner to logged in user
-if (isloggedin()) {
-	set_page_owner(get_loggedin_userid());
+$offset = (int)get_input('offset', 0);
+$limit = (int)get_input('limit', 16);
+
+$options = array('type' => 'object',
+                 'subtype' => 'image',
+                 'limit' => $limit,
+                 'offset' => $offset,
+                 'annotation_name' => 'tp_view',
+                 'order_by_annotation' => "n_table.time_created desc",
+                 'full_view' => false,
+                 'list_type' => 'gallery',
+                 'gallery_class' => 'tidypics-gallery'
+                );
+
+$result = elgg_list_entities_from_annotations($options);
+
+$title = elgg_echo('tidypics:recentlyviewed');
+
+if (elgg_is_logged_in()) {
+        $logged_in_guid = elgg_get_logged_in_user_guid();
+        elgg_register_menu_item('title', array('name' => 'addphotos',
+                                               'href' => "ajax/view/photos/selectalbum/?owner_guid=" . $logged_in_guid,
+                                               'text' => elgg_echo("photos:addphotos"),
+                                               'link_class' => 'elgg-button elgg-button-action elgg-lightbox'));
 }
 
-// allow other plugins to override the slideshow
-$slideshow_link = trigger_plugin_hook('tp_slideshow', 'album', array(), null);
-if ($slideshow_link) {
-	add_submenu_item(elgg_echo('album:slideshow'),
-			$slideshow_link,
-			'photos' );
+// only show slideshow link if slideshow is enabled in plugin settings and there are images
+if (elgg_get_plugin_setting('slideshow', 'tidypics') && !empty($result)) {
+        $url = elgg_get_site_url() . "photos/recentlyviewed?limit=64&offset=$offset&view=rss";
+        $url = elgg_format_url($url);
+        $slideshow_link = "javascript:PicLensLite.start({maxScale:0, feedUrl:'$url'})";
+        elgg_register_menu_item('title', array('name' => 'slideshow',
+                                                'href' => $slideshow_link,
+                                                'text' => "<img src=\"".elgg_get_site_url() ."mod/tidypics/graphics/slideshow.png\" alt=\"".elgg_echo('album:slideshow')."\">",
+                                                'title' => elgg_echo('album:slideshow'),
+                                                'class' => 'elgg-button elgg-button-action'));
 }
 
-
-global $CONFIG;
-$prefix = $CONFIG->dbprefix;
-$max_limit = 200; //get extra because you'll have multiple views per image in the result set
-$max = 16; //controls how many actually show on screen
-
-//this works but is wildly inefficient
-//$annotations = get_annotations(0, "object", "image", "tp_view", "", "", 5000);
-
-$sql = "SELECT distinct ent.guid, ann1.time_created
-			FROM " . $prefix . "entities ent
-			INNER JOIN " . $prefix . "entity_subtypes sub ON ent.subtype = sub.id
-			AND sub.subtype = 'image'
-			INNER JOIN " . $prefix . "annotations ann1 ON ann1.entity_guid = ent.guid
-			INNER JOIN " . $prefix . "metastrings ms ON ms.id = ann1.name_id
-			AND ms.string = 'tp_view'
-			ORDER BY ann1.id DESC
-			LIMIT $max_limit";
-
-$result = get_data($sql);
-
-$entities = array();
-foreach ($result as $entity) {
-	if (!$entities[$entity->guid]) {
-		$entities[$entity->guid] = get_entity($entity->guid);
-	}
-	if (count($entities) >= $max) {
-		break;
-	}
+if (!empty($result)) {
+        $area2 = $result;
+} else {
+        $area2 = elgg_echo('tidypics:recentlyviewed:nosuccess');
 }
+$body = elgg_view_layout('content', array(
+        'filter_override' => '',
+        'content' => $area2,
+        'title' => $title,
+        'sidebar' => elgg_view('photos/sidebar', array('page' => 'all')),
+));
 
-$title = elgg_echo("tidypics:recentlyviewed");
-$area2 = elgg_view_title($title);
-
-// grab the html to display the images
-$images = tp_view_entity_list($entities, $max, 0, $max, false);
-
-// this view takes care of the title on the main column and the content wrapper
-$area2 = elgg_view('tidypics/content_wrapper', array('title' => $title, 'content' => $images,));
-if (empty($area2)) {
-	$area2 = $images;
-}
-
-$body = elgg_view_layout('two_column_left_sidebar', '', $area2);
-page_draw($title, $body);
+// Draw it
+echo elgg_view_page(elgg_echo('tidypics:recentlyviewed'), $body);

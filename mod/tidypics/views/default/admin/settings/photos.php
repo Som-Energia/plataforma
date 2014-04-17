@@ -35,6 +35,11 @@ echo elgg_view('navigation/tabs', array(
 			'href' => '/admin/settings/photos?tab=thumbnail',
 			'selected' => ($tab == 'thumbnail'),
 		),
+                array(
+                        'text' => elgg_echo('tidypics:delete_image'),
+                        'href' => '/admin/settings/photos?tab=delete_image',
+                        'selected' => ($tab == 'delete_image'),
+                ),
 		array(
 			'text' => elgg_echo('tidypics:settings:help'),
 			'href' => '/admin/settings/photos?tab=help',
@@ -59,6 +64,10 @@ switch ($tab) {
 	case 'thumbnail':
 		echo elgg_view('admin/settings/photos/thumbnail');
 		break;
+
+        case 'delete_image':
+                echo elgg_view('admin/settings/photos/delete_image');
+                break;
 
 	case 'help':
 		echo elgg_view('admin/settings/photos/help');

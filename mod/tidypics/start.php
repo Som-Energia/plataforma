@@ -19,11 +19,14 @@ function tidypics_init() {
 	elgg_register_library('tidypics:resize', "$base_dir/resize.php");
 	elgg_register_library('tidypics:exif', "$base_dir/exif.php");
 	elgg_load_library('tidypics:core');
+	
+	// Register an ajax view that allows selection of album to upload images to
+	elgg_register_ajax_view('photos/selectalbum');
 
 	// Set up site menu
 	elgg_register_menu_item('site', array(
 		'name' => 'photos',
-		'href' => 'photos/all',
+		'href' => 'photos/siteimagesall',
 		'text' => elgg_echo('photos'),
 	));
 
@@ -46,8 +49,7 @@ function tidypics_init() {
 	elgg_register_js('tidypics:uploading', $js, 'footer');
 
 	elgg_register_js('tidypics:slideshow', 'mod/tidypics/vendors/PicLensLite/piclens_optimized.js', 'footer');
-	elgg_register_js('swfobject', 'mod/tidypics/vendors/uploadify/swfobject.js', 'footer');
-	elgg_register_js('jquery.uploadify-tp', 'mod/tidypics/vendors/uploadify/jquery.uploadify.v2.1.1.min.js', 'footer');
+	elgg_register_js('jquery.uploadify-tp', 'mod/tidypics/vendors/uploadify/jquery.uploadify.min.js', 'footer');
 
 	// Add photos link to owner block/hover menus
 	elgg_register_plugin_hook_handler('register', 'menu:owner_block', 'tidypics_owner_block_menu');
@@ -62,13 +64,28 @@ function tidypics_init() {
 	// Register for the entity menu
 	elgg_register_plugin_hook_handler('register', 'menu:entity', 'tidypics_entity_menu_setup');
 
-	// Register group option
+	// Register group options
 	add_group_tool_option('photos', elgg_echo('tidypics:enablephotos'), true);
 	elgg_extend_view('groups/tool_latest', 'photos/group_module');
+        add_group_tool_option('tp_images', elgg_echo('tidypics:enable_group_images'), true);
+        elgg_extend_view('groups/tool_latest', 'photos/group_tp_images_module');
 
 	// Register widgets
 	elgg_register_widget_type('album_view', elgg_echo("tidypics:widget:albums"), elgg_echo("tidypics:widget:album_descr"), 'profile');
 	elgg_register_widget_type('latest_photos', elgg_echo("tidypics:widget:latest"), elgg_echo("tidypics:widget:latest_descr"), 'profile');
+	
+	if (elgg_is_active_plugin('widget_manager')) {
+                //add index widgets for Widget Manager plugin
+                elgg_register_widget_type('index_latest_photos', elgg_echo("tidypics:mostrecent"), elgg_echo('tidypics:mostrecent:description'), "index");
+                elgg_register_widget_type('index_latest_albums', elgg_echo("tidypics:albums_mostrecent"), elgg_echo('tidypics:albums_mostrecent:description'), "index");
+
+                //add groups widgets for Widget Manager plugin
+                elgg_register_widget_type('groups_latest_photos', elgg_echo("tidypics:mostrecent"), elgg_echo('tidypics:mostrecent:description'), "groups");
+                elgg_register_widget_type('groups_latest_albums', elgg_echo("tidypics:albums_mostrecent"), elgg_echo('tidypics:albums_mostrecent:description'), "groups");
+
+                //register title urls for widgets
+                elgg_register_plugin_hook_handler('widget_url', 'widget_manager', "tidypics_widget_urls", 499);
+        }
 
 	// RSS extensions for embedded media
 	elgg_extend_view('extensions/xmlns', 'extensions/photos/xmlns');
@@ -78,14 +95,23 @@ function tidypics_init() {
 	elgg_register_plugin_hook_handler('permissions_check:metadata', 'object', 'tidypics_group_permission_override');
 
 	// notifications
-	register_notification_object('object', 'album', elgg_echo('tidypics:newalbum_subject'));
-	elgg_register_plugin_hook_handler('notify:entity:message', 'object', 'tidypics_notify_message');
+        elgg_register_event_handler('notify', 'album', 'object_notifications'); 
+        elgg_register_plugin_hook_handler('notify:entity:message', 'object', 'tidypics_notify_message');
 
 	// allow people in a walled garden to use flash uploader
 	elgg_register_plugin_hook_handler('public_pages', 'walled_garden', 'tidypics_walled_garden_override');
 
 	// flash session work around for uploads when use_only_cookies is set
 	elgg_register_plugin_hook_handler('forward', 'csrf', 'tidypics_ajax_session_handler');
+	
+	// override the default url to view a tidypics_batch object
+        elgg_register_entity_url_handler('object', 'tidypics_batch', 'tidypics_batch_url_handler');
+
+        // no userpoints for commenting on a tidypics_batch as the points are additionally awarded by adding the same comment to the corresponding album
+        elgg_register_plugin_hook_handler('userpoints:add', 'object', 'tidypics_userpoints_adding');
+
+	// custom layout for comments on tidypics river entries
+        elgg_register_plugin_hook_handler('creating', 'river', 'tidypics_comments_handler');
 
 	// Register actions
 	$base_dir = elgg_get_plugins_path() . 'tidypics/actions/photos';
@@ -106,7 +132,10 @@ function tidypics_init() {
 
 	elgg_register_action("photos/admin/settings", "$base_dir/admin/settings.php", 'admin');
 	elgg_register_action("photos/admin/create_thumbnails", "$base_dir/admin/create_thumbnails.php", 'admin');
+	elgg_register_action("photos/admin/delete_image", "$base_dir/admin/delete_image.php", 'admin');
 	elgg_register_action("photos/admin/upgrade", "$base_dir/admin/upgrade.php", 'admin');
+	
+	elgg_register_action('photos/image/selectalbum', "$base_dir/image/selectalbum.php");
 }
 
 /**
@@ -122,9 +151,37 @@ function tidypics_page_handler($page) {
 	}
 
 	elgg_load_js('tidypics');
+	elgg_load_js('lightbox');
+	elgg_load_css('lightbox');
+	if (elgg_get_plugin_setting('slideshow', 'tidypics')) {
+                elgg_load_js('tidypics:slideshow');
+        }
 
 	$base = elgg_get_plugins_path() . 'tidypics/pages/photos';
+	$base_lists = elgg_get_plugins_path() . 'tidypics/pages/lists';
 	switch ($page[0]) {
+                case "siteimagesall":
+                        require "$base_lists/siteimagesall.php";
+                        break;
+
+                case "siteimagesowner":
+                        if (isset($page[1])) {
+                                set_input('guid', $page[1]);
+                        }
+                        require "$base_lists/siteimagesowner.php";
+                        break;
+
+                case "siteimagesfriends":
+                        require "$base_lists/siteimagesfriends.php";
+                        break;
+
+                case "siteimagesgroup":
+                        if (isset($page[1])) {
+                                set_input('guid', $page[1]);
+                        }
+                        require "$base_lists/siteimagesgroup.php";
+                        break;
+
 		case "all": // all site albums
 		case "world":
 			require "$base/all.php";
@@ -145,7 +202,6 @@ function tidypics_page_handler($page) {
 
 		case "album": // view an album individually
 			set_input('guid', $page[1]);
-			elgg_load_js('tidypics:slideshow');
 			require "$base/album/view.php";
 			break;
 
@@ -154,7 +210,7 @@ function tidypics_page_handler($page) {
 			set_input('guid', $page[1]);
 			require "$base/album/add.php";
 			break;
-
+			
 		case "edit": //edit image or album
 			set_input('guid', $page[1]);
 			$entity = get_entity($page[1]);
@@ -203,13 +259,6 @@ function tidypics_page_handler($page) {
 			require "$base/image/upload.php";
 			break;
 
-		case "batch": //update titles and descriptions
-			if (isset($page[1])) {
-				set_input('batch', $page[1]);
-			}
-			include($CONFIG->pluginspath . "tidypics/pages/edit_multiple.php");
-			break;
-
 		case "download": // download an image
 			set_input('guid', $page[1]);
 			set_input('disposition', elgg_extract(2, $page, 'attachment'));
@@ -220,43 +269,115 @@ function tidypics_page_handler($page) {
 			if (isset($page[1])) {
 				set_input('guid', $page[1]);
 			}
-			include($CONFIG->pluginspath . "tidypics/pages/tagged.php");
+                        require "$base/tagged.php";
 			break;
 
 		case "mostviewed": // images with the most views
 			if (isset($page[1])) {
 				set_input('username', $page[1]);
 			}
-			include($CONFIG->pluginspath . "tidypics/pages/lists/mostviewedimages.php");
+			require "$base_lists/mostviewedimages.php";
 			break;
 
-		case "mostrecent": // images uploaded most recently
-			if (isset($page[1])) {
-				set_input('username', $page[1]);
-			}
-			include($CONFIG->pluginspath . "tidypics/pages/lists/mostrecentimages.php");
+                case "mostviewedtoday":
+                        if (isset($page[1])) {
+                                set_input('username', $page[1]);
+                        }
+                        require "$base_lists/mostviewedimagestoday.php";
+                        break;
+
+                case "mostviewedthismonth":
+                        if (isset($page[1])) {
+                                set_input('username', $page[1]);
+                        }
+                        require "$base_lists/mostviewedimagesthismonth.php";
+                        break;
+
+                case "mostviewedlastmonth":
+                        if (isset($page[1])) {
+                                set_input('username', $page[1]);
+                        }
+                        require "$base_lists/mostviewedimageslastmonth.php";
+                        break;
+
+                case "mostviewedthisyear":
+                        if (isset($page[1])) {
+                                set_input('username', $page[1]);
+                        }
+                        require "$base_lists/mostviewedimagesthisyear.php";
+                        break;
+
+                case "mostcommented":
+                        if (isset($page[1])) {
+                                set_input('username', $page[1]);
+                        }
+                        require "$base_lists/mostcommentedimages.php";
+                        break;
+
+                case "mostcommentedtoday":
+                        if (isset($page[1])) {
+                                set_input('username', $page[1]);
+                        }
+                        require "$base_lists/mostcommentedimagestoday.php";
+                        break;
+
+                case "mostcommentedthismonth":
+                        if (isset($page[1])) {
+                                set_input('username', $page[1]);
+                        }
+                        require "$base_lists/mostcommentedimagesthismonth.php";
+                        break;
+
+                case "mostcommentedlastmonth":
+                        if (isset($page[1])) {
+                                set_input('username', $page[1]);
+                        }
+                        require "$base_lists/mostcommentedimageslastmonth.php";
+                        break;
+
+                case "mostcommentedthisyear":
+                        if (isset($page[1])) {
+                                set_input('username', $page[1]);
+                        }
+                        require "$base_lists/mostcommentedimagesthisyear.php";
+                        break;
+
+		case "recentlyviewed":
+                        require "$base_lists/recentlyviewed.php";
 			break;
 
-		case "recentlyviewed": // images most recently viewed
-			include($CONFIG->pluginspath . "tidypics/pages/lists/recentlyviewed.php");
+		case "recentlycommented":
+                        require "$base_lists/recentlycommented.php";
 			break;
 
-		case "recentlycommented": // images with the most recent comments
-			include($CONFIG->pluginspath . "tidypics/pages/lists/recentlycommented.php");
-			break;
+                case "recentvotes":
+                        if(elgg_is_active_plugin('elggx_fivestar')) {
+                                require "$base_lists/recentvotes.php";
+                                break;
+                        } else {
+                                return false;
+                        }
 
-		case "highestrated": // images with the highest average rating
-			include($CONFIG->pluginspath . "tidypics/pages/lists/highestrated.php");
-			break;
+		case "highestrated":
+                        if(elgg_is_active_plugin('elggx_fivestar')) {
+                                require "$base_lists/highestrated.php";
+                                break;
+                        } else {
+                                return false;
+                        }
 
-		case "admin":
-			include ($CONFIG->pluginspath . "tidypics/pages/admin.php");
-			break;
+                case "highestvotecount":
+                        if(elgg_is_active_plugin('elggx_fivestar')) {
+                                require "$base_lists/highestvotecount.php";
+                                break;
+                        } else {
+                                return false;
+                        }
 
 		default:
 			return false;
 	}
-	
+
 	return true;
 }
 
@@ -265,16 +386,28 @@ function tidypics_page_handler($page) {
  */
 function tidypics_owner_block_menu($hook, $type, $return, $params) {
 	if (elgg_instanceof($params['entity'], 'user')) {
-		$url = "photos/owner/{$params['entity']->username}";
+		$url = "photos/siteimagesowner/{$params['entity']->guid}";
 		$item = new ElggMenuItem('photos', elgg_echo('photos'), $url);
 		$return[] = $item;
 	} else {
-		if ($params['entity']->photos_enable != "no") {
-			$url = "photos/group/{$params['entity']->guid}/all";
+		if ($params['entity']->tp_images_enable != "no") {
+			$url = "photos/siteimagesgroup/{$params['entity']->guid}";
 			$item = new ElggMenuItem('photos', elgg_echo('photos:group'), $url);
 			$return[] = $item;
 		}
 	}
+
+        if (elgg_instanceof($params['entity'], 'user')) {
+                $url = "photos/owner/{$params['entity']->username}";
+                $item = new ElggMenuItem('photo_albums', elgg_echo('albums'), $url);
+                $return[] = $item;
+        } else {
+                if ($params['entity']->photos_enable != "no") {
+                        $url = "photos/group/{$params['entity']->guid}/all";
+                        $item = new ElggMenuItem('photo_albums', elgg_echo('photos:group_albums'), $url);
+                        $return[] = $item;
+                }
+        }
 
 	return $return;
 }
@@ -330,7 +463,7 @@ function tidypics_entity_menu_setup($hook, $type, $return, $params) {
 			$return[] = ElggMenuItem::factory($options);
 		}
 
-		if (elgg_get_plugin_setting('tagging', 'tidypics')) {
+		if (elgg_get_plugin_setting('tagging', 'tidypics') && elgg_is_logged_in()) {
 			$options = array(
 				'name' => 'tagging',
 				'text' => elgg_echo('tidypics:actiontag'),
@@ -343,31 +476,46 @@ function tidypics_entity_menu_setup($hook, $type, $return, $params) {
 		}
 	}
 
-	// only show these options if there are images
-	if (elgg_instanceof($entity, 'object', 'album') && $entity->getSize() > 0) {
-		$url = $entity->getURL() . '?limit=50&view=rss';
-		$url = elgg_format_url($url);
-		$slideshow_link = "javascript:PicLensLite.start({maxScale:0, feedUrl:'$url'})";
-		$options = array(
-			'name' => 'slideshow',
-			'text' => elgg_echo('album:slideshow'),
-			'href' => $slideshow_link,
-			'priority' => 80,
-		);
-		$return[] = ElggMenuItem::factory($options);
-
-		if ($entity->canEdit()) {
-			$options = array(
-				'name' => 'sort',
-				'text' => elgg_echo('album:sort'),
-				'href' => "photos/sort/" . $entity->getGUID(),
-				'priority' => 90,
-			);
-			$return[] = ElggMenuItem::factory($options);
-		}
-	}
-
 	return $return;
+}
+
+
+function tidypics_widget_urls($hook_name, $entity_type, $return_value, $params){
+    $result = $return_value;
+    $widget = $params["entity"];
+
+    if(empty($result) && ($widget instanceof ElggWidget)) {
+        $owner = $widget->getOwnerEntity();
+        switch($widget->handler) {
+            case "latest_photos":
+                $result = "/photos/siteimagesowner/" . $owner->guid;
+                break;
+            case "album_view":
+                $result = "/photos/owner/" . $owner->username;
+                break;
+            case "index_latest_photos":
+                $result = "/photos/siteimagesall";
+                break;
+            case "index_latest_albums":
+                $result = "/photos/all";
+                break;
+            case "groups_latest_photos":
+                if($owner instanceof ElggGroup){
+                    $result = "photos/siteimagesgroup/{$owner->guid}";
+                } else {
+                    $result = "/photos/siteimagesowner/" . $owner->guid;
+                }
+                break;
+            case "groups_latest_albums":
+                if($owner instanceof ElggGroup){
+                    $result = "photos/group/{$owner->guid}/all";
+                } else {
+                    $result = "/photos/owner/" . $owner->username;
+                }
+                break;
+        }
+    }
+    return $result;
 }
 
 /**
@@ -383,7 +531,7 @@ function tidypics_entity_menu_setup($hook, $type, $return, $params) {
  * @return mixed
  */
 function tidypics_group_permission_override($hook, $type, $result, $params) {
-	if (get_input('action') == 'photos/image/upload') {
+	if (get_input('action') == 'photos/image/upload' || get_input('action') == 'photos/image/ajax_upload' || get_input('action') == 'photos/image/ajax_upload_complete') {
 		if (isset($params['container'])) {
 			$album = $params['container'];
 		} else {
@@ -398,45 +546,48 @@ function tidypics_group_permission_override($hook, $type, $result, $params) {
 
 
 /**
- * Create the body of the notification message
+ *
+ * Prepare a notification message about a new images added to an album
  *
  * Does not run if a new album without photos
- * 
- * @param string $hook
- * @param string $type
- * @param bool   $result
- * @param array  $params
- * @return mixed
+ *
+ * @param string                          $hook         Hook name
+ * @param string                          $type         Hook type
+ * @param Elgg_Notifications_Notification $notification The notification to prepare
+ * @param array                           $params       Hook parameters
+ * @return Elgg_Notifications_Notification (on Elgg 1.9); mixed (on Elgg 1.8)
  */
-function tidypics_notify_message($hook, $type, $result, $params) {
-	$entity = $params['entity'];
-	$to_entity = $params['to_entity'];
-	$method = $params['method'];
-	
-	if (elgg_instanceof($entity, 'object', 'album')) {
-		if ($entity->new_album) {
-			// stops notification from being sent
-			return false;
-		}
-		
-		if ($entity->first_upload) {
-			$descr = $entity->description;
-			$title = $entity->getTitle();
-			$owner = $entity->getOwnerEntity();
-			return elgg_echo('tidypics:newalbum', array($owner->name))
-					. ': ' . $title . "\n\n" . $descr . "\n\n" . $entity->getURL();
-		} else {
-			if ($entity->shouldNotify()) {
-				$descr = $entity->description;
-				$title = $entity->getTitle();
-				$owner = $entity->getOwnerEntity();
+function tidypics_notify_message($hook, $type, $notification, $params) {
 
-				return elgg_echo('tidypics:updatealbum', array($owner->name, $title)) . ': ' . $entity->getURL();
-			}
-		}
-	}
-	
-	return null;
+        $entity = $params['entity'];
+        $to_entity = $params['to_entity'];
+        $method = $params['method'];
+
+        if (elgg_instanceof($entity, 'object', 'album')) {
+                if ($entity->new_album) {
+                        // stops notification from being sent
+                        return false;
+                }
+
+                if ($entity->first_upload) {
+                        $descr = $entity->description;
+                        $title = $entity->getTitle();
+                        $owner = $entity->getOwnerEntity();
+                        return elgg_echo('tidypics:newalbum', array($owner->name)) . ': ' . $title . "\n\n" . $descr . "\n\n" . $entity->getURL();
+                } else {
+                        if ($entity->shouldNotify()) {
+                                $descr = $entity->description;
+                                $title = $entity->getTitle();
+                                $user = elgg_get_logged_in_user_entity();
+                                if (!$user) {
+                                        $user = $entity->getOwnerEntity();
+                                }
+                                return elgg_echo('tidypics:updatealbum', array($user->name, $title)) . ': ' . $entity->getURL();
+                        }
+                }
+        }
+        return null;
+
 }
 
 /**
@@ -474,7 +625,7 @@ function tidypics_ajax_session_handler($hook, $type, $value, $params) {
     }
 
     // action_gatekeeper rejected ajax call from Flash due to session issue
-    
+
 	// Validate token
     $token = get_input('__elgg_token');
     $ts = get_input('__elgg_ts');
@@ -514,26 +665,73 @@ function tidypics_ajax_session_handler($hook, $type, $value, $params) {
 
 	// passed token test, so login and process action
 	login($user);
-	$actions = elgg_get_config('actions');
+	$actions = array();
+        $actions = elgg_get_config('actions');
 	include $actions['photos/image/ajax_upload']['file'];
 
 	exit;
 }
 
 /**
- * Sets up submenus for tidypics most viewed pages
+ * return the album url of the album the tidypics_batch entitities belongs to
  */
-function tidypics_mostviewed_submenus() {
+function tidypics_batch_url_handler($batch) {
+        if (!$batch->getOwnerEntity()) {
+                // default to a standard view if no owner.
+                return false;
+        }
 
-	global $CONFIG;
+        $album = get_entity($batch->container_guid);
 
-	add_submenu_item(elgg_echo('tidypics:mostvieweddashboard'), $CONFIG->url . "mod/tidypics/mostvieweddashboard.php");
-	add_submenu_item(elgg_echo('tidypics:mostviewedthisyear'), $CONFIG->url . "mod/tidypics/pages/lists/mostviewedimagesthisyear.php");
-	add_submenu_item(elgg_echo('tidypics:mostviewedthismonth'), $CONFIG->url . "mod/tidypics/pages/lists/mostviewedimagesthismonth.php");
-	add_submenu_item(elgg_echo('tidypics:mostviewedlastmonth'), $CONFIG->url . "mod/tidypics/pages/lists/mostviewedimageslastmonth.php");
-	add_submenu_item(elgg_echo('tidypics:mostviewedtoday'), $CONFIG->url . "mod/tidypics/pages/lists/mostviewedimagestoday.php");
-	add_submenu_item(elgg_echo('tidypics:mostcommented'), $CONFIG->url . "mod/tidypics/pages/lists/mostcommentedimages.php");
-	add_submenu_item(elgg_echo('tidypics:mostcommentedthismonth'), $CONFIG->url . "mod/tidypics/pages/lists/mostcommentedimagesthismonth.php");
-	add_submenu_item(elgg_echo('tidypics:mostcommentedtoday'), $CONFIG->url . "mod/tidypics/pages/lists/mostcommentedimagestoday.php");
-	add_submenu_item(elgg_echo('tidypics:recentlycommented'), $CONFIG->wwwroot . 'pg/photos/recentlycommented/');
+        return $album->getURL();
+}
+
+/**
+ * not awarding userpoints for commenting on tidypics_batch entitities as the same action also adds the comment
+ * to the corresponding album entity and this action gives the userpoints 
+ */
+function tidypics_userpoints_adding($hook, $type, $value, $params) {
+
+        $userpoints_entity = $params['entity'];
+        $userpoints_meta_entity = get_entity($userpoints_entity->meta_guid);
+
+        if ($userpoints_meta_entity && $userpoints_meta_entity->getSubtype() == 'tidypics_batch') {
+                return false;
+        } else {
+                return true;
+        }
+}
+
+
+/**
+ * custom layout for comments on tidypics river entries
+ *
+ * Overriding generic_comment view
+ */
+function tidypics_comments_handler($hook, $type, $value, $params) {
+
+        $result = $value;
+
+        $subtype = $value['subtype'];
+        $action_type = $value['action_type'];
+
+        if ($subtype == 'image' && $action_type == 'comment') {
+                $result['view'] = 'river/annotation/comment/image';
+        } else if ($subtype == 'album' && $action_type == 'comment') {
+                $result['view'] = 'river/annotation/comment/album';
+        } else if ($subtype == 'tidypics_batch' && $action_type == 'comment') {
+                $batch = get_entity($value['object_guid']);
+                $album = get_entity($batch->container_guid);
+                $annotation = elgg_get_annotation_from_id($value['annotation_id']);
+                create_annotation($album->getGUID(), 'generic_comment', $annotation->value, 'text', $annotation->owner_guid, $album->access_id);
+                $result['type'] = 'object';
+                $result['subtype'] = 'album';
+                $result['access_id'] = $album->access_id;
+                $result['object_guid'] = $album->getGUID();
+                $result['view'] = 'river/annotation/comment/album';
+        } else {
+                return;
+        }
+
+        return $result;
 }

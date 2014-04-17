@@ -17,9 +17,10 @@ $album = $vars['entity'];
 $cover_guid = $album->getCoverImageGuid();
 if ($cover_guid) {
 	$vars['title'] = $album->getTitle();
+	$vars['href'] = $album->getURL();
 	echo elgg_view_entity_icon(get_entity($cover_guid), $vars['size'], $vars);
 } else {
-	$url = "mod/tidypics/graphics/empty_album.png";
+	$url = "mod/tidypics/graphics/empty_album_{$vars['size']}.png";
 	$url = elgg_normalize_url($url);
 	$img = elgg_view('output/img', array(
 		'src' => $url,
@@ -29,7 +30,7 @@ if ($cover_guid) {
 	));
 
 	$params = array(
-		'href' => $url,
+		'href' => $album->getURL(),
 		'text' => $img,
 		'is_trusted' => true,
 	);

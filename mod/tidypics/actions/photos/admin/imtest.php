@@ -14,5 +14,5 @@ $result = system($command, $return_val);
 if ($return_val == 0) {
 	echo $result;
 } else {
-	echo "Unable to run ImageMagick. Please check the path.";
+	echo elgg_echo('tidypics:lib_tools:error');
 }

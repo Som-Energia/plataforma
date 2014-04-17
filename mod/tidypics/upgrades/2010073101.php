@@ -24,4 +24,3 @@ while ($guid_obj = mysql_fetch_object($album_guids)) {
 
 	$album->prependImageList($image_list);
 }
-

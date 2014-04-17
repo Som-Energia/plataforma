@@ -27,7 +27,8 @@ $owner = elgg_get_page_owner_entity();
 
 $title = elgg_echo('tidypics:editprops');
 
-elgg_push_breadcrumb(elgg_echo('photos'), "photos/all");
+elgg_push_breadcrumb(elgg_echo('photos'), 'photos/siteimagesall');
+elgg_push_breadcrumb(elgg_echo('tidypics:albums'), 'photos/all');
 elgg_push_breadcrumb($owner->name, "photos/owner/$owner->username");
 elgg_push_breadcrumb($album->getTitle(), $album->getURL());
 elgg_push_breadcrumb($title);
@@ -38,7 +39,7 @@ $body = elgg_view_layout('content', array(
 	'filter' => false,
 	'content' => $content,
 	'title' => elgg_echo('tidypics:editprops'),
-	'sidebar' => elgg_view('tidypics/sidebar', array('page' => 'album')),
+	'sidebar' => elgg_view('photos/sidebar', array('page' => 'album')),
 ));
 
 echo elgg_view_page($title, $body);

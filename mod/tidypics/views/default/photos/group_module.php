@@ -1,6 +1,6 @@
 <?php
 /**
- * Group blog module
+ * Group album module
  */
 
 $group = $vars['entity'];
@@ -38,7 +38,7 @@ $new_link = elgg_view('output/url', array(
 ));
 
 echo elgg_view('groups/profile/module', array(
-	'title' => elgg_echo('photos:group'),
+	'title' => elgg_echo("tidypics:albums_mostrecent"),
 	'content' => $content,
 	'all_link' => $all_link,
 	'add_link' => $new_link,

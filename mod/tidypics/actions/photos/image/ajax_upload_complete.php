@@ -24,11 +24,10 @@ $params = array(
 $images = elgg_get_entities_from_metadata($params);
 if ($images) {
 	// Create a new batch object to contain these photos
-	$batch = new ElggObject();
-	$batch->subtype = "tidypics_batch";
-	$batch->access_id = ACCESS_PUBLIC;
+	$batch = new TidypicsBatch();
+	$batch->access_id = $album->access_id;
 	$batch->container_guid = $album->guid;
-	
+
 	if ($batch->save()) {
 		foreach ($images as $image) {
 			add_entity_relationship($image->guid, "belongs_to_batch", $batch->getGUID());
@@ -42,6 +41,8 @@ if ($images) {
 // "added images to album" river
 if ($img_river_view == "batch" && $album->new_album == false) {
 	add_to_river('river/object/tidypics_batch/create', 'create', $batch->getOwnerGUID(), $batch->getGUID());
+}  else if ($img_river_view == "1" && $album->new_album == false) {
+        add_to_river('river/object/tidypics_batch/create_single_image', 'create', $batch->getOwnerGUID(), $batch->getGUID());
 }
 
 // "created album" river
@@ -49,13 +50,17 @@ if ($album->new_album) {
 	$album->new_album = false;
 	$album->first_upload = true;
 
-	add_to_river('river/object/album/create', 'create', $album->getOwnerGUID(), $album->getGUID());
+	$album_river_view = elgg_get_plugin_setting('album_river_view', 'tidypics');
+        if ($album_river_view != "none") {
+                add_to_river('river/object/album/create', 'create', $album->getOwnerGUID(), $album->getGUID());
+        }
 
 	// "created album" notifications
 	// we throw the notification manually here so users are not told about the new album until
 	// there are at least a few photos in it
 	if ($album->shouldNotify()) {
-		object_notifications('create', 'object', $album);
+                register_notification_object('object', 'album', elgg_echo('tidypics:newalbum_subject'));
+                elgg_trigger_event('notify', 'album', $album);
 		$album->last_notified = time();
 	}
 } else {
@@ -65,7 +70,8 @@ if ($album->new_album) {
 	}
 
 	if ($album->shouldNotify()) {
-		object_notifications('create', 'object', $album);
+                register_notification_object('object', 'album', elgg_echo('tidypics:updatealbum_subject'));
+                elgg_trigger_event('notify', 'album', $album);
 		$album->last_notified = time();
 	}
 }

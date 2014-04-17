@@ -35,6 +35,10 @@ function tp_create_gd_thumbnails($file, $prefix, $filestorename) {
 	// tiny thumbail
 	$thumb->setFilename($prefix."thumb".$filestorename);
 	$thumbname = $thumb->getFilenameOnFilestore();
+	if (empty($image_sizes['tiny_image_width'])) {
+		// sites upgraded from 1.6 may not have this set
+		$image_sizes['tiny_image_width'] = $image_sizes['tiny_image_height'] = 60;
+	}
 	$rtn_code = tp_gd_resize(	$file->getFilenameOnFilestore(),
 								$thumbname,
 								FALSE,
@@ -111,7 +115,7 @@ function tp_gd_resize($input_name, $output_name, $watermark, $maxwidth, $maxheig
 	if (!$params) {
 		return FALSE;
 	}
-	
+
 	$new_width = $params['new_width'];
 	$new_height = $params['new_height'];
 	$region_width = $params['region_width'];
@@ -144,6 +148,11 @@ function tp_gd_resize($input_name, $output_name, $watermark, $maxwidth, $maxheig
 	if (!$newimage) {
 		return FALSE;
 	}
+
+	// color transparencies white (default is black)
+	imagefilledrectangle(
+		$newimage, 0, 0, $new_width, $new_height, imagecolorallocate($newimage, 255, 255, 255)
+	);
 
 	$rtn_code = imagecopyresampled(	$newimage,
 									$oldimage,
@@ -207,6 +216,10 @@ function tp_create_imagick_thumbnails($file, $prefix, $filestorename) {
 	// tiny thumbnail
 	$thumb->setFilename($prefix."thumb".$filestorename);
 	$thumbname = $thumb->getFilenameOnFilestore();
+        if (empty($image_sizes['tiny_image_width'])) {
+                // sites upgraded from 1.6 may not have this set 
+                $image_sizes['tiny_image_width'] = $image_sizes['tiny_image_height'] = 60;
+        }
 	$rtn_code = tp_imagick_resize(	$file->getFilenameOnFilestore(),
 									$thumbname,
 									$image_sizes['tiny_image_width'],
@@ -275,12 +288,12 @@ function tp_imagick_resize($input_name, $output_name, $maxwidth, $maxheight, $sq
 	// Get width and height
 	$width = $imgsizearray[0];
 	$height = $imgsizearray[1];
-	
+
 	$params = tp_im_calc_resize_params($width, $height, $maxwidth, $maxheight, $square, $x1, $y1, $x2, $y2);
 	if (!$params) {
 		return FALSE;
 	}
-	
+
 	$new_width = $params['new_width'];
 	$new_height = $params['new_height'];
 	$region_width = $params['region_width'];
@@ -333,6 +346,10 @@ function tp_create_im_cmdline_thumbnails($file, $prefix, $filestorename) {
 	// tiny thumbnail
 	$thumb->setFilename($prefix."thumb".$filestorename);
 	$thumbname = $thumb->getFilenameOnFilestore();
+        if (empty($image_sizes['tiny_image_width'])) {
+                // sites upgraded from 1.6 may not have this set 
+                $image_sizes['tiny_image_width'] = $image_sizes['tiny_image_height'] = 60;
+        }
 	$rtn_code = tp_im_cmdline_resize(	$file->getFilenameOnFilestore(),
 										$thumbname,
 										$image_sizes['tiny_image_width'],
@@ -391,7 +408,6 @@ function tp_create_im_cmdline_thumbnails($file, $prefix, $filestorename) {
  */
 function tp_im_cmdline_resize($input_name, $output_name, $maxwidth, $maxheight, $square = FALSE, $x1 = 0, $y1 = 0, $x2 = 0, $y2 = 0) {
 
-
 	// Get the size information from the image
 	$imgsizearray = getimagesize($input_name);
 	if (!$imgsizearray) {
@@ -409,7 +425,7 @@ function tp_im_cmdline_resize($input_name, $output_name, $maxwidth, $maxheight, 
 
 	$newwidth = $params['new_width'];
 	$newheight = $params['new_height'];
-	
+
 	$accepted_formats = array(
 			'image/jpeg' => 'jpeg',
 			'image/pjpeg' => 'jpeg',
@@ -444,7 +460,7 @@ function tp_im_cmdline_resize($input_name, $output_name, $maxwidth, $maxheight, 
 		trigger_error('Tidypics warning: Image Magick convert failed', E_USER_WARNING);
 		return FALSE;
 	}
-	
+
 	return TRUE;
 }
 

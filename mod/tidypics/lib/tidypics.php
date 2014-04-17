@@ -9,41 +9,49 @@
  * Get images for display on front page
  *
  * @param int number of images
- * @param int (optional) guid of owner
+ * @param array (optional) array of owner guids
+ * @param string (optional) context of view to display
  * @return string of html for display
- *
- * To use with the custom index plugin, use something like this:
-	
- if (is_plugin_enabled('tidypics')) {
- ?>
- <!-- display latest photos -->
- <div class="index_box">
-	<h2><a href="<?php echo $vars['url']; ?>pg/photos/world/"><?php echo elgg_echo("tidypics:mostrecent"); ?></a></h2>
-	<div class="contentWrapper">
- <?php
- echo tp_get_latest_photos(5);
- ?>
-	</div>
- </div>
- <?php
- }
- ?>
-
- * Good luck
  */
-function tp_get_latest_photos($num_images, $owner_guid = 0, $context = 'front') {
-	$prev_context = get_context();
-	set_context($context);
-	$image_html = elgg_list_entities(array(
-		'type' => 'object',
-		'subtype' => 'image',
-		'owner_guid' => $owner_guid,
-		'limit' => $num_images,
-		'full_view' => false,
-		'pagination' => false,
-	));
-	set_context($prev_context);
-	return $image_html;
+function tp_get_latest_photos($num_images, array $owner_guids = NULL, $context = 'front') {
+        $prev_context = elgg_get_context();
+        elgg_set_context($context);
+        $image_html = elgg_list_entities(array(
+        'type' => 'object',
+        'subtype' => 'image',
+        'owner_guids' => $owner_guids,
+        'limit' => $num_images,
+        'full_view' => false,
+        'list_type_toggle' => false,
+        'list_type' => 'gallery',
+        'pagination' => false,
+        'gallery_class' => 'tidypics-gallery-widget',
+        ));
+        elgg_set_context($prev_context);
+        return $image_html;
+}
+
+/**
+ * Get albums for display on front page
+ *
+ * @param int number of albums
+ * @param array (optional) array of container_guids
+ * @param string (optional) context of view to display
+ * @return string of html for display
+ */
+function tp_get_latest_albums($num_albums, array $container_guids = NULL, $context = 'front') {
+        $prev_context = elgg_get_context();
+        elgg_set_context($context);
+        $image_html = elgg_list_entities(array(
+        'type' => 'object',
+        'subtype' => 'album',
+        'container_guids' => $container_guids,
+        'limit' => $num_albums,
+        'full_view' => false,
+        'pagination' => false,
+        ));
+        elgg_set_context($prev_context);
+        return $image_html;
 }
 
 
@@ -54,14 +62,15 @@ function tp_get_latest_photos($num_images, $owner_guid = 0, $context = 'front') 
  *
  * @return string	path to image directory
  */
-function tp_get_img_dir() {
+function tp_get_img_dir($album_guid) {
 	$file = new ElggFile();
-	return $file->getFilenameOnFilestore() . 'image/';
+	$file->setFilename("image/$album_guid");
+	return $file->getFilenameOnFilestore($file);
 }
 
 /**
  * Prepare vars for a form, pulling from an entity or sticky forms.
- * 
+ *
  * @param type $entity
  * @return type
  */
@@ -99,7 +108,7 @@ function tidypics_prepare_form_vars($entity = null) {
 
 /**
  * Returns available image libraries.
- * 
+ *
  * @return string
  */
 function tidypics_get_image_libraries() {
@@ -123,7 +132,7 @@ function tidypics_get_image_libraries() {
 /**
  * Are there upgrade scripts to be run?
  *
- * @return bool 
+ * @return bool
  */
 function tidypics_is_upgrade_available() {
 	// sets $version based on code
@@ -196,7 +205,7 @@ function tidypics_list_photos(array $options = array()) {
 	foreach ($entities as $entity) {
 		$keys[] = $entity->guid;
 	}
-	
+
 	$entities = array_combine($keys, $entities);
 
 	$sorted_entities = array();
@@ -224,13 +233,13 @@ function tp_guid_callback($row) {
 }
 
 
-/*********************************************************************
- * the functions below replace broken core functions or add functions 
+/**
+ * the functions below replace broken core functions or add functions
  * that could/should exist in the core
  */
 
 function tp_view_entity_list($entities, $count, $offset, $limit, $fullview = true, $viewtypetoggle = false, $pagination = true) {
-	$context = get_context();
+	$context = elgg_get_context();
 
 	$html = elgg_view('tidypics/gallery',array(
 			'entities' => $entities,
@@ -323,7 +332,7 @@ function tp_get_entities_from_annotations_calculate_x($sum = "sum", $entity_type
  */
 function tp_is_group_page() {
 
-	if ($group = page_owner_entity()) {
+	if ($group = elgg_get_page_owner_entity()) {
 		if ($group instanceof ElggGroup)
 			return true;
 	}
@@ -370,7 +379,7 @@ function tp_get_tag_list($viewer) {
 	// is this a group
 	$is_group = tp_is_group_page();
 	if ($is_group) {
-		$group_guid = page_owner();
+		$group_guid = elgg_get_page_owner_guid();
 		$viewer_guid = $viewer->guid;
 		$members = get_group_members($group_guid, 999);
 		if (is_array($members)) {
@@ -394,15 +403,4 @@ function tp_get_tag_list($viewer) {
 	asort($friend_list);
 
 	return $friend_list;
-}
-
-/**
- * Convenience function for listing recent images
- *
- * @param int $max
- * @param bool $pagination
- * @return string
- */
-function tp_mostrecentimages($max = 8, $pagination = true) {
-	return list_entities("object", "image", 0, $max, false, false, $pagination);
 }

@@ -8,26 +8,20 @@
  * @license http://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2
  */
 
-echo '<div class="elgg-col elgg-col-4of5">';
-
+echo '<p>';
 echo elgg_view('input/autocomplete', array(
-	'name' => 'username',
-	'match_on' => 'friends',
+        'name' => 'username',
+        'match_on' => 'friends',
 ));
 
 echo elgg_view('input/hidden', array(
-	'name' => 'guid',
-	'value' => $vars['entity']->getGUID(),
+        'name' => 'guid',
+        'value' => $vars['entity']->getGUID(),
 ));
 
 echo elgg_view('input/hidden', array(
-	'name' => 'coordinates',
+        'name' => 'coordinates',
 ));
+echo '</p>';
 
-echo '</div>';
-
-echo '<div class="elgg-col elgg-col-1of5 center">';
-echo elgg_view('input/submit', array(
-	'value' => elgg_echo('tidypics:actiontag'),
-));
-echo '</div>';
+echo elgg_view('input/submit', array('value' => elgg_echo('tidypics:actiontag')));

@@ -3,7 +3,7 @@
  * Tidypics Thumbnail Creation Test
  *
  * Called through ajax, but registered as an Elgg action.
- * 
+ *
  */
 
 elgg_load_library('tidypics:resize');
@@ -41,7 +41,7 @@ if ($image_lib == 'ImageMagick') {
 	}
 
 // imagick PHP extension
-} else if ($image_lib == 'ImageMagickPHP') {  
+} else if ($image_lib == 'ImageMagickPHP') {
 	if (!tp_create_imagick_thumbnails($image, $prefix, $filestorename)) {
 		trigger_error('Tidypics warning: failed to create thumbnails - ImageMagick PHP', E_USER_WARNING);
 		register_error(elgg_echo('tidypics:thumbnail_tool:create_failed'));

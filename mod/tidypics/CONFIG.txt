@@ -21,7 +21,7 @@ settings will tell you whether it is installed.
 
 ImageMagick command line tools
 ===============================
-This requires that the PHP function exec() is available which is often disbaled
+This requires that the PHP function exec() is available which is often disabled
 for security reasons. You can find ImageMagick on your server by running "which convert".
 
 Memory Available to PHP

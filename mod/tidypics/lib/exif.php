@@ -7,7 +7,7 @@
 
 /**
  * Pull EXIF data from image file
- * 
+ *
  * @param TidypicsImage $image
  */
 function td_get_exif($image) {
@@ -38,7 +38,7 @@ function td_get_exif($image) {
 
 /**
  * Grab array of EXIF data for display
- * 
+ *
  * @param TidypicsImage $image
  * @return array|false
  */

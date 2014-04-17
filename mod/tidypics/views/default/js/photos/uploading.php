@@ -2,6 +2,9 @@
 /**
  * AJAX uploading
  */
+
+$maxfilesize = (int) elgg_get_plugin_setting('maxfilesize', 'tidypics');
+$maxfilesize *= 1024;
 ?>
 
 //<script>
@@ -20,38 +23,30 @@ elgg.tidypics.uploading.init = function() {
 	});
 
 	$("#uploadify").uploadify({
-		'uploader'     : elgg.config.wwwroot + 'mod/tidypics/vendors/uploadify/uploadify.swf',
-		'script'       : elgg.config.wwwroot + 'action/photos/image/ajax_upload',
-		'cancelImg'    : elgg.config.wwwroot + 'mod/tidypics/vendors/uploadify/cancel.png',
-		'fileDataName' : 'Image',
-		'multi'        : true,
-		'auto'         : false,
-		'wmode'        : 'transparent',
-		'buttonImg'    : " ",
-		'height'       : $('#tidypics-choose-button').height(),
-		'width'        : $('#tidypics-choose-button').width(),
-		'scriptData'   : data,
-		'onEmbedFlash' : function(event) {
-			// @todo This is supposed to mimick hovering over the link.
-			// hover events aren't firing for the object.
-			$("#" + event.id).hover(
-				function(){
-					$("#tidypics-choose-button").addClass('tidypics-choose-button-hover');
-				},
-				function(){
-					$("#tidypics-choose-button").removeClass('tidypics-choose-button-hover');
-				}
-			);
+		'swf'           : elgg.config.wwwroot + 'mod/tidypics/vendors/uploadify/uploadify.swf',
+		'uploader'      : elgg.config.wwwroot + 'action/photos/image/ajax_upload',
+		'fileObjName'   : 'Image',
+		'fileSizeLimit' : <?php echo $maxfilesize; ?>,
+		'fileTypeDesc'  : 'Image Files',
+                'fileTypeExts'  : '*.gif; *.jpg; *.png', 
+		'multi'         : true,
+		'auto'          : false,
+		'buttonText'    : '1. <?php echo elgg_echo('tidypics:uploader:choose'); ?>',
+		'height'        : $('#tidypics-choose-button').height(),
+		'width'         : $('#tidypics-choose-button').width(),
+		'formData'      : data,
+		'onFallback'    : function() {
+                        alert('<?php echo elgg_echo('tidypics:uploader:no_flash'); ?>');
+                },
+                'onDialogClose' : function(queueData) {
+                        if (queueData.queueLength > 0) {
+                                 $("#tidypics-upload-button").removeClass('tidypics-disable');
+                        }
+                },
+		'onUploadStart' : function(file) {
+			// @todo do something
 		},
-		'onSelectOnce'  : function() {
-			$("#tidypics-upload-button").removeClass('tidypics-disable');
-		},
-		'onAllComplete' : function() {
-			// @todo they can keep adding pics if they want. no need to disable this.
-			$("#tidypics-choose-button").addClass('tidypics-disable');
-			$("#tidypics-upload-button").addClass('tidypics-disable').die();
-			$("#tidypics-describe-button").removeClass('tidypics-disable');
-
+		'onQueueComplete' : function(queueData) {
 			elgg.action('photos/image/ajax_upload_complete', {
 				data: {
 					album_guid: data.album_guid,
@@ -59,36 +54,47 @@ elgg.tidypics.uploading.init = function() {
 				},
 				success: function(json) {
 					var url = elgg.normalize_url('photos/edit/' + json.batch_guid)
-					$('#tidypics-describe-button').attr('href', url);
+					window.location.href = url;
 				}
 			});
 		},
-		'onComplete'    : function(event, queueID, fileObj, response) {
-			// check for errors here
-			if (response != 'success') {
-				$("#uploadify" + queueID + " .percentage").text(" - " + response);
-				$("#uploadify" + queueID).addClass('uploadifyError');
-			}
-			$("#uploadify" + queueID + " > .cancel").remove();
-			return false;
+		'onUploadSuccess' : function(file, data, response) {
+                        // check for errors here
+                        if (response != 'success') {
+                                $("#uploadify" + file.name + " .percentage").text(" - " + response);
+                                $("#uploadify" + file.name).addClass('uploadifyError');
+                        }
+                        $("#uploadify" + file.name + " > .cancel").remove();
+                        return false;
 		},
-		'onCancel'      : function(event, queueID, fileObj, data) {
-			if (data.fileCount == 0) {
-				$("#tidypics-upload-button").addClass('tidypics-disable');
-			}
+		'onUploadComplete' : function(file) {
+                        // @todo do something
 		},
-		'onError' : function (event, ID, fileObj, errorObj) {
-			// @todo do something useful with the limited information in the errorObj.
+		'onCancel' : function(file) {
+                        // @todo do something
+                },
+		'onClearQueue' : function(queueItemCount) {
+		        // @todo do something
+		},
+		'onUploadError' : function (file, errorCode, errorMsg, errorString) {
+			// @todo do something
 		}
 
 	});
 
-	// bind to upload button
-	$('#tidypics-upload-button').live('click', function(e) {
+	// bind to choose button
+	$('#tidypics-choose-button').live('click', function(e) {
 		var $uploadify = $('#uploadify');
-		$uploadify.uploadifyUpload();
+		$uploadify.uploadify('disable', false);
 		e.preventDefault();
 	});
+	
+	// bind to upload button
+        $('#tidypics-upload-button').live('click', function(e) {
+                var $uploadify = $('#uploadify');
+                $uploadify.uploadify('upload','*');
+                e.preventDefault();
+        });
 }
 
 elgg.register_hook_handler('init', 'system', elgg.tidypics.uploading.init);

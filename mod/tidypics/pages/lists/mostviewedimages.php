@@ -1,87 +1,65 @@
 <?php
 
 /**
- * Most viewed images - either for a user or all site
+ * Most viewed images
  *
  */
 
-// Load Elgg engine
-include_once dirname(dirname(dirname(dirname(dirname(__FILE__))))) . "/engine/start.php";
+// set up breadcrumbs
+elgg_push_breadcrumb(elgg_echo('photos'), 'photos/siteimagesall');
+elgg_push_breadcrumb(elgg_echo('tidypics:mostviewed'));
 
-global $CONFIG;
-$prefix = $CONFIG->dbprefix;
-$max = 24;
+$offset = (int)get_input('offset', 0);
+$limit = (int)get_input('limit', 16);
 
-$owner_guid = page_owner();
+$options = array(
+        'type' => 'object',
+        'subtype' => 'image',
+        'limit' => $limit,
+        'offset' => $offset,
+        'annotation_name' => 'tp_view',
+        'calculation' => 'count',
+        'order_by' => 'annotation_calculation desc',
+        'full_view' => false,
+        'list_type' => 'gallery',
+        'gallery_class' => 'tidypics-gallery'
+);
 
-//$start = microtime(true);
-$photos = tp_get_entities_from_annotations_calculate_x(	
-		'count',
-		'object',
-		'image',
-		'tp_view',
-		'',
-		'',
-		$owner_guid,
-		$max);
-//error_log("elgg query is " . (float)(microtime(true) - $start));
+$result = elgg_list_entities_from_annotation_calculation($options);
 
-//this works but is wildly inefficient
-//$annotations = get_annotations(0, "object", "image", "tp_view", "", "", 5000);
-/*
-	$start = microtime(true);
-	$sql = "SELECT ent.guid, count( * ) AS views
-			FROM " . $prefix . "entities ent
-			INNER JOIN " . $prefix . "entity_subtypes sub ON ent.subtype = sub.id
-			AND sub.subtype = 'image'
-			INNER JOIN " . $prefix . "annotations ann1 ON ann1.entity_guid = ent.guid AND ann1.owner_guid != ent.owner_guid
-			INNER JOIN " . $prefix . "metastrings ms ON ms.id = ann1.name_id
-			AND ms.string = 'tp_view'
-			GROUP BY ent.guid
-			ORDER BY views DESC
-			LIMIT $max";
-	
-	$result = get_data($sql);
+$title = elgg_echo('tidypics:mostviewed');
 
-	$entities = array();
-	foreach($result as $entity) {
-		$entities[] = get_entity($entity->guid);
-	}
-*/
-//error_log("custom query is " . (float)(microtime(true) - $start));
-
-// allow other plugins to override the slideshow
-$slideshow_link = trigger_plugin_hook('tp_slideshow', 'album', array(), null);
-if ($slideshow_link) {
-	add_submenu_item(elgg_echo('album:slideshow'),
-			$slideshow_link,
-			'photos' );
+if (elgg_is_logged_in()) {
+        $logged_in_guid = elgg_get_logged_in_user_guid();
+        elgg_register_menu_item('title', array('name' => 'addphotos',
+                                               'href' => "ajax/view/photos/selectalbum/?owner_guid=" . $logged_in_guid,
+                                               'text' => elgg_echo("photos:addphotos"),
+                                               'link_class' => 'elgg-button elgg-button-action elgg-lightbox'));
 }
 
-if ($owner_guid) {
-	if ($owner_guid == get_loggedin_userid()) {
-		$title = elgg_echo("tidypics:yourmostviewed");
-	} else {
-		$title = sprintf(elgg_echo("tidypics:friendmostviewed"), page_owner_entity()->name);
-	}
+// only show slideshow link if slideshow is enabled in plugin settings and there are images
+if (elgg_get_plugin_setting('slideshow', 'tidypics') && !empty($result)) {
+        $url = elgg_get_site_url() . "photos/mostviewed?limit=64&offset=$offset&view=rss";
+        $url = elgg_format_url($url);
+        $slideshow_link = "javascript:PicLensLite.start({maxScale:0, feedUrl:'$url'})";
+        elgg_register_menu_item('title', array('name' => 'slideshow',
+                                                'href' => $slideshow_link,
+                                                'text' => "<img src=\"".elgg_get_site_url() ."mod/tidypics/graphics/slideshow.png\" alt=\"".elgg_echo('album:slideshow')."\">",
+                                                'title' => elgg_echo('album:slideshow'),
+                                                'class' => 'elgg-button elgg-button-action'));
+}
+
+if (!empty($result)) {
+        $area2 = $result;
 } else {
-	// world view - set page owner to logged in user
-	if (isloggedin()) {
-		set_page_owner(get_loggedin_userid());
-	}
-
-	$title = elgg_echo("tidypics:mostviewed");
+        $area2 = elgg_echo('tidypics:mostviewed:nosuccess');
 }
-$area2 = elgg_view_title($title);
+$body = elgg_view_layout('content', array(
+        'filter_override' => '',
+        'content' => $area2,
+        'title' => $title,
+        'sidebar' => elgg_view('photos/sidebar', array('page' => 'all')),
+));
 
-// grab the html to display the images
-$content = tp_view_entity_list($photos, $max, 0, $max, false);
-
-// this view takes care of the title on the main column and the content wrapper
-$area2 = elgg_view('tidypics/content_wrapper', array('title' => $title, 'content' => $content,));
-if (empty($area2)) {
-	$area2 = $content;
-}
-
-$body = elgg_view_layout('two_column_left_sidebar', '', $area2);
-page_draw($title, $body);
+// Draw it
+echo elgg_view_page(elgg_echo('tidypics:mostviewed'), $body);

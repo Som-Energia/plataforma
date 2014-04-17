@@ -26,6 +26,5 @@ $image_sizes['tiny_image_width'] = get_input('tiny_image_width');
 $image_sizes['tiny_image_height'] = get_input('tiny_image_height');
 $plugin->setSetting('image_sizes', serialize($image_sizes));
 
-
 system_message(elgg_echo('tidypics:settings:save:ok'));
 forward(REFERER);

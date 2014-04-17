@@ -13,7 +13,7 @@ while ($item = mysql_fetch_object($river_items)) {
 	$DB_QUERY_CACHE = $DB_PROFILE = array();
 
 	// find the annotation for this river item
-	$annotations = get_annotations($item->subject_guid, '', '', 'phototag', '', 0, 999);
+	elgg_get_annotations(array('guid' => $item->subject_guid, 'annotation_name' => 'phototag', 'limit' => 999));
 	foreach ($annotations as $annotation) {
 		$tag = unserialize($annotation->value);
 		if ($tag->type === 'user') {

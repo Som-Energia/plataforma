@@ -58,7 +58,7 @@ function tidypics_migrate_pics() {
 /**
  * Migrates all pictures owned by a user regardless of
  * if they're group or user files.
- * 
+ *
  * @param ElggUser $user User to migrate.
  * @return bool on success
  */
@@ -75,10 +75,16 @@ function tidypics_migrate_user_pics(ElggUser $user) {
 	}
 
 	//echo "{$user->name} ({$user->getGUID()}) has " . count($pics) . " pics.\n";
-	
+
 	// get an album to migrate into if it already exists.
 	// will create later on if it doesn't.
-	$user_album_entities = get_entities_from_metadata('migrated_from_files', true, 'object', 'album', $user->getGUID(), 1);
+	$user_album_entities = elgg_get_entities_from_metadata(array('metadata_name' => 'migrated_from_files',
+                                                                     'metadata_value' => true,
+	                                                             'type' => 'object',
+	                                                             'subtype' => 'album',
+	                                                             'owner_guid' => $user->getGUID(),
+	                                                             'limit' => 1));
+	
 	$user_album_guid = isset($album_entities[0]) ? $album_entities[0]->getGUID() : false;
 
 	// a list of albums to randomly select a cover for on newly created albums.
@@ -90,23 +96,23 @@ function tidypics_migrate_user_pics(ElggUser $user) {
 			//echo "{$pic->filename} ({$pic->getGUID()}) looks like it's already in tidy pics. Ignoring.\n";
 			continue;
 		}
-	
+
 		// blank some vars
 		$group_pic = $group_album_guid = $group_guid = false;
-		
+
 		// see if we're doing a group file migration.
-		if ($pic->container_guid != $user->getGUID() 
+		if ($pic->container_guid != $user->getGUID()
 			AND $group = get_entity($pic->container_guid)
 			AND $group instanceof ElggGroup
 		) {
 			//echo "{$pic->getGUID()} is in a group!\n";
 			$group_pic = true;
 			$group_guid = $group->getGUID();
-			
+
 			// yes, this is how you get entities by container_guid.
 			// yes, it's wrong, wrong, wrong for this function to work this way.
-			$group_album_entities = get_entities('object', 'album', $group_guid);
-			
+			$group_album_entities = elgg_get_entities(array('type' => 'object', 'subtype' => 'album',  'owner_guid' => $group_guid));
+
 			// get_entities_from_metadata doesn't support container_guid (or owner_guid meaning container_guid)
 			// do it the hard way.
 			if (is_array($group_album_entities)) {
@@ -122,16 +128,16 @@ function tidypics_migrate_user_pics(ElggUser $user) {
 		} else {
 			$album_guid = $user_album_guid;
 		}
-		
+
 		//echo "album_guid is $album_guid and group_pic is: $group_pic\n";
-		
+
 		// create an album if we need to.
 		if (!$album_guid) {
 			//echo "Creating new album...\n";
 			$album = new ElggObject();
 			$album->subtype = 'album';
 			$album->new_album = TP_NEW_ALBUM;
-			
+
 			if ($group_pic) {
 				$album->container_guid = $group_guid;
 				$album->owner_guid = $group->owner_guid;
@@ -151,13 +157,13 @@ function tidypics_migrate_user_pics(ElggUser $user) {
 			$album->migrated_from_files = true;
 			$album_guid = $album->getGUID();
 			$new_album_guids[] = $album_guid;
-			
+
 			// save the album guid as the users
 			if (!$group_pic) {
 				$user_album_guid = $album_guid;
 			}
 		}
-		
+
 		if (!tidypics_migrate_pic_from_files($pic, $album_guid)) {
 			//echo "{$pic->filename} ({$pic->getGUID()}) Couldn't be migrated. Ignoring.\n";
 			continue;
@@ -169,7 +175,7 @@ function tidypics_migrate_user_pics(ElggUser $user) {
 	foreach ($new_album_guids as $guid) {
 		tidypics_set_random_cover_pic($guid);
 	}
-	
+
 	return true;
 }
 
@@ -180,14 +186,14 @@ function tidypics_migrate_user_pics(ElggUser $user) {
  */
 function tidypics_set_random_cover_pic($album_guid) {
 	global $CONFIG;
-	
+
 	if ($album = get_entity($album_guid) AND $album instanceof TidypicsAlbum) {
 		$q = "SELECT guid FROM {$CONFIG->dbprefix}entities WHERE container_guid = $album_guid ORDER BY RAND() limit 1";
 		$pic = get_data($q);
-		
+
 		return $album->cover = $pic[0]->guid;
 	}
-	
+
 	return false;
 }
 
@@ -226,7 +232,7 @@ function tidypics_migrate_pic_from_files($pic, $album_guid) {
 		$old_file = $pic->$md_name;
 		$new_file = str_replace('file/', "image/$album_guid", $old_file);
 
-		if (!($old_fp = fopen($user_fs_path . $old_file, 'r') 
+		if (!($old_fp = fopen($user_fs_path . $old_file, 'r')
 		AND $new_fp = fopen($user_fs_path . $new_file, 'w'))) {
 			//echo "Could not move {$user_fs_path}{$old_file} to {$user_fs_path}{$new_file}\n";
 			continue;
@@ -261,15 +267,15 @@ function tidypics_migrate_pic_from_files($pic, $album_guid) {
  */
 function tidypics_get_user_guids_with_pics_in_files($offset, $limit) {
 	global $CONFIG;
-	
+
 	//$simpletype_ms_id = add_metastring('simple_type');
 	//$image_ms_id = add_metastring('image');
-	
-	$q = "SELECT DISTINCT e.owner_guid 
-		FROM 
-			{$CONFIG->dbprefix}entities as e, 
+
+	$q = "SELECT DISTINCT e.owner_guid
+		FROM
+			{$CONFIG->dbprefix}entities as e,
 			{$CONFIG->dbprefix}entity_subtypes as st
-			
+
 		WHERE st.subtype = 'file'
 		AND e.subtype = st.id
 		LIMIT $offset, $limit";
@@ -277,7 +283,7 @@ function tidypics_get_user_guids_with_pics_in_files($offset, $limit) {
 	if (!$data = get_data($q)) {
 		return false;
 	}
-	
+
 	// return an array of IDs
 	$r = array();
 	foreach ($data as $row) {
@@ -297,5 +303,10 @@ function tidypics_get_user_pics_from_files($user_guid) {
 	}
 
 	// @todo Might have to cycle this through with standard while + foreach.
-	return get_entities_from_metadata('simpletype', 'image', 'object', 'file', $user_guid, 5000);
+	return elgg_get_entities_from_metadata(array('metadata_name' => 'simpletype',
+                                                     'metadata_value' => 'image',
+                                                     'type' => 'object',
+                                                     'subtype' => 'file',
+                                                     'owner_guid' => $user_guid,
+                                                     'limit' => 5000));
 }

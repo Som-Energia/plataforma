@@ -7,7 +7,7 @@
  */
 
 $button = elgg_view('output/url', array(
-	'text' => elgg_echo('quit'),
+	'text' => elgg_echo('tidypics:quit'),
 	'href' => '#',
 	'id' => 'tidypics-tagging-quit',
 ));

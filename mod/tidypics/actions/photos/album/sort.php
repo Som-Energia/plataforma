@@ -6,7 +6,7 @@
 $album_guid = get_input('album_guid');
 $album = get_entity($album_guid);
 if (!$album) {
-	
+
 }
 
 $guids = get_input('guids');

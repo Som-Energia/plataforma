@@ -12,8 +12,13 @@ $image = elgg_extract('entity', $vars);
 
 $img = elgg_view_entity_icon($image, 'small');
 
+$img_title = $image->getTitle();
+if (strlen($img_title) > 20) {
+        $img_title = substr($img_title, 0, 17).'...';
+}
+
 $header = elgg_view('output/url', array(
-	'text' => $image->getTitle(),
+	'text' => $img_title,
 	'href' => $image->getURL(),
 	'is_trusted' => true,
 	'class' => 'tidypics-heading',
@@ -26,16 +31,4 @@ $body = elgg_view('output/url', array(
 	'is_trusted' => true,
 ));
 
-/*
-$footer = elgg_view('output/url', array(
-	'text' => $image->getContainerEntity()->name,
-	'href' => $image->getContainerEntity()->getURL(),
-	'is_trusted' => true,
-));
-$footer .= '<div class="elgg-subtext">' . elgg_echo('album:num', array($album->getSize())) . '</div>';
-*/
-
-$params = array(
-	'footer' => $footer,
-);
-echo elgg_view_module('tidypics-image', $header, $body, $params);
+echo elgg_view_module('tidypics-image', $header, $body);

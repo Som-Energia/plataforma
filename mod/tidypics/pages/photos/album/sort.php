@@ -24,7 +24,8 @@ elgg_set_page_owner_guid($owner->getGUID());
 $title = elgg_echo('tidypics:sort', array($album->getTitle()));
 
 // set up breadcrumbs
-elgg_push_breadcrumb(elgg_echo('photos'), 'photos/all');
+elgg_push_breadcrumb(elgg_echo('photos'), 'photos/siteimagesall');
+elgg_push_breadcrumb(elgg_echo('tidypics:albums'), 'photos/all');
 if (elgg_instanceof($owner, 'group')) {
 	elgg_push_breadcrumb($owner->name, "photos/group/$owner->guid/all");
 } else {
@@ -32,13 +33,6 @@ if (elgg_instanceof($owner, 'group')) {
 }
 elgg_push_breadcrumb($album->getTitle(), $album->getURL());
 elgg_push_breadcrumb(elgg_echo('album:sort'));
-
-elgg_register_menu_item('title', array(
-		'name' => 'upload',
-		'href' => 'photos/upload/' . $album->getGUID(),
-		'text' => elgg_echo('images:upload'),
-		'link_class' => 'elgg-button elgg-button-action',
-));
 
 if ($album->getSize()) {
 	$content = elgg_view_form('photos/album/sort', array(), array('album' => $album));
@@ -50,7 +44,7 @@ $body = elgg_view_layout('content', array(
 	'filter' => false,
 	'content' => $content,
 	'title' => $title,
-	'sidebar' => elgg_view('tidypics/sidebar', array('page' => 'album')),
+	'sidebar' => elgg_view('photos/sidebar', array('page' => 'album')),
 ));
 
 echo elgg_view_page($title, $body);

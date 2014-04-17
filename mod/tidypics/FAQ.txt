@@ -29,3 +29,35 @@ Unable to save settings
 If you are unable to settings, Apache may be configured to block pages that use
 file paths as Tidypics does when setting the location of the ImageMagick executable.
 In this case, leave that field blank.
+
+
+Latest photos and latest albums widgets on index page
+=====================================================
+You can either use the Widget Manager plugin to add these widgets to the index page or in case you
+don't use this plugin you can also add them with customizing the Custom Index plugin index page. For
+adding the widgets with the Custom Index you need to add the following code to the file
+mod/custom_index/views/default/page/layouts/custom_index.php:
+
+<pre><code>// Tidypics latest photos
+if (elgg_is_active_plugin('tidypics')) {
+    $latest_photos = tp_get_latest_photos(6);
+    $latest_images .= elgg_view('output/url', array('href' => "/photos/siteimagesall",
+                                                    'text' => elgg_echo('link:view:all'),
+                                                    'is_trusted' => true,
+                               ));
+    echo elgg_view_module('featured', elgg_echo("tidypics:mostrecent"), $latest_photos, $mod_params);
+}</code></pre>
+
+<pre><code>// Tidypics latest albums
+if (elgg_is_active_plugin('tidypics')) {
+    $latest_albums = tp_get_latest_albums(6);
+    $latest_albums .= elgg_view('output/url', array('href' => "/photos/all",
+                                                    'text' => elgg_echo('link:view:all'),
+                                                    'is_trusted' => true,
+                               ));
+    echo elgg_view_module('featured', elgg_echo("tidypics:albums_mostrecent"), $latest_albums, $mod_params);
+}</code></pre>
+
+Where to add these lines depends on where you want the widgets to appear on your index page. You can also adjust
+the number of photos or albums respectively that will shown in the widgets by changing the parameter of
+tp_get_latest_photos() and tp_get_latest_albums() to the desired number.

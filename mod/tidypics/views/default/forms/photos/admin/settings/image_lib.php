@@ -17,4 +17,3 @@ echo '<div>';
 echo elgg_echo('tidypics:settings:im_path') . ' ';
 echo elgg_view("input/text", array('name' => 'params[im_path]', 'value' => $plugin->im_path));
 echo '</div>';
-

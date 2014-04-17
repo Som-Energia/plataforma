@@ -12,7 +12,6 @@
  */
 
 $album = $vars['entity'];
-$access_id = $album->access_id;
 
 $maxfilesize = (float) elgg_get_plugin_setting('maxfilesize', 'tidypics');
 
@@ -25,7 +24,7 @@ for ($x = 0; $x < 10; $x++) {
 }
 
 $foot = elgg_view('input/hidden', array('name' => 'guid', 'value' => $album->getGUID()));
-$foot .= elgg_view('input/submit', array('value' => elgg_echo("save")));
+$foot .= elgg_view('input/submit', array('value' => elgg_echo("photos:addphotos")));
 
 $form_body = <<<HTML
 <div>

@@ -46,9 +46,4 @@ if (!$maxfilesize) {
 			2. <?php echo elgg_echo('tidypics:uploader:upload'); ?>
 		</a>
 	</li>
-	<li class="mbm">
-		<a id="tidypics-describe-button" class="tidypics-disable" href="#">
-			3. <?php echo elgg_echo('tidypics:uploader:describe'); ?>
-		</a>
-	</li>
 </ul>

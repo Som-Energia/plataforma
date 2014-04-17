@@ -71,12 +71,12 @@ class TidypicsImage extends ElggFile {
 			}
 		}
 
+                $this->removeThumbnails();
+
 		$album = get_entity($this->container_guid);
 		if ($album) {
 			$album->removeImage($this->guid);
 		}
-
-		$this->removeThumbnails();
 
 		// update quota
 		$owner = $this->getOwnerEntity();
@@ -100,7 +100,7 @@ class TidypicsImage extends ElggFile {
 
 	/**
 	 * Get the URL for the web page of this image
-	 * 
+	 *
 	 * @return string
 	 */
 	public function getURL() {
@@ -111,7 +111,7 @@ class TidypicsImage extends ElggFile {
 
 	/**
 	 * Get the src URL for the image
-	 * 
+	 *
 	 * @return string
 	 */
 	public function getIconURL($size = 'small') {
@@ -193,17 +193,195 @@ class TidypicsImage extends ElggFile {
 		$this->originalfilename = $originalName;
 	}
 
+        /**
+         * Auto-correction of image orientation based on exif data
+         *
+         * @param array $data
+         */
+        protected function OrientationCorrection($data) {
+                // catch for those who don't have exif module loaded
+                if (!is_callable('exif_read_data')) {
+                        return;
+                }
+                $exif = exif_read_data($data['tmp_name']);
+                $orientation = isset($exif['Orientation']) ? $exif['Orientation'] : 0;
+                if($orientation != 0 || $orientation != 1) {
+
+                        $imageLib = elgg_get_plugin_setting('image_lib', 'tidypics');
+
+                        if ($imageLib == 'ImageMagick') {
+                                // ImageMagick command line
+                                        $im_path = elgg_get_plugin_setting('im_path', 'tidypics');
+                                if (!$im_path) {
+                                        $im_path = "/usr/bin/";
+                                }
+                                if (substr($im_path, strlen($im_path)-1, 1) != "/") {
+                                        $im_path .= "/";
+                                }
+
+                                $filename = $data['tmp_name'];
+                                $command = $im_path . "mogrify -auto-orient $filename";
+                                $output = array();
+                                $ret = 0;
+                                exec($command, $output, $ret);
+                        } else if ($imageLib == 'ImageMagickPHP') {
+                                // imagick php extension
+                                $rotate = false;
+                                $flop = false;
+                                switch($orientation) {
+                                        case 2:
+                                                $rotate = false;
+                                                $flop = true;
+                                                break;
+                                        case 3:
+                                                $rotate = true;
+                                                $flop = false;
+                                                $angle = 180;
+                                                break;
+                                        case 4:
+                                                $rotate = true;
+                                                $flop = true;
+                                                $angle = 180;
+                                                break;
+                                        case 5:
+                                                $rotate = true;
+                                                $flop = true;
+                                                $angle = 90;
+                                                break;
+                                        case 6:
+                                                $rotate = true;
+                                                $flop = false;
+                                                $angle = 90;
+                                                break;
+                                        case 7:
+                                                $rotate = true;
+                                                $flop = true;
+                                                $angle = -90;
+                                                break;
+                                        case 8:
+                                                $rotate = true;
+                                                $flop = false;
+                                                $angle = -90;
+                                                break;
+                                        default:
+                                                $rotate = false;
+                                                $flop = false;
+                                                break;
+                                }
+                                $imagick = new Imagick();
+                                $imagick->readImage($data['tmp_name']);
+                                if ($rotate) {
+                                        $imagick->rotateImage('#000000', $angle);
+                                }
+                                if ($flop) {
+                                        $imagick->flopImage();
+                                }
+                                $imagick->setImageOrientation(imagick::ORIENTATION_TOPLEFT);
+                                $imagick->writeImage($data['tmp_name']);
+                                $imagick->clear();
+                                $imagick->destroy(); 
+                        } else {
+                                // make sure the in memory image size does not exceed memory available
+                                $imginfo = getimagesize($data['tmp_name']);
+                                $requiredMemory1 = ceil($imginfo[0] * $imginfo[1] * 5.35);
+                                $requiredMemory2 = ceil($imginfo[0] * $imginfo[1] * ($imginfo['bits'] / 8) * $imginfo['channels'] * 2.5);
+                                $requiredMemory = (int)max($requiredMemory1, $requiredMemory2);
+
+                                $mem_avail = ini_get('memory_limit');
+                                $mem_avail = rtrim($mem_avail, 'M');
+                                $mem_avail = $mem_avail * 1024 * 1024;
+                                $mem_used = memory_get_usage();
+
+                                $mem_avail = $mem_avail - $mem_used - 2097152; // 2 MB buffer
+                                if ($requiredMemory < $mem_avail) {
+                                        $image = imagecreatefromstring(file_get_contents($data['tmp_name']));
+                                        $rotate = false;
+                                        $flip = false;
+                                        switch($orientation) {
+                                                case 2:
+                                                        $rotate = false;
+                                                        $flip = true;
+                                                        break;
+                                                case 3:
+                                                        $rotate = true;
+                                                        $flip = false;
+                                                        $angle = 180;
+                                                        break;
+                                                case 4:
+                                                        $rotate = true;
+                                                        $flip = true;
+                                                        $angle = 180;
+                                                        break;
+                                                case 5:
+                                                        $rotate = true;
+                                                        $flip = true;
+                                                        $angle = -90;
+                                                        break;
+                                                case 6:
+                                                        $rotate = true;
+                                                        $flip = false;
+                                                        $angle = -90;
+                                                        break;
+                                                case 7:
+                                                        $rotate = true;
+                                                        $flip = true;
+                                                        $angle = 90;
+                                                        break;
+                                                case 8:
+                                                        $rotate = true;
+                                                        $flip = false;
+                                                        $angle = 90;
+                                                        break;
+                                                default:
+                                                        $rotate = false;
+                                                        $flip = false;
+                                                        break;
+                                        }
+                                        if ($rotate) {
+                                                $image = imagerotate($image, $angle, 0);
+                                                imagejpeg($image, $data['tmp_name']);
+                                        }
+                                        if ($flip) {
+                                                $mem_avail = ini_get('memory_limit');
+                                                $mem_avail = rtrim($mem_avail, 'M');
+                                                $mem_avail = $mem_avail * 1024 * 1024;
+                                                $mem_used = memory_get_usage();
+
+                                                $mem_avail = $mem_avail - $mem_used - 2097152; // 2 MB buffer
+                                                if (($requiredMemory) < $mem_avail) {
+                                                        $width = imagesx($image);
+                                                        $height = imagesy($image);
+                                                        $src_x = 0;
+                                                        $src_y = 0;
+                                                        $src_width = $width;
+                                                        $src_height = $height;
+                                                        $src_x = $width -1;
+                                                        $src_width = -$width;
+                                                        $imgdest = imagecreatetruecolor($width, $height);
+                                                        imagecopyresampled($imgdest, $image, 0, 0, $src_x, $src_y, $width, $height, $src_width, $src_height);
+                                                        imagejpeg($imgdest, $data['tmp_name']);
+                                                        imagedestroy($imgdest);
+                                                }
+                                        }
+                                        imagedestroy($image);
+                                }
+                        }
+                }
+        }
+
 	/**
 	 * Save the uploaded image
-	 * 
+	 *
 	 * @param array $data
 	 */
 	protected function saveImageFile($data) {
 		$this->checkUploadErrors($data);
+		
+		$this->OrientationCorrection($data);
 
 		// we need to make sure the directory for the album exists
 		// @note for group albums, the photos are distributed among the users
-		$dir = tp_get_img_dir() . $this->getContainerGUID();
+		$dir = tp_get_img_dir($this->getContainerGUID());
 		if (!file_exists($dir)) {
 			mkdir($dir, 0755, true);
 		}
@@ -249,7 +427,11 @@ class TidypicsImage extends ElggFile {
 
 		// make sure the in memory image size does not exceed memory available
 		$imginfo = getimagesize($data['tmp_name']);
-		if (!tp_upload_memory_check($image_lib, $imginfo[0] * $imginfo[1])) {
+		$requiredMemory1 = ceil($imginfo[0] * $imginfo[1] * 5.35);
+		$requiredMemory2 = ceil($imginfo[0] * $imginfo[1] * ($imginfo['bits'] / 8) * $imginfo['channels'] * 2.5);
+		$requiredMemory = (int)max($requiredMemory1, $requiredMemory2);
+		$image_lib = elgg_get_plugin_setting('image_lib', 'tidypics');
+		if (!tp_upload_memory_check($image_lib, $requiredMemory)) {
 			trigger_error('Tidypics warning: image memory size too large for resizing so rejecting', E_USER_WARNING);
 			throw new Exception(elgg_echo('tidypics:image_pixels'));
 		}
@@ -267,11 +449,11 @@ class TidypicsImage extends ElggFile {
 		elgg_load_library('tidypics:resize');
 
 		$imageLib = elgg_get_plugin_setting('image_lib', 'tidypics');
-		
+
 		$prefix = "image/" . $this->container_guid . "/";
 		$filename = $this->getFilename();
 		$filename = substr($filename, strrpos($filename, '/') + 1);
-		
+
 		if ($imageLib == 'ImageMagick') {
 			// ImageMagick command line
 			if (tp_create_im_cmdline_thumbnails($this, $prefix, $filename) != true) {
@@ -334,14 +516,14 @@ class TidypicsImage extends ElggFile {
 		elgg_load_library('tidypics:exif');
 		td_get_exif($this);
 	}
-	
+
 	/**
 	 * Has the photo been tagged with "in this photo" tags
 	 *
 	 * @return true/false
 	 */
 	public function isPhotoTagged() {
-		$num_tags = count_annotations($this->getGUID(), 'object', 'image', 'phototag');
+		$num_tags = elgg_get_annotations(array('guid' => $this->getGUID(), 'type' => 'object', 'subtype' => 'image', 'annotation_name' => 'phototag', 'count' => true));
 		if ($num_tags > 0) {
 			return true;
 		} else {

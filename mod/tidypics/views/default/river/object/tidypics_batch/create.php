@@ -4,6 +4,7 @@
  *
  * @author Cash Costello
  * @license http://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2
+ *
  */
 
 $batch = $vars['item']->getObjectEntity();
@@ -48,7 +49,12 @@ if (count($images)) {
 }
 
 if (count($images) == 1) {
-	$summary = elgg_echo('image:river:created', array($subject_link, $album_link));
+        $image_link = elgg_view('output/url', array(
+                    'href' => $images[0]->getURL(),
+                    'text' => $images[0]->getTitle(),
+                    'is_trusted' => true,
+                   ));
+	$summary = elgg_echo('image:river:created', array($subject_link, $image_link, $album_link));
 } else {
 	$summary = elgg_echo('image:river:created:multiple', array($subject_link, count($images), $album_link));
 }

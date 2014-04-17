@@ -24,6 +24,20 @@ if (empty($title)) {
 
 if ($guid) {
 	$album = get_entity($guid);
+	if ($album->access_id != $access_id) {
+            $options = array('type' => 'object', 'subtype' => 'image', 'container_guid' => $album->guid, 'limit' => false);
+            $images = new ElggBatch('elgg_get_entities', $options);
+	    foreach($images as $image) {
+	        $image->access_id = $access_id;
+	        $image->save();
+	    }
+	    $options = array('type' => 'object', 'subtype' => 'tidypics_batch', 'container_guid' => $album->guid, 'limit' => false);
+            $batches = new ElggBatch('elgg_get_entities', $options);
+            foreach($batches as $batch) {
+                $batch->access_id = $access_id;
+                $batch->save();
+            }
+	}
 } else {
 	$album = new TidypicsAlbum();
 }
@@ -33,8 +47,10 @@ $album->owner_guid = elgg_get_logged_in_user_guid();
 $album->access_id = $access_id;
 $album->title = $title;
 $album->description = $description;
-if ($tags) {
-	$album->tags = string_to_tag_array($tags);
+if($tags) {
+        $album->tags = string_to_tag_array($tags);
+} else {
+        $album->deleteMetadata('tags');
 }
 
 if (!$album->save()) {
