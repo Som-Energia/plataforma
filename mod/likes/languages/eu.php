@@ -1,36 +1,43 @@
 <?php
-$basque=array (
-  'likes:this' => 'Gustokoa du',
-  'likes:deleted' => 'Zure gustokoa ezabatu da',
-  'likes:see' => 'Ikusi nork duen hau gustoko',
-  'likes:remove' => 'Gustokoa kendu',
-  'likes:notdeleted' => 'Zure gustokoa kentzerakoan arazoa egon da',
-  'likes:likes' => 'Item hau gustokoa duzu orain',
-  'likes:failure' => 'Item hau gustokoa duzula ezartzean arazoa egon da',
-  'likes:alreadyliked' => 'Dagoeneko gustokoa duzu item hau',
-  'likes:notfound' => 'Gustokoa bihurtu nahi duzun itema ezin da aurkitu',
-  'likes:likethis' => 'Gustokoa egin',
-  'likes:userlikedthis' => '%s-(e)k gustokoa du',
-  'likes:userslikedthis' => '%s-(e)k gustokoa du',
-  'likes:river:annotate' => 'gustokoak',
-  'likes:delete:confirm' => 'Ziur zaude hau ez duzula jada gustuko?',
-  'river:likes' => 'gustokoa %s %s',
-  'likes:notifications:subject' => '%s-(e)k gustokoa du zure mezua: "%s"',
-  'likes:notifications:body' => 'Kaixo %1$s,
-  
-%2$s-(e)k gustokoa du zure mezua: "%3$s" %4$s-(e)n
+/**
+ * Likes Basque language file
+ */
 
-Ikusi zure jatorrizko mezua hemen:
+$basque = array(
+    'likes:this' => 'hau gustatzen zaio',
+    'likes:deleted' => 'Dagoeneko ez zaizu hau gustatzen',
+    'likes:see' => 'Ikusi hau nori gustatzen zaion',
+    'likes:remove' => 'Dagoeneko ez zait gustatzen',
+    'likes:notdeleted' => 'Arazoa ageri da gustukoa kentzen saiatzean',
+    'likes:likes' => 'Orain hau gustatzen zaizu',
+    'likes:failure' => 'Arazoa ageri da gustukoa gehitzen saiatzean',
+    'likes:alreadyliked' => 'Dagoeneko gustatzen zaizu',
+    'likes:notfound' => 'Ezin izan da aurkitu gustatzen zaizun itema',
+    'likes:likethis' => 'Gustatzen zait',
+    'likes:userlikedthis' => '%s gustatzen zait',
+    'likes:userslikedthis' => '%s gustatzen zait',
+    'likes:river:annotate' => 'gustatzen zait',
 
-%5$s
+    'river:likes' => 'gustatzen zaizkit %s %s',
 
-edo ikusi %2$s-(r)en profila hemen:
+    // notifications. yikes.
+    'likes:notifications:subject' => '%s gustatzen zait "%s"zure argitarapenean',
+    'likes:notifications:body' =>
+    'Kaixo %1$s,
 
-%6$s
+    %2$s(e)i gustatzen zaie "%3$s" zure argitarapena en %4$s(e)n!
 
-Eskerrik asko,
-%4$s
-',
+    Ikusi jatorrizko argitarapena hemen:
+
+    %5$s
+
+    edo ikusi %2$s(r)en profila hemen:
+
+    %6$s
+
+    Eskerrik asko,
+    %4$s
+    ',
 );
 
-add_translation("eu", $basque);
+add_translation('eu', $basque);
