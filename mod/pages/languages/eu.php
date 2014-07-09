@@ -1,62 +1,104 @@
 <?php
-$basque=array (
-  'pages' => 'Orriak',
-  'pages:owner' => '%s-(r)en orriak',
-  'pages:friends' => 'Lagunen orriak',
-  'pages:all' => 'Gune osoko orriak',
-  'pages:add' => 'Orria gehitu',
-  'pages:group' => 'Taldeko orriak',
-  'groups:enablepages' => 'Baimendu talde orriak',
-  'pages:edit' => 'Orri hau editatu',
-  'pages:delete' => 'Orri hau ezabatu',
-  'pages:history' => 'historia',
-  'pages:view' => 'Orria ikusi',
-  'pages:revision' => 'Berrikuspena',
-  'pages:navigation' => 'Nabigazioa',
-  'pages:new' => 'Orri berria',
-  'pages:notification' => '%s-ek orri berria sortu du:
+/**
+ * Pages languages
+ *
+ * @package ElggPages
+ */
 
-%s
-%s
+$euskara = array(
 
-Ikusi eta utzi zure iruzkina orri berrian:
-%s
-',
-  'item:object:page_top' => 'Goi mailako orriak',
+  /**
+   * Menu items and titles
+   */
+
+  'pages' => "Orriak",
+  'pages:owner' => "%s(r)en orriak",
+  'pages:friends' => "Lagunen orriak",
+  'pages:all' => "Leku osoko orriak",
+  'pages:add' => "Orria gehitu",
+
+  'pages:group' => "Taldeko orriak",
+  'groups:enablepages' => 'Gaitu taldeko orriak',
+
+  'pages:edit' => "Editatu orri hau",
+  'pages:delete' => "Ezabatu orri hau",
+  'pages:history' => "Historia",
+  'pages:view' => "Orria ikusi",
+  'pages:revision' => "Errebisioa",
+
+  'pages:navigation' => "Nabigatzea",
+  'pages:via' => "orrien bidez",
+  'item:object:page_top' => 'Maila altuko orriak',
   'item:object:page' => 'Orriak',
-  'pages:nogroup' => 'Talde honez ez du oraindik inongo orririk',
+  'pages:nogroup' => 'Talde honek oraindik ez du orririk',
   'pages:more' => 'Orri gehiago',
-  'pages:none' => 'Ez da orririk sortu oraindik',
-  'river:create:object:page' => '%s-(e)k %s orria sortu du',
-  'river:create:object:page_top' => '%s-(e)k %s orria sortu du',
-  'river:update:object:page' => '%s-(e)k %s orria eguneratu du',
-  'river:update:object:page_top' => '%s-(e)k %s orria eguneratu du',
-  'river:comment:object:page' => '%s-(e)k iruzkina jarri du %s tituludun orrian',
-  'river:comment:object:page_top' => '%s-(e)k iruzkina jarri du %s tituludun orrian',
-  'pages:title' => 'Orri izenbura',
-  'pages:description' => 'Orri edukia',
+  'pages:none' => 'Oraindik ez da orririk sortu',
+
+  /**
+  * River
+  **/
+
+  'river:create:object:page' => '%s(e)k sortu du %s orria',
+  'river:create:object:page_top' => '%s(e)k sortu du %s orria',
+  'river:update:object:page' => '%s(e)k eguneratu du %s orria',
+  'river:update:object:page_top' => '%s(e)k eguneratu du %s orria',
+  'river:comment:object:page' => '%s(e)k iruzkina egin du %s izeneko orrian',
+  'river:comment:object:page_top' => '%s(e)k iruzkina egin du %s izeneko orrian',
+
+  /**
+   * Form fields
+   */
+
+  'pages:title' => 'Orriaren izenburua',
+  'pages:description' => 'Orriaren testua',
   'pages:tags' => 'Etiketak',
-  'pages:access_id' => 'Irakurtzeko sarbidea',
-  'pages:write_access_id' => 'Idazteko sarbidea',
-  'pages:noaccess' => 'Orrira sarbiderik ez',
+  'pages:access_id' => 'Sarrera irakurri',
+  'pages:write_access_id' => 'Sarrera idatzi',
+
+  /**
+   * Status and error messages
+   */
+  'pages:noaccess' => 'Ez dago orrirako sarbiderik',
   'pages:cantedit' => 'Ezin duzu orri hau editatu',
-  'pages:saved' => 'Orria gord da',
+  'pages:saved' => 'Orria gorde da',
   'pages:notsaved' => 'Ezin izan da orria gorde',
-  'pages:error:no_title' => 'Orri honentzat izenburua eman behar duzu.',
-  'pages:delete:success' => 'Orria ongi ezabatu da.',
-  'pages:delete:failure' => 'Ezin izan da orria ezabatu',
-  'pages:strapline' => 'Azken eguneraketa %s, honek egina: %s',
-  'pages:revision:subtitle' => 'Berrikuspena sotua %s, honek egina: %s',
-  'pages:num' => 'Erakutsiko den orri kopurua',
-  'pages:widget:description' => 'Hau zure orri zerrenda da.',
-  'pages:label:view' => 'Orria ikusi',
-  'pages:label:edit' => 'Orria editatu',
-  'pages:label:history' => 'Orri historia',
-  'pages:sidebar:this' => 'Orri hau',
-  'pages:sidebar:children' => 'Azpiorriak',
-  'pages:sidebar:parent' => 'Gurasoa',
-  'pages:newchild' => 'Azpiorri bat sortu',
-  'pages:backtoparent' => 'Atzera \'%s\'-(r)a',
+  'pages:error:no_title' => 'Orri honi izenburua jarri behar diozu.',
+  'pages:delete:success' => 'Orria zuzen ezabatu da.',
+  'pages:delete:failure' => 'Ezin izan da orria ezabatu.',
+
+  /**
+   * Page
+   */
+  'pages:strapline' => 'Azken eguneratzea %s %s(e)k egina',
+
+  /**
+   * History
+   */
+  'pages:revision:subtitle' => '%s errebisioa %s(e)k egina',
+
+  /**
+   * Widget
+   **/
+
+  'pages:num' => 'Ikusgai egoteko orri kopurua',
+  'pages:widget:description' => "Hau da zure orrien zerrenda.",
+
+  /**
+   * Submenu items
+   */
+  'pages:label:view' => "Orria ikusi",
+  'pages:label:edit' => "Orria editatu",
+  'pages:label:history' => "Orriaren historia",
+
+  /**
+   * Sidebar items
+   */
+  'pages:sidebar:this' => "Orri hau",
+  'pages:sidebar:children' => "Azpi-orriak",
+  'pages:sidebar:parent' => "Ama",
+
+  'pages:newchild' => "Azpi-orria sortu",
+  'pages:backtoparent' => "'%s'(r) itzuli",
 );
 
-add_translation("eu", $basque);
+add_translation("eu", $euskara);
