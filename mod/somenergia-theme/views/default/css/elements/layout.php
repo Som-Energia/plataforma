@@ -52,6 +52,7 @@
 /***** TOP NAVIGATION ******/
 .elgg-page-topnav {
     border-bottom: 1px solid #8E8D93;
+    color: #808080;
     font-size: 10px;
     height: 26px;
     line-height: 26px;
@@ -64,12 +65,20 @@
     width: 990px;
 }
 
+.elgg-page-topnav .elgg-inner select {
+    border: 1px solid #B8B9BD;
+    border-radius: 3px;
+    font-family: 'Roboto', sans-serif;
+    font-size: inherit;
+    font-weight: 300;
+    height: 18px;
+    margin-left: 5px;
+}
+
 .elgg-page-topnav .elgg-inner div:first-of-type {
-    color: #808080;
 }
 
 .elgg-page-topnav .elgg-inner div:last-of-type {
-    color: #8E8D93;
     text-align: right;
     text-transform: uppercase;
 }
