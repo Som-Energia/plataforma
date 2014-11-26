@@ -54,7 +54,60 @@
     border-bottom: 1px solid #8E8D93;
     font-size: 10px;
     height: 26px;
+    line-height: 26px;
 }
+
+.elgg-page-topnav .elgg-inner {
+    box-sizing: border-box;
+    margin: auto;
+    padding: 0 10px 0 15px;
+    width: 990px;
+}
+
+.elgg-page-topnav .elgg-inner div:first-of-type {
+    color: #808080;
+}
+
+.elgg-page-topnav .elgg-inner div:last-of-type {
+    color: #8E8D93;
+    text-align: right;
+    text-transform: uppercase;
+}
+
+.elgg-page-topnav .elgg-inner div:last-of-type a:not(.social) {
+    margin-right: 20px;
+}
+
+.elgg-page-topnav .elgg-inner div:last-of-type a.social {
+    background: url( '<?php echo elgg_get_site_url(); ?>mod/somenergia-theme/graphics/social.png' ) no-repeat;
+    display: inline-block;
+    height: 12px;
+    margin: 0 5px -2px 0;
+    overflow: hidden;
+    text-indent: 100%;
+    width: 12px;
+}
+
+.elgg-page-topnav .elgg-inner div:last-of-type a.social[href*="facebook"] {
+    background-position: left top;
+}
+
+.elgg-page-topnav .elgg-inner div:last-of-type a.social[href*="twitter"] {
+    background-position: -12px top;
+}
+
+.elgg-page-topnav .elgg-inner div:last-of-type a.social[href*="youtube"] {
+    background-position: -24px top;
+}
+
+.elgg-page-topnav .elgg-inner div:last-of-type a.social[href*="rss"] {
+    background-position: -36px top;
+}
+
+.elgg-page-topnav label {
+    font-weight: normal;
+}
+
 
 /***** PAGE MESSAGES ******/
 .elgg-system-messages {

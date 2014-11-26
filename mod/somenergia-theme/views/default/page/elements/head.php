@@ -45,8 +45,6 @@ $release = get_version(true);
 <?php foreach ($css as $link) { ?>
 	<link rel="stylesheet" href="<?php echo $link; ?>" type="text/css" />
 <?php } ?>
-        
-        <link href="http://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
 
 <?php
 	$ie_url = elgg_get_simplecache_url('css', 'ie');
@@ -62,6 +60,8 @@ $release = get_version(true);
 	<!--[if IE 6]>
 		<link rel="stylesheet" type="text/css" href="<?php echo $ie6_url; ?>" />
 	<![endif]-->
+        
+<link href='http://fonts.googleapis.com/css?family=Roboto:400,300' rel='stylesheet' type='text/css'>
 
 <?php foreach ($js as $script) { ?>
 	<script type="text/javascript" src="<?php echo $script; ?>"></script>

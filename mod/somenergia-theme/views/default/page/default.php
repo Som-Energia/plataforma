@@ -46,7 +46,7 @@ $lang = get_current_language();
     
 	<div class="elgg-page-topnav">
 		<div class="elgg-inner">
-                    <div class="elgg-col-1of2">
+                    <div class="elgg-col elgg-col-1of2">
                         <label>
                             Estàs aquí:
                             <select>
@@ -54,12 +54,12 @@ $lang = get_current_language();
                             </select>
                         </label>
                     </div>
-                    <div class="elgg-col-1of2">
+                    <div class="elgg-col elgg-col-1of2">
                         <a href="#">Fes-te soci</a>
                         <a href="#">Contracta la llum</a>
-                        <a href="#" class="social">Facebook</a>
-                        <a href="#" class="social">Twitter</a>
-                        <a href="#" class="social">YouTube</a>
+                        <a href="https://www.facebook.com/somenergia" class="social">Facebook</a>
+                        <a href="https://twitter.com/somenergia" class="social">Twitter</a>
+                        <a href="https://www.youtube.com/user/SomEnergia" class="social">YouTube</a>
                         <a href="#" class="social">RSS</a>
                     </div>
 		</div>
