@@ -11,10 +11,10 @@
 	Typography
 *************************************** */
 body {
-	font-size: 80%;
-	line-height: 1.5em;
-	font-family: "Trebuchet MS", Arial, Tahoma, Verdana, sans-serif;
-  color: #000;
+    font-size: 80%;
+    line-height: 1.5em;
+    font-family: 'Roboto', sans-serif;
+    color: #000;
 }
 
 a {

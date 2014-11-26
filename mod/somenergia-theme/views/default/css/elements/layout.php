@@ -49,6 +49,13 @@
 }
 
 
+/***** TOP NAVIGATION ******/
+.elgg-page-topnav {
+    border-bottom: 1px solid #8E8D93;
+    font-size: 10px;
+    height: 26px;
+}
+
 /***** PAGE MESSAGES ******/
 .elgg-system-messages {
 	position: fixed;
@@ -68,7 +75,7 @@
 /***** PAGE HEADER ******/
 .elgg-page-header {
 	position: relative;
-	background: #B4D900;
+	background: white;
 }
 .elgg-page-header > .elgg-inner {
 	position: relative;

@@ -45,6 +45,8 @@ $release = get_version(true);
 <?php foreach ($css as $link) { ?>
 	<link rel="stylesheet" href="<?php echo $link; ?>" type="text/css" />
 <?php } ?>
+        
+        <link href="http://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
 
 <?php
 	$ie_url = elgg_get_simplecache_url('css', 'ie');
