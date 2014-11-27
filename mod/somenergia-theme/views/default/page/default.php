@@ -49,18 +49,21 @@ $lang = get_current_language();
                     <div class="elgg-col elgg-col-1of2">
                         <label>
                             Estàs aquí:
-                            <select class="chosen-select">
-                                <option>Plataforma</option>
-                            </select>
+                            <div href="#" class="breadcrumbs">
+                                 Plataform <span class="fa fa-angle-down"></span>
+                                 <ul>
+                                     <li><a href="#">Lorem Ipsum</a></li>
+                                 </ul>
+                            </div>
                         </label>
                     </div>
                     <div class="elgg-col elgg-col-1of2">
                         <a href="#">Fes-te soci</a>
                         <a href="#">Contracta la llum</a>
-                        <a href="https://www.facebook.com/somenergia" class="social">Facebook</a>
-                        <a href="https://twitter.com/somenergia" class="social">Twitter</a>
-                        <a href="https://www.youtube.com/user/SomEnergia" class="social">YouTube</a>
-                        <a href="#" class="social">RSS</a>
+                        <a href="https://www.facebook.com/somenergia" class="social"><span class="fa fa-facebook"></span></a>
+                        <a href="https://twitter.com/somenergia" class="social"><span class="fa fa-twitter"></span></a>
+                        <a href="https://www.youtube.com/user/SomEnergia" class="social"><span class="fa fa-youtube"></span></a>
+                        <a href="#" class="social"><span class="fa fa-rss"></span></a>
                     </div>
 		</div>
 	</div>

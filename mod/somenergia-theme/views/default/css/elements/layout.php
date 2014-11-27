@@ -68,16 +68,52 @@
     width: 990px;
 }
 
-.elgg-page-topnav .elgg-inner select {
+.elgg-page-topnav .elgg-inner .breadcrumbs,
+.elgg-page-topnav .elgg-inner .breadcrumbs ul {
     border: 1px solid #B8B9BD;
-    border-radius: 3px;
+    display: inline-block;
     font-family: 'Roboto', sans-serif;
     font-size: inherit;
     font-weight: 300;
-    height: 18px;
-    margin-left: 5px;
 }
 
+.elgg-page-topnav .elgg-inner .breadcrumbs {
+    border-radius: 3px;
+    height: 18px;
+    line-height: 18px;
+    margin-left: 5px;
+    padding: 0 8px;
+    position: relative;
+}
+
+.elgg-page-topnav .elgg-inner .breadcrumbs:hover {
+
+}
+
+.elgg-page-topnav .elgg-inner .breadcrumbs ul {
+    background-color: white;
+    display: none;
+    position: absolute;
+    left: 0;
+    min-width: 120px;
+}
+/*
+.elgg-page-topnav .elgg-inner .breadcrumbs:hover ul {
+    display: block;
+}
+
+.elgg-page-topnav .elgg-inner .breadcrumbs ul li {
+}
+
+.elgg-page-topnav .elgg-inner .breadcrumbs ul li a {
+    box-sizing: border-box;
+    display: inline-block;
+    height: 18px;
+    line-height: 18px;
+    padding: 0 8px;
+    width: 100%;
+}
+*/
 .elgg-page-topnav .elgg-inner > div:first-of-type {
 }
 
@@ -91,29 +127,13 @@
 }
 
 .elgg-page-topnav .elgg-inner > div:last-of-type a.social {
-    background: url( '<?php echo elgg_get_site_url(); ?>mod/somenergia-theme/graphics/social.png' ) no-repeat;
     display: inline-block;
+    font-size: 12px;
     height: 12px;
+    line-height: 12px;
     margin: 0 5px -2px 0;
     overflow: hidden;
-    text-indent: 100%;
     width: 12px;
-}
-
-.elgg-page-topnav .elgg-inner > div:last-of-type a.social[href*="facebook"] {
-    background-position: left top;
-}
-
-.elgg-page-topnav .elgg-inner > div:last-of-type a.social[href*="twitter"] {
-    background-position: -12px top;
-}
-
-.elgg-page-topnav .elgg-inner > div:last-of-type a.social[href*="youtube"] {
-    background-position: -24px top;
-}
-
-.elgg-page-topnav .elgg-inner > div:last-of-type a.social[href*="rss"] {
-    background-position: -36px top;
 }
 
 .elgg-page-topnav label {

@@ -2,10 +2,11 @@
 	MISC
 *************************************** */
 #login-dropdown {
-	position: absolute;
-	top:25px;
-	right:0;
-	z-index: 100;
+    margin-top: -19px;
+    position: absolute;
+    right:0;
+    top:45px;
+    z-index: 100;
 }
 
 
