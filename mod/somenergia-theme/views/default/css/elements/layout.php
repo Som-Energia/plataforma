@@ -51,11 +51,14 @@
 
 /***** TOP NAVIGATION ******/
 .elgg-page-topnav {
+    background-color: white;
     border-bottom: 1px solid #8E8D93;
     color: #808080;
     font-size: 10px;
     height: 26px;
     line-height: 26px;
+    position: relative;
+    z-index: 1;
 }
 
 .elgg-page-topnav .elgg-inner {
@@ -137,6 +140,7 @@
 /***** PAGE HEADER ******/
 .elgg-page-header {
     background: white;
+    box-shadow: 0 0 10px rgba( 0, 0, 0, 0.5 );
     position: relative;
     width: 100%;
 }
