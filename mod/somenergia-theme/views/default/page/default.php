@@ -49,7 +49,7 @@ $lang = get_current_language();
                     <div class="elgg-col elgg-col-1of2">
                         <label>
                             Estàs aquí:
-                            <select class="breadcrumbs">
+                            <select class="chosen-select">
                                 <option>Plataforma</option>
                             </select>
                         </label>

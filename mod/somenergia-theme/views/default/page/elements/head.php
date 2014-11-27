@@ -73,6 +73,14 @@ $release = get_version(true);
 // ]]>
 </script>
 
+<script type="text/javascript">
+    jQuery( document ).ready( function() {
+        jQuery( '.chosen-select' ).chosen({
+            disable_search_threshold: 10
+        });
+    });
+</script>
+
 <?php
 echo $feedref;
 

@@ -75,19 +75,19 @@
     margin-left: 5px;
 }
 
-.elgg-page-topnav .elgg-inner div:first-of-type {
+.elgg-page-topnav .elgg-inner > div:first-of-type {
 }
 
-.elgg-page-topnav .elgg-inner div:last-of-type {
+.elgg-page-topnav .elgg-inner > div:last-of-type {
     text-align: right;
     text-transform: uppercase;
 }
 
-.elgg-page-topnav .elgg-inner div:last-of-type a:not(.social) {
+.elgg-page-topnav .elgg-inner > div:last-of-type a:not(.social) {
     margin-right: 20px;
 }
 
-.elgg-page-topnav .elgg-inner div:last-of-type a.social {
+.elgg-page-topnav .elgg-inner > div:last-of-type a.social {
     background: url( '<?php echo elgg_get_site_url(); ?>mod/somenergia-theme/graphics/social.png' ) no-repeat;
     display: inline-block;
     height: 12px;
@@ -97,19 +97,19 @@
     width: 12px;
 }
 
-.elgg-page-topnav .elgg-inner div:last-of-type a.social[href*="facebook"] {
+.elgg-page-topnav .elgg-inner > div:last-of-type a.social[href*="facebook"] {
     background-position: left top;
 }
 
-.elgg-page-topnav .elgg-inner div:last-of-type a.social[href*="twitter"] {
+.elgg-page-topnav .elgg-inner > div:last-of-type a.social[href*="twitter"] {
     background-position: -12px top;
 }
 
-.elgg-page-topnav .elgg-inner div:last-of-type a.social[href*="youtube"] {
+.elgg-page-topnav .elgg-inner > div:last-of-type a.social[href*="youtube"] {
     background-position: -24px top;
 }
 
-.elgg-page-topnav .elgg-inner div:last-of-type a.social[href*="rss"] {
+.elgg-page-topnav .elgg-inner > div:last-of-type a.social[href*="rss"] {
     background-position: -36px top;
 }
 
