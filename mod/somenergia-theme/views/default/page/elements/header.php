@@ -16,4 +16,12 @@
 
 </div>
 
-<?php echo elgg_view_menu('site'); ?>
+<div class="elgg-heading-menu">
+    
+    <div class="elgg-inner">
+    
+        <?php echo elgg_view_menu('site'); ?>
+        
+    </div>
+    
+</div>

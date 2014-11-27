@@ -137,13 +137,12 @@
 /***** PAGE HEADER ******/
 .elgg-page-header {
     background: white;
-    height: 90px;
     position: relative;
     width: 100%;
-    /*background-color: yellow;*/
 }
 .elgg-page-header .elgg-heading-site {
     box-sizing: border-box;
+    height: 90px;
     margin: auto;
     padding: 0 15px;
     position: relative;
@@ -166,6 +165,19 @@
 
 .elgg-page-header .elgg-heading-description h3 {
     margin-top: 5px;
+}
+
+
+/***** PAGE MENU ******/
+.elgg-page-header .elgg-heading-menu {
+    background-color: #F7F7F8;
+}
+
+.elgg-page-header .elgg-heading-menu .elgg-inner {
+    box-sizing: border-box;
+    margin: auto;
+    padding: 0 15px;
+    width: 990px;
 }
 
 
