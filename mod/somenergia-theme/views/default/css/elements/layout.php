@@ -143,13 +143,15 @@
     /*background-color: yellow;*/
 }
 .elgg-page-header .elgg-heading-site {
+    box-sizing: border-box;
     margin: auto;
+    padding: 0 15px;
     position: relative;
     width: 990px;
 }
 
 .elgg-page-header .elgg-heading-site .elgg-inner {
-    padding: 0 15px;
+    position: relative;
 }
 
 .elgg-page-header img {
