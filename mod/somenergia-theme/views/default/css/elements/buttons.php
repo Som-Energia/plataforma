@@ -6,6 +6,28 @@
  * @subpackage UI
  */
 ?>
+
+/* **************************
+    ELEMENTS
+************************** */
+
+.elgg-page-header .elgg-heading-site #login-dropdown .elgg-button {
+    background: white;
+    border: 1px solid;
+    box-shadow: none;
+    color: #BBCA2B;
+    font-size: 12px;
+    font-weight: 500;
+    height: 26px;
+    line-height: 26px;
+    padding: 0 15px;
+}
+
+.elgg-page-header .elgg-heading-site #login-dropdown .elgg-button:after {
+    content: "";
+}
+
+
 /* **************************
 	BUTTONS
 ************************** */
