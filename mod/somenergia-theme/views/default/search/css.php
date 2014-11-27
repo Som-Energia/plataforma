@@ -8,12 +8,32 @@
 /**********************************
 Search plugin
 ***********************************/
-.elgg-search-header {
-	bottom: 5px;
-	position: absolute;
-	right: 5px;
-  z-index: 1;
+.elgg-search-header fieldset {
+    margin: auto;
+    position: relative;
+    width: 990px;
 }
+
+.elgg-search-header input[type="text"] {
+    background-color: #AEADB3 !important;
+    border: none !important;
+    font-size: 15px !important;
+    font-weight: 500 !important;
+    height: 25px !important;
+    line-height: 25px;
+    padding: 0 10px !important;
+    position: absolute;
+    right: 15px;
+    top: -31px;
+    width: 220px !important;
+}
+
+.elgg-search-header input[type="text"]:focus {
+    box-shadow: none;
+    color: white !important;
+    line-height: 25px;
+}
+
 .elgg-search input[type=submit] {
 	display: none;
 }
