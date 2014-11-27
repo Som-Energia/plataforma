@@ -11,10 +11,10 @@
 	Typography
 *************************************** */
 body {
-    font-size: 80%;
+    font-size: 13px;
     line-height: 1.5em;
     font-family: 'Roboto', sans-serif;
-    color: #000;
+    color: #727176;
 }
 
 a {
@@ -89,20 +89,27 @@ h4 { font-size: 1.0em; }
 h5 { font-size: 0.9em; }
 h6 { font-size: 0.8em; }
 
-.elgg-heading-site, .elgg-heading-site:hover {
-  display: inline-block;
-	font-size: 2em;
-  font-weight: normal;
-	line-height: 1.5em;
-  letter-spacing: 2px;
-	color: #fff;
-	text-shadow: 0px 2px 5px rgba(0, 0, 0, 0.5);
-	text-decoration: none;
-  padding: 10px 15px;
+
+/* ***************************************
+    ELEMENTS
+*************************************** */
+
+.elgg-page-header .elgg-heading-description .tag {
+    background-color: #BAC92A;
+    border-radius: 3px;
+    color: white;
+    display: inline-block;
+    font-size: 7px;
+    font-weight: 900;
+    height: 14px;
+    line-height: 14px;
+    padding: 0 4px;
 }
 
-.elgg-heading-site:hover {
-	text-shadow: 0px 0px 10px #fff;
+.elgg-page-header .elgg-heading-description h3 {
+    color: #5B5B5F;
+    font-size: 12px;
+    font-weight: 100;
 }
 
 .elgg-heading-main {

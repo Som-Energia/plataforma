@@ -78,9 +78,7 @@ $lang = get_current_language();
 	<?php } ?>
 	
 	<div class="elgg-page-header">
-		<div class="elgg-inner">
-			<?php echo $header; ?>
-		</div>
+                <?php echo $header; ?>
 	</div>
 	<div class="elgg-page-body">
 		<div class="elgg-inner">

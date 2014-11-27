@@ -136,11 +136,34 @@
 
 /***** PAGE HEADER ******/
 .elgg-page-header {
-	position: relative;
-	background: white;
+    background: white;
+    height: 90px;
+    position: relative;
+    width: 100%;
+    /*background-color: yellow;*/
 }
-.elgg-page-header > .elgg-inner {
-	position: relative;
+.elgg-page-header .elgg-heading-site {
+    margin: auto;
+    position: relative;
+    width: 990px;
+}
+
+.elgg-page-header .elgg-heading-site .elgg-inner {
+    padding: 0 15px;
+}
+
+.elgg-page-header img {
+    margin-top: 19.5px;
+    float: left;
+}
+
+.elgg-page-header .elgg-heading-description {
+    margin-left: 105px;
+    padding-top: 28px;
+}
+
+.elgg-page-header .elgg-heading-description h3 {
+    margin-top: 5px;
 }
 
 
