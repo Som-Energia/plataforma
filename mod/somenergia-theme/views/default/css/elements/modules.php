@@ -88,27 +88,23 @@
 
 /* Featured */
 .elgg-module-featured {
-  background-color: #fff;
-	border: 1px solid #28d;
-	
-	-webkit-border-radius: 3px;
-	-moz-border-radius: 3px;
-	border-radius: 3px;
+    background-color: #fff;
+    box-shadow: 0px 0 5px rgba(0, 0, 0, 0.25);
+}
 
-	-webkit-box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.5);
-	-moz-box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.5);
-	box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.5);
-}
 .elgg-module-featured > .elgg-head {
-	padding: 7px 15px;
-	background-color: #28d;
-  border-bottom: 1px solid #06b;
+    background: linear-gradient( to top, #9ebf0f 50%, #aecd1d 50% );
+    background-color: #BBCA2B;
+    padding: 7px 15px;
 }
+
 .elgg-module-featured > .elgg-head * {
-	color: #fff;
-  padding: 0px;
-	text-shadow: 0px 1px 1px #02b;
+    color: #fff;
+    font-size: 15px;
+    font-weight: normal;
+    padding: 0px;
 }
+
 .elgg-module-featured > .elgg-body {
 	padding: 10px 15px;
 }
