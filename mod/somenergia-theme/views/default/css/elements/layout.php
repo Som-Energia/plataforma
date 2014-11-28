@@ -17,7 +17,8 @@
 /***** DEFAULT LAYOUT ******/
 <?php // the width is on the page rather than topbar to handle small viewports ?>
 .elgg-page-default {
-	min-width: 990px;
+    background-color: #EDEEF0;
+    min-width: 990px;
 }
 .elgg-page-default .elgg-page-header > .elgg-inner {
 	width: 990px;
