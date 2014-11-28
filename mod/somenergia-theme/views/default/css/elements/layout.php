@@ -71,6 +71,7 @@
 .elgg-page-topnav .elgg-inner .breadcrumbs,
 .elgg-page-topnav .elgg-inner .breadcrumbs ul {
     border: 1px solid #B8B9BD;
+    border-radius: 3px;
     display: inline-block;
     font-family: 'Roboto', sans-serif;
     font-size: inherit;
@@ -78,7 +79,6 @@
 }
 
 .elgg-page-topnav .elgg-inner .breadcrumbs {
-    border-radius: 3px;
     height: 18px;
     line-height: 18px;
     margin-left: 5px;
@@ -97,7 +97,7 @@
     left: 0;
     min-width: 120px;
 }
-/*
+
 .elgg-page-topnav .elgg-inner .breadcrumbs:hover ul {
     display: block;
 }
@@ -113,7 +113,7 @@
     padding: 0 8px;
     width: 100%;
 }
-*/
+
 .elgg-page-topnav .elgg-inner > div:first-of-type {
 }
 
