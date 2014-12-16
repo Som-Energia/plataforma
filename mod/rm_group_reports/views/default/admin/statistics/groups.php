@@ -5,7 +5,7 @@ $groups = elgg_get_entities( array(
     'limit' => 0,
 ) );
 
-echo '<div><a href="#" class="elgg-button elgg-button-action">Descargar Excel</a></div>';
+echo '<div><a href="?view=xls" class="elgg-button elgg-button-action">Descargar Excel</a></div>';
 
 echo '<table class="elgg-table-alt">';
 
