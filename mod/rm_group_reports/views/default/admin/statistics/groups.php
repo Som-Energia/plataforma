@@ -5,7 +5,7 @@ $groups = elgg_get_entities( array(
     'limit' => 0,
 ) );
 
-echo '<div><a href="?view=xls" class="elgg-button elgg-button-action">Descargar Excel</a></div>';
+//echo '<div><a href="?view=xls" class="elgg-button elgg-button-action">Descargar Excel</a></div>';
 
 echo '<table class="elgg-table-alt">';
 
@@ -17,6 +17,7 @@ echo <<<THEAD
             <td>Miembros</td>
             <td>Creado</td>
             <td>Última actividad</td>
+            <td></td>
         </tr>
     </thead>
 THEAD;
@@ -51,6 +52,14 @@ foreach( $groups as $group ) {
         echo "<td>&#8212;</td>";
         
     }
+    
+    echo '<td>';
+    echo elgg_view('output/confirmlink', array(
+        'text' => elgg_echo('groups:delete'),
+        'href' => 'action/groups/delete?guid=' . $group->getGUID(),
+        'confirm' => elgg_echo('groups:deletewarning'),
+    ));
+    echo '</td>';
     
     echo '<tr>';
     
