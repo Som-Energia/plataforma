@@ -99,16 +99,16 @@ h6 { font-size: 0.8em; }
     border-radius: 3px;
     color: white;
     display: inline-block;
-    font-size: 7px;
+    font-size: 10px;
     font-weight: 900;
-    height: 14px;
-    line-height: 14px;
+    height: 15px;
+    line-height: 15px;
     padding: 0 4px;
 }
 
 .elgg-page-header .elgg-heading-description h3 {
     color: #5B5B5F;
-    font-size: 12px;
+    font-size: 15px;
     font-weight: 100;
 }
 
