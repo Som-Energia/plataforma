@@ -11,5 +11,5 @@ $site = elgg_get_site_entity();
 </a>
 <div class="elgg-heading-description">
     <span class="tag">Plataforma</span>
-    <h3><?php echo $site->description; ?></h3>
+    <h3><?php echo elgg_echo( 'somenergia:theme:slogan' ); ?></h3>
 </div>
