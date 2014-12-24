@@ -1,0 +1,37 @@
+== Version History ==
+
+x.x:
+
+1.5 (07/10/2013):
+ - adds better language for large subscription button
+ - better styling to associate subscription button to comments
+ - adds auto-subscription option (enabled by default)
+ - adds user notification setting to disable auto-subscription
+ - adds block to prevent auto-subscription after manual un-subscription
+ - adds context aware notification subjects (eg. Matt Beckett commented on the blog "Latest News")
+(Changes for 1.5 funded by GriffinGroups.com)
+
+1.4 (06/30/2013):
+ - fixes run-once upgrade logic
+ - adds option to use a subscribe/unsubscribe button above comments view (like in older versions)
+ - button works using new ajax system still
+(Changes for Version 1.4 funded by GriffinGroups.com)
+
+1.3 ():
+ - fixes php warning in menu item registration
+
+1.2(10/29/2012):
+ - removed unregistration of non-existent event handler causing php warnings due to empty foreach
+ - moved comment notification settings to notifications page
+ - fixed annoying typo in main variable
+ - fixed code formatting to the way I like it
+ - formatted plugin structure the way I like (separated hooks/events/custom functions)
+ - moved subscribe action button to entity menu for consistency
+ - AJAX'd the subscribe/unsubscribe action
+ - added list of items subscribed to (linked from settings page)
+ - fixed whitespace to conform to elgg standards (Juho Jaakkola http://community.elgg.org/profile/juho.jaakkola)
+ - re-added confirmation/error messages for subscribe action (Juho Jaakkola http://community.elgg.org/profile/juho.jaakkola)
+
+1.1 (08/30/2012):
+ - fixed markup of subscribe/unsubscribe buttons on discussion page (IE/Opera had issues)
+ - Changed the style of the subscribe/unsubscribe buttons to be in line with theme
