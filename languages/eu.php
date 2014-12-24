@@ -540,6 +540,7 @@ $basque=array (
   'admin:statistics:label:version' => 'Elgg bertsioa',
   'admin:statistics:label:version:release' => 'Argitalpena',
   'admin:statistics:label:version:version' => 'Bertsioa',
+  'admin:statistics:groups' => "Actividad grupos",
   'admin:server:label:php' => 'PHP',
   'admin:server:label:web_server' => 'Web Zerbitzaria',
   'admin:server:label:server' => 'Zerbitzaria',

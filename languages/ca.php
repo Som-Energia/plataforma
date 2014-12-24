@@ -732,6 +732,7 @@ $catalan = array(
 	'admin:statistics:label:version' => "Versió de l'Elgg",
 	'admin:statistics:label:version:release' => "Release",
 	'admin:statistics:label:version:version' => "Versió",
+    'admin:statistics:groups' => "Activitat grups",
 	
 	'admin:user:label:search' => "Trobar usuari:",
 	'admin:user:label:searchbutton' => "Cercar",
