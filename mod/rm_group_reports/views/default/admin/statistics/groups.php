@@ -5,6 +5,24 @@ $groups = elgg_get_entities( array(
     'limit' => 0,
 ) );
 
+$tables = array();
+
+foreach( $groups as $group ) {
+ 
+    list( $activity ) = elgg_get_entities( array(
+        'container_guids' => $group->get( 'guid' ),
+        'limit' => 1,
+    ) );
+    
+    if ( is_object( $activity ) )
+        $table[ $activity->get( 'time_created' ) ] = $group;
+    else
+        $table[ $group->get( 'time_created' ) ] = $group;
+    
+}
+
+ksort( $table );
+
 //echo '<div><a href="?view=xls" class="elgg-button elgg-button-action">Descargar Excel</a></div>';
 
 echo '<table class="elgg-table-alt">';
@@ -12,51 +30,36 @@ echo '<table class="elgg-table-alt">';
 echo <<<THEAD
     <thead style="background-color: #eee;">
         <tr>
-            <td>ID</td>
-            <td>Nombre</td>
-            <td>Miembros</td>
-            <td>Creado</td>
-            <td>Última actividad</td>
-            <td></td>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Miembros</th>
+            <th>Creado</th>
+            <th>Última actividad</th>
+            <th></td>
         </tr>
     </thead>
 THEAD;
 
 echo '<tbody>';
 
-foreach( $groups as $group ) {
+foreach( $table as $activity => $row ) {
     
     echo '<tr>';
     
-    echo '<td>' . $group->get( 'guid' ) . '</td>';
-    echo '<td><a href="' . $group->getURL() . '" target="_blank">' . $group->get( 'name' ) . '</a></td>';
-    echo '<td><a href="' . elgg_get_config( 'url' ) . 'groups/members/' . $group->get( 'guid' ) . '" target="_blank">' . $group->getMembers( 0, 0, true ) . '</a></td>';
-    echo '<td>' . date( 'd/m/Y H:i', $group->get( 'time_created' ) ) . '</td>';
+    echo '<td>' . $row->get( 'guid' ) . '</td>';
+    echo '<td><a href="' . $row->getURL() . '" target="_blank">' . $row->get( 'name' ) . '</a></td>';
+    echo '<td><a href="' . elgg_get_config( 'url' ) . 'groups/members/' . $row->get( 'guid' ) . '" target="_blank">' . $row->getMembers( 0, 0, true ) . '</a></td>';
+    echo '<td>' . date( 'd/m/Y H:i', $row->get( 'time_created' ) ) . '</td>';
     
-    $db_prefix = elgg_get_config('dbprefix');
-    
-    list( $activity ) = elgg_get_river( array(
-	'limit'         => 1,
-	'pagination'    => false,
-	'joins'         => array("JOIN {$db_prefix}entities e1 ON e1.guid = rv.object_guid"),
-	'wheres'        => array("(e1.container_guid = $group->guid)"),
-    ) );
-       
-    if ( ! empty( $activity ) ) {
-        
-        $activity = $activity->getObjectEntity();
-        echo '<td><a href="' . elgg_get_config( 'url' ) . 'groups/activity/' . $group->get( 'guid' ) . '" target="_blank">' . date( 'd/m/Y H:i', $activity->get( 'time_created' ) ) . '</a></td>';
-        
-    } else {
-        
+    if ( $activity != $row->get( 'time_created' ) )
+        echo '<td>' . date( 'd/m/Y H:i', $activity ) . '</td>';
+    else
         echo "<td>&#8212;</td>";
-        
-    }
     
     echo '<td>';
     echo elgg_view('output/confirmlink', array(
         'text' => elgg_echo('groups:delete'),
-        'href' => 'action/groups/delete?guid=' . $group->getGUID(),
+        'href' => 'action/groups/delete?guid=' . $row->getGUID(),
         'confirm' => elgg_echo('groups:deletewarning'),
     ));
     echo '</td>';
