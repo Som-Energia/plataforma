@@ -12,9 +12,6 @@ $spanish = array(
  */
 	'item:site' => 'Sitios',
 
-		
-		
-		
 /**
  * Sessions
  */
@@ -732,6 +729,7 @@ $spanish = array(
 	'admin:statistics:label:version' => "Versi&oacute;n de Elgg",
 	'admin:statistics:label:version:release' => "Release",
 	'admin:statistics:label:version:version' => "Versi&oacute;n",
+    'admin:statistics:groups' => "Actividad grupos",
 
 	'admin:user:label:search' => "Encontrar usuarios:",
 	'admin:user:label:searchbutton' => "Buscar",

@@ -6,7 +6,7 @@
  */
 
 $spanish = array(
-    'somenergia:theme:slogan' => 'a cooperativa de consum i producció d\'energia verda',
+    'somenergia:theme:slogan' => 'La cooperativa de consum i producció d\'energia verda',
 );
 
 add_translation("ca", $spanish);

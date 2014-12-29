@@ -46,7 +46,7 @@ function rm_as_adminSubmenu( $hook, $type, $returnvalue, $params ) {
 
 function rm_as_init() {
     
-    $plugin_path = elgg_get_plugins_path() . 'rm_autosubscription/actions';
+    $plugin_path = elgg_get_plugins_path() . 'rm_group_autosubscription/actions';
     
     //{{{ Actions
     
