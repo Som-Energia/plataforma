@@ -102,13 +102,14 @@ h6 { font-size: 0.8em; }
     font-size: 10px;
     font-weight: 900;
     height: 15px;
+	letter-spacing: 1px;
     line-height: 15px;
     padding: 0 4px;
 }
 
 .elgg-page-header .elgg-heading-description h3 {
     color: #5B5B5F;
-    font-size: 15px;
+    font-size: 20px;
     font-weight: 100;
 }
 
