@@ -34,8 +34,8 @@ MESSAGE
 
 function rm_as_adminSubmenu( $hook, $type, $returnvalue, $params ) {
     
-    $item = new ElggMenuItem( 'subscribeAll', 'Subscriure a tots', elgg_add_action_tokens_to_url( elgg_get_site_url() . 'action/rm/subscribe' ) );
-    $item->setSection( 'notificaciones' );
+    $item = new ElggMenuItem( 'subscribeAll', elgg_echo( 'rm_group_autosubscription:admin:button' ), elgg_add_action_tokens_to_url( elgg_get_site_url() . 'action/rm/subscribe' ) );
+    $item->setSection( 'notifications' );
     $item->setContext( 'admin' );    
     $returnvalue[] = $item;
     
