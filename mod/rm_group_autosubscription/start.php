@@ -16,7 +16,7 @@ function rm_as_event( $event, $type, $reply ) {
 		$guids[] = $member->get( 'guid' );
 	    
 	    
-	notify_user( $guids, $group->get( 'guid' ), 'New group reply post', <<<MESSAGE
+	notify_user( $guids, $group->get( 'guid' ), elgg_echo( 'rm_group_autosubscription:email:reply' ), <<<MESSAGE
 {$user->get( 'name' )} added a new reply to "{$topic->get( 'title' )}" in {$group->get( 'name' )}:
 
 {$reply->description}
@@ -34,8 +34,8 @@ MESSAGE
 
 function rm_as_adminSubmenu( $hook, $type, $returnvalue, $params ) {
     
-    $item = new ElggMenuItem( 'subscribeAll', 'Subscriure a tots', elgg_add_action_tokens_to_url( elgg_get_site_url() . 'action/rm/subscribe' ) );
-    $item->setSection( 'notificaciones' );
+    $item = new ElggMenuItem( 'subscribeAll', elgg_echo( 'rm_group_autosubscription:admin:button' ), elgg_add_action_tokens_to_url( elgg_get_site_url() . 'action/rm/subscribe' ) );
+    $item->setSection( 'notifications' );
     $item->setContext( 'admin' );    
     $returnvalue[] = $item;
     
