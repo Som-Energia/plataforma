@@ -16,7 +16,7 @@ function rm_as_event( $event, $type, $reply ) {
 		$guids[] = $member->get( 'guid' );
 	    
 	    
-	notify_user( $guids, $group->get( 'guid' ), 'New group reply post', <<<MESSAGE
+	notify_user( $guids, $group->get( 'guid' ), elgg_echo( 'rm_group_autosubscription:email:reply' ), <<<MESSAGE
 {$user->get( 'name' )} added a new reply to "{$topic->get( 'title' )}" in {$group->get( 'name' )}:
 
 {$reply->description}
