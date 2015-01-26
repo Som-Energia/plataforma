@@ -6,5 +6,4 @@ $spanish = array(
     'rm_group_autosubscription:email:reply'     => 'Nueva repuesta en el grupo',
 );
 
-
-add_translation("es", $spanish );
+add_translation('es', $spanish);
