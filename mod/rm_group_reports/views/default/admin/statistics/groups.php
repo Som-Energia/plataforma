@@ -25,7 +25,7 @@ ksort( $table );
 
 //echo '<div><a href="?view=xls" class="elgg-button elgg-button-action">Descargar Excel</a></div>';
 
-echo '<table class="elgg-table-alt">';
+echo '<table class="sortable elgg-table-alt">';
 
 echo <<<THEAD
     <thead style="background-color: #eee;">
@@ -49,12 +49,12 @@ foreach( $table as $activity => $row ) {
     echo '<td>' . $row->get( 'guid' ) . '</td>';
     echo '<td><a href="' . $row->getURL() . '" target="_blank">' . $row->get( 'name' ) . '</a></td>';
     echo '<td><a href="' . elgg_get_config( 'url' ) . 'groups/members/' . $row->get( 'guid' ) . '" target="_blank">' . $row->getMembers( 0, 0, true ) . '</a></td>';
-    echo '<td>' . date( 'd/m/Y H:i', $row->get( 'time_created' ) ) . '</td>';
+    echo '<td sorttable_customkey="' . $row->get( 'time_created' ) . '">' . date( 'd/m/Y H:i', $row->get( 'time_created' ) ) . '</td>';
     
     if ( $activity != $row->get( 'time_created' ) )
-        echo '<td>' . date( 'd/m/Y H:i', $activity ) . '</td>';
+        echo '<td sorttable_customkey="' . $activity . '">' . date( 'd/m/Y H:i', $activity ) . '</td>';
     else
-        echo "<td>&#8212;</td>";
+        echo '<td sorttable_customkey="' . $row->get( 'time_created' ) . '">&#8212;</td>';
     
     echo '<td>';
     echo elgg_view('output/confirmlink', array(
