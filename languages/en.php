@@ -755,6 +755,7 @@ $english = array(
 	'admin:statistics:label:version' => "Elgg version",
 	'admin:statistics:label:version:release' => "Release",
 	'admin:statistics:label:version:version' => "Version",
+    'admin:statistics:groups' => "Groups activity",
 
 	'admin:server:label:php' => 'PHP',
 	'admin:server:label:web_server' => 'Web Server',
