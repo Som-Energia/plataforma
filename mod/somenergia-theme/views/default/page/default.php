@@ -42,7 +42,7 @@ $lang = get_current_language();
 <?php echo elgg_view('page/elements/head', $vars); ?>
 </head>
 <body>
-<div class="elgg-page elgg-page-default">
+    <div class="elgg-page elgg-page-default">
     
 	<div class="elgg-page-topnav">
 		<div class="elgg-inner">
@@ -67,7 +67,7 @@ $lang = get_current_language();
                         <a href="https://www.facebook.com/somenergia" class="social"><span class="fa fa-facebook"></span></a>
                         <a href="https://twitter.com/somenergia" class="social"><span class="fa fa-twitter"></span></a>
                         <a href="https://www.youtube.com/user/SomEnergia" class="social"><span class="fa fa-youtube"></span></a>
-                        <a href="#" class="social"><span class="fa fa-rss"></span></a>
+                        <!--<a href="#" class="social"><span class="fa fa-rss"></span></a>-->
                     </div>
 		</div>
 	</div>
@@ -97,7 +97,7 @@ $lang = get_current_language();
 			<?php echo $footer; ?>
 		</div>
 	</div>
-</div>
-<?php echo elgg_view('page/elements/foot'); ?>
+    </div>
+    <?php echo elgg_view('page/elements/foot'); ?>
 </body>
 </html>
