@@ -41,7 +41,6 @@
 	background: #444 url(<?php echo elgg_get_site_url(); ?>mod/bright-theme-1.0/graphics/topbar.png) repeat-x bottom left;
 	border-bottom: 1px solid #000;
 	position: relative;
-	z-index: 9000;
 }
 .elgg-page-topbar > .elgg-inner {
   padding: 8px 0px 6px 0px;
@@ -148,7 +147,7 @@
 	top: 40px;
 	right: 20px;
 	max-width: 500px;
-	z-index: 2000;
+	z-index: 1;
 }
 .elgg-system-messages li {
 	margin-top: 10px;

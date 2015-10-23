@@ -24,6 +24,7 @@ if (elgg_get_context() == 'admin') {
 }
 
 // render content before head so that JavaScript and CSS can be loaded. See #4032
+$somenergiabar = elgg_view('page/elements/somenergiaheader', $vars);
 $topbar = elgg_view('page/elements/topbar', $vars);
 $messages = elgg_view('page/elements/messages', array('object' => $vars['sysmessages']));
 $header = elgg_view('page/elements/header', $vars);
@@ -44,7 +45,7 @@ $lang = get_current_language();
 <body>
     <div class="elgg-page elgg-page-default">
     
-	<div class="elgg-page-topnav">
+        <!--
 		<div class="elgg-inner">
                     <div class="elgg-col elgg-col-1of2">
                         <label>
@@ -73,7 +74,10 @@ $lang = get_current_language();
                         <a href="https://www.flickr.com/photos/somenergia" class="social"><span class="fa fa-flickr"></span></a>
                         <a href="https://github.com/Som-Energia" class="social"><span class="fa fa-github"></span></a>
                     </div>
-		</div>
+		</div> -->
+        
+        <div class="elgg-page-topnav">
+		<?php echo $somenergiabar ?>
 	</div>
     
 	<div class="elgg-page-messages">
