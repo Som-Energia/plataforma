@@ -12,8 +12,6 @@
 
 <div class="elgg-inner">
     <div class="elgg-col elgg-col-1of2">
-        <!--<label>-->
-            <!--Estàs aquí:-->
             <div class="breadcrumbs">
                 <span class="estasaqui"><?php echo elgg_echo('somenergia:somheader:estasaqui'); ?> <span class="fa fa-angle-down"></span></span>
                 <ul>
@@ -24,7 +22,6 @@
                     <li><a href="https://oficinavirtual.somenergia.coop/es/login/"><?php echo elgg_echo('somenergia:somheader:OficinaVirtual'); ?></a></li>
                 </ul>
             </div>
-        <!--</label>-->
     </div>
     <div class="elgg-col elgg-col-1of2">
         <a href="https://www.somenergia.coop/es/hazte-socio-a/#/"> <?php echo elgg_echo('somenergia:somheader:haztesocio'); ?> </a>
