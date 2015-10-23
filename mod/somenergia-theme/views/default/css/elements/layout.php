@@ -38,7 +38,8 @@
 
 /***** TOPBAR ******/
 .elgg-page-topbar {
-	background: #444 url(<?php echo elgg_get_site_url(); ?>mod/bright-theme-1.0/graphics/topbar.png) repeat-x bottom left;
+	//background: #444 url(<?php echo elgg_get_site_url(); ?>mod/somenergia-theme/graphics/topbar.png) repeat-x bottom left;
+        background: black;
 	border-bottom: 1px solid #000;
 	position: relative;
 }
