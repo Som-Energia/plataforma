@@ -13,7 +13,7 @@
 *************************************** */
 
 .elgg-icon {
-	background: transparent url(<?php echo elgg_get_site_url(); ?>mod/bright-theme-1.0/graphics/sprites.png) no-repeat left;
+	background: transparent url(<?php echo elgg_get_site_url(); ?>mod/somenergia-theme/graphics/sprites.png) no-repeat left;
 	width: 18px;
 	height: 18px;
 	margin: 0 2px;
