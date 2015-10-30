@@ -46,7 +46,7 @@
 	
 	/*background: none repeat scroll 0 0 #4690D6;*/
 
-	background: #fff url(<?php echo elgg_get_site_url(); ?>mod/bright-theme-1.0/graphics/button.png) repeat-x left top;
+	background: #fff url(<?php echo elgg_get_site_url(); ?>mod/somenergia-theme/graphics/button.png) repeat-x left top;
   border: 1px solid #bbb;
 	padding: 5px 15px;
 	margin: 10px 0;

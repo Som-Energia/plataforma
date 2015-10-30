@@ -93,7 +93,6 @@
 }
 
 .elgg-module-featured > .elgg-head {
-    background: linear-gradient( to top, #9ebf0f 50%, #aecd1d 50% );
     background-color: #BBCA2B;
     padding: 7px 15px;
 }
