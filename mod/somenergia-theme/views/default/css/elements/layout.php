@@ -248,15 +248,13 @@
 }
 .elgg-page-footer {
         background-color: #F7F7F8;
-	border-top: 1px solid #333;
-  min-height: 100px;
+        min-height: 100px;
 	color: #aaa;
-	//text-shadow: 0px 1px 1px #000;
 }
 .elgg-page-footer a {
 	color: #888;
-  text-decoration: none;
+        text-decoration: none;
 }
 .elgg-page-footer a:hover {
-	color: #eee;
+	color: #5B5B5F;
 }
