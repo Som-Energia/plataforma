@@ -36,7 +36,11 @@
 		<priority>after</priority>
 		<plugin>thewire</plugin>
 	</requires>
-	
+        <requires>
+		<type>priority</type>
+		<priority>after</priority>
+		<plugin>externalpages</plugin>
+	</requires>
 	<suggests>
 		<type>plugin</type>
 		<name>profile</name>

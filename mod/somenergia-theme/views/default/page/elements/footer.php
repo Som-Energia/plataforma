@@ -14,7 +14,13 @@ echo elgg_view_menu('footer', array('sort_by' => 'priority', 'class' => 'elgg-me
 echo '<div class="mts clearfloat float-alt">';
 echo elgg_view('output/url', array(
 	'href' => 'http://elgg.org',
-	'text' => "<img src=\"$powered_url\" alt=\"Powered by Elgg\" width=\"106\" height=\"15\" />",
+	'text' => "<p>Powered by Elgg</p>",
+	'class' => '',
+	'is_trusted' => true,
+));
+echo elgg_view('output/url', array(
+	'href' => 'https://github.com/Som-Energia/plataforma',
+	'text' => "<p>Fork me on Github</p>",
 	'class' => '',
 	'is_trusted' => true,
 ));
