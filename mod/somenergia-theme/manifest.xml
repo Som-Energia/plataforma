@@ -41,6 +41,11 @@
 		<priority>after</priority>
 		<plugin>externalpages</plugin>
 	</requires>
+        <requires>
+		<type>priority</type>
+		<priority>after</priority>
+		<plugin>custom_index_widgets</plugin>
+	</requires>
 	<suggests>
 		<type>plugin</type>
 		<name>profile</name>
