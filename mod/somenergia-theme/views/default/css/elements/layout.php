@@ -249,7 +249,7 @@
 .elgg-page-footer {
         background-color: #F7F7F8;
         min-height: 100px;
-	color: #aaa;
+	color: #888;
 }
 .elgg-page-footer a {
 	color: #888;
