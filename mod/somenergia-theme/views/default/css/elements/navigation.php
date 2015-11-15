@@ -395,11 +395,15 @@
 
 .elgg-menu-footer-default {
 	//float: right;
-        text-align: center;
+        text-align: right;
 }
 
 .elgg-menu-footer-alt {
 	//float: left;
+}
+
+.elgg-menu-footer-item {
+	//float: right;
 }
 
 
