@@ -385,20 +385,25 @@
 .elgg-menu-footer > li,
 .elgg-menu-footer > li > a {
 	display: inline-block;
-	color: #aaa;
+	color: #888;
+        padding: 0% 1%;
 }
 
 .elgg-menu-footer > li:after {
-	content: "\007C";
 	padding: 0 5px;
 }
 
 .elgg-menu-footer-default {
-	float: right;
+	//float: right;
+        text-align: right;
 }
 
 .elgg-menu-footer-alt {
-	float: left;
+	//float: left;
+}
+
+.elgg-menu-footer-item {
+	//float: right;
 }
 
 
