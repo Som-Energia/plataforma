@@ -389,6 +389,7 @@
         padding: 0% 1%;
 }
 
+
 .elgg-menu-footer > li:after {
 	padding: 0 5px;
 }
@@ -404,6 +405,8 @@
 
 .elgg-menu-footer-item {
 	//float: right;
+        display: block;
+        padding: 0% 1%;
 }
 
 

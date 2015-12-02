@@ -14,15 +14,15 @@ echo elgg_view_menu('footer', array('sort_by' => 'priority', 'class' => 'elgg-me
 echo '<div class="elgg-menu elgg-menu-footer elgg-menu-hz elgg-menu-footer-default">';
 echo elgg_view('output/url', array(
 	'href' => 'https://github.com/Som-Energia/plataforma',
-	'text' => "<p><span class=\"fa fa-github\"></span> Fork me on Github</p>",
-	'class' => 'elgg-menu-item-about',
+	'text' => "<span class=\"fa fa-github\"></span> Fork me on Github",
+	'class' => 'elgg-menu-footer-item',
 	'is_trusted' => true,
 ));
 
 
 echo elgg_view('output/url', array(
 	'href' => 'http://elgg.org',
-	'text' => "<p>Powered by Elgg</p>",
+	'text' => "Powered by Elgg",
 	'class' => 'elgg-menu-footer-item',
 	'is_trusted' => true,
 ));
