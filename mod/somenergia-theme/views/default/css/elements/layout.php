@@ -61,6 +61,16 @@
     z-index: 1;
 }
 
+.elgg-page-topnav a {
+    color: #808080;
+    text-decoration: none;
+}
+
+.elgg-page-topnav a:hover {
+    color: #BAC92A;
+}
+
+
 .elgg-page-topnav .elgg-inner {
     box-sizing: border-box;
     margin: auto;
