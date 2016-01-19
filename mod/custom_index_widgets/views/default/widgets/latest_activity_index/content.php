@@ -16,5 +16,6 @@
   $widget_datas = elgg_list_river(0, $widget_group, '', '', '', '', $num_items,0,0,false);
   
 	echo $widget_datas;
+  echo "<br/><br/><div class='more-activities'><a href='./activity'>".elgg_echo('custom_index_widgets:see_more_activities')."</a></div><br/>";
 ?>        
 

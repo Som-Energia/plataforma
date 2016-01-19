@@ -70,7 +70,9 @@
 		"custom_index_widgets:box_style" => "Kutxa estiloa",
 		"custom_index_widgets:social_share_index" => "Konpartitze soziala",
 		"custom_index_widgets:login_index"=>"Login",
-		"admin:appearance:custom_index_widgets" => "Index Widgetak"
+                "admin:appearance:custom_index_widgets" => "Index Widgetak",
+
+                "custom_index_widgets:see_more_activities" => "Ikusi jardueren gehiago"
 	
 	);
 					

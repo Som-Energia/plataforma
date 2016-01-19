@@ -70,7 +70,9 @@
 		"custom_index_widgets:box_style" => "Estil de la caixa",
 		"custom_index_widgets:social_share_index" => "Participació social",
 		"custom_index_widgets:login_index" => "Autenticació",
-		"admin:appearance:custom_index_widgets" => "Enginys de l'índex"
+                "admin:appearance:custom_index_widgets" => "Enginys de l'índex",
+
+                "custom_index_widgets:see_more_activities" => "Veure més activitats"
 	
 	);
 					

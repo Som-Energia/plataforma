@@ -175,3 +175,11 @@ h6 { font-size: 0.8em; }
 .elgg-output img {
 	max-width: 100%;
 }
+
+/* ***************************************
+	INIT WIDGETS STYLES
+*************************************** */
+.more-activities {
+  text-align: center;
+  font-size: 18px;
+}
