@@ -11,3 +11,8 @@ nbdist/
 nbactions.xml
 nb-configuration.xml
 .nb-gradle/
+
+# Settings
+.htaccess
+.htaccess.swp
+engine/settings.php
