@@ -23,7 +23,10 @@ function somenergia_calendar_init() {
     //menu 
     $item = new ElggMenuItem('somenergia_calendar', elgg_echo('item:object:somenergia_calendar'), 'somenergia_calendar/calendar');
     elgg_register_menu_item('site', $item);
-
+    
+    //CSS
+    elgg_extend_view('css/elgg', 'somenergia_calendar/css');
+    
 }
 
 function somenergia_calendar_url($entity) { 

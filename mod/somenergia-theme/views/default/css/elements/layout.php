@@ -54,12 +54,22 @@
     background-color: white;
     border-bottom: 1px solid #8E8D93;
     color: #808080;
-    font-size: 10px;
+    font-size: 12px;
     height: 26px;
     line-height: 26px;
     position: relative;
     z-index: 1;
 }
+
+.elgg-page-topnav a {
+    color: #808080;
+    text-decoration: none;
+}
+
+.elgg-page-topnav a:hover {
+    color: #BAC92A;
+}
+
 
 .elgg-page-topnav .elgg-inner {
     box-sizing: border-box;
@@ -95,7 +105,7 @@
     display: none;
     position: absolute;
     left: 0;
-    min-width: 120px;
+    min-width: 147px;
 }
 
 .elgg-page-topnav .elgg-inner .breadcrumbs:hover ul {
