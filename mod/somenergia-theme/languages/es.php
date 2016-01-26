@@ -6,16 +6,15 @@
  */
 
 $spanish = array(
-    'somenergia:theme:slogan' => 'La cooperativa de consumo y producción de energia verde',
+    'somenergia:theme:slogan' => 'Donde el debate abierto, transparente y participativo tiene lugar.',
     'somenergia:somheader:haztesocio' => 'Hazte socio',
     'somenergia:somheader:contrata' => 'Contrata la luz',
-    'somenergia:somheader:estasaqui' => 'Estàs aquí: Plataforma',
+    'somenergia:somheader:estasaqui' => 'Estás aquí: Plataforma',
     'somenergia:somheader:Web' => 'Web',
     'somenergia:somheader:Blog' => 'Blog',
     'somenergia:somheader:Ayuda' => 'Ayuda',
     'somenergia:somheader:Participa' => 'Participa',
     'somenergia:somheader:OficinaVirtual' => 'Oficina Virtual',
-    
 );
 
 add_translation("es", $spanish);
