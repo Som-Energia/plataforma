@@ -6,7 +6,7 @@
  */
 
 $spanish = array(
-    'somenergia:theme:slogan' => 'L'espai per al debat obert, transparent i participatiu.',
+    'somenergia:theme:slogan' => 'L\'espai per al debat obert, transparent i participatiu.',
     'somenergia:somheader:haztesocio' => 'Fes-t soci',
     'somenergia:somheader:contrata' => 'Contracta la llum',
     'somenergia:somheader:estasaqui' => 'Estàs aquí: Plataforma',
