@@ -38,10 +38,9 @@
 
 /***** TOPBAR ******/
 .elgg-page-topbar {
-	background: #444 url(<?php echo elgg_get_site_url(); ?>mod/bright-theme-1.0/graphics/topbar.png) repeat-x bottom left;
+        background: #5B5B5F;
 	border-bottom: 1px solid #000;
 	position: relative;
-	z-index: 9000;
 }
 .elgg-page-topbar > .elgg-inner {
   padding: 8px 0px 6px 0px;
@@ -55,12 +54,22 @@
     background-color: white;
     border-bottom: 1px solid #8E8D93;
     color: #808080;
-    font-size: 10px;
+    font-size: 12px;
     height: 26px;
     line-height: 26px;
     position: relative;
     z-index: 1;
 }
+
+.elgg-page-topnav a {
+    color: #808080;
+    text-decoration: none;
+}
+
+.elgg-page-topnav a:hover {
+    color: #BAC92A;
+}
+
 
 .elgg-page-topnav .elgg-inner {
     box-sizing: border-box;
@@ -96,7 +105,7 @@
     display: none;
     position: absolute;
     left: 0;
-    min-width: 120px;
+    min-width: 147px;
 }
 
 .elgg-page-topnav .elgg-inner .breadcrumbs:hover ul {
@@ -148,7 +157,7 @@
 	top: 40px;
 	right: 20px;
 	max-width: 500px;
-	z-index: 2000;
+	z-index: 1;
 }
 .elgg-system-messages li {
 	margin-top: 10px;
@@ -211,10 +220,10 @@
 	min-height: 360px;
 }
 .elgg-layout-one-sidebar {
-	background: transparent url(<?php echo elgg_get_site_url(); ?>mod/bright-theme-1.0/graphics/sidebar.png) repeat-y right top;
+	background: transparent url(<?php echo elgg_get_site_url(); ?>mod/somenergia-theme/graphics/sidebar.png) repeat-y right top;
 }
 .elgg-layout-two-sidebar {
-	background: transparent url(<?php echo elgg_get_site_url(); ?>mod/bright-theme-1.0/graphics/sidebar-double.png) repeat-y right top;
+	background: transparent url(<?php echo elgg_get_site_url(); ?>mod/somenergia-theme/graphics/sidebar-double.png) repeat-y right top;
 }
 .elgg-layout-error {
 	margin-top: 20px;
@@ -248,16 +257,14 @@
 	position: relative;
 }
 .elgg-page-footer {
-	background: #222 url(<?php echo elgg_get_site_url(); ?>mod/bright-theme-1.0/graphics/footer.png) repeat-x left top;
-	border-top: 1px solid #333;
-  min-height: 100px;
-	color: #aaa;
-	text-shadow: 0px 1px 1px #000;
+        background-color: #F7F7F8;
+        min-height: 100px;
+	color: #888;
 }
 .elgg-page-footer a {
 	color: #888;
-  text-decoration: none;
+        text-decoration: none;
 }
 .elgg-page-footer a:hover {
-	color: #eee;
+	color: #5B5B5F;
 }

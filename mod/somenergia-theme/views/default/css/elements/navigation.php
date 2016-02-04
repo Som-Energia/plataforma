@@ -301,7 +301,7 @@
 	-moz-border-radius: 3px;
 	border-radius: 3px;
 	
-	background: #fff url(<?php echo elgg_get_site_url(); ?>mod/bright-theme-1.0/graphics/button.png) repeat-x left top;
+	background: #fff url(<?php echo elgg_get_site_url(); ?>mod/somenergia-theme/graphics/button.png) repeat-x left top;
   border: 1px solid #bbb;
 	padding: 5px 15px;
 	margin: 1px 0;
@@ -314,7 +314,7 @@
 	text-decoration: none;
 }
 .elgg-menu-page a:active {
-	background-image: url(<?php echo elgg_get_site_url(); ?>mod/bright-theme-1.0/graphics/button-active.png);
+	background-image: url(<?php echo elgg_get_site_url(); ?>mod/somenergia-theme/graphics/button-active.png);
   background-position: left bottom;
 }
 .elgg-menu-page .elgg-child-menu {
@@ -385,20 +385,28 @@
 .elgg-menu-footer > li,
 .elgg-menu-footer > li > a {
 	display: inline-block;
-	color: #aaa;
+	color: #888;
+        padding: 0% 1%;
 }
 
+
 .elgg-menu-footer > li:after {
-	content: "\007C";
 	padding: 0 5px;
 }
 
 .elgg-menu-footer-default {
-	float: right;
+	//float: right;
+        text-align: right;
 }
 
 .elgg-menu-footer-alt {
-	float: left;
+	//float: left;
+}
+
+.elgg-menu-footer-item {
+	//float: right;
+        display: block;
+        padding: 0% 1%;
 }
 
 
@@ -453,7 +461,7 @@
 	-moz-border-radius: 3px;
 	border-radius: 3px;
 	
-	background: #fff url(<?php echo elgg_get_site_url(); ?>mod/bright-theme/graphics/button.png) repeat-x left top;
+	background: #fff url(<?php echo elgg_get_site_url(); ?>mod/somenergia-theme/graphics/button.png) repeat-x left top;
   border: 1px solid #bbb;
 	padding: 5px 15px;
 	margin: 1px 0;
@@ -466,7 +474,7 @@
 	text-decoration: none;
 }
 .elgg-menu-owner-block li a:active {
-	background-image: url(<?php echo elgg_get_site_url(); ?>mod/bright-theme/graphics/button-active.png);
+	background-image: url(<?php echo elgg_get_site_url(); ?>mod/somenergia-theme/graphics/button-active.png);
   background-position: left bottom;
 }
 

@@ -24,6 +24,7 @@ if (elgg_get_context() == 'admin') {
 }
 
 // render content before head so that JavaScript and CSS can be loaded. See #4032
+$somenergiabar = elgg_view('page/elements/somenergiaheader', $vars);
 $topbar = elgg_view('page/elements/topbar', $vars);
 $messages = elgg_view('page/elements/messages', array('object' => $vars['sysmessages']));
 $header = elgg_view('page/elements/header', $vars);
@@ -42,34 +43,11 @@ $lang = get_current_language();
 <?php echo elgg_view('page/elements/head', $vars); ?>
 </head>
 <body>
-<div class="elgg-page elgg-page-default">
+    <div class="elgg-page elgg-page-default">
     
-	<div class="elgg-page-topnav">
-		<div class="elgg-inner">
-                    <div class="elgg-col elgg-col-1of2">
-                        <label>
-                            Estàs aquí:
-                            <div href="#" class="breadcrumbs">
-                                 Plataform <span class="fa fa-angle-down"></span>
-                                 <ul>
-                                    <li><a href="https://www.somenergia.coop/">Web</a></li>
-                                    <li><a href="http://blog.somenergia.coop/">Blog</a></li>
-                                    <li><a href="http://es.support.somenergia.coop/">Ayuda</a></li>
-                                    <li><a href="https://www.somenergia.coop/es/participa/">Participa</a></li>
-                                    <li><a href="https://oficinavirtual.somenergia.coop/es/login/">Oficina virtual</a></li>
-                                 </ul>
-                            </div>
-                        </label>
-                    </div>
-                    <div class="elgg-col elgg-col-1of2">
-                        <a href="https://www.somenergia.coop/es/hazte-socio-a/#/">Fes-te soci</a>
-                        <a href="https://www.somenergia.coop/es/contrata-la-luz/">Contracta la llum</a>
-                        <a href="https://www.facebook.com/somenergia" class="social"><span class="fa fa-facebook"></span></a>
-                        <a href="https://twitter.com/somenergia" class="social"><span class="fa fa-twitter"></span></a>
-                        <a href="https://www.youtube.com/user/SomEnergia" class="social"><span class="fa fa-youtube"></span></a>
-                        <a href="#" class="social"><span class="fa fa-rss"></span></a>
-                    </div>
-		</div>
+        
+        <div class="elgg-page-topnav">
+		<?php echo $somenergiabar ?>
 	</div>
     
 	<div class="elgg-page-messages">
@@ -97,7 +75,7 @@ $lang = get_current_language();
 			<?php echo $footer; ?>
 		</div>
 	</div>
-</div>
-<?php echo elgg_view('page/elements/foot'); ?>
+    </div>
+    <?php echo elgg_view('page/elements/foot'); ?>
 </body>
 </html>

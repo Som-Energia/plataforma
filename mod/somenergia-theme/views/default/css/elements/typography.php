@@ -18,7 +18,7 @@ body {
 }
 
 a {
-  color: #4C5C00;
+  color: #87A300;
 }
 
 a:hover,
@@ -174,4 +174,12 @@ h6 { font-size: 0.8em; }
 }
 .elgg-output img {
 	max-width: 100%;
+}
+
+/* ***************************************
+	INIT WIDGETS STYLES
+*************************************** */
+.more-activities {
+  text-align: center;
+  font-size: 18px;
 }

@@ -73,8 +73,9 @@
 		"custom_index_widgets:box_style" => "Type d'affichage",
 		"custom_index_widgets:social_share_index" => "Social Share",
 		"custom_index_widgets:login_index"=>"Login",
-		"admin:appearance:custom_index_widgets" => "Index Widgets"
+		"admin:appearance:custom_index_widgets" => "Index Widgets",
 		
+                "custom_index_widgets:see_more_activities" => "Voir plus d'activités"
 	);
 					
 	add_translation("fr",$french);
