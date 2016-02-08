@@ -22,6 +22,13 @@ function somenergia_drive_init() {
     //menu 
     $item = new ElggMenuItem('somenergia_drive', elgg_echo('item:object:somenergia_drive'), 'somenergia_drive/drive');
     elgg_register_menu_item('site', $item);
+    elgg_register_menu_item('groups', $item);
+
+    // Add generic new file widget
+    elgg_register_widget_type('list', elgg_echo("Google drive"), elgg_echo("Google Drive"),"profile,dashboard,groups");
+
+        // add a file link to owner blocks
+    elgg_register_plugin_hook_handler('register', 'menu:owner_block', 'somenergia_drive_owner_block_menu');
 
 }
 
@@ -34,4 +41,17 @@ function somenergia_drive_page_handler($page) {
     $base_dir = elgg_get_plugins_path() . 'somenergia_drive';
     include "$base_dir/drive.php";
     return true; 
+}
+
+
+function somenergia_drive_owner_block_menu($hook, $type, $return, $params) {
+    $owner = $params['entity'];   
+    if($owner->guid == '64' ){
+        $url = 'somenergia_drive/drive';
+        $item = new ElggMenuItem('somenergia_drive', elgg_echo('item:object:somenergia_drive_menu'), $url);
+        $return[] = $item;
+   
+        }
+    return $return;
+
 }
