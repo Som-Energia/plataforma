@@ -142,4 +142,4 @@ To change your notification preferences for all such messages, please click here
 		',
 	);
 					
-add_translation("en",$galego);
+add_translation("gl",$galego);
