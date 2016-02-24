@@ -9,137 +9,137 @@
  * @author Akhilesh @ Cubet Technologies
  */
 
-	$euskera = array(
-		'comments' => "Comments",
-		'comment:notification:settings' => 'Comment notifications',
-		'comment:notification:settings:description' => 'Notify when comments are posted to items you have subscribed to.',
-		'comment:notification:settings:how' => 'Select your method of notification',
-		'comment:notification:settings:linktext' => 'View all items to which you are subscribed',
-		'comment:subscriptions' => 'Subscriptions',
-		'comment:subscriptions:none' => 'No current subscriptions',
-		'comment:subscribe:tooltip' => 'Subscribe to receive notifications when comments are made on this content',
-		'allow:comment:notification' => 'Do you want to enable notification? ',
-		'email:content:type' => 'Do you want to support HTML Email? ',
-		'text:email' => 'No',
-		'html:email' => 'Yes',
-		'comment:subscribe' => 'Subscribe',
-		'comment:unsubscribe' => 'Unsubscribe',
-        'comment:subscribe:long' => 'Subscribe to comment notifications',
-		'comment:unsubscribe:long' => 'Unsubscribe from comment notifications',
-        'comment_tracker:setting:autosubscribe' => "Auto-subscribe to content you comment on?",
-		'show:subscribers' => 'Show Subscribers',
-		'comment:subscribe:success' => 'You have successfully subscribed to this post or topic.',
-		'comment:subscribe:failed' => "Sorry! You couldn't subscribe this post or topic.",
-		'comment:subscribe:entity:not:access' => "Sorry! we couldn't find the post or topic for some reason.",
-		'comment:unsubscribe:success' => 'You have successfully unsubscribed from this post or topic.',
-		'comment:unsubscribe:failed' => "Sorry! You couldn't unsubscribe from this post or topic.",
-		'comment:unsubscribe:not:valid:url' => 'Sorry! This is not a valid url to unsubscribe from this post or topic.',
-		'comment:unsubscribe:entity:not:access' => "Sorry! we couldn't find the post or topic.",
-        'comment_tracker:setting:show_button' => "Show subscribe/unsubscribe button above comments view? ",
-        'comment_tracker:item' => "item",
+    $euskera = array(
+        'comments' => 'Iruzkinak',
+        'comment:notification:settings' => 'Iruzkinen abisuak',
+        'comment:notification:settings:description' => 'Esan noiz iruzkinak argitaratzen diren zuk harpidetu dituzun gaietan.',
+        'comment:notification:settings:how' => 'Aukera ezazu zure komunikazio-era',
+        'comment:notification:settings:linktext' => 'Ikus itzazu harpidetu egin dituzun gai guztiak',
+        'comment:subscriptions' => 'Harpidetzak',
+        'comment:subscriptions:none' => 'Ez dago jarduneko harpidetzarik',
+        'comment:subscribe:tooltip' => 'Harpidetu jakinarazpenak jasotzeko gai honi buruzko iruzkinak eginez gero',
+        'allow:comment:notification' => 'Jakinarazpenak aktibatu nahi al dituzu? ',
+        'email:content:type' => 'Jaso nahi al duzu emailak HTML formatuan? ',
+        'text:email' => 'Ez',
+        'html:email' => 'Bai',
+        'comment:subscribe' => 'Harpidetu',
+        'comment:unsubscribe' => 'Harpidetza indargabetu',
+        'comment:subscribe:long' => 'Harpidetu jakinarazpenak egiteko',
+        'comment:unsubscribe:long' => 'Indargabetu jakinarazpenak egiteko',
+        'comment_tracker:setting:autosubscribe' => 'Auto-harpidetza nik iruzkindu dudan edukira?',
+        'show:subscribers' => 'Erakutsi harpidedunak',
+        'comment:subscribe:success' => 'Eduki edota gai honetara arrakastatsu harpidetu egin duzu.',
+        'comment:subscribe:failed' => 'Barkatu! Ezin duzu eduki edota gai honetara harpidetu.',
+        'comment:subscribe:entity:not:access' => 'Barkatu! Ezin dugu aurkitu edukia edota gaia arrazoiren batengatik.',
+        'comment:unsubscribe:success' => 'Eduki edota gai honetatik arrakastatsu indargabetu egin duzu.',
+        'comment:unsubscribe:failed' => 'Barkatu! Ezin duzu eduki edota gai honetatik indargabetu.',
+        'comment:unsubscribe:not:valid:url' => 'Barkatu! Hau ez da baliozko URLa eduki edota gai honetatik indargabetzeko.',
+        'comment:unsubscribe:entity:not:access' => 'Barkatu! Ezin dugu edukia edota gaia aurkitu.',
+        'comment_tracker:setting:show_button' => 'Erakutsi harpidetu/indargabetu botoia iruzkinen gainetik?',
+        'comment_tracker:item' => 'item',
         
-        'comment:notify:subject:groupforumtopic' => '%s added to the discussion %s in the group %s',
-        'comment:notify:subject:comment' => '%s commented on the %s "%s"',
-        'comment:notify:subject:comment:group' => '%s commented on the %s "%s" in the group %s',
+        'comment:notify:subject:groupforumtopic' => '%s eztabaidari erantsirik %s taldean %s',
+        'comment:notify:subject:comment' => '%s iruzkindurik  %s "%s"',
+        'comment:notify:subject:comment:group' => '%s iruzkindurik %s "%s" taldean %s',
         
         
         /* Legacy stuff - @TODO - see what's safe to delete */
-		'comment:notify:subject' => 'There is a new comment on %s',
-		'comment:notify:group:subject' => 'There is a new post in the thread %s',
-		'comment:notify:body:web' => 'Hi %s,
-<br/>There is a new comment on %s
-<br/>%s wrote: %s
+        'comment:notify:subject' => 'Iruzkin berri bat badago %s',
+        'comment:notify:group:subject' => 'Iruzkin berri bat badago eztabaidan %s',
+        'comment:notify:body:web' => 'Kaixo %s,
+<br/>Iruzkin berri bat badago %s
+<br/>%s idatzi zuen: %s
 <br/>%s
 <br/>
 <font color="#888888" size="2">
-You have received this notification because you have subscribed to it, or are involved in it.<br/>
-To change your notification preferences, please click here: %s<br/>
+Jakinarazpen hau jaso egin duzu eduki edota gai honetara harpideturik edo tartean sarturik zaudelako.<br/>
+Zure jakinarazpenen lehentasunak aldatzeko, mesedez klikatu hemen: %s<br/>
 </font>
-		',
-			'comment:notify:group:body:web' => 'Hi %s,
-<br/>There is a new post in the thread %s
-<br/>%s wrote: %s
+        ',
+            'comment:notify:group:body:web' => 'Kaixo %s,
+<br/>Iruzkin berri bat badago eztabaidan %s
+<br/>%s idatzi zuen: %s
 <br/>%s
 <br/>
 <font color="#888888" size="2">
-You have received this notification because you have subscribed to it, or are involved in it.<br/>
-To change your notification preferences, please click here: %s<br/>
+Jakinarazpen hau jaso egin duzu eduki edota gai honetara harpideturik edo tartean sarturik zaudelako.<br/>
+Zure jakinarazpenen lehentasunak aldatzeko, mesedez klikatu hemen: %s<br/>
 </font>
-		',
-		'comment:notify:body:email:text' => 'Hi %s,
+        ',
+        'comment:notify:body:email:text' => 'Hi %s,
 
-There is a new comment on %s
+Iruzkin berri bat badago %s
 
-%s wrote: %s
+%s idatzi zuen: %s
 
 %s
 
-Regards,
+Goraintziak,
 %s
 
 _________________________________________________________________________________
 <font color="#888888" size="2">
-Please note you may have to login before viewing the post or topic.
+Adi egon, zure edukia edota gaia ikusi baino lehen sisteman sar zenezake.
 
-You have received this notification because you have subscribed to it, or are involved in it.
+Jakinarazpen hau jaso egin duzu eduki edota gai honetara harpideturik edo tartean sarturik zaudelako.
 
-To change your notification preferences for all such messages, please click here: %s
+Zure jakinarazpenen lehentasunak aldatzeko, mesedez klikatu hemen: %s
 </font>
-		',
-			'comment:notify:group:body:email:text' => 'Hi %s,
+        ',
+            'comment:notify:group:body:email:text' => 'Kaixo %s,
 
-There is a new post in the thread %s
+Iruzkin berri bat badago eztabaidan %s
 
-%s wrote: %s
+%s idatzi zuen: %s
 
 %s
 
-Regards,
+Goraintziak,
 %s
 
 _________________________________________________________________________________
 <font color="#888888" size="2">
-Please note you may have to login before viewing the post or topic.
+Adi egon, zure edukia edota gaia ikusi baino lehen sisteman sar zenezake.
 
-You have received this notification because you have subscribed to it, or are involved in it.
+Jakinarazpen hau jaso egin duzu eduki edota gai honetara harpideturik edo tartean sarturik zaudelako.
 
-To change your notification preferences for all such messages, please click here: %s
+Zure jakinarazpenen lehentasunak aldatzeko, mesedez klikatu hemen: %s
 </font>
-		',
-	
-	'comment:notify:body:email:html' => '
+        ',
+    
+    'comment:notify:body:email:html' => '
 <div>
-	<div>Hi %s,</div>
-	<div>There is a new comment on %s</div>
-	<div>%s wrote: %s</div>
-	<div>%s</div>
-	<div>&nbsp;</div>
-	<div>Regards,</div></div>
-	<div>%s</div>
-	<div>&nbsp;</div>
-	<div style="border-top:1px solid #CCCCCC;color:#888888;">
-		<div>Please note you may have to login before viewing the post or topic.</div>
-		<div>You have received this notification because you have subscribed to it, or are involved in it.</div>
-		<div>To change your notification preferences for all such messages, please click here: %s</div>
-	</div>
+    <div>Kaixo %s,</div>
+    <div>Iruzkin berri bat badago %s</div>
+    <div>%s idatzi zuen: %s</div>
+    <div>%s</div>
+    <div>&nbsp;</div>
+    <div>Goraintziak,</div></div>
+    <div>%s</div>
+    <div>&nbsp;</div>
+    <div style="border-top:1px solid #CCCCCC;color:#888888;">
+        <div>Adi egon, zure edukia edota gaia ikusi baino lehen sisteman sar zenezake.</div>
+        <div>Jakinarazpen hau jaso egin duzu eduki edota gai honetara harpideturik edo tartean sarturik zaudelako.</div>
+        <div>Zure jakinarazpenen lehentasunak aldatzeko, mesedez klikatu hemen: %s</div>
+    </div>
 </div>
-		',
-			'comment:notify:group:body:email:html' => '
+        ',
+            'comment:notify:group:body:email:html' => '
 <div>
-	<div>Hi %s,</div>
-	<div>There is a new post in the thread %s</div>
-	<div>%s wrote: %s</div>
-	<div>%s</div>
-	<div>&nbsp;</div>
-	<div>Regards,</div>
-	<div>%s</div>
-	<div style="border-top:1px solid #CCCCCC;color:#888888;">
-		<div>Please note you may have to login before viewing the post or topic.</div>
-		<div>You have received this notification because you have subscribed to it, or are involved in it.</div>
-		<div>To change your notification preferences for all such messages, please click here: %s</div>
-	</div>
+    <div>Kaixo %s,</div>
+    <div>Iruzkin berri bat badago eztabaidan %s</div>
+    <div>%s idatzi zuen: %s</div>
+    <div>%s</div>
+    <div>&nbsp;</div>
+    <div>Goraintziak,</div>
+    <div>%s</div>
+    <div style="border-top:1px solid #CCCCCC;color:#888888;">
+        <div>Adi egon, zure edukia edota gaia ikusi baino lehen sisteman sar zenezake.</div>
+        <div>Jakinarazpen hau jaso egin duzu eduki edota gai honetara harpideturik edo tartean sarturik zaudelako.</div>
+        <div>Zure jakinarazpenen lehentasunak aldatzeko, mesedez klikatu hemen: %s</div>
+    </div>
 </div>
-		',
-	);
-					
-add_translation("en",$euskera);
+        ',
+    );
+                    
+add_translation("eu",$euskera);

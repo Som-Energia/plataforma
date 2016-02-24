@@ -10,136 +10,138 @@
  */
 
 	$galego = array(
-		'comments' => "Comments",
-		'comment:notification:settings' => 'Comment notifications',
-		'comment:notification:settings:description' => 'Notify when comments are posted to items you have subscribed to.',
-		'comment:notification:settings:how' => 'Select your method of notification',
-		'comment:notification:settings:linktext' => 'View all items to which you are subscribed',
-		'comment:subscriptions' => 'Subscriptions',
-		'comment:subscriptions:none' => 'No current subscriptions',
-		'comment:subscribe:tooltip' => 'Subscribe to receive notifications when comments are made on this content',
-		'allow:comment:notification' => 'Do you want to enable notification? ',
-		'email:content:type' => 'Do you want to support HTML Email? ',
-		'text:email' => 'No',
-		'html:email' => 'Yes',
-		'comment:subscribe' => 'Subscribe',
-		'comment:unsubscribe' => 'Unsubscribe',
-        'comment:subscribe:long' => 'Subscribe to comment notifications',
-		'comment:unsubscribe:long' => 'Unsubscribe from comment notifications',
-        'comment_tracker:setting:autosubscribe' => "Auto-subscribe to content you comment on?",
-		'show:subscribers' => 'Show Subscribers',
-		'comment:subscribe:success' => 'You have successfully subscribed to this post or topic.',
-		'comment:subscribe:failed' => "Sorry! You couldn't subscribe this post or topic.",
-		'comment:subscribe:entity:not:access' => "Sorry! we couldn't find the post or topic for some reason.",
-		'comment:unsubscribe:success' => 'You have successfully unsubscribed from this post or topic.',
-		'comment:unsubscribe:failed' => "Sorry! You couldn't unsubscribe from this post or topic.",
-		'comment:unsubscribe:not:valid:url' => 'Sorry! This is not a valid url to unsubscribe from this post or topic.',
-		'comment:unsubscribe:entity:not:access' => "Sorry! we couldn't find the post or topic.",
-        'comment_tracker:setting:show_button' => "Show subscribe/unsubscribe button above comments view? ",
-        'comment_tracker:item' => "item",
+		'comments' => "Comentarios",
+		'comment:notification:settings' => 'Notificacións de comentarios',
+		'comment:notification:settings:description' => 'Notificarme cando haxa comentarios en elementos nos que me subscribín',
+		'comment:notification:settings:how' => 'Selecciona o teu método de notificación',
+		'comment:notification:settings:linktext' => 'Ver todos os elementos nos que me subscribín',
+		'comment:subscriptions' => 'Subscricións',
+		'comment:subscriptions:none' => 'Actualmente non hai subscricións',
+		'comment:subscribe:tooltip' => 'Subscríbete para recibir notificacións cando haxa comentarios sobre este contido',
+		'allow:comment:notification' => 'Queres habilitar as notificacións? ',
+		'email:content:type' => 'Desexas recibir correos en formato HTML? ',
+		'text:email' => 'Non',
+		'html:email' => 'Si',
+		'comment:subscribe' => 'Subscribirme',
+		'comment:unsubscribe' => 'Cancelar subscrición',
+        'comment:subscribe:long' => 'Subscribirme ás notificacións de comentarios',
+		'comment:unsubscribe:long' => 'Cancelar subscrición das notificacións de comentarios',
+        'comment_tracker:setting:autosubscribe' => "Auto-subscribirme ao contido no que haxa comentarios?",
+		'show:subscribers' => 'Amosar subscritores',
+		'comment:subscribe:success' => 'Subscribícheste correctamente a este contido ou temática.',
+		'comment:subscribe:failed' => "Sentímolo! Non podes subscribirte a este contido ou temática.",
+		'comment:subscribe:entity:not:access' => "Sentímolo! Por algunha razón non puidemos atopar o contido ou temática.",
+		'comment:unsubscribe:success' => 'Cancelaches correctamente a túa subscrición a este contido ou temática.',
+		'comment:unsubscribe:failed' => "Sentímolo! Non puideches cancelar a túa subscrición a este contido ou temática.",
+		'comment:unsubscribe:not:valid:url' => 'Sentímolo! Esta non é unha url válida para cancelar a subscrición a este contido ou temática.',
+		'comment:unsubscribe:entity:not:access' => "Sentímolo! Non puidemos atopar o contido ou temática.",
+        'comment_tracker:setting:show_button' => "Amosar o botón de subscrición/cancelación por riba da vista de comentarios?",
+        'comment_tracker:item' => "elemento",
         
-        'comment:notify:subject:groupforumtopic' => '%s added to the discussion %s in the group %s',
-        'comment:notify:subject:comment' => '%s commented on the %s "%s"',
-        'comment:notify:subject:comment:group' => '%s commented on the %s "%s" in the group %s',
+        'comment:notify:subject:groupforumtopic' => '%s engadiuse á discusión %s no grupo %s',
+        'comment:notify:subject:comment' => '%s comentou no %s "%s"',
+        'comment:notify:subject:comment:group' => '%s comentou no %s "%s" no grupo %s',
         
         
         /* Legacy stuff - @TODO - see what's safe to delete */
-		'comment:notify:subject' => 'There is a new comment on %s',
-		'comment:notify:group:subject' => 'There is a new post in the thread %s',
-		'comment:notify:body:web' => 'Hi %s,
-<br/>There is a new comment on %s
-<br/>%s wrote: %s
+		'comment:notify:subject' => 'Hai un novo comentario sobre %s',
+		'comment:notify:group:subject' => 'Hai novo contido no fío %s',
+		'comment:notify:body:web' => 'Ola %s,
+<br/>Hai un novo comentario sobre %s
+<br/>%s escribiu: %s
 <br/>%s
 <br/>
 <font color="#888888" size="2">
-You have received this notification because you have subscribed to it, or are involved in it.<br/>
-To change your notification preferences, please click here: %s<br/>
+Recibiches esta notificación porque te subscribiches a ela ou tés relación con ela.<br/>
+Para cambiar as túas preferencias de notificación, por favor fai clic aquí: %s<br/>
 </font>
 		',
-			'comment:notify:group:body:web' => 'Hi %s,
-<br/>There is a new post in the thread %s
-<br/>%s wrote: %s
+			'comment:notify:group:body:web' => 'Ola %s,
+<br/>Hai novo contido no fío %s
+<br/>%s escribiu: %s
 <br/>%s
 <br/>
 <font color="#888888" size="2">
-You have received this notification because you have subscribed to it, or are involved in it.<br/>
-To change your notification preferences, please click here: %s<br/>
+Recibiches esta notificación porque te subscribiches a ela ou tés relación con ela.<br/>
+
+Para cambiar as túas preferencias de notificación, por favor fai clic aquí: %s<br/>
 </font>
 		',
-		'comment:notify:body:email:text' => 'Hi %s,
+		'comment:notify:body:email:text' => 'Ola %s,
 
-There is a new comment on %s
+hai un novo comentario sobre %s
 
-%s wrote: %s
+%s escribiu: %s
 
 %s
 
-Regards,
+Saúdos,
 %s
 
 _________________________________________________________________________________
 <font color="#888888" size="2">
-Please note you may have to login before viewing the post or topic.
+Por favor, ten en conta que podes ter que iniciar sesión antes de ver o contido ou tema. 
 
-You have received this notification because you have subscribed to it, or are involved in it.
+Recibiches esta notificación porque te subscribiches a ela ou tés relación con ela. 
 
-To change your notification preferences for all such messages, please click here: %s
+Para cambiar as túas preferencias de notificación de este tipo de mensaxes, por favor fai clic aquí: %s
 </font>
 		',
-			'comment:notify:group:body:email:text' => 'Hi %s,
+			'comment:notify:group:body:email:text' => 'Ola %s,
 
-There is a new post in the thread %s
+hai novo contido no fío %s
 
-%s wrote: %s
+%s escribiu: %s
 
 %s
 
-Regards,
+Saúdos,
 %s
 
 _________________________________________________________________________________
-<font color="#888888" size="2">
-Please note you may have to login before viewing the post or topic.
+<font color="#888888" size="2">Por favor, ten en conta que podes ter que iniciar sesión antes de ver o contido ou tema.Recibiches esta notificación porque te subscribiches a ela ou tés relación con ela.
 
-You have received this notification because you have subscribed to it, or are involved in it.
-
-To change your notification preferences for all such messages, please click here: %s
+Para cambiar as túas preferencias de notificación de este tipo de mensaxes, por favor fai clic aquí: %s
 </font>
 		',
 	
 	'comment:notify:body:email:html' => '
 <div>
-	<div>Hi %s,</div>
-	<div>There is a new comment on %s</div>
-	<div>%s wrote: %s</div>
+	<div>Ola %s,</div>
+	<div>Hai un novo comentario sobre %s</div>
+	<div>%s escribiu: %s</div>
 	<div>%s</div>
 	<div>&nbsp;</div>
-	<div>Regards,</div></div>
+	<div>Saúdos,</div></div>
 	<div>%s</div>
 	<div>&nbsp;</div>
 	<div style="border-top:1px solid #CCCCCC;color:#888888;">
-		<div>Please note you may have to login before viewing the post or topic.</div>
-		<div>You have received this notification because you have subscribed to it, or are involved in it.</div>
-		<div>To change your notification preferences for all such messages, please click here: %s</div>
+		<div>Por favor, ten en conta que podes ter que iniciar sesión antes de ver o contido ou tema</div>
+		<div>Recibiches esta notificación porque te subscribiches a ela ou tés relación con ela
+.</div>
+		<div>
+
+Para cambiar as túas preferencias de notificación de este tipo de mensaxes, por favor fai clic aquí: %s</div>
 	</div>
 </div>
 		',
 			'comment:notify:group:body:email:html' => '
 <div>
-	<div>Hi %s,</div>
-	<div>There is a new post in the thread %s</div>
-	<div>%s wrote: %s</div>
+	<div>Ola %s,</div>
+	<div>Hai un novo contido no fío %s</div>
+	<div>%s escribiu: %s</div>
 	<div>%s</div>
 	<div>&nbsp;</div>
-	<div>Regards,</div>
+	<div>Saúdos,</div>
 	<div>%s</div>
 	<div style="border-top:1px solid #CCCCCC;color:#888888;">
-		<div>Please note you may have to login before viewing the post or topic.</div>
-		<div>You have received this notification because you have subscribed to it, or are involved in it.</div>
-		<div>To change your notification preferences for all such messages, please click here: %s</div>
+		<div>Por favor, ten en conta que podes ter que iniciar sesión antes de ver o contido ou tema.</div>
+		<div>Recibiches esta notificación porque te subscribiches a ela ou tés relación con ela.</div>
+		<div>Para cambiar as túas preferencias de notificación de este tipo de mensaxes, por favor fai clic aquí: %s</div>
 	</div>
 </div>
 		',
 	);
 					
-add_translation("en",$galego);
+add_translation("gl",$galego);
+
