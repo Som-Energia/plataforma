@@ -1,7 +1,7 @@
 <?php
 /**
  * comment_tracker language extender
- * 
+ *
  * @package ElggCommentTracker
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU Public License version 2
  * @copyright Copyright (c) 2007-2011 Cubet Technologies. (http://cubettechnologies.com)
@@ -24,9 +24,9 @@
 		'html:email' => 'Si',
 		'comment:subscribe' => 'Subscribirme',
 		'comment:unsubscribe' => 'Cancelar subscrición',
-        'comment:subscribe:long' => 'Subscribirme ás notificacións de comentarios',
+                'comment:subscribe:long' => 'Subscribirme ás notificacións de comentarios',
 		'comment:unsubscribe:long' => 'Cancelar subscrición das notificacións de comentarios',
-        'comment_tracker:setting:autosubscribe' => "Auto-subscribirme ao contido no que haxa comentarios?",
+                'comment_tracker:setting:autosubscribe' => "Auto-subscribirme ao contido no que haxa comentarios?",
 		'show:subscribers' => 'Amosar subscritores',
 		'comment:subscribe:success' => 'Subscribícheste correctamente a este contido ou temática.',
 		'comment:subscribe:failed' => "Sentímolo! Non podes subscribirte a este contido ou temática.",
@@ -80,9 +80,15 @@ Saúdos,
 
 _________________________________________________________________________________
 <font color="#888888" size="2">
+<<<<<<< HEAD
 Por favor, ten en conta que podes ter que iniciar sesión antes de ver o contido ou tema. 
 
 Recibiches esta notificación porque te subscribiches a ela ou tés relación con ela. 
+=======
+Por favor, ten en conta que podes ter que iniciar sesión antes de ver o contido ou tema.
+
+Recibiches esta notificación porque te subscribiches a ela ou tés relación con ela.
+>>>>>>> bb569afab8f2893a1140b49f7cb3f92344f1d04c
 
 Para cambiar as túas preferencias de notificación de este tipo de mensaxes, por favor fai clic aquí: %s
 </font>
@@ -104,7 +110,7 @@ ________________________________________________________________________________
 Para cambiar as túas preferencias de notificación de este tipo de mensaxes, por favor fai clic aquí: %s
 </font>
 		',
-	
+
 	'comment:notify:body:email:html' => '
 <div>
 	<div>Ola %s,</div>
@@ -117,6 +123,7 @@ Para cambiar as túas preferencias de notificación de este tipo de mensaxes, po
 	<div>&nbsp;</div>
 	<div style="border-top:1px solid #CCCCCC;color:#888888;">
 		<div>Por favor, ten en conta que podes ter que iniciar sesión antes de ver o contido ou tema</div>
+<<<<<<< HEAD
 		<div>Recibiches esta notificación porque te subscribiches a ela ou tés relación con ela
 .</div>
 		<div>
@@ -144,4 +151,3 @@ Para cambiar as túas preferencias de notificación de este tipo de mensaxes, po
 	);
 					
 add_translation("gl",$galego);
-
