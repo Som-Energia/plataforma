@@ -14,7 +14,7 @@ $download_url = elgg_get_site_url() . "file/download/{$file->getGUID()}";
 if ($vars['full_view']) {
 	echo <<<HTML
 		<div class="file-photo">
-			<a href="$download_url"><img class="elgg-photo" src="$image_url" /></a>
+			<a href="$download_url" target="_blank"><img class="elgg-photo" src="$image_url" /></a>
 		</div>
 HTML;
 }
