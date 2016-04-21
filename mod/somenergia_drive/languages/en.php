@@ -7,6 +7,7 @@
 
 $strings = array(
     'item:object:somenergia_drive' => 'Ficheros',
+    'item:object:somenergia_drive_menu' => 'Ficheros en Google Drive',
     'somenergia_drive:id_folder' => 'ID del directorio de Google Drive',
     'somenergia_drive:settings:instructions' => 'Aquí se debe indicar el ID del directorio que se desee compartir de google Drive.',
     'option:list' => 'Lista',
