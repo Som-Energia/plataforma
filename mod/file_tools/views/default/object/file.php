@@ -79,9 +79,10 @@
 			$extra = elgg_view("file/specialcontent/$base_type/default", $vars);
 		}
 		
+		
 		$params = array(
 			"entity" => $file,
-			"title" => elgg_view("output/url", array("text" => $title, "href" => "file/download/" . $file->getGUID())),
+			"title" => elgg_view("output/url", array("text" => $title, "href" => "file/download/" . $file->getGUID(), "target" => "_blank" )),
 			"metadata" => $entity_menu,
 			"subtitle" => $subtitle,
 			"tags" => $tags
