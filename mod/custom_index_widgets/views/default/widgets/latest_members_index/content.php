@@ -2,6 +2,8 @@
   
   $num_items = $vars['entity']->num_items;
   if (!isset($num_items)) $num_items = 10;
+  $num_items = 5;
+
   $display_avatar = $vars['entity']->display_avatar;
   if (!isset($display_avatar)) $display_avatar = 'yes';
   

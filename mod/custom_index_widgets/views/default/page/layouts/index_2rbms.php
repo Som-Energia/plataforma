@@ -14,8 +14,8 @@
         </td>
       </tr>
       <tr>
-        <td align="left" valign="top" class="medium">
-              <div id="middlecolumn_widgets" class="medium_<?php echo elgg_echo($layoutmode); ?>_box">
+        <td align="left" valign="top" class="small">
+              <div id="middlecolumn_widgets" class="small_<?php echo elgg_echo($layoutmode); ?>_box">
               <?php custom_index_show_widget_area($area2widgets) ?>
               </div>
         </td>

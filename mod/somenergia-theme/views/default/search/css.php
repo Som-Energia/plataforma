@@ -15,7 +15,7 @@ Search plugin
 }
 
 .elgg-search-header input[type="text"] {
-    background-color: #AEADB3 !important;
+    background-color: #c8c8c8 !important;
     border: none !important;
     font-size: 15px !important;
     font-weight: 500 !important;
@@ -25,13 +25,14 @@ Search plugin
     position: absolute;
     right: 15px;
     top: -31px;
-    width: 220px !important;
+    width: 120px !important;
 }
 
 .elgg-search-header input[type="text"]:focus {
     box-shadow: none;
     color: white !important;
     line-height: 25px;
+    font-weight: bold !important;
 }
 
 .elgg-search input[type=submit] {

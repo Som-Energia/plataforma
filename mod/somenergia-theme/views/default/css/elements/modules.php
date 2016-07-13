@@ -93,8 +93,13 @@
 }
 
 .elgg-module-featured > .elgg-head {
-    background-color: #BBCA2B;
+    /*background-color: #BBCA2B;*/
+    background-color: #c8c8c8;
     padding: 7px 15px;
+}
+
+.elgg-module-featured > .elgg-head > h3 {
+    font-weight: bold;
 }
 
 .elgg-module-featured > .elgg-head * {

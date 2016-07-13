@@ -204,7 +204,7 @@
 
 /***** PAGE MENU ******/
 .elgg-page-header .elgg-heading-menu {
-    background-color: #F7F7F8;
+    background-color: #BBCA2B;
 }
 
 .elgg-page-header .elgg-heading-menu .elgg-inner {

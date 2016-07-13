@@ -14,6 +14,7 @@
 	if (!isset($num_items))
 	    $num_items = 10;
 	
+	
 	$widget_group = $vars["entity"]->widget_group;
 	if (!isset($widget_group))
 	    $widget_group = 0;

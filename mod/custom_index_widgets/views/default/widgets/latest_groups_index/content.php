@@ -2,6 +2,8 @@
  
   $num_items = $vars['entity']->num_items;
   if (!isset($num_items)) $num_items = 10;
+
+  $num_items = 5;
  
   $widget_context_mode = $vars['entity']->widget_context_mode;
   if (!isset($widget_context_mode)) $widget_context_mode = 'search';

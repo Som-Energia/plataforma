@@ -3,6 +3,9 @@
 $num_items = $vars['entity']->num_items;
 if (!isset($num_items)) $num_items = 7;
 if ($num_items <= 1) $num_items = 7;
+
+
+$num_items = 9;
   
   $widget_group = $vars["entity"]->widget_group;
   if (!isset($widget_group)) $widget_group = 0;

@@ -186,6 +186,12 @@
 .elgg-heading-menu {
     height: 36px;
 }
+.elgg-heading-menu a {
+    cursor: pointer;
+}
+.elgg-heading-menu a:hover {
+    text-decoration: none;
+}
 
 .elgg-menu-site.elgg-menu-site-default {
     font-size: 15px;
@@ -195,7 +201,27 @@
 }
 
 .elgg-menu-site > li:hover > ul {
-	display: block;
+    display: block;
+    background-color: #BBCA2B;
+    margin-top: -2px;
+}
+
+.elgg-menu-site > li > ul > li:hover {
+    background-color: #A1AE25;
+}
+
+.elgg-menu-site > li > ul > li > a, .elgg-menu-site > li > ul > li > a:hover {
+    padding: 5px;
+    color: #f8f8f8;
+    font-weight: bold;
+}
+
+.elgg-menu-site > li {
+    width: 110px;
+}
+
+.elgg-menu-site > li > ul > li {
+    margin: 0 !important;
 }
 
 .elgg-menu-site.elgg-menu-site-default > li {
@@ -209,15 +235,23 @@
 
 .elgg-menu-site.elgg-menu-site-default > li > a,
 .elgg-menu-site a:hover {
-    color: #808080;
+    color: #f8f8f8;
+    font-weight: bold;
 }
 
 .elgg-menu-site.elgg-menu-site-default > li.elgg-more > a:before {
-    content: "\f107\0020";
+    /*content: "\f107\0020";*/
     font-family: FontAwesome;
     font-size: 20px;
     position: relative;
     top: 2px;
+}
+
+.elgg-menu-site.elgg-menu-site-default > li > ul > li {
+    font-size: 13px;
+}
+.elgg-menu-site.elgg-menu-site-default > li > ul > li > a {
+    line-height: 18px;
 }
 
 .elgg-menu-site-more {
