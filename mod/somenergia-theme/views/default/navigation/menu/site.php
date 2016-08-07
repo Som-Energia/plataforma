@@ -198,19 +198,22 @@ echo '</li>';
 echo '</ul>';
 
 
-//comunidad
+/**
+ * Community Menu
+ */
 echo '<li class="elgg-more">';
-
 $community = elgg_echo('menu:community');
-echo "<a href=\"#\">$community</a>";
+echo '<a href="#">'.$community.'</a>';
 
+/**
+ * Merge elgg menu items to show in the community menu
+ */
+$all_items = array_merge($default_items, $more_items);
 echo elgg_view('navigation/menu/elements/section', array(
     'class' => 'elgg-menu elgg-menu-site elgg-menu-site-more',
-    'items' => $default_items,
+    'items' => $all_items,
 ));
-
 echo '</li>';
-
 echo '</ul>';
 
 
