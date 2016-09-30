@@ -12,6 +12,14 @@ $id_folder_view = elgg_view('input/text', array(
 	'class' => 'elgg-input-thin',
 ));
 
+$id_guid_string = elgg_echo('somenergia_drive:id_groupid');
+$id_guid_view = elgg_view('input/text', array(
+    'name' => 'params[id_groupid]',
+    'value' => $vars['entity']->id_groupid,
+    'class' => 'elgg-input-thin',
+));
+
+
 $view_drive_string = elgg_echo('somenergia_drive:view_drive');
 	$view_drive_view = elgg_view('input/dropdown', array(
 		'name' => 'params[type_view]',
@@ -28,6 +36,7 @@ $view_drive_string = elgg_echo('somenergia_drive:view_drive');
 $settings = <<<__HTML
 <div class="elgg-content-thin mtm"><p>$instructions</p></div>
 <div><label>$id_folder_string</label><br /> $id_folder_view</div>
+<div><label>$id_guid_string</label><br /> $id_guid_view</div>
 $view_drive
 __HTML;
 

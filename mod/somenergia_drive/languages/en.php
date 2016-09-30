@@ -13,6 +13,7 @@ $strings = array(
     'option:list' => 'Lista',
     'option:grid' => 'Grid',
     'somenergia_drive:view_drive' => 'Tipo de vista de los ficheros',
+    'somenergia_drive:id_groupid' => 'Añade los id de los grupos separados por ,  y añadiras Drive al grupo'
 );
 
 add_translation("en", $strings);

@@ -45,13 +45,20 @@ function somenergia_drive_page_handler($page) {
 
 
 function somenergia_drive_owner_block_menu($hook, $type, $return, $params) {
-    $owner = $params['entity'];   
-    if($owner->guid == '64' ){
+    $owner = $params['entity'];
+    $setting = elgg_get_plugin_setting('id_groupid', 'somenergia_drive');
+    $split = explode ( ",",$setting);
+    foreach ($split as $e){
+        if($owner->guid == $e ){
         $url = 'somenergia_drive/drive';
         $item = new ElggMenuItem('somenergia_drive', elgg_echo('item:object:somenergia_drive_menu'), $url);
         $return[] = $item;
    
         }
+
+
+    }
+
     return $return;
 
 }
