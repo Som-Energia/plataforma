@@ -73,9 +73,9 @@ $spanish = array(
 
 	'groups:invitations:none' => 'En este momento no hay invitaciones.',
 
-	'item:object:groupforumtopic' => "Discusiones",
+	'item:object:groupforumtopic' => "Debates",
 
-	'groupforumtopic:new' => "Nueva entrada de discusi&oacute;n",
+	'groupforumtopic:new' => "Nueva entrada de debate",
 
 	'groups:count' => "grupos creados",
 	'groups:open' => "grupo abierto",
@@ -108,20 +108,20 @@ $spanish = array(
 	/*
 	Group discussion
 	*/
-	'discussion' => 'Discusi&oacute;n',
-	'discussion:add' => 'Nueva discusi&oacute;n',
-	'discussion:latest' => 'Ultima discusi&oacute;n',
-	'discussion:group' => 'Discusi&oacute;n del grupo',
+	'discussion' => 'Debates',
+	'discussion:add' => 'Nuevo debate',
+	'discussion:latest' => 'Último debate',
+	'discussion:group' => 'Debates del grupo',
 
-	'discussion:topic:created' => 'Se cre&oacute; una nueva discusi&oacute;n.',
-	'discussion:topic:updated' => 'Se ha actualizado la discusi&oacute;n.',
-	'discussion:topic:deleted' => 'Se ha eliminado la discusi&oacute;n.',
+	'discussion:topic:created' => 'Se cre&oacute; un nuevo debate.',
+	'discussion:topic:updated' => 'Se ha actualizado el debate.',
+	'discussion:topic:deleted' => 'Se ha eliminado el debate.',
 
-	'discussion:topic:notfound' => 'No se pudo encontrar la discusi&oacute;n',
-	'discussion:error:notsaved' => 'No se pudo guardar la discusi&oacute;n',
+	'discussion:topic:notfound' => 'No se pudo encontrar el debate',
+	'discussion:error:notsaved' => 'No se pudo guardar el debate',
 	'discussion:error:missing' => 'El t&iacute;tulo y el mensaje son requridos',
 	'discussion:error:permissions' => 'No posee los permisos necesarios para poder realizar esta acci&oacute;n',
-	'discussion:error:notdeleted' => 'No se pudo eliminar la discusi&oacute;n',
+	'discussion:error:notdeleted' => 'No se pudo eliminar el debate',
 
 	'discussion:reply:deleted' => 'La respuesta en la discusi&oacute;n ha sido eliminada.',
 	'discussion:reply:error:notdeleted' => 'No se pudo eliminar la respuesta en la discusi&oacute;n',
@@ -131,17 +131,17 @@ $spanish = array(
 	'group:replies' => 'Respuestas',
 	'groups:forum:created' => 'Creado %s con %d comentarios',
 	'groups:forum:created:single' => 'Creado %s con %d respuestas',
-	'groups:forum' => 'Discusi&oacute;n',
-	'groups:addtopic' => 'Nueva discusi&oacute;n',
-	'groups:forumlatest' => 'Ultima discusi&oacute;n',
-	'groups:latestdiscussion' => 'Ultima discusi&oacute;n',
+	'groups:forum' => 'Debates',
+	'groups:addtopic' => 'Nuevo debate',
+	'groups:forumlatest' => 'Último debate',
+	'groups:latestdiscussion' => 'Último debate',
 	'groups:newest' => 'La m&aacute;s reciente',
 	'groups:popular' => 'Popular',
 	'groupspost:success' => 'Su respuesta ha sido publicada correctamente',
-	'groups:alldiscussion' => 'Ultima discusi&oacute;n',
-	'groups:edittopic' => 'Editar discusi&oacute;n',
-	'groups:topicmessage' => 'Mensaje de discusi&oacute;n',
-	'groups:topicstatus' => 'Estado de la discusi&oacute;n',
+	'groups:alldiscussion' => 'última debate',
+	'groups:edittopic' => 'Editar debate',
+	'groups:topicmessage' => 'Mensaje de debate',
+	'groups:topicstatus' => 'Estado del debate',
 	'groups:reply' => 'Publicar un comentario',
 	'groups:topic' => 'Discusi&oacute;n',
 	'groups:posts' => 'Entradas',
@@ -213,7 +213,7 @@ o haga click debaajo para ver las solicitudes para este grupo:
 
 	'river:create:group:default' => '%s ha creado el grupo %s',
 	'river:join:group:default' => '%s se ha unido al grupo %s',
-	'river:create:object:groupforumtopic' => '%s ha agregado una nueva discusi&oacute;n: %s',
+	'river:create:object:groupforumtopic' => '%s ha agregado una nuevo debate: %s',
 	'river:reply:object:groupforumtopic' => '%s ha respondido en la discusi&oacute;n %s',
 	
 	'groups:nowidgets' => 'No se encontraon widgets para este grupo.',
