@@ -37,6 +37,8 @@ $version = get_version();
 $release = get_version(true);
 ?>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="ElggRelease" content="<?php echo $release; ?>" />
 	<meta name="ElggVersion" content="<?php echo $version; ?>" />
 	<title><?php echo $title; ?></title>
@@ -60,8 +62,6 @@ $release = get_version(true);
 	<!--[if IE 6]>
 		<link rel="stylesheet" type="text/css" href="<?php echo $ie6_url; ?>" />
 	<![endif]-->
-        
-<link href='//fonts.googleapis.com/css?family=Roboto:400,300' rel='stylesheet' type='text/css'>
 
 <?php foreach ($js as $script) { ?>
 	<script type="text/javascript" src="<?php echo $script; ?>"></script>
@@ -72,14 +72,6 @@ $release = get_version(true);
 	<?php echo elgg_view('js/initialize_elgg'); ?>
 // ]]>
 </script>
-
-<!--<script type="text/javascript">
-    jQuery( document ).ready( function() {
-        jQuery( '.chosen-select' ).chosen({
-            disable_search_threshold: 10
-        });
-    });
-</script>-->
 
 <?php
 echo $feedref;

@@ -70,11 +70,11 @@ $lang = get_current_language();
 			<?php echo $body; ?>
 		</div>
 	</div>
-	<div class="elgg-page-footer">
+            <div class="elgg-page-footer">
 		<div class="elgg-inner">
-			<?php echo $footer; ?>
+                    <?php echo $footer; ?>
 		</div>
-	</div>
+            </div>
     </div>
     <?php echo elgg_view('page/elements/foot'); ?>
 </body>

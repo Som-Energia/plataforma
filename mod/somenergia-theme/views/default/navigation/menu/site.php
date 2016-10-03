@@ -20,20 +20,17 @@ echo '<ul class="elgg-menu elgg-menu-site elgg-menu-site-more">';
 $welcome = elgg_echo('menu:howwork:welcome');
 echo '<li class="elgg-menu-item"><a href="'.elgg_get_site_url().'groups/profile/1117/bienvenida">'.$welcome.'</a></li>';
 
-$link = elgg_echo('menu:howwork:guide');
-echo "<li class='elgg-menu-item'><a href='https://plataforma.somenergia.coop/dokuwiki/64/doku.php?id=guia_de_introduccion'>$link</a></li>";
+$guide = elgg_echo('menu:howwork:guide');
+echo '<li class="elgg-menu-item"><a href="'.elgg_get_site_url().'dokuwiki/64/doku.php?id=guia_de_introduccion">'.$guide.'</a></li>';
 
-$link = elgg_echo('menu:howwork:general');
+$general = elgg_echo('menu:howwork:general');
+echo '<li class="elgg-menu-item"><a href="'.elgg_get_site_url().'groups/profile/14318/som-energia-grupo-general">'.$general.'</a></li>';
 
-echo "<li class='elgg-menu-item'><a href='https://plataforma.somenergia.coop/groups/profile/14318/som-energia-grupo-general'>$link</a></li>";
+$about = elgg_echo('menu:howwork:about');
+echo '<li class="elgg-menu-item"><a href="'.elgg_get_site_url().'groups/profile/64/grupo-sobre-la-plataforma">'.$about.'</a></li>';
 
-$link = elgg_echo('menu:howwork:about');
-
-echo "<li class='elgg-menu-item'><a href='https://plataforma.somenergia.coop/groups/profile/64/grupo-sobre-la-plataforma'>$link</a></li>";
-
-$link = elgg_echo('menu:howwork:local');
-
-echo "<li class='elgg-menu-item'><a href='https://plataforma.somenergia.coop/groups/profile/7496/apoyo-grupos-locales'>$link</a></li>";
+$local = elgg_echo('menu:howwork:local');
+echo '<li class="elgg-menu-item"><a href="'.elgg_get_site_url().'groups/profile/7496/apoyo-grupos-locales">'.$local.'</a></li>';
 
 echo '</ul>';
 echo '</li>';
@@ -45,8 +42,8 @@ echo '</li>';
 //tematicas
 
 echo '<li class="elgg-more">';
-$more = elgg_echo('menu:topics');
-echo "<a href=\"#\">$more</a>";
+$topics = elgg_echo('menu:topics');
+echo "<a href=\"#\">$topics</a>";
 echo '<ul class="elgg-menu elgg-menu-site elgg-menu-site-more">';
 
 
@@ -182,9 +179,6 @@ $link = elgg_echo('menu:local:rioja');
 echo "<li class='elgg-menu-item'><a href='https://plataforma.somenergia.coop/groups/search?tag=la+rioja&limit=40'>$link</a></li>";
 
 
-
-
-
 $link = elgg_echo('menu:local:madrid');
 echo "<li class='elgg-menu-item'><a href='https://plataforma.somenergia.coop/groups/search?tag=madrid&limit=40'>$link</a></li>";
 
@@ -197,33 +191,29 @@ $link = elgg_echo('menu:local:navarra');
 echo "<li class='elgg-menu-item'><a href='https://plataforma.somenergia.coop/groups/search?tag=navarra&limit=40'>$link</a></li>";
 
 
-
-$link = elgg_echo('menu:local:valencia');
-echo "<li class='elgg-menu-item'><a href='https://plataforma.somenergia.coop/groups/search?tag=valencia&limit=40'>$link</a></li>";
-
-
-
+$valencia = elgg_echo('menu:local:valencia');
+echo '<li class="elgg-menu-item"><a href="'.elgg_get_site_url().'groups/search?tag=valencia&limit=40">'.$valencia.'</a></li>';
 
 echo '</li>';
-
-
 echo '</ul>';
 
 
-
-//comunidad
+/**
+ * Community Menu
+ */
 echo '<li class="elgg-more">';
+$community = elgg_echo('menu:community');
+echo '<a href="#">'.$community.'</a>';
 
-$more = elgg_echo('menu:community');
-echo "<a href=\"#\">$more</a>";
-
+/**
+ * Merge elgg menu items to show in the community menu
+ */
+$all_items = array_merge($default_items, $more_items);
 echo elgg_view('navigation/menu/elements/section', array(
     'class' => 'elgg-menu elgg-menu-site elgg-menu-site-more',
-    'items' => $default_items,
+    'items' => $all_items,
 ));
-
 echo '</li>';
-
 echo '</ul>';
 
 
