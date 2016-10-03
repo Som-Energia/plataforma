@@ -335,22 +335,27 @@
 	-moz-border-radius: 3px;
 	border-radius: 3px;
 	
-	background: #fff url(<?php echo elgg_get_site_url(); ?>mod/somenergia-theme/graphics/button.png) repeat-x left top;
   border: 1px solid #bbb;
 	padding: 5px 15px;
 	margin: 1px 0;
+	background: -webkit-linear-gradient(white, #BDBDBD);
+	background: -o-linear-gradient(white, #BDBDBD); 
+	background: -moz-linear-gradient(white,#BDBDBD );
+	background: linear-gradient(white, #BDBDBD);
 }
 .elgg-menu-page a:hover,
 .elgg-menu-page li.elgg-state-selected > a {
-	background-color: #657A00;
-  border-color: #4C5C00;
-	color: #fff;
+	background: -webkit-linear-gradient(#657A00,#657A00);
+	background: -o-linear-gradient(#657A00,#657A00); 
+	background: -moz-linear-gradient(#657A00,#657A00);
+	background: linear-gradient(#657A00,#657A00);
+	color:#FFF;
 	text-decoration: none;
 }
 .elgg-menu-page a:active {
-	background-image: url(<?php echo elgg_get_site_url(); ?>mod/somenergia-theme/graphics/button-active.png);
   background-position: left bottom;
 }
+
 .elgg-menu-page .elgg-child-menu {
 	display: none;
 	margin-left: 15px;
@@ -495,22 +500,28 @@
 	-moz-border-radius: 3px;
 	border-radius: 3px;
 	
-	background: #fff url(<?php echo elgg_get_site_url(); ?>mod/somenergia-theme/graphics/button.png) repeat-x left top;
+
   border: 1px solid #bbb;
 	padding: 5px 15px;
 	margin: 1px 0;
+	background: -webkit-linear-gradient(white, #BDBDBD);
+	background: -o-linear-gradient(white, #BDBDBD); 
+	background: -moz-linear-gradient(white,#BDBDBD );
+	background: linear-gradient(white, #BDBDBD);
 }
 .elgg-menu-owner-block li a:hover,
 .elgg-menu-owner-block li.elgg-state-selected > a {
-	background-color: #28d;
-  border-color: #06b;
-	color: #fff;
+	background: -webkit-linear-gradient(#657A00,#657A00);
+	background: -o-linear-gradient(#657A00,#657A00); 
+	background: -moz-linear-gradient(#657A00,#657A00);
+	background: linear-gradient(#657A00,#657A00);
+	color:#FFF;
 	text-decoration: none;
 }
 .elgg-menu-owner-block li a:active {
-	background-image: url(<?php echo elgg_get_site_url(); ?>mod/somenergia-theme/graphics/button-active.png);
   background-position: left bottom;
 }
+
 
 
 /* ***************************************
