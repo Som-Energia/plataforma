@@ -23,21 +23,18 @@ $gid = elgg_get_page_owner_guid();
 
 $op = False;
 
-if ($vars['title']=="discussion:group"){
-	$index = 0;
-	$ena = get_object_vars($vars['config'])["local_metadata_cache"];
-	$convertarray = (array) $ena;
 
-	foreach ($convertarray as $key => $value) {
-			if($convertarray[$key][$gid]['columns_enable']){
-				$op = $convertarray[$key][$gid]['columns_enable'];
-			}
-	}
+if ($vars['title']=="discussion:group" || $vars['title']=="Debates" || $vars['title']=="Taldearen eztabaida"
+	|| $vars['title']=="Group discussion" ){
+	$op = $group->columns_enable;
+
+
 }
 
 
 
-if( $op=="yes" && $vars['title']=="discussion:group"){
+
+if( $op=="yes" ){
 	//var_dump($vars);
 	echo '<table cellspacing="10" cellpadding="10" width="100%">';
 	echo '<tr>';
