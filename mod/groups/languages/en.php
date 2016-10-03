@@ -10,6 +10,7 @@ $english = array(
 	/**
 	 * Menu items and titles
 	 */
+	'groups:enablelongcolumn'=>"Enable three columns discussion module",
 	'groups' => "Groups",
 	'groups:owned' => "Groups I own",
 	'groups:owned:user' => 'Groups %s owns',

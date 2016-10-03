@@ -10,6 +10,7 @@ $euskara = array(
 	/**
 	 * Menu items and titles
 	 */
+	'groups:enablelongcolumn'=>"Gaitu hiru zutabeak eztabaida modulua",
 	'groups' => "Taldeak",
 	'groups:owned' => "Kudeatzen ditudan taldeak",
 	'groups:yours' => "Nire taldeak",

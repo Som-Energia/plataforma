@@ -40,9 +40,17 @@ $new_link = elgg_view('output/url', array(
 	'is_trusted' => true,
 ));
 
+
+
+ 
+
 echo elgg_view('groups/profile/module', array(
 	'title' => elgg_echo('discussion:group'),
 	'content' => $content,
 	'all_link' => $all_link,
-	'add_link' => $new_link,
+	'add_link' => $new_link,	
+	
+	
 ));
+
+

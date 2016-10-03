@@ -54,6 +54,7 @@ function groups_init() {
 
 	// add group activity tool option
 	add_group_tool_option('activity', elgg_echo('groups:enableactivity'), true);
+
 	elgg_extend_view('groups/tool_latest', 'groups/profile/activity_module');
 
 	// add link to owner block
@@ -771,7 +772,9 @@ function discussion_init() {
 	elgg_register_plugin_hook_handler('register', 'menu:river', 'discussion_add_to_river_menu');
 
 	// add the forum tool option
+	add_group_tool_option('columns', elgg_echo('groups:enablelongcolumn'), false);
 	add_group_tool_option('forum', elgg_echo('groups:enableforum'), true);
+
 	elgg_extend_view('groups/tool_latest', 'discussion/group_module');
 
 	// notifications
@@ -878,7 +881,9 @@ function discussion_owner_block_menu($hook, $type, $return, $params) {
  * Add the reply button for the river
  */
 function discussion_add_to_river_menu($hook, $type, $return, $params) {
+	
 	if (elgg_is_logged_in() && !elgg_in_context('widgets')) {
+		
 		$item = $params['item'];
 		$object = $item->getObjectEntity();
 		if (elgg_instanceof($object, 'object', 'groupforumtopic')) {
