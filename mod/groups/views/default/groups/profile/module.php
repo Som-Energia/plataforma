@@ -24,8 +24,7 @@ $gid = elgg_get_page_owner_guid();
 $op = False;
 
 
-if ($vars['title']=="discussion:group" || $vars['title']=="Debates" || $vars['title']=="Taldearen eztabaida"
-	|| $vars['title']=="Group discussion" ){
+if ($vars['title']=="discussion:group" || $vars['title']=="Debats"||$vars['title']=="Debates" || $vars['title']=="Taldearen eztabaida" || $vars['title']=="Group discussion" ){
 	$op = $group->columns_enable;
 
 
