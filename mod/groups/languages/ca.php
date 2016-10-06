@@ -10,7 +10,7 @@ $catalan = array(
     /**
      * Menu items and titles
      */
-    'groups:enablelongcolumn'=>"Habilitar tres columnes el mòdul de discussió",
+    'groups:enablelongcolumn'=>"Habilitar tres columnes el mòdul de debat",
     'groups' => "Grups",
     'groups:owned' => "Grups que administreu",
     'groups:yours' => "Els meus grups",
@@ -76,7 +76,7 @@ $catalan = array(
 
     'item:object:groupforumtopic' => "Discussions",
 
-    'groupforumtopic:new' => "Nova entrada de discussió",
+    'groupforumtopic:new' => "Nova entrada de debat",
 
     'groups:count' => "grups creats",
     'groups:open' => "grup obert",
@@ -109,42 +109,42 @@ $catalan = array(
     /*
     Group discussion
     */
-    'discussion' => "Discussió",
-    'discussion:add' => "Nova discussió",
-    'discussion:latest' => "Última discussió",
-    'discussion:group' => "Discussió del grup",
+    'discussion' => "Debat",
+    'discussion:add' => "Nou debat",
+    'discussion:latest' => "Últim debat",
+    'discussion:group' => "Debats",
 
-    'discussion:topic:created' => "S'ha creat una nova discussió.",
-    'discussion:topic:updated' => "S'ha actualitzat la discussió.",
-    'discussion:topic:deleted' => "S'ha eliminat la discussió.",
+    'discussion:topic:created' => "S'ha creat una nou debat.",
+    'discussion:topic:updated' => "S'ha actualitzat el debat.",
+    'discussion:topic:deleted' => "S'ha eliminat el debat.",
 
-    'discussion:topic:notfound' => "No s'ha trobat la discussió.",
-    'discussion:error:notsaved' => "No s'ha desat la discussió.",
+    'discussion:topic:notfound' => "No s'ha trobat el debat.",
+    'discussion:error:notsaved' => "No s'ha desat el debat.",
     'discussion:error:missing' => "És obligatori introduir el títol i el missatge",
     'discussion:error:permissions' => "No teniu els permisos necessaris.",
-    'discussion:error:notdeleted' => "No s'ha eliminat la discussió",
+    'discussion:error:notdeleted' => "No s'ha eliminat el debat",
 
-    'discussion:reply:deleted' => "S'ha eliminat la resposta de la discussió.",
-    'discussion:reply:error:notdeleted' => "No s'ha eliminat la resposta de la discussió.",
+    'discussion:reply:deleted' => "S'ha eliminat la resposta del debat.",
+    'discussion:reply:error:notdeleted' => "No s'ha eliminat la resposta del debat.",
 
     'reply:this' => "Respondre",
 
     'group:replies' => "Respostes",
     'groups:forum:created' => "Creat %s amb %d comentaris",
     'groups:forum:created:single' => "Creat %s amb %d respostes",
-    'groups:forum' => "Discussió",
-    'groups:addtopic' => "Nova discussió",
-    'groups:forumlatest' => "Última discussió",
-    'groups:latestdiscussion' => "Última discussió",
+    'groups:forum' => "Debat",
+    'groups:addtopic' => "Nou Debat",
+    'groups:forumlatest' => "Últim debat",
+    'groups:latestdiscussion' => "Últim debat",
     'groups:newest' => "La més recent",
     'groups:popular' => "Popular",
     'groupspost:success' => "S'ha publicat la resposta",
-    'groups:alldiscussion' => "Última discussió",
-    'groups:edittopic' => "Editar la discussió",
-    'groups:topicmessage' => "Missatge de la discussió",
-    'groups:topicstatus' => "Estat de la discussió",
+    'groups:alldiscussion' => "Últim debat",
+    'groups:edittopic' => "Editar el debat",
+    'groups:topicmessage' => "Missatge del debat",
+    'groups:topicstatus' => "Estat del debat",
     'groups:reply' => "Publicar un comentari",
-    'groups:topic' => "Discussió",
+    'groups:topic' => "Debat",
     'groups:posts' => "Entrades",
     'groups:lastperson' => "Última persona",
     'groups:when' => "Quan",
@@ -152,12 +152,12 @@ $catalan = array(
     'groups:topicopen' => "Oberta",
     'groups:topicclosed' => "Tancada",
     'groups:topicresolved' => "Resolta",
-    'grouptopic:created' => "S'ha creat una discussió.",
-    'groupstopic:deleted' => "S'ha eliminat la discussió.",
+    'grouptopic:created' => "S'ha creat un debat.",
+    'groupstopic:deleted' => "S'ha eliminat el debat.",
     'groups:topicsticky' => "Enganxada",
-    'groups:topicisclosed' => "La discussió està tancada.",
-    'groups:topiccloseddesc' => "La discussió està tancada i no s'accepten més comentaris.",
-    'grouptopic:error' => "No s'ha pogut crear una discussió al grup. Torneu-ho a intentar o poseu-vos en contacte amb l'administrador del sistema.",
+    'groups:topicisclosed' => "El debat està tancada.",
+    'groups:topiccloseddesc' => "El debat està tancada i no s'accepten més comentaris.",
+    'grouptopic:error' => "No s'ha pogut crear un debat al grup. Torneu-ho a intentar o poseu-vos en contacte amb l'administrador del sistema.",
     'groups:forumpost:edited' => "S'ha editat el comentari del fòrum.",
     'groups:forumpost:error' => "S'ha produït un error a l'editar el comentari del fòrum.",
 
@@ -214,8 +214,8 @@ o premeu per a veure les sol·licituds d'aquest grup:
 
     'river:create:group:default' => "%s ha creat el grup %s",
     'river:join:group:default' => "%s s'ha afegit al grup %s",
-    'river:create:object:groupforumtopic' => "%s ha afegit una nova discussió a %s",
-    'river:reply:object:groupforumtopic' => "%s ha contestat a la discussió %s",
+    'river:create:object:groupforumtopic' => "%s ha afegit una nou debat a %s",
+    'river:reply:object:groupforumtopic' => "%s ha contestat a el debat %s",
     
     'groups:nowidgets' => "No s'han trobat enginys associats al grup.",
 
@@ -230,7 +230,7 @@ o premeu per a veure les sol·licituds d'aquest grup:
     'groups:widgets:entities:label:displaynum' => "Llistar els objectes del grup.",
     'groups:widgets:entities:label:pleaseedit' => "Configureu l'enginy.",
 
-    'groups:forumtopic:edited' => "La discussió s'ha editat correctament.",
+    'groups:forumtopic:edited' => "El debat s'ha editat correctament.",
 
     'groups:allowhiddengroups' => "Voleu habilitar els grups privats (invisibles)?",
 

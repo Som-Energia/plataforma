@@ -10,7 +10,7 @@ $spanish = array(
 	/**
 	 * Menu items and titles
 	 */
-	'groups:enablelongcolumn'=>"Habilitar a 3 columnas el módulo de discusión",
+	'groups:enablelongcolumn'=>"Habilitar a 3 columnas el módulo de debate",
 	'groups' => "Grupos",
 	'groups:owned' => "Grupos que administro",
 	'groups:yours' => "Mis grupos",
