@@ -19,6 +19,7 @@
 		
 		// menu
 		'group_tools:menu:mail' => "Mail Members",
+		'group_tools:menu:docs' => "Documentation Process",
 		'group_tools:menu:invitations' => "Manage invitations",
 		
 		// plugin settings

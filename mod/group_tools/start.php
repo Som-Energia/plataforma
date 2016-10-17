@@ -203,6 +203,15 @@
 						'text' => elgg_echo('group_tools:menu:mail'),
 						'href' => "groups/mail/" . $page_owner->getGUID(),
 					));
+					if ($page_owner->getGUID()=="175519"){
+						elgg_register_menu_item('page', array(
+							'name' => 'docs',
+							'text' => elgg_echo('group_tools:menu:docs'),
+							'href' => "https://drive.google.com/drive/folders/0B69kf2S7gdgDbEJISmtFY25RWnM",
+						));
+
+					}
+
 				}
 			}	
 		}
