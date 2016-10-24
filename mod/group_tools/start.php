@@ -74,6 +74,7 @@
 		// group notifications
 		elgg_extend_view("groups/edit", "group_tools/forms/notifications", 375);
 		
+		
 		// show group status in owner block
 		elgg_extend_view("page/elements/owner_block/extend", "group_tools/owner_block");
 		// show group status in stats (on group profile)
@@ -195,7 +196,15 @@
 						));
 					}
 				}
-				
+								if ($page_owner->getGUID()=="175519"){
+						elgg_register_menu_item('page', array(
+							'name' => 'docs',
+							'text' => elgg_echo('group_tools:menu:docs'),
+							'href' => "https://drive.google.com/drive/folders/0B69kf2S7gdgDbEJISmtFY25RWnM",
+							'target'=>"_blank",
+						));
+
+					}
 				// group mail options
 				if ($page_owner->canEdit() && (elgg_get_plugin_setting("mail", "group_tools") == "yes")) {
 					elgg_register_menu_item('page', array(
@@ -203,14 +212,7 @@
 						'text' => elgg_echo('group_tools:menu:mail'),
 						'href' => "groups/mail/" . $page_owner->getGUID(),
 					));
-					if ($page_owner->getGUID()=="175519"){
-						elgg_register_menu_item('page', array(
-							'name' => 'docs',
-							'text' => elgg_echo('group_tools:menu:docs'),
-							'href' => "https://drive.google.com/drive/folders/0B69kf2S7gdgDbEJISmtFY25RWnM",
-						));
-
-					}
+	
 
 				}
 			}	
