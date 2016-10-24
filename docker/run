@@ -1,0 +1,23 @@
+#!/bin/bash
+APPPATH=$(realpath "./")
+echo "# Comprobando archivo configuracion"
+CONFIG="${APPPATH}/engine/settings.php"
+if [ ! -f ${CONFIG} ];
+then
+   echo "Error: Archivo de configuracion no encontrado."
+   exit 1
+fi
+
+echo "# Comprobando archivo htaccess"
+HTACCESS="${APPPATH}/.htaccess"
+if [ ! -f ${HTACCESS} ];
+then
+   echo "Error: Archivo htaccess no encontrado"
+   exit 1
+fi
+
+echo "## Cuentas accesso docker ##"
+echo "## Plataforma: admin Passwd: adminadmin ##"
+echo "## Admin Base datos: admin Passwd: plataforma ##"
+
+docker run -it -p 8000:80 -p 3306:3306 -v "${APPPATH}":/app:z somenergia/plataforma

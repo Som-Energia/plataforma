@@ -1,0 +1,4 @@
+#!/bin/bash
+APPPATH=$(realpath "./docker")
+echo "# Construyendo docker image"
+docker build -t somenergia/plataforma $APPPATH
