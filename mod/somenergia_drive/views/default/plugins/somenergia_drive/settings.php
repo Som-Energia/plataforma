@@ -5,17 +5,19 @@
 
 $instructions = elgg_echo('somenergia_drive:settings:instructions', array(elgg_get_site_url()));
 
+$entity = elgg_get_config('entity');
+
 $id_folder_string = elgg_echo('somenergia_drive:id_folder');
 $id_folder_view = elgg_view('input/text', array(
 	'name' => 'params[id_folder]',
-	'value' => $vars['entity']->id_folder,
+	'value' => $entity->id_folder,
 	'class' => 'elgg-input-thin',
 ));
 
 $id_guid_string = elgg_echo('somenergia_drive:id_groupid');
 $id_guid_view = elgg_view('input/text', array(
     'name' => 'params[id_groupid]',
-    'value' => $vars['entity']->id_groupid,
+    'value' => $entity->id_groupid,
     'class' => 'elgg-input-thin',
 ));
 
@@ -27,7 +29,7 @@ $view_drive_string = elgg_echo('somenergia_drive:view_drive');
 			'list' => elgg_echo('option:list'),
 			'grid' => elgg_echo('option:grid'),
 		),
-		'value' => $vars['entity']->type_view ? $vars['entity']->type_view : 'grid',
+		'value' => $entity->type_view ? $entity->type_view : 'grid',
 	));
 	$view_drive = "<div>$view_drive_string $view_drive_view</div>";
 
