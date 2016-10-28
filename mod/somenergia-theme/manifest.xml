@@ -1,55 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin_manifest xmlns="http://www.elgg.org/plugin_manifest/1.8">
-	<name>SomEnergia Theme</name>
-	<author>Rubén Martín</author>
-	<version>1.0</version>
-	<category>theme</category>
-	<description></description>
-	<website>http://rubenmartin.me</website>
-	
-	<requires>
-		<type>elgg_version</type>
-		<version>1.8</version>
-	</requires>
-	<requires>
-		<type>priority</type>
-		<priority>after</priority>
-		<plugin>profile</plugin>
-	</requires>
-	<requires>
-		<type>priority</type>
-		<priority>after</priority>
-		<plugin>groups</plugin>
-	</requires>
-	<requires>
-		<type>priority</type>
-		<priority>after</priority>
-		<plugin>messages</plugin>
-	</requires>
-	<requires>
-		<type>priority</type>
-		<priority>after</priority>
-		<plugin>search</plugin>
-	</requires>
-	<requires>
-		<type>priority</type>
-		<priority>after</priority>
-		<plugin>thewire</plugin>
-	</requires>
-        <requires>
-		<type>priority</type>
-		<priority>after</priority>
-		<plugin>externalpages</plugin>
-	</requires>
-        <requires>
-		<type>priority</type>
-		<priority>after</priority>
-		<plugin>custom_index_widgets</plugin>
-	</requires>
-	<suggests>
-		<type>plugin</type>
-		<name>profile</name>
-		<version>1.8</version>
-	</suggests>
+    <id>somenergia-theme</id>
+    <name>SomEnergia Theme</name>
+    <author>Rubén Martín</author>
+    <version>1.1</version>
+    <category>theme</category>
+    <description>Som Energia Platform Theme</description>
+    <website>https://www.somenergia.coop</website>
+    <requires>
+        <type>elgg_version</type>
+        <version>1.8</version>
+    </requires>
+    <requires>
+        <type>priority</type>
+        <priority>after</priority>
+        <plugin>profile</plugin>
+    </requires>
+    <requires>
+        <type>priority</type>
+        <priority>after</priority>
+        <plugin>groups</plugin>
+    </requires>
+    <requires>
+        <type>priority</type>
+        <priority>after</priority>
+        <plugin>messages</plugin>
+    </requires>
+    <requires>
+        <type>priority</type>
+        <priority>after</priority>
+        <plugin>search</plugin>
+    </requires>
+    <requires>
+        <type>priority</type>
+        <priority>after</priority>
+        <plugin>thewire</plugin>
+    </requires>
+    <requires>
+        <type>priority</type>
+        <priority>after</priority>
+        <plugin>externalpages</plugin>
+    </requires>
+    <requires>
+        <type>priority</type>
+        <priority>after</priority>
+        <plugin>custom_index_widgets</plugin>
+    </requires>
+    <suggests>
+        <type>plugin</type>
+        <name>profile</name>
+        <version>1.8</version>
+    </suggests>
 
 </plugin_manifest>
