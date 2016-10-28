@@ -46,10 +46,19 @@
 		<priority>after</priority>
 		<plugin>custom_index_widgets</plugin>
 	</requires>
+        <requires>
+		<type>priority</type>
+		<priority>after</priority>
+		<plugin>file</plugin>
+	</requires>
+        <requires>
+		<type>priority</type>
+		<priority>after</priority>
+		<plugin>reportedcontent</plugin>
+	</requires>
 	<suggests>
 		<type>plugin</type>
 		<name>profile</name>
 		<version>1.8</version>
 	</suggests>
-
 </plugin_manifest>
