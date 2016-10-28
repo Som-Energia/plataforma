@@ -17,7 +17,7 @@ function somenergia_theme_init() {
     /** CSS */
     elgg_register_css( 'somenergia_font_roboto', '//fonts.googleapis.com/css?family=Roboto:400,900,300,100,500' );
     elgg_load_css( 'somenergia_font_roboto' );
-    elgg_register_css( 'somenergia_font_awesome', '//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css' );
+    elgg_register_css( 'somenergia_font_awesome', '//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css' );
     elgg_load_css( 'somenergia_font_awesome' );
     
     //elgg_register_css( 'bootstrap_css', 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css' );
