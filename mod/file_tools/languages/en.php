@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 	$english = array(
 		'file_tools' => "File Tools",
@@ -9,6 +9,7 @@
 		'file_tools:list:sort:time_created' => 'Time created',
 		'file_tools:list:sort:asc' => 'Ascending',
 		'file_tools:list:sort:desc' => 'Descending',
+		'file_tools:show_more' => 'Show more files',
 	
 		// object name
 		'item:object:folder' => "File Folder",
@@ -79,11 +80,20 @@
 	
 		'file_tools:folder:delete:confirm_files' => "Do you also wish to delete all files in the removed (sub)folders",
 	
+		// upload
+		'file_tools:upload:tabs:single' => "Single file",
+		'file_tools:upload:tabs:multi' => "Multi file",
+		'file_tools:upload:tabs:zip' => "Zip file",
+		'file_tools:upload:form:choose' => 'Choose file',
+		'file_tools:upload:form:info' => 'Click browse to upload (multiple) files',
+		'file_tools:upload:form:zip:info' => "You can upload a zip file. It will be extracted and each file will be separately imported. Also if you have folders in your zip they will be imported into each specific folder. File types that are not allowed will be skipped.",
+		
 		// actions
 		// edit
 		'file_tools:action:edit:error:input' => "Incorrect input to create/edit a file folder",
 		'file_tools:action:edit:error:owner' => "Could not find the owner of the file folder",
 		'file_tools:action:edit:error:folder' => "No folder to create/edit",
+		'file_tools:action:edit:error:parent_guid' => "Invalid parent folder, the parent folder can't be the folder itself",
 		'file_tools:action:edit:error:save' => "Unknown error occured while saving the file folder",
 		'file_tools:action:edit:success' => "File folder successfully created/edited",
 	
@@ -95,11 +105,6 @@
 		'file_tools:actions:delete:error:subtype' => "The given GUID is not a file folder",
 		'file_tools:actions:delete:error:delete' => "An unknown error occured while deleting the file folder",
 		'file_tools:actions:delete:success' => "The file folder was deleted successfully",
-	
-		'file_tools:upload:new' => 'Upload zip file',
-		'file_tools:upload:form:choose' => 'Choose file',
-		'file_tools:upload:form:info' => 'Click browse to upload (multiple) files',
-		'file_tools:upload:form:zip:info' => "You can upload a zip file. It will be extracted and each file will be separately imported. Also if you have folders in your zip they will be imported into each specific folder. File types that are not allowed will be skipped.",
 	
 		//errors
 		'file_tools:error:pageowner' => 'Error retrieving page owner.',
@@ -128,6 +133,8 @@
 		'file_tools:settings:allowed_extensions' => 'Allowed extensions (comma seperated)',
 		'file_tools:settings:user_folder_structure' => 'Use folder structure',
 		'file_tools:settings:sort:default' => 'Default folder sorting options',
+		'file_tools:settings:list_length' => 'How many files to show in the listing',
+		'file_tools:settings:list_length:unlimited' => 'Unlimited',
 	
 		'file:type:application' => 'Application',
 		'file:type:text' => 'Text',

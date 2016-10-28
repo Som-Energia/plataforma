@@ -46,10 +46,17 @@
 		}
 		
 		if(!empty($folders)){
+			$owner = $widget->getOwnerEntity();
+			if(elgg_instanceof($owner, "user")){
+				$more_url = $vars["url"] . "file/owner/" . $owner->username;
+			} else {
+				$more_url = $vars["url"] . "file/group/" . $owner->getGUID() . "/all";
+			}
+			
 			echo $folders;
 			
 			echo "<div class='widget_more_wrapper'>";
-			echo elgg_view("output/url", array("href" => $vars["url"] . "file/owner/" . $widget->getOwnerEntity()->username, "text" => elgg_echo("widgets:file_tree:more")));
+			echo elgg_view("output/url", array("href" => $more_url, "text" => elgg_echo("widgets:file_tree:more")));
 			echo "</div>";
 		} else {
 			echo elgg_echo("notfound");

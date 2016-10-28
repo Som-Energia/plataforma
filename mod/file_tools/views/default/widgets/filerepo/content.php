@@ -1,82 +1,69 @@
-<script type="text/javascript">
-	$(document).ready(function () {
-	
-		$('a.show_file_desc').click(function () {
-			$(this.parentNode).children("[class=filerepo_listview_desc]").slideToggle("fast");
-			return false;
-		});
-	
-	}); /* end document ready function */
-</script>
 <?php
-
-    //the page owner
-	$owner = $vars['entity']->owner_guid;
 	
-	//the number of files to display
-	$number = (int) $vars['entity']->num_display;
-	if (!$number) {
-		$number = 4;
+	$widget = elgg_extract("entity", $vars);
+	
+	// how many files to display 
+	$num_display = sanitise_int($widget->num_display, false);
+	if(empty($num_display)){
+		$num_display = 4;
 	}
 	
-	//get the layout view which is set by the user in the edit panel
-	$get_view = (int) $vars['entity']->gallery_list;
-	if (!$get_view || $get_view == 1) {
-	    $view = "list";
-    } else{
-        $view = "gallery";
-    }
-
-	//get the user's files
-	if($vars['entity']->featured_only !== "yes"){
-	    $options = array(
-	      'types' => array('object'),
-	      'subtypes' => array('file'),
-	      'owner_guids' => array($vars['entity']->owner_guid),
-	      'limit' => $number,
-	      'offset' => 0
-	    );
-	    
-	    $files = elgg_get_entities($options);
-	} else {
-		$options = array(
-					"type" => "object",
-					"subtype" => 'file',
-					"owner_guid" => $owner,
-					"limit" => $number,
-					"metadata_name_value_pairs" => array('name' => 'show_in_widget', 'value' => '0', 'operand' => '>')
+	$options = array(
+		"type" => "object",
+		"subtype" => "file",
+		"container_guid" => $widget->getOwnerGUID(),
+		"limit" => $num_display,
+		"pagination" => false,
+		"full_view" => false
+	);
+	
+	// show only featured files
+	if($widget->featured_only == "yes"){
+		$options["metadata_name_value_pairs"] = array(
+			"name" => "show_in_widget",
+			"value" => "0",
+			"operand" => ">"
 		);
-		$files = elgg_get_entities_from_metadata($options);
 	}
 	
-	//if there are some files, go get them
-	if ($files) {
-    	echo "<div id=\"filerepo_widget_layout\">";
-        
-        if($view == "gallery"){
-        	echo "<div class=\"filerepo_widget_galleryview\">";
-        	
-            //display in gallery mode
-            foreach($files as $f){
-            	
-                $mime = $f->mimetype;
-                echo "<a href=\"{$f->getURL()}\">" . elgg_view("icon/object/file", array("entity" => $f)) . "</a>";
-            				
-            }
-            
-            echo "</div>";
-        } else {
-        	//display in list mode
-			foreach($files as $f){
-            	echo elgg_view_entity($f);
-          	}
-        }
-        	
-        //get a link to the users files
-        $users_file_url = $vars['url'] . "file/owner/" . get_user($f->owner_guid)->username;
-        	
-        echo "<div class=\"filerepo_widget_singleitem_more\"><a href=\"{$users_file_url}\">" . elgg_echo('file:more') . "</a></div>";
-        echo "</div>";
+	// how to display the files
+	if($widget->gallery_list == 2){
+		if($files = elgg_get_entities_from_metadata($options)){
+			$list = "<ul class='elgg-gallery'>";
+			
+			foreach($files as $file) {
+				$list .= "<li class='elgg-item'>";
+				$list .= elgg_view("output/url", array("text" => elgg_view_entity_icon($file, "small"), "href" => $file->getURL(), "title" => $file->title));
+				$list .= "</li>";
+			}
+			$list .= "</ul>";
+			
+			$owner = $widget->getOwnerEntity();
+			if(elgg_instanceof($owner, "user")){
+				$more_link = $vars["url"] . "file/owner/" . $owner->username;
+			} else {
+				$more_link = $vars["url"] . "file/group/" . $owner->getGUID() . "/all";
+			}
+			$list .= "<span class='elgg-widget-more'>";
+			$list .= elgg_view("output/url", array("text" => elgg_echo("file:more"), "href" => $more_link, "is_trusted" => true));
+			$list .= "</span>";
+			
+		} else {
+			$list = elgg_echo("file:none");
+		}
+	} elseif($list = elgg_list_entities_from_metadata($options)){
+		$owner = $widget->getOwnerEntity();
+		if(elgg_instanceof($owner, "user")){
+			$more_link = $vars["url"] . "file/owner/" . $owner->username;
+		} else {
+			$more_link = $vars["url"] . "file/group/" . $owner->getGUID() . "/all";
+		}
+		$list .= "<span class='elgg-widget-more'>";
+		$list .= elgg_view("output/url", array("text" => elgg_echo("file:more"), "href" => $more_link, "is_trusted" => true));
+		$list .= "</span>";
 	} else {
-		echo "<div class=\"contentWrapper\">" . elgg_echo("file:none") . "</div>";
+		$list = elgg_echo("file:none");
 	}
+	
+	echo $list;
+	
