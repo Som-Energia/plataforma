@@ -11,7 +11,7 @@ if (!$vars['entity']->tracker_display) {
 	$vars['entity']->tracker_display = "profile";
 }
     
-	if (!$vars['entity']->tracker_url) {
+if (!$vars['entity']->tracker_url) {
 	$vars['entity']->tracker_url = 'http://en.utrace.de/?query=%s';
 } 
 
