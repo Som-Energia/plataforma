@@ -84,9 +84,10 @@ if (elgg_get_plugin_setting('hidden_groups', 'groups') == 'yes') {
 <?php 	
 }
 
-if (isset($vars['entity'])) {
-	$entity     = $vars['entity'];
-	$owner_guid = $vars['entity']->owner_guid;
+$entity = elgg_get_config('entity');
+
+if (isset($entity)) {
+	$owner_guid = $entity->owner_guid;
 } else {
 	$entity = false;
 }
@@ -96,7 +97,7 @@ if ($entity && ($owner_guid == elgg_get_logged_in_user_guid() || elgg_is_admin_l
 
 	$options = array(
 		'relationship' => 'member',
-		'relationship_guid' => $vars['entity']->getGUID(),
+		'relationship_guid' => $entity->getGUID(),
 		'inverse_relationship' => true,
 		'type' => 'user',
 		'limit' => 0,
@@ -131,11 +132,13 @@ if ($entity && ($owner_guid == elgg_get_logged_in_user_guid() || elgg_is_admin_l
 
 $tools = elgg_get_config('group_tool_options');
 
-foreach ( $tools as $option )
-    if ( $option->default_on )
+foreach ( $tools as $option ) {
+    if ( $option->default_on ) {
         $option_on[] = $option;
-    else
+    } else {
         $option_off[] = $option;
+    }
+}
 
 $default = array_merge( $option_on, $option_off );
 

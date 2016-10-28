@@ -21,9 +21,11 @@ foreach ( $groups as $group ) {
 
 	add_entity_relationship( $user->get( 'guid' ), 'notifyemail', $group->get( 'guid' ) );
 
-	foreach ( $topics as $topic )
-	    if ( ! comment_tracker_is_subscribed( $user, $topic ) )
+	foreach ( $topics as $topic ) {
+	    if ( ! comment_tracker_is_subscribed( $user, $topic ) ) {
 		comment_tracker_subscribe( $user->get( 'guid' ), $topic->get( 'guid' ) );
+            }
+        }
 
     }
 
