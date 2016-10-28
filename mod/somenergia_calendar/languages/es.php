@@ -5,8 +5,8 @@
  * @package SomEnergia
  */
 
-$spanish = array(
+$strings = array(
     'item:object:somenergia_calendar' => 'Calendario',
 );
 
-add_translation("es", $spanish);
+add_translation("es", $strings);

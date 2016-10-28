@@ -6,7 +6,7 @@
  */
 
 $strings = array(
-    'item:object:somenergia_calendar' => 'Calendario',
+    'item:object:somenergia_calendar' => 'Calendario GL',
 );
 
 add_translation("gl", $strings);
