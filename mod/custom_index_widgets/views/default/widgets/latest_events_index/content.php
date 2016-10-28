@@ -14,7 +14,6 @@
 	if (!isset($num_items))
 	    $num_items = 10;
 	
-	
 	$widget_group = $vars["entity"]->widget_group;
 	if (!isset($widget_group))
 	    $widget_group = 0;
@@ -23,7 +22,7 @@
 	if (!isset($mode))
 	    $mode = "month";
 	
-	$site_categories = $vars['config']->site->categories;
+	$site_categories = elgg_get_site_entity()->categories;
 	$widget_categorie = $vars['entity']->widget_categorie;
 	$widget_context_mode = $vars['entity']->widget_context_mode;
 	if (!isset($widget_context_mode))
