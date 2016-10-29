@@ -49,7 +49,7 @@ $CONFIG->dbpass = 'plataforma';
  *
  * @global string $CONFIG->dbname
  */
-$CONFIG->dbname = 'plataforma';
+$CONFIG->dbname = 'elgg';
 
 /**
  * The database host.
@@ -69,7 +69,7 @@ $CONFIG->dbhost = 'localhost';
  *
  * @global string $CONFIG->dbprefix
  */
-$CONFIG->dbprefix = 'plataforma_';
+$CONFIG->dbprefix = 'elgg_';
 
 
 /**
@@ -121,3 +121,5 @@ $CONFIG->db_disable_query_cache = FALSE;
  * @global int $CONFIG->min_password_length
  */
 $CONFIG->min_password_length = 6;
+
+
