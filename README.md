@@ -15,3 +15,6 @@
 - Admin Plataforma: admin Passwd: adminadmin
 - Admin Base datos: admin Passwd: plataforma
 
+# Copiar instalación de Elgg
+- ![Duplicar instalación](http://learn.elgg.org/es/1.9/admin/duplicate-installation.html)
+
