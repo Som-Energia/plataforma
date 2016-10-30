@@ -14,9 +14,6 @@ function embed_extender_init()
 	
 	include_once $CONFIG->pluginspath . 'embed_extender/lib/custom.php';
 	include_once $CONFIG->pluginspath . 'embed_extender/lib/embed_extender.php';
-
-	//elgg_register_plugin_hook_handler('display', 'view', 'embed_extender_rewrite');
-	//elgg_register_plugin_hook_handler('view', 'all', 'embed_extender_rewrite');
 	
 	//Check where embed code - The wire
 	$wire_show = elgg_get_plugin_setting('wire_show', 'embed_extender');		
@@ -60,8 +57,22 @@ function embed_extender_init()
 	if($page_show == 'yes'){
 		elgg_register_plugin_hook_handler('view', 'object/bookmarks', 'embed_extender_rewrite');
 	}
+	
+	// Check embed code for custom views
+	$viewslist = elgg_get_plugin_setting('custom_views', 'embed_extender');
+	$views = explode("\n", $viewslist);
+	foreach ($views as $view) {
+		elgg_register_plugin_hook_handler('view', $view, 'embed_extender_rewrite');
+	}
+	
+	
 	elgg_extend_view('css','embed_extender/css');
 
+	
+	// register example hook handler
+	// for providing custom video handler (yahoo)
+	elgg_register_plugin_hook_handler('embed_extender', 'custom_patterns', 'embed_extender_yahoo_pattern');
+	elgg_register_plugin_hook_handler('embed_extender', 'custom_embed', 'embed_extender_yahoo_embed');
 }
 
 elgg_register_event_handler('init', 'system', 'embed_extender_init');

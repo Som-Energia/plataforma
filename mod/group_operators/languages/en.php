@@ -13,7 +13,6 @@ $english = array(
 	"group_operators:title" => 'Operators of %s',
 	"group_operators:manage" => 'Manage group operators',
 	"group_operators:operators" => 'Operators',
-	"group_operators:members" => 'Members',
 	
 	/**
 	 * Menus

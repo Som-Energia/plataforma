@@ -10,28 +10,32 @@
  * Gives the list of the operators of a group
  *
  * @param ElggGroup $group
- * @return array
+ * @return array|null
  */
-function get_group_operators($group){
-	if($group instanceof ElggGroup){
-		$operators = elgg_get_entities_from_relationship(
-			array('types'=>'user', 'limit'=>0, 'relationship_guid'=>$group->guid, 'relationship'=>'operator', 'inverse_relationship'=>true));
+function get_group_operators($group) {
+	if ($group instanceof ElggGroup) {
+		$operators = elgg_get_entities_from_relationship(array(
+			'types' => 'user',
+			'limit' => 0,
+			'relationship_guid' => $group->guid,
+			'relationship' => 'operator',
+			'inverse_relationship' => true,
+		));
 		$group_owner = get_entity($group->getOwnerGUID());
 
-		if(!in_array($group_owner, $operators)){
+		if ($group_owner && !in_array($group_owner, $operators)) {
 			$operators[$group_owner->guid] = $group_owner;
 		}
 		return $operators;
-	}
-	else {
+	} else {
 		return null;
 	}
 }
 
-function elgg_view_group_operators_list($group){
+function elgg_view_group_operators_list($group) {
 	$operators = get_group_operators($group);
 	$html = '<ul class="elgg-list">';
-	foreach($operators as $operator){
+	foreach ($operators as $guid => $operator) {
 		$html .= '<li class="elgg-item">';
 		$html .= elgg_view('group_operators/display', array(
 			'entity' => $operator,
