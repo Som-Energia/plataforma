@@ -136,7 +136,7 @@ class renderer_plugin_s5reloaded extends Doku_Renderer_xhtml {
 <div id="controls"><!-- DO NOT EDIT --></div>
 <div id="currentSlide"><!-- DO NOT EDIT --></div>
 <div id="header">
-<div class="scale" id="logo" style="background:url('.page_owner_entity()->getIcon('small').') no-repeat;"><!-- DO NOT EDIT --></div>
+<div class="scale" id="logo" style="background:url('.elgg_get_page_owner_entity()->getIcon('small').') no-repeat;"><!-- DO NOT EDIT --></div>
 </div>
 <div id="footer">
 <h1>'.$title.'</h1>
