@@ -60,7 +60,7 @@ function au_subgroups_delete_group($hook, $type, $return, $params) {
 
 function au_subgroups_group_canedit($hook, $type, $return, $params) {
   $group = $params['entity'];
-  $user = $params['entity'];
+  $user = $params['user'];
   
   $parent = au_subgroups_get_parent_group($group);
   

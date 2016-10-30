@@ -2,9 +2,13 @@
 
 $page_owner = elgg_get_page_owner_entity();
 
-if (!$page_owner->canEdit()) {
-  register_error(elgg_echo('au_subgroups:noedit'));
-  forward($page_owner->getURL());
+$any_member = ($page_owner->subgroups_members_create_enable != 'no');
+
+if (!($any_member && $page_owner->isMember())) {
+  if (!$page_owner->canEdit()) {
+	register_error(elgg_echo('au_subgroups:noedit'));
+	forward($page_owner->getURL());
+  }
 }
 
 $title = elgg_echo('au_subgroups:add:subgroup');
