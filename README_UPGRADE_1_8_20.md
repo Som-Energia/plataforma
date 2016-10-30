@@ -7,7 +7,7 @@
 
 ## 2. Pre Actualización
   1. Desactivar mod tydipics
-
+  2. Desactivar mod oauth_api
 
 ## 3. Actualización
   1. Subir la actualización.
