@@ -8,7 +8,7 @@
  * you automatically.
  */
 
-$conf['title']       = 'Elgg Wiki';        //what to show in the title
+$conf['title']       = 'SomEnergia Wiki';        //what to show in the title
 $conf['basedir']     = '';                //absolute dir from serveroot - blank for autodetection
 $conf['baseurl']     = '';                //URL to server including protocol - blank for autodetect
 $conf['savedir']     = DOKU_ELGGDATA;          //where to store all the files
@@ -21,7 +21,7 @@ $conf['updatecheck'] = 0;                //automatically check for new releases?
 // get language from elgg directly
 $conf['lang']        = get_current_language();
 
-$conf['superuser']   = '@root';
+$conf['superuser']   = '@admin';
 
 $conf['license']     = 'cc-by-sa';     //see conf/license.php
 
