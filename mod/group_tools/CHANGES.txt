@@ -1,4 +1,58 @@
 = Version History =
+
+2.10 (2014-05-15):
+
+- added: users can register if registration is disabled but they have a valid group invite code
+- fixed: no groups to select in groups_river_widget
+- fixed: error during saving of special states
+- fixed: if trying to access a hidden group when logged out, correctly forward after login
+- fixed: the action URL for user membership killrequest (#57)
+
+2.9.1 (2014-03-14):
+
+- removed: debug code which caused errors to appear on screen
+
+2.9 (2014-03-11):
+
+- added: plugin setting to indicate if a group is hidden
+- added: option to configure a group welcome message (#41)
+- added: listing of the email invitations for groups (#42)
+- added: option to join groups based on email domain (#43)
+- added: option to relate groups (#44)
+- fixed: layout issue in plugin settings
+- fixed: you can no join groups you were invited for on the group profile page
+- fixed: misleading translation for a group cleanup setting (#22)
+- fixed: create group button showing up on some pages when setting was disabled (#35)
+
+2.8 (2013-10-31):
+
+- added: option to allow group members to invite more members
+- added: Portuguese-Brazilian translation (thanks to brunovb)
+- added: tags to quickstart discussion widget
+- added: suggested groups (based on profile information)
+- added: group admins are notified upon membership request #31 (thanks to Matt Beckett)
+- fixed: crash when listing a forum topic of a hidden group
+- fixed: email invites are not cleaned up on register
+- fixed: group owner should not be group admin #26
+- changed: better group selection in quickstart discussion widget
+- changed: showing group status (open/closed) is a plugin setting #3
+- changed: group index widget to include popular groups option #28
+
+2.7 (2013-06-27):
+
+- added: status icon when discussion is closed and fast action to close/open a topic
+- added: a widget to quickly start a discussion (index, dashboard and group context)
+- fixed: no tab selected in group listing when group_tools is first activated
+- fixed: group admin transfer no longer working for non admins
+- changed: performance improvement in group admin transfer
+- changed: discussion list now shows in which group the discussion takes place (if not already clear)
+
+2.6 (2013-05-06):
+
+- added: option to hide the My Status sidebar
+- fixed: using new cache functions
+- changed: index groups widget now optionally respects group ordering
+
 2.5 (2013-04-05):
 
 - added: auto join groups based on email invitation when joining the site
@@ -134,5 +188,4 @@
 - fixed: manage membership approval always visible
 
 1.0 (2011-06-10):
-
 - initial version

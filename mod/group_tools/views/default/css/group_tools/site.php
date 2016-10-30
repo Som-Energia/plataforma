@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 ?>
 
@@ -73,4 +73,29 @@
 
 #friends_toggle {
 	z-index: 1;
+}
+
+.group-tools-suggested-groups .elgg-item {
+	width: 33%;
+	text-align: center;
+}
+
+.group-tools-suggested-groups .elgg-item:hover {
+	background: #EFEFEF;
+}
+
+.group-tools-suggested-groups .elgg-item h3 {
+	padding-bottom: 5px;
+}
+.group-tools-suggested-groups .elgg-item > div {
+	padding: 10px;
+}
+
+.elgg-icon-invisible-group {
+	background: transparent url(<?php echo elgg_get_site_url(); ?>mod/group_tools/_graphics/invisible_group2.png) no-repeat left;
+	vertical-align: top;
+}
+
+#group-tools-related-groups-form input.elgg-input-autocomplete {
+	width: 80%;
 }
