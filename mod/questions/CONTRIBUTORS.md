@@ -1,1 +1,0 @@
-Evan Winslow <evan@elgg.org>
