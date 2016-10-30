@@ -17,3 +17,4 @@
   1. Activar mod tydipics
   2. Ejecutar upgrade.php desde el navegador
   3. Ejecutar actualizaciones base datos del mod tydipics
+  4. Reconfigurar mod custom_index_widgets
