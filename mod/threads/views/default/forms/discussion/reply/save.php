@@ -5,6 +5,8 @@
  * @uses $vars['entity'] The entity to reply/edit
  * @uses $vars['reply'] If it is an edition or a reply
  * @uses $vars['inline'] Display a shortened form?
+ * 
+ * @override mod/groups/views/default/forms/discussion/reply/save.php
  */
 
 if (isset($vars['entity']) && elgg_is_logged_in()) {

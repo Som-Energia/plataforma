@@ -2,6 +2,7 @@
 /**
  * Post a reply to discussion topic
  *
+ * @override mod/groups/actions/discussion/reply/save.php
  */
 
 gatekeeper();
@@ -20,13 +21,12 @@ if (empty($text)) {
 }
 
 $topic = threads_top($entity_guid);
-$topic_guid = $topic->guid;
 if (!$topic) {
 	register_error(elgg_echo('grouppost:nopost'));
 	forward(REFERER);
 }
 
-$user = get_loggedin_user();
+$user = elgg_get_logged_in_user_entity();
 
 $group = $topic->getContainerEntity();
 if (!$group->canWriteToContainer($user)) {
@@ -59,4 +59,4 @@ if (!$reply) {
 	system_message(elgg_echo('groupspost:success'));
 }
 
-forward(REFERER);
+forward($topic->getURL());
