@@ -1,6 +1,5 @@
 <?php
 
-elgg_log ('Load threads lib','WARNING'); 
 
 function threads_top($entity_guid){
 	$entity = get_entity($entity_guid);
