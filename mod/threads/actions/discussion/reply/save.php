@@ -26,13 +26,22 @@ if (!$topic) {
 	forward(REFERER);
 }
 
-$user = elgg_get_logged_in_user_entity();
+$user = elgg_get_logged_in_user_entity()->guid;
 
 $group = $topic->getContainerEntity();
 if (!$group->canWriteToContainer($user)) {
 	register_error(elgg_echo('groups:notmember'));
 	forward(REFERER);
 }
+
+// $group = $topic->getContainerEntity();
+// if (!$group->canWriteToContainer($user)) {
+// 	system_message('verdadedro');
+// } else {
+// 	system_message('falso');
+// }
+
+
 
 // if editing a reply, make sure it's valid
 if (!$reply) {

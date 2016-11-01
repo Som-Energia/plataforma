@@ -12,11 +12,11 @@ elgg_register_event_handler('init', 'system', 'threads_init');
  */
 function threads_init() {
 
-	elgg_register_library('elgg:discussion', elgg_get_plugins_path() . 'threads/lib/discussion.php');
-	elgg_register_library('elgg:threads', elgg_get_plugins_path() . 'threads/lib/threads.php');
-
-	elgg_register_page_handler('discussion', 'threads_page_handler');
-	elgg_register_page_handler('threaded_forums', 'threads_page_handler');
+    elgg_register_library('elgg:discussion', elgg_get_plugins_path() . 'threads/lib/discussion.php');   
+    elgg_register_library('elgg:threads', elgg_get_plugins_path() . 'threads/lib/threads.php');
+    
+    elgg_register_page_handler('discussion', 'threads_page_handler');
+    elgg_register_page_handler('threaded_forums', 'threads_page_handler');
 
 	//elgg_register_entity_url_handler('object', 'groupforumtopic', 'threads_override_topic_url');
 
@@ -120,6 +120,7 @@ function threads_page_handler($page, $handler) {
 
 	elgg_load_library('elgg:groups');
 	elgg_load_library('elgg:discussion');
+        elgg_load_library('elgg:threads');
 
 	elgg_push_breadcrumb(elgg_echo('discussion'), 'discussion/all');
 

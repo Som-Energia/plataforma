@@ -42,7 +42,7 @@ if ($num_replies != 0) {
 	));
 	$reply_time = elgg_view_friendly_time($last_reply->time_created);
 	$reply_text = elgg_echo('groups:updated', array($last_poster_link, $reply_time));
-	
+
 	$replies_link = elgg_view('output/url', array(
 		'href' => $topic->getURL() . '#group-replies',
 		'text' => elgg_echo('group:replies') . " ($num_replies)",
@@ -106,6 +106,9 @@ HTML;
 	echo elgg_view_image_block($poster_icon, $list_body);
 }
 
+$user = elgg_get_logged_in_user_entity()->guid;
+$group = $topic->getContainerEntity();
+
 if ($full && $topic->canAnnotate()) {
 	if(get_input('box') == "reply" && get_input('guid') == $topic->guid){
 		$form = elgg_view_form('discussion/reply/save', array(), array_merge(array(
@@ -115,10 +118,12 @@ if ($full && $topic->canAnnotate()) {
 		);
 		echo "<div class=\"$hidden mvl replies\" id=\"reply-topicreply-$topic->guid\">$form</div>";
 	} elseif($topic->status != 'closed') {
-		echo elgg_view('output/url', array(
-			'text' => elgg_echo('reply'),
-			'href' => current_page_url() . "?box=reply&guid=$topic->guid",
-			'class' => 'elgg-button elgg-button-submit mtm',
-		));
+		if ($group->canWriteToContainer($user)) {
+			echo elgg_view('output/url', array(
+				'text' => elgg_echo('reply'),
+				'href' => current_page_url() . "?box=reply&guid=$topic->guid",
+				'class' => 'elgg-button elgg-button-submit mtm',
+			));
+		}
 	}
 }
