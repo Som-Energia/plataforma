@@ -8,7 +8,6 @@
  */
 function groups_handle_all_page() {
   $display_subgroups = elgg_get_plugin_setting('display_subgroups', 'au_subgroups');
-  $display_alphabetically = elgg_get_plugin_setting('display_alphabetically', 'au_subgroups');
   $db_prefix = elgg_get_config('dbprefix');
   
 	// all groups doesn't get link to self

@@ -31,6 +31,53 @@ ul.elgg-menu-owner-block-z-au_subgroups {
   padding-top: 5px;
 }
 
+
+/** move to subgroup of another **/
+.au-subgroups-throbber {
+  background-image: url('<?php echo elgg_get_site_url(); ?>/_graphics/ajax_loader_bw.gif');
+  background-position: center center;
+  background-repeat: no-repeat;
+  min-height: 35px;
+}
+
+.au-subgroups-search {
+  width: 150px;
+}
+
+.au-subgroups-search-results {
+  width: 500px;
+  border: 2px solid #E4E4E4;
+  float: right;
+}
+
+.au-subgroups-result-col {
+  width: 250px;
+  float: left;
+}
+
+.au-subgroups-parentable {
+  background-color: white;
+  cursor: pointer;
+  border-top: 1px solid black;
+}
+
+.au-subgroups-parentable:hover {
+  background-color: #FAFFA8;
+}
+
+.au-subgroups-non-parentable {
+  cursor: not-allowed;
+  background-color: #cccccc;
+  border-top: 1px solid black;
+}
+
+.au-subgroups-non-parentable a,
+.au-subgroups-non-parentable a:hover {
+  color: #454545;
+  text-decoration: none;
+  cursor: not-allowed;
+}
+
 <?php
   
   foreach ($icon_sizes as $size => $value) {

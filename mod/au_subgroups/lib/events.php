@@ -8,10 +8,20 @@ function au_subgroups_add_parent($event, $type, $object) {
   }
   
   $parent = get_entity($parent_guid);
-  // subgroups aren't enabled, how are we creating a new subgroup?
-  if (elgg_instanceof($parent, 'group') && $parent->subgroups_enable == 'no') {
-    register_error(elgg_echo('au_subtypes:error:create:disabled'));
-    return FALSE;
+  // a few things that can stop subgroup creation
+  // - no subgroups allowed
+  // - not an admin/group-admin and members disallowed
+  
+  if (elgg_instanceof($parent, 'group')) {
+	if ($parent->subgroups_enable == 'no') {
+	  return FALSE;
+	}
+	if ($parent->subgroups_members_create_enable == 'no') {
+	  // only group admins can create subgroups
+	  if (!$parent->canEdit()) {
+		return FALSE;
+	  }
+	}
   }
 }
 
@@ -127,9 +137,48 @@ function au_subgroups_join_group($event, $type, $object) {
     $user = get_entity($object->guid_one);
     $group = get_entity($object->guid_two);
     $parent = au_subgroups_get_parent_group($group);
+	
+	// use temp global config to decide if we should prevent joining
+	// prevent joining if not a member of the parent group
+	// except during a subgroup move invitation
+	$au_subgroups_ignore_join = elgg_get_config('au_subgroups_ignore_join');
     
-    if ($parent) {
-      if (!$parent->isMember($user)) {
+    if ($parent && !$au_subgroups_ignore_join) {
+	  // cover the case of moved subgroups
+	  // user will have been invited, and have a plugin setting saying which other groups to join
+	  $invited = check_entity_relationship($group->guid, 'invited', $user->guid);
+	  $children_to_join = elgg_get_plugin_user_setting('invitation_' . $group->guid, $user->guid, 'au_subgroups');
+	  
+	  if (!empty($children_to_join)) {
+		$children_to_join = unserialize($children_to_join);
+	  }
+	  
+	  if ($invited) {
+		elgg_set_config('au_subgroups_ignore_join', true);
+		// we have been invited in through the back door by a subgroup move
+		// join this user to all parent groups fo this group
+		if (au_subgroups_join_parents_recursive($group, $user)) {
+		  // we're in, now lets rejoin the children
+		  if (is_array($children_to_join)) {
+			$children_guids = au_subgroups_get_all_children_guids($group);
+			foreach ($children_to_join as $child) {
+			  if (in_array($child, $children_guids)) {
+				$child_group = get_entity($child);
+				$child_group->join($user);
+			  }
+			}
+		  }
+		  
+		  // delete plugin setting
+		  elgg_set_plugin_user_setting('invitation_' . $group->guid, '', $user->guid, 'au_subgroups');
+		}
+		else {
+		  // something went wrong with joining the groups
+		  // lets stop everything now
+		  return false;
+		}
+	  }
+	  elseif (!$parent->isMember($user)) {
         register_error(elgg_echo('au_subgroups:error:notparentmember'));
         return false;
       }
@@ -157,16 +206,18 @@ function au_subgroups_leave_group($event, $type, $params) {
 function au_subgroups_pagesetup() {
   if (in_array(elgg_get_context(), array('au_subgroups', 'group_profile'))) {
     $group = elgg_get_page_owner_entity();
-    if (elgg_instanceof($group, 'group')
-			&& $group->canEdit()
-			&& $group->subgroups_enable != 'no') {
-      // register our title menu
-      elgg_register_menu_item('title', array(
-        'name' => 'add_subgroup',
-        'href' => "groups/subgroups/add/{$group->guid}",
-        'text' => elgg_echo('au_subgroups:add:subgroup'),
-        'class' => 'elgg-button elgg-button-action'
-      ));
+	$any_member = ($group->subgroups_members_create_enable != 'no');
+    if (elgg_instanceof($group, 'group') && $group->subgroups_enable != 'no') {
+	  
+	  if (($any_member && $group->isMember()) || $group->canEdit()) {
+		// register our title menu
+		elgg_register_menu_item('title', array(
+		  'name' => 'add_subgroup',
+		  'href' => "groups/subgroups/add/{$group->guid}",
+		  'text' => elgg_echo('au_subgroups:add:subgroup'),
+		  'class' => 'elgg-button elgg-button-action'
+		));
+	  }
     }
   }
 }

@@ -1,0 +1,22 @@
+#!/bin/bash
+APPPATH=$(realpath "./")
+APPDATA="$APPPATH/docker/elggdata"
+APPDATABASE="$APPPATH/docker/elggdatabase"
+
+CONFIG="${APPPATH}/engine/settings.php"
+if [[ -f "${CONFIG}" ]]; then
+    sudo rm -rf ${CONFIG}
+fi
+
+HTACCESS="${APPPATH}/.htaccess"
+if [[ -f "${HTACCESS}" ]]; then
+    sudo rm -rf ${HTACCESS}
+fi
+
+if [ -d ${APPDATA} ]; then
+   sudo rm -rf ${APPDATA}
+fi
+
+if [ -d ${APPDATABASE} ]; then
+   sudo rm -rf ${APPDATABASE}
+fi

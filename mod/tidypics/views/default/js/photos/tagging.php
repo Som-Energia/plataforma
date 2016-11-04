@@ -32,6 +32,8 @@ elgg.tidypics.tagging.start = function(event) {
 		return;
 	}
 
+	elgg.tidypics.tagging.makeUnClickable();
+
 	$('.tidypics-photo').imgAreaSelect({
 		disable      : false,
 		hide         : false,
@@ -68,6 +70,8 @@ elgg.tidypics.tagging.stop = function(event) {
 	elgg.tidypics.tagging.active = false;
 	elgg.tidypics.tagging.toggleTagHover();
 
+	elgg.tidypics.tagging.makeClickable();
+
 	event.preventDefault();
 };
 
@@ -75,6 +79,10 @@ elgg.tidypics.tagging.stop = function(event) {
  * Start the selection stage of tagging
  */
 elgg.tidypics.tagging.startSelect = function(img, selection) {
+
+	if(selection.width < 2 && selection.height < 2) {
+		$(this).cancelSelection();
+	}
 
 	var coords  = '"x1":"' + selection.x1 + '",';
 	coords += '"y1":"' + selection.y1 + '",';
@@ -155,5 +163,22 @@ elgg.tidypics.tagging.toggleTagHover = function() {
 	}
 	elgg.tidypics.tagging.tag_hover = !elgg.tidypics.tagging.tag_hover;
 };
+
+elgg.tidypics.tagging.makeUnClickable = function() {
+	$('.tidypics-lightbox').each(function () {
+		$(this).data('href', $(this).attr('href'));
+ 		$(this).removeAttr('href');
+	});
+	$(".tidypics-lightbox").unbind("click.fb");
+}
+
+elgg.tidypics.tagging.makeClickable = function() {
+	$('.tidypics-lightbox').each(function () {
+		$(this).attr('href', $(this).data('href'));
+	});
+	if ($(".tidypics-lightbox").length) {
+		$(".tidypics-lightbox").fancybox({'type': 'image'});
+	}
+}
 
 elgg.register_hook_handler('init', 'system', elgg.tidypics.tagging.init);

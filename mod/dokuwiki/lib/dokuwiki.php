@@ -58,5 +58,3 @@ function dokuwiki_create_datafolder($path) {
 	dokuwiki_recurse_copy($orig, $path);
 	
 }
-	
-?>

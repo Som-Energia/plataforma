@@ -7,7 +7,10 @@ function au_subgroups_breadcrumb_override($params) {
   switch ($params['segments'][0]) {
     case 'profile':
       $group = get_entity($params['segments'][1]);
-      
+      if (!$group) {
+		return;
+	  }
+	  
       $breadcrumbs[] = array('title' => elgg_echo('groups'), 'link' => elgg_get_site_url() . 'groups/all');
       $parentcrumbs = au_subgroups_parent_breadcrumbs($group, false);
       
@@ -25,6 +28,9 @@ function au_subgroups_breadcrumb_override($params) {
       
     case 'edit':
       $group = get_entity($params['segments'][1]);
+	  if (!$group) {
+		return;
+	  }
       
       $breadcrumbs[] = array('title' => elgg_echo('groups'), 'link' => elgg_get_site_url() . 'groups/all');
       $parentcrumbs = au_subgroups_parent_breadcrumbs($group, false);
@@ -111,6 +117,13 @@ function au_subgroups_get_all_children_guids($group, $guids = array()) {
   }
   
   return $guids;
+}
+
+
+function au_subgroups_get_all_members($result, $getter, $options) {
+  global $AU_SUBGROUPS_ALL_MEMBERS;
+  
+  $AU_SUBGROUPS_ALL_MEMBERS[] = $result->guid;
 }
 
 /**
@@ -396,4 +409,109 @@ function au_subgroups_parent_breadcrumbs($group, $push = true) {
 // links the subgroup with the parent group
 function au_subgroups_set_parent_group($group_guid, $parent_guid) {
   add_entity_relationship($group_guid, AU_SUBGROUPS_RELATIONSHIP, $parent_guid);
+}
+
+function au_subgroups_remove_parent_group($group_guid) {
+  $group = get_entity($group_guid);
+  
+  $parent = au_subgroups_get_parent_group($group);
+  
+  if ($parent) {
+	remove_entity_relationship($group_guid, AU_SUBGROUPS_RELATIONSHIP, $parent->guid);
+  }
+}
+
+// can a user edit the group and it's parent, recursively up to the top level parent?
+function au_subgroups_can_edit_recursive($group, $user = NULL) {
+  if (!elgg_instanceof($user, 'user')) {
+	$user = elgg_get_logged_in_user_entity();
+  }
+  
+  if (!$user) {
+	return false;
+  }
+  
+  $full_perms = true;
+  $tmp_subgroup = $group;
+  while ($tmp_parent = au_subgroups_get_parent_group($tmp_subgroup)) {
+	if (!$tmp_parent->canEdit() || !$tmp_subgroup->canEdit()) {
+	  $full_perms = false;
+	  break;
+	}
+  
+	$tmp_subgroup = $tmp_parent;
+  }
+  
+  return $full_perms;
+}
+
+
+
+function au_subgroups_join_parents_recursive($group, $user = NULL) {
+  if (!elgg_instanceof($user, 'user')) {
+	$user = elgg_get_logged_in_user_entity();
+  }
+  
+  if (!$user) {
+	return false;
+  }
+  
+  while ($parent = au_subgroups_get_parent_group($group)) {
+	if (!$parent->isMember($user)) {
+	  $parent->join($user);
+	}
+	
+	$group = $parent;
+  }
+  
+  return true;
+}
+
+/**
+ * Determines if a subgroup could potentially be moved
+ * To a parent group
+ * Makes sure permissions are in order, and that the subgroup isn't already a parent
+ * of the parent or anything weird like that
+ * 
+ * @param type $user ElggUser
+ * @param type $subgroup_guid
+ * @param type $parentgroup_guid
+ */
+function au_subgroups_can_move_subgroup($subgroup, $parent, $user = NULL) {
+  if (!elgg_instanceof($user, 'user')) {
+	$user = elgg_get_logged_in_user_entity();
+  }
+  
+  if (!$user) {
+	return false;
+  }
+  
+  // make sure they're really groups
+  if (!elgg_instanceof($subgroup, 'group') || !elgg_instanceof($parent, 'group')) {
+	return false;
+  }
+  
+  // make sure we can edit them
+  if (!$subgroup->canEdit($user->guid) || !$parent->canEdit($user->guid)) {
+	return false;
+  }
+  
+  // make sure we can edit all the way up, and we're not trying to move a group into itself
+  if (!au_subgroups_can_edit_recursive($subgroup) || $subgroup->guid == $parent->guid) {
+	return false;
+  }
+  
+  // make sure we're not moving a group into it's existing parent
+  $current_parent = au_subgroups_get_parent_group($subgroup);
+  if ($current_parent && $current_parent->guid == $parent->guid) {
+	return false;
+  }
+  
+  // also make sure the potential parent isn't a subgroup of the subgroup
+  $children = au_subgroups_get_all_children_guids($subgroup);
+  if (in_array($parent->guid, $children)) {
+	return false;
+  }
+  
+  return true;
 }

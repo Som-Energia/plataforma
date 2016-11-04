@@ -41,6 +41,11 @@ function tracker_log_ip($event, $object_type, $object) {
 			$ip_address = getenv('HTTP_CLIENT_IP');
 		} elseif (getenv('HTTP_X_FORWARDED_FOR')) {
 			$ip_address = getenv('HTTP_X_FORWARDED_FOR');
+			// Check for multiple IP addresses in result from
+			// HTTP_X_FORWARDED_FOR and return only the last one
+			if (($pos = strrpos($ip_address, ",")) !== false) {
+				$ip_address = substr($ip_address, $pos+1);
+			}
 		} elseif (getenv('HTTP_X_FORWARDED')) {
 			$ip_address = getenv('HTTP_X_FORWARDED');
 		} elseif (getenv('HTTP_FORWARDED_FOR')) {
@@ -49,6 +54,11 @@ function tracker_log_ip($event, $object_type, $object) {
 			$ip_address = getenv('HTTP_FORWARDED');
 		} else {
 			$ip_address = $_SERVER['REMOTE_ADDR'];
+		}
+
+		// Check for multiple IP addresses in 
+		if (($pos = strrpos($ip_address, ",")) !== false) {
+			$ip_address = substr($ip_address, $pos+1);
 		}
 
 		if (!empty($ip_address)) {

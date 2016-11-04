@@ -23,7 +23,7 @@ $options = array(
 	'type' => 'object',
 	'subtype' => 'groupforumtopic',
 	'container_guid' => $group->getGUID(),
-	'limit' => 3,
+	'limit' => 6,
 	'full_view' => false,
 	'pagination' => false,
 );
@@ -48,9 +48,5 @@ echo elgg_view('groups/profile/module', array(
 	'title' => elgg_echo('discussion:group'),
 	'content' => $content,
 	'all_link' => $all_link,
-	'add_link' => $new_link,	
-	
-	
+	'add_link' => $new_link,
 ));
-
-

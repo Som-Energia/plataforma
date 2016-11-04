@@ -1,5 +1,12 @@
 <?php
 $language = array (
+  'file_tools:show_more' => 'Toon meer bestanden',
+  'file_tools:settings:list_length' => 'Hoeveel bestanden moeten er getoond worden in de lijst',
+  'file_tools:settings:list_length:unlimited' => 'Ongelimiteerd',
+  'file_tools:upload:tabs:single' => 'Enkel bestand',
+  'file_tools:upload:tabs:multi' => 'Meerdere bestanden',
+  'file_tools:upload:tabs:zip' => 'Zip bestand',
+  'file_tools:action:edit:error:parent_guid' => 'Ongeldige bovenliggende map, de bovenliggende map mag niet de map zelf zijn',
   'widgets:file_tree:edit:show_content' => 'Toon de inhoud van de map(pen)',
   'file_tools:action:move:success:file' => 'Het bestand is succesvol verplaatst',
   'file_tools:action:move:success:folder' => 'De map is succesvol verplaatst',
@@ -91,7 +98,6 @@ $language = array (
   'file_tools:actions:delete:error:subtype' => 'Opgegeven GUID is geen map',
   'file_tools:actions:delete:error:delete' => 'Onbekende fout tijdens verwijderen van een map',
   'file_tools:actions:delete:success' => 'De map is verwijderd',
-  'file_tools:upload:new' => 'Upload zip bestand',
   'file_tools:upload:form:choose' => 'Kies bestand',
   'file_tools:upload:form:info' => 'Klik op bladeren om (meerdere) bestanden te selecteren',
   'file_tools:upload:form:zip:info' => 'Je kunt een zip file uploaden. Het zal worden uitgepakt en elk bestand en map zal individueel worden aangemaakt. Bestandstypes die niet worden toegestaan zullen worden overgeslagen.',

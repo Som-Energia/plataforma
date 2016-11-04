@@ -9,7 +9,7 @@
 #uploadify-button-wrapper.uploadify{
 	display: inline-block;
 	position: relative;
-	background: url("http://jeroen.coldtrick.com/_graphics/button_background.gif") repeat-x scroll 0 0 #CCCCCC;
+	background: url(<?php echo elgg_get_site_url(); ?>_graphics/button_background.gif) repeat-x scroll 0 0 #CCCCCC;
     border: 1px solid #999999;
     border-radius: 5px 5px 5px 5px;
     box-shadow: none;

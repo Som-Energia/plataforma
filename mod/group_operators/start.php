@@ -20,12 +20,16 @@ function group_operators_init() {
 	elgg_register_event_handler('pagesetup', 'system', 'group_operators_setup_menu');
 	
 	elgg_register_plugin_hook_handler('register', 'menu:entity', 'group_operators_entity_menu_setup');
+    
+    elgg_set_config('disable_group_owner_change_from_form', true);
 
 	// Register actions
 	$action_path = elgg_get_plugins_path() . 'group_operators/actions/group_operators';
 	elgg_register_action("group_operators/add", "$action_path/add.php");
 	elgg_register_action("group_operators/remove", "$action_path/remove.php");
 	elgg_register_action("group_operators/mkowner", "$action_path/change_owner.php");
+	$action_path = elgg_get_plugins_path() . 'group_operators/actions/groups';
+	elgg_register_action("groups/delete", "$action_path/delete.php");
 
 	// Register plugin hooks
 	elgg_register_plugin_hook_handler('permissions_check', 'group', 'group_operators_permissions_hook');
@@ -33,6 +37,7 @@ function group_operators_init() {
 
 	// Extend the forms css view
 	elgg_extend_view('css/elements/forms', 'group_operators/css/forms');
+	elgg_extend_view('js/elgg', 'group_operators/js');
 
 	// Register javascript needed for adding operators
 	elgg_register_js('jquery-combobox', 'mod/group_operators/vendors/jquery/combobox.js');
@@ -44,6 +49,7 @@ function group_operators_init() {
  * Dispatches group operators pages.
  * URLs take the form of
  *  Edit operators:       group_operators/manage/<group-guid>
+ *  List operated groups: group_operators/owner/<username>
  *
  * @param array $page
  * @return bool
@@ -59,6 +65,10 @@ function group_operators_page_handler($page) {
 				set_input('group_guid', $page[1]);
 				include "$dir/manage.php";
 				return true;
+			case 'owner':
+				elgg_set_context('groups');
+				include "$dir/owner.php";
+				return true;
 		}
 	}
 	
@@ -69,6 +79,13 @@ function group_operators_setup_menu() {
 
 	// Get the page owner entity
 	$page_owner = elgg_get_page_owner_entity();
+
+	if (elgg_is_menu_item_registered('page', 'groups:owned')) {
+		$user = elgg_get_logged_in_user_entity();
+		$url =  "group_operators/owner/$user->username";
+		$item = new ElggMenuItem('groups:owned', elgg_echo('groups:owned'), $url);
+		elgg_register_menu_item('page', $item);
+	}
 
 	if (elgg_in_context('groups')) {
 		if ($page_owner instanceof ElggGroup) {
@@ -105,18 +122,18 @@ function group_operators_container_permissions_hook($hook, $entity_type, $return
 function group_operators_entity_menu_setup($hook, $entity_type, $returnvalue, $params) {
 	
 	if (elgg_in_context('widgets')) {
-		return $return;
+		return $returnvalue;
 	}
 
 	$entity = $params['entity'];
 	$handler = elgg_extract('handler', $params, false);
 	if ($handler != 'group_operators') {
-		return $return;
+		return $returnvalue;
 	}
 
-	foreach ($return as $index => $item) {
+	foreach ($returnvalue as $index => $item) {
 		if (in_array($item->getName(), array('access', 'likes', 'edit', 'delete'))) {
-			unset($return[$index]);
+			unset($returnvalue[$index]);
 		}
 	}
 	
@@ -134,7 +151,7 @@ function group_operators_entity_menu_setup($hook, $entity_type, $returnvalue, $p
 			'priority' => 300,
 			'is_action' => true
 		);
-		$return[] = ElggMenuItem::factory($options);
+		$returnvalue[] = ElggMenuItem::factory($options);
 		
 		if(elgg_get_logged_in_user_guid() == $group->owner_guid || elgg_is_admin_logged_in()){
 			$options = array(
@@ -147,7 +164,7 @@ function group_operators_entity_menu_setup($hook, $entity_type, $returnvalue, $p
 				'priority' => 300,
 				'is_action' => true
 			);
-			$return[] = ElggMenuItem::factory($options);
+			$returnvalue[] = ElggMenuItem::factory($options);
 			
 		}
 	} else {
@@ -157,9 +174,9 @@ function group_operators_entity_menu_setup($hook, $entity_type, $returnvalue, $p
 			'href' => false,
 		);
 		
-		$return[] = ElggMenuItem::factory($options);
+		$returnvalue[] = ElggMenuItem::factory($options);
 	}
 
-	return $return;
+	return $returnvalue;
 }
 

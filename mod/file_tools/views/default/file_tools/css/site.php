@@ -13,6 +13,7 @@
 
 #file_tools_list_files_container {
 	position: relative;
+	min-height: 50px;
 }
 
 #file_tools_list_files_container .elgg-ajax-loader {
@@ -32,4 +33,8 @@
 
 #file-tools-folder-tree .file-tools-tree-droppable-hover {
 	border: 1px solid red;
+}
+
+#file-tools-multi-form .uploadify-queue-item {
+	max-width: 100%;
 }

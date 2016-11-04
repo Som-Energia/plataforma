@@ -1,4 +1,42 @@
 = Version History =
+
+1.2 (2015-01-05):
+
+- added: max number of files in the listing (plugin setting) with 'show more' button
+- fixed: mimetype detection in ZIP upload doesn't detect all MS Office types correctly
+- fixed: moving a folder doesn't always correclty refreshed the content
+- changed: small css fixes
+
+1.1.2 (2013-04-05):
+
+- fixed: files lost their folder if the access of the folder was updated (thanks to Tauvic Ritter for reporting)
+- fixed: uploading a zip could create an empty folder
+- changed: layout of the upload page, now with tabs for the different option (single file, multi file, zip file)
+- removed: old css file
+- removed: tags from multi upload form
+
+1.1.1 (2012-11-14):
+
+- fixed: critical bug in upgrade script when you first enable file_tools (thanks to Sergiy Kamolov http://community.elgg.org/profile/sergiy.kamolov)
+- changed: disabled notifications of new file on zip upload
+- changed: README.txt to README.md for better markup
+
+1.1 (2012-11-06):
+
+- added: breadcrumb folderstructure on file full view
+- added: upgrade script to fix disappeared folders
+- fixed: mine tab highlighted when showing files from a friend
+- fixed: call to undefined function
+- fixed: language keys in index_file widget
+- fixed: layout issues and old code in filerepo widget
+- fixed: more link in file_tree widget
+- fixed: deadloop issue when deleting a folder
+- fixed: setting wrong parent on folders
+- fixed: css error in uploadify styling
+- fixed: missing zip upload button on some pages
+- changed: group_files widget redone
+- changed: better validation of folder listing
+
 1.0 (2012-07-31):
 
 - added: option to show folder content in the widget

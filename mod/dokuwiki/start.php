@@ -57,7 +57,7 @@ function dokuwiki_init(){
 		if ($page[0] === "all") {
 			elgg_set_context("search");
 			include(elgg_get_plugins_path().'dokuwiki/index.php');
-			return;
+			return true;
 		}
 		
 		elgg_set_context("dokuwiki");
@@ -65,7 +65,7 @@ function dokuwiki_init(){
 		$dokuwiki_path = elgg_get_plugins_path().'dokuwiki/vendors/dokuwiki/';
 		$doku = current_dokuwiki_entity();
 		if (!$doku) // can fail if there is no user and wiki doesnt exist
-			forward();
+			return false;
 		$parsed_url = parse_url(elgg_get_site_url().'dokuwiki/');
 		$url_base = $parsed_url['path'];
 		if (is_numeric($page[0])) {
@@ -74,14 +74,16 @@ function dokuwiki_init(){
 			
 			if (($ent && $ent instanceof ElggGroup) && $ent->dokuwiki_enable !== 'yes') {
 				// wiki not activated for this group. bail out.
-				forward();
+				elgg_pop_context();
+				return false;
 			}
 			if ($ent && (/*$ent instanceof ElggUser ||*/ $ent instanceof ElggGroup)) {
 				elgg_set_page_owner_guid($entity_guid);
 				$data_path = elgg_get_data_path().'wikis/'.$entity_guid;
 			} else {
 				// can't see the group
-				forward();
+				elgg_pop_context();
+				return false;
 			}
 			$page = array_slice($page, 1); // pop first element
 			define('DOKU_REL', $url_base.$entity_guid."/");
@@ -135,14 +137,14 @@ function dokuwiki_init(){
 				$doku_body = elgg_view('dokuwiki/index',array('page'=>implode("/",$page)));
 			echo $doku_body;
 		}
-		return;
+		return true;
 	}
 
 	/**
 	 * Add a menu item to an ownerblock
 	 */
 	function dokuwiki_owner_block_menu($hook, $type, $return, $params) {
-		if (elgg_instanceof($params['entity'], 'group') && $params['entity']->dokuwiki_enable != "no") {
+		if (elgg_instanceof($params['entity'], 'group') && $params['entity']->dokuwiki_enable == "yes") {
 			$url = "dokuwiki/{$params['entity']->guid}/";
 			$item = new ElggMenuItem('dokuwiki', elgg_echo('dokuwiki:group'), $url);
 			$return[] = $item;

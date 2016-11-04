@@ -41,7 +41,7 @@ elgg.tinymce.init = function() {
 		language : "<?php echo tinymce_get_site_language(); ?>",
 		plugins : "lists,spellchecker,autosave,fullscreen,paste,inlinepopups",
 		relative_urls : false,
-		remove_script_host : false,	
+		remove_script_host : false,
 		document_base_url : elgg.config.wwwroot,
 		theme_advanced_buttons1 : "bold,italic,underline,separator,strikethrough,bullist,numlist,undo,redo,link,unlink,image,blockquote,code,pastetext,pasteword,more,fullscreen,spellchecker",
 		theme_advanced_buttons2 : "",

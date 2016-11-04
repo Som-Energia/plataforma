@@ -12,7 +12,7 @@ $english = array(
 	// IP related
 	'tracker:title' => "Members with IP address: %s",
 	'tracker:find' => "Find others with same IP",
-	'tracker:moreinfo' => "Get extended information about IP address",
+	'tracker:moreinfo' => "Info about ISP and geo location",
 	'tracker:info' => "Info",
 	'tracker:searchip' => "Find all users coming from a specific IP address:",
 	'tracker:search:info' => "Extended IP info",

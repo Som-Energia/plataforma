@@ -32,5 +32,5 @@
 }
 
 .ui-menu-item a:hover {
-	color: white !important;
+	color: white;
 }

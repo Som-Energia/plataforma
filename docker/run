@@ -1,23 +1,14 @@
 #!/bin/bash
 APPPATH=$(realpath "./")
-echo "# Comprobando archivo configuracion"
-CONFIG="${APPPATH}/engine/settings.php"
-if [ ! -f ${CONFIG} ];
-then
-   echo "Error: Archivo de configuracion no encontrado."
-   exit 1
-fi
+#APPDATA="$APPPATH/docker/elggdata"
+#APPDATABASE="$APPPATH/docker/elggdatabase"
+DOCKERIMAGE="somenergia/plataforma"
 
-echo "# Comprobando archivo htaccess"
-HTACCESS="${APPPATH}/.htaccess"
-if [ ! -f ${HTACCESS} ];
-then
-   echo "Error: Archivo htaccess no encontrado"
-   exit 1
-fi
-
+echo "## Run $DOCKERIMAGE image"
 echo "## Cuentas accesso docker ##"
 echo "## Plataforma: admin Passwd: adminadmin ##"
 echo "## Admin Base datos: admin Passwd: plataforma ##"
 
-docker run -it -p 8000:80 -p 3306:3306 -v "${APPPATH}":/app:z somenergia/plataforma
+
+#docker run -it -p 8000:80 -p 3306:3306 -v "${APPPATH}":/app:z -v "${APPDATA}":/data:z -v "${APPDATABASE}":/var/lib/mysql:z "$DOCKERIMAGE"
+docker run -it -p 8000:80 -p 3306:3306 -v "${APPPATH}":/app:z "$DOCKERIMAGE"

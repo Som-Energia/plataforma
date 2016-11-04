@@ -1,6 +1,162 @@
 Changelog and contributors list
 
 ------------------------------------------------------------------------
+Version 1.8.6 Change List
+Release Date: 31/01/2015
+------------------------------------------------------------------------
+BEGIN VERSION 1.8.6 CHANGES
+------------------------------------------------------------------------
+* UI-improvements on thumbnails re-creation page (progress bar),
+* Fine-tuning of sidebar entries with addition of "Latest comments" and "Tagcloud" blocks where appropriate.
+Contributors:
+  * iionly
+------------------------------------------------------------------------
+END VERSION 1.8.6 CHANGES
+------------------------------------------------------------------------
+
+------------------------------------------------------------------------
+Version 1.8.5 Change List
+Release Date: 10/01/2015
+------------------------------------------------------------------------
+BEGIN VERSION 1.8.5 CHANGES
+------------------------------------------------------------------------
+* Fixed an error in 2013121301.php upgrade script on handling of ElggBatches that could have resulted in the upgrade getting stuck (script in new version is now 2013121401.php),
+* Do not show "Upgrade" button on a new install of Tidypics,
+* Added script for re-sizing all image thumbnails after changing thumbnail size settings (available on Thumbnail Creation tab on Tidypics plugin settings page). NOTICE: when changing the default thumbnail sized it's very likely that you need to make adjustments in Tidypics' CSS (that's for YOU to do),
+* Corrections in group access check to prevent full view display of group albums and group images in hidden group to non-members of the group,
+* Added "Upload photos" link to "Latest group photos" widget on group profile pages (without and with Widget Manager plugin in use),
+* Display of filter tabs (no tab selected) and owner block when viewing the images of another user (i.e. made the siteimagesowner page to behave like pages of other type of content),
+* Display the categories selected for a photo in its full view output,
+* Image file extension "jpeg" added to list of allowed extension for html5 uploader,
+* Allow tagging of all site members (including yourself) on an image,
+* Prevent the photo to be opened in the lightbox popup while adding a tag,
+* Added plugin setting to allow for restricting tagging of a photo to the owner of the photo (and admins) only,
+* Change in tag labels for a better indication of difference between word-tags ("Tag(s): bla") and member tags ("Member: Mr. X (tagged by Mr. Y)"),
+* Fixes in page views (siteimagesowner, siteimagesgroup, tagged) in case of missing guid on input or viewer is logged out,
+* Added missing CSS classes for tagging borders again that were mistakenly removed in release 1.8.1beta14,
+* French translations added.
+Contributors:
+  * iionly
+  * Facyla
+------------------------------------------------------------------------
+END VERSION 1.8.5 CHANGES
+------------------------------------------------------------------------
+
+------------------------------------------------------------------------
+Version 1.8.4 Change List
+Release Date: 07/10/2014
+------------------------------------------------------------------------
+BEGIN VERSION 1.8.4 CHANGES
+------------------------------------------------------------------------
+* "No-Flash required" fallback for slideshow.
+Contributors:
+  * iionly
+------------------------------------------------------------------------
+END VERSION 1.8.4 CHANGES
+------------------------------------------------------------------------
+
+------------------------------------------------------------------------
+Version 1.8.3 Change List
+Release Date: 05/10/2014
+------------------------------------------------------------------------
+BEGIN VERSION 1.8.3 CHANGES
+------------------------------------------------------------------------
+* "Upload photos" / "Upload photos to this album" buttons hidden within group context for non-group members,
+* "Upload photos" link removed from groups images profile module / widget (failed to work correctly, i.e. not open in a lightbox popup as desired),
+* "Create album" link removed from groups images profile module / widget for for non-members of groups,
+* Disable unintended text shadow within html5 uploader at least in some cases if this text styling has been enabled by other plugins and unwantedly inherited by plupload (can't prevent text shadow in all circumstances as a theme plugin might override Tidypics' CSS).
+Contributors:
+  * iionly
+------------------------------------------------------------------------
+END VERSION 1.8.3 CHANGES
+------------------------------------------------------------------------
+
+------------------------------------------------------------------------
+Version 1.8.2 Change List
+Release Date: 06/09/2014
+------------------------------------------------------------------------
+BEGIN VERSION 1.8.2 CHANGES
+------------------------------------------------------------------------
+* No longer beta! Apart from the things mentioned in the ToDo section everything should work. If not, please tell me,
+* Rework of river activity settings (check the settings and make adjustments if necessary):
+  - new option to set preview image size for all kind of Tidypics' river entries,
+  - click on preview image in river now opens full size version of the image in a lightbox popup.
+Contributors:
+  * iionly
+------------------------------------------------------------------------
+END VERSION 1.8.2 CHANGES
+------------------------------------------------------------------------
+
+------------------------------------------------------------------------
+Version 1.8.1beta16 Change List
+Release Date: 10/08/2014
+------------------------------------------------------------------------
+BEGIN VERSION 1.8.1beta16 CHANGES
+------------------------------------------------------------------------
+ * Fix in latest upgrade script that might resulted in not all database entries having been updated successfully (new "Upgrade" run necessary to complete),
+ * Fix for HTML5 uploader to correctly disable/enable the "Add files" button if the maximum number of allowed photos (or more) had been selected for upload,
+ * Using ElggBatch for image deletion when deleting an album (and its possibly numberous images) to avoid memory issues.
+Contributors:
+  * iionly
+------------------------------------------------------------------------
+END VERSION 1.8.1beta16 CHANGES
+------------------------------------------------------------------------
+
+------------------------------------------------------------------------
+Version 1.8.1beta15 Change List
+Release Date: 20/07/2014
+------------------------------------------------------------------------
+BEGIN VERSION 1.8.1beta15 CHANGES
+------------------------------------------------------------------------
+ * Fix of limitation to 10 images to be uploaded in one batch when using Plupload HTML5/HTML4 uploader.
+Contributors:
+  * iionly
+------------------------------------------------------------------------
+END VERSION 1.8.1beta15 CHANGES
+------------------------------------------------------------------------
+
+------------------------------------------------------------------------
+Version 1.8.1beta14 Change List
+Release Date: 09/06/2014
+------------------------------------------------------------------------
+BEGIN VERSION 1.8.1beta14 CHANGES
+------------------------------------------------------------------------
+ * Uploadify flash uploader replaced by Plupload HTML5/HTML4 uploader (thanks to YaNoo for taking the initiative and providing a PR - otherwise you would have had to wait longer for me to implement it),
+ * Spanish language file added (provided by Joaquín).
+Contributors:
+  * iionly
+  * YaNoo
+  * Joaquín
+------------------------------------------------------------------------
+END VERSION 1.8.1beta14 CHANGES
+------------------------------------------------------------------------
+
+------------------------------------------------------------------------
+Version 1.8.1beta13 Change List
+Release Date: 01/04/2014
+------------------------------------------------------------------------
+BEGIN VERSION 1.8.1beta13 CHANGES
+------------------------------------------------------------------------
+ATTENTION: this new release contains an update script that changes database entries related to comments and likes made on Tidypics image upload river entries. Read the changelog carefully BEFORE running the upgrade to understand what it does and in any case make a database backup before executing the upgrade to be able to revert to the former state if you are not content with the result. The backup is also important because the script might possibly take some time to finish depending on how many database entries are in need to be updated.
+
+ * Code cleanup,
+ * Flash uploader: limit number of images that can be added in one go to 10,
+ * Fix on friends tab pages of "All Photos" and "All photo albums" to check if user has friends and display a fitting message if not instead of saying the friends would not have uploaded image yet (which shows when the user has friends but they have not yet uploaded images),
+ * Removed plugin setting to turn commenting on albums on/off. Commenting on albums is now always on,
+ * Commenting on image uploads on the Activity page (commenting on Tidypics_batch entities): when commenting on an upload of a single image the comment will be added to this image and when commenting on an upload of more than a single image the comment will be added to the corresponding album (in both cases the comment made will still be shown also on the activity page below this river entry),
+ * the same with liking image uploads entries on the Activity page: if a single image was uploaded this image will get the like and if more than a single image was uploaded the corresponding album will get the like (in both cases the like will also be shown on the activity page in the river menu of this entry),
+ * IMPORTANT!!!!!! Please read: upgrade script to assign existing comments and likes made on image upload river entries either to the corresponding image or album. This script makes the existing comments and likes consistent with the future comments and likes created on Tidypics 1.8.1beta13. The update script (mod/tidypics/upgrades/2013121201.php) does the folling:
+		1. upgrading of comments on river entries that were made with Tidypics 1.8.0rc1 or earlier,
+		2. slightly different procedure for upgrading comments on river entries made with a Tidypics 1.8.1betaXX version: for these comments a second database entry was created for the comment to show not only on the activity page but also on the albums' pages. The upgrade script identifies these second comment entries by the lack of corresponding river entries in the database and then deletes these entries. If you have by any means deleted entries on the activity page informing about comments made on album pages or if you prevent such entries to be created on your site somehow then these comments will also get deleted. Unfortunately, there's no other way of getting rid of the duplicate comments entries that are now no longer needed. If in doubt, comment out "Part 3" of the upgrade code in mod/tidypics/upgrades/2013121201.php.
+		3. upgrading of likes on river entries: here's a check included if a user has already liked the album or image the like made to the river entry would get moved to. If there's not already an existing like the like will get moved from the river entry and added to the album/image. If the user has already liked the image or corresponding album the like will not get added to avoid duplicate likings.
+Contributors:
+  * iionly
+  * Juho Jaakkola
+------------------------------------------------------------------------
+END VERSION 1.8.1beta13 CHANGES
+------------------------------------------------------------------------
+
+------------------------------------------------------------------------
 Version 1.8.1beta12 Change List
 Release Date: 02/01/2014
 ------------------------------------------------------------------------
@@ -19,7 +175,6 @@ Contributors:
 ------------------------------------------------------------------------
 END VERSION 1.8.1beta12 CHANGES
 ------------------------------------------------------------------------
-
 
 ------------------------------------------------------------------------
 Version 1.8.1beta11 Change List
@@ -48,7 +203,6 @@ Contributors:
 END VERSION 1.8.1beta11 CHANGES
 ------------------------------------------------------------------------
 
-
 ------------------------------------------------------------------------
 Version 1.8.1beta10 Change List
 Release Date: 17/08/2013
@@ -72,7 +226,6 @@ Contributors:
 END VERSION 1.8.1beta10 CHANGES
 ------------------------------------------------------------------------
 
-
 ------------------------------------------------------------------------
 Version 1.8.1beta9 Change List
 Release Date: 26/06/2013
@@ -86,7 +239,6 @@ Contributors:
 ------------------------------------------------------------------------
 END VERSION 1.8.1beta9 CHANGES
 ------------------------------------------------------------------------
-
 
 ------------------------------------------------------------------------
 Version 1.8.1beta8 Change List
@@ -118,7 +270,6 @@ Contributors:
 END VERSION 1.8.1beta8 CHANGES
 ------------------------------------------------------------------------
 
-
 ------------------------------------------------------------------------
 Version 1.8.1beta7 Change List
 Release Date: 20/05/2013
@@ -140,7 +291,6 @@ Contributors:
 END VERSION 1.8.1beta7 CHANGES
 ------------------------------------------------------------------------
 
-
 ------------------------------------------------------------------------
 Version 1.8.1beta6 Change List
 Release Date: 28/04/2013
@@ -157,7 +307,6 @@ Contributors:
 END VERSION 1.8.1beta6 CHANGES
 ------------------------------------------------------------------------
 
-
 ------------------------------------------------------------------------
 Version 1.8.1beta5 Change List
 Release Date: 01/04/2013
@@ -170,7 +319,6 @@ Contributors:
 ------------------------------------------------------------------------
 END VERSION 1.8.1beta5 CHANGES
 ------------------------------------------------------------------------
-
 
 ------------------------------------------------------------------------
 Version 1.8.1beta4 Change List
@@ -188,7 +336,6 @@ Contributors:
 END VERSION 1.8.1beta4 CHANGES
 ------------------------------------------------------------------------
 
-
 ------------------------------------------------------------------------
 Version 1.8.1beta3 Change List
 Release Date: 03/17/2013
@@ -201,7 +348,6 @@ Contributors:
 ------------------------------------------------------------------------
 END VERSION 1.8.1beta3 CHANGES
 ------------------------------------------------------------------------
-
 
 ------------------------------------------------------------------------
 Version 1.8.1beta2 Change List
@@ -219,7 +365,6 @@ Contributors:
 ------------------------------------------------------------------------
 END VERSION 1.8.1beta2 CHANGES
 ------------------------------------------------------------------------
-
 
 ------------------------------------------------------------------------
 Version 1.8.1beta1 Change List
@@ -246,7 +391,6 @@ Contributors:
 END VERSION 1.8.1beta1 CHANGES
 ------------------------------------------------------------------------
 
-
 ------------------------------------------------------------------------
 Version 1.8.0 RC1 Change List
 Release Date: 07/14/2012
@@ -261,7 +405,6 @@ Contributors:
 END VERSION 1.8.0 RC1 CHANGES
 ------------------------------------------------------------------------
 
-
 ------------------------------------------------------------------------
 Version 1.7.3 Change List
 Release Date: 11/09/2011
@@ -274,7 +417,6 @@ BEGIN VERSION 1.7.3 CHANGES
 ------------------------------------------------------------------------
 END VERSION 1.7.3 CHANGES
 ------------------------------------------------------------------------
-
 
 ------------------------------------------------------------------------
 Version 1.7.2 Change List
@@ -290,7 +432,6 @@ BEGIN VERSION 1.7.2 CHANGES
 END VERSION 1.7.2 CHANGES
 ------------------------------------------------------------------------
 
-
 ------------------------------------------------------------------------
 Version 1.7.1 Change List
 Release Date: 07/10/2011
@@ -303,7 +444,6 @@ BEGIN VERSION 1.7.1 CHANGES
 ------------------------------------------------------------------------
 END VERSION 1.7.1 CHANGES
 ------------------------------------------------------------------------
-
 
 ------------------------------------------------------------------------
 Version 1.7.0 Change List
@@ -330,7 +470,6 @@ BEGIN VERSION 1.7.0 CHANGES
 END VERSION 1.7.0 CHANGES
 ------------------------------------------------------------------------
 
-
 ------------------------------------------------------------------------
 Version 1.6.8 Change List
 Release Date: 05/01/2010
@@ -350,7 +489,6 @@ BEGIN VERSION 1.6.8 CHANGES
 END VERSION 1.6.8 CHANGES
 ------------------------------------------------------------------------
 
-
 ------------------------------------------------------------------------
 Version 1.6.7 Change List
 Release Date: 04/24/2010
@@ -363,7 +501,6 @@ BEGIN VERSION 1.6.7 CHANGES
 ------------------------------------------------------------------------
 END VERSION 1.6.7 CHANGES
 ------------------------------------------------------------------------
-
 
 ------------------------------------------------------------------------
 Version 1.6.6 Change List
@@ -378,7 +515,6 @@ BEGIN VERSION 1.6.6 CHANGES
 ------------------------------------------------------------------------
 END VERSION 1.6.6 CHANGES
 ------------------------------------------------------------------------
-
 
 ------------------------------------------------------------------------
 Version 1.6.5 Change List
@@ -397,7 +533,6 @@ BEGIN VERSION 1.6.5 CHANGES
 END VERSION 1.6.5 CHANGES
 ------------------------------------------------------------------------
 
-
 ------------------------------------------------------------------------
 Version 1.6.4 Change List
 Release Date: 10/05/2009
@@ -410,7 +545,6 @@ BEGIN VERSION 1.6.4 CHANGES
 ------------------------------------------------------------------------
 END VERSION 1.6.4 CHANGES
 ------------------------------------------------------------------------
-
 
 ------------------------------------------------------------------------
 Version 1.6.3 Change List
@@ -426,7 +560,6 @@ BEGIN VERSION 1.6.3 CHANGES
 ------------------------------------------------------------------------
 END VERSION 1.6.3 CHANGES
 ------------------------------------------------------------------------
-
 
 ------------------------------------------------------------------------
 Version 1.6.2 Change List
@@ -444,7 +577,6 @@ BEGIN VERSION 1.6.2 CHANGES
 END VERSION 1.6.2 CHANGES
 ------------------------------------------------------------------------
 
-
 ------------------------------------------------------------------------
 Version 1.6.1 Change List
 Release Date: 08/04/2009
@@ -456,7 +588,6 @@ BEGIN VERSION 1.6.1 CHANGES
 ------------------------------------------------------------------------
 END VERSION 1.6.1 CHANGES
 ------------------------------------------------------------------------
-
 
 ------------------------------------------------------------------------
 Version 1.6.0 Change List
@@ -488,7 +619,6 @@ BEGIN VERSION 1.6.0 CHANGES
 END VERSION 1.6.0 CHANGES
 ------------------------------------------------------------------------
 
-
 ------------------------------------------------------------------------
 Version 1.5.1 Change List
 Release Date: 03/29/2009
@@ -505,7 +635,6 @@ BEGIN VERSION 1.5.1 CHANGES
 ------------------------------------------------------------------------
 END VERSION 1.5.1 CHANGES
 ------------------------------------------------------------------------
-
 
 ------------------------------------------------------------------------
 Version 1.5 Change List
@@ -534,7 +663,6 @@ BEGIN VERSION 1.5 CHANGES
 ------------------------------------------------------------------------
 END VERSION 1.5 CHANGES
 ------------------------------------------------------------------------
-
 
 ------------------------------------------------------------------------
 Version 1.08.2 Change List
@@ -566,7 +694,6 @@ BEGIN VERSION 1.08.2 CHANGES
 ------------------------------------------------------------------------
 END VERSION 1.08.2 CHANGES
 ------------------------------------------------------------------------
-
 
 ------------------------------------------------------------------------
 Version 1.08.1 Change List
@@ -610,7 +737,6 @@ BEGIN VERSION 1.08.1 CHANGES
 END VERSION 1.08.1 CHANGES
 ------------------------------------------------------------------------
 
-
 ------------------------------------------------------------------------
 Version 1.08 Change List
 Release Date: 02/08/2008
@@ -647,7 +773,6 @@ BEGIN VERSION 1.08 CHANGES
 END VERSION 1.08 CHANGES
 ------------------------------------------------------------------------
 
-
 ------------------------------------------------------------------------
 Version 1.07 Change List
 Release Date: 02/03/2008
@@ -667,7 +792,6 @@ BEGIN VERSION 1.07 CHANGES
 ------------------------------------------------------------------------
 END VERSION 1.07 CHANGES
 ------------------------------------------------------------------------
-
 
 ------------------------------------------------------------------------
 Version 1.06 Change List

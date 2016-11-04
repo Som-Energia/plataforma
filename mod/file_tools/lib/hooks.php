@@ -1,22 +1,17 @@
 <?php
 
-	function file_tools_can_edit_metadata_hook($hook, $type, $returnvalue, $params)
-	{
+	function file_tools_can_edit_metadata_hook($hook, $type, $returnvalue, $params)	{
 		$result = $returnvalue;
 	
-		if(!empty($params) && is_array($params) && $result !== true)
-		{
-			if(array_key_exists("user", $params) && array_key_exists("entity", $params))
-			{
-				$entity = $params["entity"];
-				$user = $params["user"];
+		if(($result !== true) && !empty($params) && is_array($params)) {
+			if(array_key_exists("user", $params) && array_key_exists("entity", $params)) {
+				$entity = elgg_extract("entity", $params);
+				$user = elgg_extract("user", $params);
 	
-				if($entity->getSubtype() == FILE_TOOLS_SUBTYPE)
-				{
+				if(elgg_instanceof($entity, "object", FILE_TOOLS_SUBTYPE)) {
 					$container_entity = $entity->getContainerEntity();
 						
-					if(($container_entity instanceof ElggGroup) && $container_entity->isMember($user) && ($container_entity->file_tools_structure_management_enable != "no"))
-					{
+					if(elgg_instanceof($container_entity, "group") && $container_entity->isMember($user) && ($container_entity->file_tools_structure_management_enable != "no")) {
 						$result = true;
 					}
 				}
@@ -50,15 +45,12 @@
 		return $result;
 	}
 	
-	function file_tools_write_acl_plugin_hook($hook, $type, $returnvalue, $params)
-	{
+	function file_tools_write_acl_plugin_hook($hook, $type, $returnvalue, $params) {
 		$result = $returnvalue;
 		
-		if(!empty($params) && is_array($params))
-		{
+		if(!empty($params) && is_array($params)) {
 			
-			if((elgg_get_context() == "file_tools") && ($page_owner = elgg_get_page_owner_entity()) && ($page_owner instanceof ElggGroup))
-			{
+			if(elgg_in_context("file_tools") && ($page_owner = elgg_get_page_owner_entity()) && elgg_instanceof($page_owner, "group")){
 				$result = array(
 					$page_owner->group_acl => elgg_echo("groups:group") . ": " . $page_owner->name,
 					ACCESS_LOGGED_IN => elgg_echo("LOGGED_IN"),
@@ -109,7 +101,8 @@
 						
 						elgg_set_page_owner_guid($page[1]);
 						
-						include(dirname(dirname(__FILE__)) . "/pages/import/zip.php");
+						register_error(elgg_echo("changebookmark"));
+						forward("file/add/" . $page[1] . "?upload_type=zip");
 					}
 					break;
 				case "bulk_download":
@@ -117,40 +110,6 @@
 					
 					include(dirname(dirname(__FILE__)) . "/pages/file/download.php");
 					break;
-			}
-		}
-		
-		return $result;
-	}
-	
-	function file_tools_title_menu_register_hook($hook, $type, $returnvalue, $params){
-		$result = $returnvalue;
-		
-		if(!empty($result) && is_array($result)){
-			if(!($page_owner = elgg_get_page_owner_guid())){
-				$page_owner = elgg_get_logged_in_user_guid();
-			}
-			
-			if(elgg_in_context("file")){
-				$add_found = false;
-				
-				foreach($result as $menu_item){
-					if(($menu_item->getName() == "add") && $menu_item->getText() == elgg_echo("file:add")){
-						$add_found = true;
-						break;
-					}
-				}
-				
-				$parts = parse_url(current_page_url(), PHP_URL_PATH);
-				
-				if(($add_found && stristr($parts, "file/zip/") === false) || stristr($parts, "file/add/")){
-					$result[] = ElggMenuItem::factory(array(
-						"name" => "zip_upload",
-						"href" => "file/zip/" . $page_owner,
-						"text" => elgg_echo("file_tools:upload:new"),
-						"class" => "elgg-button elgg-button-action"
-					));
-				}
 			}
 		}
 		

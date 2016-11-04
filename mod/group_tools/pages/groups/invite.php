@@ -1,16 +1,18 @@
 <?php
-	/**
-	 * Invite users to groups
-	 * 
-	 * @package ElggGroups
-	 */
+/**
+ * Invite users to groups
+ *
+ * @package ElggGroups
+ */
 
-	gatekeeper();
+gatekeeper();
 
-	$guid = (int) get_input("group_guid");
-	
-	if(($group = get_entity($guid)) && ($group instanceof ElggGroup) && $group->canEdit()){
-	
+$guid = (int) get_input("group_guid");
+$group = get_entity($guid);
+
+if (!empty($group) && ($group instanceof ElggGroup)) {
+
+	if ($group->canEdit() || group_tools_allow_members_invite($group)) {
 		elgg_set_page_owner_guid($guid);
 		
 		// get plugin settings
@@ -18,7 +20,7 @@
 		$invite_email = elgg_get_plugin_setting("invite_email", "group_tools");
 		$invite_csv = elgg_get_plugin_setting("invite_csv", "group_tools");
 			
-		if(in_array("yes", array($invite, $invite_csv, $invite_email))){
+		if (in_array("yes", array($invite, $invite_csv, $invite_email))) {
 			$title = elgg_echo("group_tools:groups:invite:title");
 			$breadcrumb = elgg_echo("group_tools:groups:invite");
 		} else {
@@ -53,3 +55,7 @@
 		register_error(elgg_echo("groups:noaccess"));
 		forward(REFERER);
 	}
+} else {
+	register_error(elgg_echo("groups:noaccess"));
+	forward(REFERER);
+}

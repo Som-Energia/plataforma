@@ -13,15 +13,9 @@ $english = array(
 
 	'item:site' => 'Sites',
 
-
-
-
-
-
 /**
  * Sessions
  */
-
 
 	'login' => "Log in",
 	'loginok' => "You have been logged in.",
@@ -761,7 +755,6 @@ $english = array(
 	'admin:statistics:label:version' => "Elgg version",
 	'admin:statistics:label:version:release' => "Release",
 	'admin:statistics:label:version:version' => "Version",
-    'admin:statistics:groups' => "Groups activity",
 
 	'admin:server:label:php' => 'PHP',
 	'admin:server:label:web_server' => 'Web Server',
@@ -1241,7 +1234,7 @@ You cannot reply to this email.",
 	'js:security:token_refreshed' => 'Connection to %s restored!',
 
 /**
- * Languages according to ISO 639-1
+ * Languages according to ISO 639-1 (with a couple of exceptions)
  */
 	"aa" => "Afar",
 	"ab" => "Abkhazian",
@@ -1260,6 +1253,7 @@ You cannot reply to this email.",
 	"bo" => "Tibetan",
 	"br" => "Breton",
 	"ca" => "Catalan",
+	"cmn" => "Mandarin Chinese", // ISO 639-3
 	"co" => "Corsican",
 	"cs" => "Czech",
 	"cy" => "Welsh",
@@ -1336,6 +1330,7 @@ You cannot reply to this email.",
 	"pl" => "Polish",
 	"ps" => "Pashto / Pushto",
 	"pt" => "Portuguese",
+	"pt_br" => 'Brazilian Portuguese',
 	"qu" => "Quechua",
 	"rm" => "Rhaeto-Romance",
 	"rn" => "Kirundi",
