@@ -5,6 +5,9 @@
 
 elgg_load_library("elgg:threads");
 
+elgg_load_js('jquery.plugins.parsequery');
+elgg_load_js('elgg.threads');
+
 $entity = elgg_extract('entity', $vars);
 $topic = threads_top($entity->guid);
 
