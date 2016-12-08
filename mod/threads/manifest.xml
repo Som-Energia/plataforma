@@ -7,7 +7,7 @@
 	<category>lorea</category>
 	<description>Allow threaded discussions into group forums.</description>
 	<website>https://lorea.cc/</website>
-	<copyright>(C) 2011-13 Lorea</copyright>
+	<copyright>(C) 2011-2016 Lorea</copyright>
 	<license>GNU Public License version 2 or higher</license>
 	<requires>
 		<type>elgg_release</type>
@@ -17,6 +17,11 @@
 		<type>priority</type>
 		<priority>after</priority>
 		<plugin>groups</plugin>
+	</requires>
+        <requires>
+		<type>priority</type>
+		<priority>after</priority>
+		<plugin>likes</plugin>
 	</requires>
 	<activate_on_install>true</activate_on_install>
 </plugin_manifest>
