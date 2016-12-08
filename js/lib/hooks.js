@@ -77,14 +77,17 @@ elgg.trigger_hook = function(name, type, params, value) {
 	// mark as triggered
 	elgg.set_triggered_hook(name, type);
 
-	// default to true if unpassed
-	value = value || true;
+	// default to null if unpassed
+	value = !elgg.isNullOrUndefined(value) ? value : null;
 
 	var hooks = elgg.config.hooks,
 		tempReturnValue = null,
 		returnValue = value,
 		callHookHandler = function(handler) {
-			tempReturnValue = handler(name, type, params, value);
+			tempReturnValue = handler(name, type, params, returnValue);
+			if (!elgg.isNullOrUndefined(tempReturnValue)) {
+				returnValue = tempReturnValue;
+			}
 		};
 
 	elgg.provide(name + '.' + type, hooks);
@@ -93,7 +96,7 @@ elgg.trigger_hook = function(name, type, params, value) {
 	elgg.provide('all.all', hooks);
 
 	var hooksList = [];
-	
+
 	if (name != 'all' && type != 'all') {
 		hooksList.push(hooks[name][type]);
 	}
@@ -115,7 +118,7 @@ elgg.trigger_hook = function(name, type, params, value) {
 		return true;
 	});
 
-	return (tempReturnValue != null) ? tempReturnValue : returnValue;
+	return returnValue;
 };
 
 /**

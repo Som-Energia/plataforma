@@ -1,8 +1,7 @@
 <?php
 /**
  * Elgg filestore.
- * This file contains classes, interfaces and functions for
- * saving and retrieving data to various file stores.
+ * This file contains functions for saving and retrieving data from files.
  *
  * @package Elgg.Core
  * @subpackage DataModel.FileStorage
@@ -42,11 +41,17 @@ function get_dir_size($dir, $totalsize = 0) {
  * @return mixed|false The contents of the file, or false on failure.
  */
 function get_uploaded_file($input_name) {
-	// If the file exists ...
-	if (isset($_FILES[$input_name]) && $_FILES[$input_name]['error'] == 0) {
-		return file_get_contents($_FILES[$input_name]['tmp_name']);
+	$files = _elgg_services()->request->files;
+	if (!$files->has($input_name)) {
+		return false;
 	}
-	return false;
+
+	$file = $files->get($input_name);
+	if (elgg_extract('error', $file) !== 0) {
+		return false;
+	}
+
+	return file_get_contents(elgg_extract('tmp_name', $file));
 }
 
 /**
@@ -65,14 +70,18 @@ function get_uploaded_file($input_name) {
  */
 function get_resized_image_from_uploaded_file($input_name, $maxwidth, $maxheight,
 $square = false, $upscale = false) {
-
-	// If our file exists ...
-	if (isset($_FILES[$input_name]) && $_FILES[$input_name]['error'] == 0) {
-		return get_resized_image_from_existing_file($_FILES[$input_name]['tmp_name'], $maxwidth,
-			$maxheight, $square, 0, 0, 0, 0, $upscale);
+	$files = _elgg_services()->request->files;
+	if (!$files->has($input_name)) {
+		return false;
 	}
 
-	return false;
+	$file = $files->get($input_name);
+	if (elgg_extract('error', $file) !== 0) {
+		return false;
+	}
+
+	return get_resized_image_from_existing_file(elgg_extract('tmp_name', $file), $maxwidth,
+		$maxheight, $square, 0, 0, 0, 0, $upscale);
 }
 
 /**
@@ -95,13 +104,13 @@ $square = false, $upscale = false) {
  *
  * @return false|mixed The contents of the resized image, or false on failure
  */
-function get_resized_image_from_existing_file($input_name, $maxwidth, $maxheight, $square = FALSE,
-$x1 = 0, $y1 = 0, $x2 = 0, $y2 = 0, $upscale = FALSE) {
+function get_resized_image_from_existing_file($input_name, $maxwidth, $maxheight, $square = false,
+$x1 = 0, $y1 = 0, $x2 = 0, $y2 = 0, $upscale = false) {
 
 	// Get the size information from the image
 	$imgsizearray = getimagesize($input_name);
-	if ($imgsizearray == FALSE) {
-		return FALSE;
+	if ($imgsizearray == false) {
+		return false;
 	}
 
 	$width = $imgsizearray[0];
@@ -118,7 +127,7 @@ $x1 = 0, $y1 = 0, $x2 = 0, $y2 = 0, $upscale = FALSE) {
 	// make sure the function is available
 	$load_function = "imagecreatefrom" . $accepted_formats[$imgsizearray['mime']];
 	if (!is_callable($load_function)) {
-		return FALSE;
+		return false;
 	}
 
 	// get the parameters for resizing the image
@@ -133,20 +142,20 @@ $x1 = 0, $y1 = 0, $x2 = 0, $y2 = 0, $upscale = FALSE) {
 		'y2' => $y2,
 	);
 	$params = get_image_resize_parameters($width, $height, $options);
-	if ($params == FALSE) {
-		return FALSE;
+	if ($params == false) {
+		return false;
 	}
 
 	// load original image
-	$original_image = $load_function($input_name);
+	$original_image = call_user_func($load_function, $input_name);
 	if (!$original_image) {
-		return FALSE;
+		return false;
 	}
 
 	// allocate the new image
 	$new_image = imagecreatetruecolor($params['newwidth'], $params['newheight']);
 	if (!$new_image) {
-		return FALSE;
+		return false;
 	}
 
 	// color transparencies white (default is black)
@@ -166,12 +175,12 @@ $x1 = 0, $y1 = 0, $x2 = 0, $y2 = 0, $upscale = FALSE) {
 									$params['selectionwidth'],
 									$params['selectionheight']);
 	if (!$rtn_code) {
-		return FALSE;
+		return false;
 	}
 
 	// grab a compressed jpeg version of the image
 	ob_start();
-	imagejpeg($new_image, NULL, 90);
+	imagejpeg($new_image, null, 90);
 	$jpeg = ob_get_clean();
 
 	imagedestroy($new_image);
@@ -187,7 +196,7 @@ $x1 = 0, $y1 = 0, $x2 = 0, $y2 = 0, $upscale = FALSE) {
  * @param int   $height  Height of the original image
  * @param array $options See $defaults for the options
  *
- * @return array or FALSE
+ * @return array or false
  * @since 1.7.2
  */
 function get_image_resize_parameters($width, $height, $options) {
@@ -196,8 +205,8 @@ function get_image_resize_parameters($width, $height, $options) {
 		'maxwidth' => 100,
 		'maxheight' => 100,
 
-		'square' => FALSE,
-		'upscale' => FALSE,
+		'square' => false,
+		'upscale' => false,
 
 		'x1' => 0,
 		'y1' => 0,
@@ -207,12 +216,20 @@ function get_image_resize_parameters($width, $height, $options) {
 
 	$options = array_merge($defaults, $options);
 
-	extract($options);
+	// Avoiding extract() because it hurts static analysis
+	$maxwidth = $options['maxwidth'];
+	$maxheight = $options['maxheight'];
+	$square = $options['square'];
+	$upscale = $options['upscale'];
+	$x1 = $options['x1'];
+	$y1 = $options['y1'];
+	$x2 = $options['x2'];
+	$y2 = $options['y2'];
 
 	// crop image first?
-	$crop = TRUE;
+	$crop = true;
 	if ($x1 == 0 && $y1 == 0 && $x2 == 0 && $y2 == 0) {
-		$crop = FALSE;
+		$crop = false;
 	}
 
 	// how large a section of the image has been selected
@@ -230,8 +247,8 @@ function get_image_resize_parameters($width, $height, $options) {
 		// asking for a square image back
 
 		// detect case where someone is passing crop parameters that are not for a square
-		if ($crop == TRUE && $selection_width != $selection_height) {
-			return FALSE;
+		if ($crop == true && $selection_width != $selection_height) {
+			return false;
 		}
 
 		// size of the new square image
@@ -388,11 +405,11 @@ function file_get_general_file_type($mimetype) {
 function delete_directory($directory) {
 	// sanity check: must be a directory
 	if (!$handle = opendir($directory)) {
-		return FALSE;
+		return false;
 	}
 
 	// loop through all files
-	while (($file = readdir($handle)) !== FALSE) {
+	while (($file = readdir($handle)) !== false) {
 		if (in_array($file, array('.', '..'))) {
 			continue;
 		}
@@ -401,7 +418,7 @@ function delete_directory($directory) {
 		if (is_dir($path)) {
 			// recurse down through directory
 			if (!delete_directory($path)) {
-				return FALSE;
+				return false;
 			}
 		} else {
 			// delete file
@@ -420,15 +437,19 @@ function delete_directory($directory) {
  * @warning This only deletes the physical files and not their entities.
  * This will result in FileExceptions being thrown.  Don't use this function.
  *
- * @param ElggUser $user And ElggUser
+ * @warning This must be kept in sync with ElggDiskFilestore.
+ *
+ * @todo Remove this when all files are entities.
+ *
+ * @param ElggUser $user An ElggUser
  *
  * @return void
  */
 function clear_user_files($user) {
 	global $CONFIG;
 
-	$time_created = date('Y/m/d', (int)$user->time_created);
-	$file_path = "$CONFIG->dataroot$time_created/$user->guid";
+	$dir = new Elgg_EntityDirLocator($user->guid);
+	$file_path = $CONFIG->dataroot . $dir;
 	if (file_exists($file_path)) {
 		delete_directory($file_path);
 	}
@@ -436,7 +457,7 @@ function clear_user_files($user) {
 
 
 /// Variable holding the default datastore
-$DEFAULT_FILE_STORE = NULL;
+$DEFAULT_FILE_STORE = null;
 
 /**
  * Return the default filestore.
@@ -465,56 +486,38 @@ function set_default_filestore(ElggFilestore $filestore) {
 }
 
 /**
- * Register entity type objects, subtype file as
- * ElggFile.
- *
- * @return void
- * @access private
- */
-function filestore_run_once() {
-	// Register a class
-	add_subtype("object", "file", "ElggFile");
-}
-
-/**
- * Initialise the file modules.
+ * Initialize the file library.
  * Listens to system init and configures the default filestore
  *
  * @return void
  * @access private
  */
-function filestore_init() {
+function _elgg_filestore_init() {
 	global $CONFIG;
 
 	// Now register a default filestore
 	if (isset($CONFIG->dataroot)) {
 		set_default_filestore(new ElggDiskFilestore($CONFIG->dataroot));
 	}
-	
-	// Now run this stuff, but only once
-	run_function_once("filestore_run_once");
+
+	// Unit testing
+	elgg_register_plugin_hook_handler('unit_test', 'system', '_elgg_filestore_test');
 }
 
 /**
  * Unit tests for files
  *
- * @param string  $hook   unit_test
+ * @param string $hook   unit_test
  * @param string $type   system
  * @param mixed  $value  Array of tests
- * @param mixed  $params Params
  *
  * @return array
  * @access private
  */
-function filestore_test($hook, $type, $value, $params) {
+function _elgg_filestore_test($hook, $type, $value) {
 	global $CONFIG;
-	$value[] = "{$CONFIG->path}engine/tests/objects/filestore.php";
+	$value[] = "{$CONFIG->path}engine/tests/ElggCoreFilestoreTest.php";
 	return $value;
 }
 
-
-// Register a startup event
-elgg_register_event_handler('init', 'system', 'filestore_init', 100);
-
-// Unit testing
-elgg_register_plugin_hook_handler('unit_test', 'system', 'filestore_test');
+elgg_register_event_handler('init', 'system', '_elgg_filestore_init', 100);

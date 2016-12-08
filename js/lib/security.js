@@ -1,9 +1,7 @@
 /**
  * Hold security-related data here
  */
-elgg.provide('elgg.security');
-
-elgg.security.token = {};
+elgg.provide('elgg.security.token');
 
 elgg.security.tokenRefreshFailed = false;
 
@@ -15,7 +13,7 @@ elgg.security.tokenRefreshTimer = null;
  * @param {Object} json The json representation of a token containing __elgg_ts and __elgg_token
  * @return {Void}
  */
-elgg.security.setToken = function(json) {	
+elgg.security.setToken = function(json) {
 	//update the convenience object
 	elgg.security.token = json;
 
@@ -33,15 +31,17 @@ elgg.security.setToken = function(json) {
 
 /**
  * Security tokens time out so we refresh those every so often.
- * 
+ *
  * @private
  */
 elgg.security.refreshToken = function() {
-	elgg.action('security/refreshtoken', function(data) {
-		if (data && data.output.__elgg_ts && data.output.__elgg_token) {
-			elgg.security.setToken(data.output);
-		} else {
-			clearInterval(elgg.security.tokenRefreshTimer);
+	elgg.getJSON('refresh_token', function(data) {
+		if (data && data.__elgg_ts && data.__elgg_token) {
+			elgg.security.setToken(data);
+			if (elgg.is_logged_in() && data.logged_in === false) {
+				elgg.session.user = null;
+				elgg.register_error(elgg.echo('session_expired'));
+			}
 		}
 	});
 };
@@ -62,8 +62,8 @@ elgg.security.addToken = function(data) {
 		var parts = elgg.parse_url(data),
 			args = {},
 			base = '';
-		
-		if (parts['host'] == undefined) {
+
+		if (parts['host'] === undefined) {
 			if (data.indexOf('?') === 0) {
 				// query string
 				base = '?';
@@ -72,7 +72,7 @@ elgg.security.addToken = function(data) {
 		} else {
 			// full or relative URL
 
-			if (parts['query'] != undefined) {
+			if (parts['query'] !== undefined) {
 				// with query string
 				args = elgg.parse_str(parts['query']);
 			}

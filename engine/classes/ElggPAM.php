@@ -18,7 +18,7 @@ class ElggPAM {
 
 	/**
 	 * ElggPAM constructor
-	 * 
+	 *
 	 * @param string $policy PAM policy type: user, api, or plugin-defined policies
 	 */
 	public function __construct($policy) {
@@ -51,7 +51,7 @@ class ElggPAM {
 
 		$authenticated = false;
 
-		foreach ($_PAM_HANDLERS[$this->policy] as $k => $v) {
+		foreach ($_PAM_HANDLERS[$this->policy] as $v) {
 			$handler = $v->handler;
 			if (!is_callable($handler)) {
 				continue;
@@ -89,7 +89,7 @@ class ElggPAM {
 
 	/**
 	 * Get a failure message to display to user
-	 * 
+	 *
 	 * @return string
 	 */
 	public function getFailureMessage() {

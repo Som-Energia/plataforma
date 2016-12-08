@@ -24,7 +24,7 @@
  *
  * @return mixed
  */
-function get_input($variable, $default = NULL, $filter_result = TRUE) {
+function get_input($variable, $default = null, $filter_result = true) {
 
 	global $CONFIG;
 
@@ -33,20 +33,24 @@ function get_input($variable, $default = NULL, $filter_result = TRUE) {
 	elgg_push_context('input');
 
 	if (isset($CONFIG->input[$variable])) {
+		// a plugin has already set this variable
 		$result = $CONFIG->input[$variable];
-
 		if ($filter_result) {
 			$result = filter_tags($result);
 		}
-	} elseif (isset($_REQUEST[$variable])) {
-		if (is_array($_REQUEST[$variable])) {
-			$result = $_REQUEST[$variable];
-		} else {
-			$result = trim($_REQUEST[$variable]);
-		}
+	} else {
+		$request = _elgg_services()->request;
+		$value = $request->get($variable);
+		if ($value !== null) {
+			$result = $value;
+			if (is_string($result)) {
+				// @todo why trim
+				$result = trim($result);
+			}
 
-		if ($filter_result) {
-			$result = filter_tags($result);
+			if ($filter_result) {
+				$result = filter_tags($result);
+			}
 		}
 	}
 
@@ -92,6 +96,30 @@ function filter_tags($var) {
 }
 
 /**
+ * Returns the current page's complete URL.
+ *
+ * It uses the configured site URL for the hostname rather than depending on
+ * what the server uses to populate $_SERVER.
+ *
+ * @return string The current page URL.
+ */
+function current_page_url() {
+	$url = parse_url(elgg_get_site_url());
+
+	$page = $url['scheme'] . "://" . $url['host'];
+
+	if (isset($url['port']) && $url['port']) {
+		$page .= ":" . $url['port'];
+	}
+
+	$page = trim($page, "/");
+
+	$page .= _elgg_services()->request->getRequestUri();
+
+	return $page;
+}
+
+/**
  * Validates an email address.
  *
  * @param string $address Email address.
@@ -103,7 +131,7 @@ function is_email_address($address) {
 }
 
 /**
- * Load all the REQUEST variables into the sticky form cache
+ * Load all the GET and POST variables into the sticky form cache
  *
  * Call this from an action when you want all your submitted variables
  * available if the submission fails validation and is sent back to the form
@@ -111,22 +139,21 @@ function is_email_address($address) {
  * @param string $form_name Name of the sticky form
  *
  * @return void
- * @link http://docs.elgg.org/Tutorials/UI/StickyForms
  * @since 1.8.0
  */
 function elgg_make_sticky_form($form_name) {
 
 	elgg_clear_sticky_form($form_name);
 
-	if (!isset($_SESSION['sticky_forms'])) {
-		$_SESSION['sticky_forms'] = array();
-	}
-	$_SESSION['sticky_forms'][$form_name] = array();
+	$session = _elgg_services()->session;
+	$data = $session->get('sticky_forms', array());
+	$req = _elgg_services()->request;
 
-	foreach ($_REQUEST as $key => $var) {
-		// will go through XSS filtering on the get function
-		$_SESSION['sticky_forms'][$form_name][$key] = $var;
-	}
+	// will go through XSS filtering in elgg_get_sticky_value()
+	$vars = array_merge($req->query->all(), $req->request->all());
+	$data[$form_name] = $vars;
+
+	$session->set('sticky_forms', $data);
 }
 
 /**
@@ -139,11 +166,13 @@ function elgg_make_sticky_form($form_name) {
  * @param string $form_name Form namespace
  *
  * @return void
- * @link http://docs.elgg.org/Tutorials/UI/StickyForms
  * @since 1.8.0
  */
 function elgg_clear_sticky_form($form_name) {
-	unset($_SESSION['sticky_forms'][$form_name]);
+	$session = _elgg_services()->session;
+	$data = $session->get('sticky_forms', array());
+	unset($data[$form_name]);
+	$session->set('sticky_forms', $data);
 }
 
 /**
@@ -152,11 +181,12 @@ function elgg_clear_sticky_form($form_name) {
  * @param string $form_name Form namespace
  *
  * @return boolean
- * @link http://docs.elgg.org/Tutorials/UI/StickyForms
  * @since 1.8.0
  */
 function elgg_is_sticky_form($form_name) {
-	return isset($_SESSION['sticky_forms'][$form_name]);
+	$session = _elgg_services()->session;
+	$data = $session->get('sticky_forms', array());
+	return isset($data[$form_name]);
 }
 
 /**
@@ -170,12 +200,13 @@ function elgg_is_sticky_form($form_name) {
  * @return mixed
  *
  * @todo should this filter the default value?
- * @link http://docs.elgg.org/Tutorials/UI/StickyForms
  * @since 1.8.0
  */
-function elgg_get_sticky_value($form_name, $variable = '', $default = NULL, $filter_result = true) {
-	if (isset($_SESSION['sticky_forms'][$form_name][$variable])) {
-		$value = $_SESSION['sticky_forms'][$form_name][$variable];
+function elgg_get_sticky_value($form_name, $variable = '', $default = null, $filter_result = true) {
+	$session = _elgg_services()->session;
+	$data = $session->get('sticky_forms', array());
+	if (isset($data[$form_name][$variable])) {
+		$value = $data[$form_name][$variable];
 		if ($filter_result) {
 			// XSS filter result
 			$value = filter_tags($value);
@@ -195,11 +226,13 @@ function elgg_get_sticky_value($form_name, $variable = '', $default = NULL, $fil
  * @since 1.8.0
  */
 function elgg_get_sticky_values($form_name, $filter_result = true) {
-	if (!isset($_SESSION['sticky_forms'][$form_name])) {
+	$session = _elgg_services()->session;
+	$data = $session->get('sticky_forms', array());
+	if (!isset($data[$form_name])) {
 		return array();
 	}
 
-	$values = $_SESSION['sticky_forms'][$form_name];
+	$values = $data[$form_name];
 	if ($filter_result) {
 		foreach ($values as $key => $value) {
 			// XSS filter result
@@ -216,11 +249,13 @@ function elgg_get_sticky_values($form_name, $filter_result = true) {
  * @param string $variable  The name of the variable to clear
  *
  * @return void
- * @link http://docs.elgg.org/Tutorials/UI/StickyForms
  * @since 1.8.0
  */
 function elgg_clear_sticky_value($form_name, $variable) {
-	unset($_SESSION['sticky_forms'][$form_name][$variable]);
+	$session = _elgg_services()->session;
+	$data = $session->get('sticky_forms', array());
+	unset($data[$form_name][$variable]);
+	$session->set('sticky_forms', $data);
 }
 
 /**
@@ -234,13 +269,14 @@ function elgg_clear_sticky_value($form_name, $variable) {
  *     match_on	   string all or array(groups|users|friends)
  *     match_owner int    0/1
  *     limit       int    default is 10
+ *     name        string default "members"
  *
  * @param array $page
  * @return string JSON string is returned and then exit
  * @access private
  */
 function input_livesearch_page_handler($page) {
-	global $CONFIG;
+	$dbprefix = elgg_get_config('dbprefix');
 
 	// only return results to logged in users.
 	if (!$user = elgg_get_logged_in_user_entity()) {
@@ -250,6 +286,8 @@ function input_livesearch_page_handler($page) {
 	if (!$q = get_input('term', get_input('q'))) {
 		exit;
 	}
+
+	$input_name = get_input('name', 'members');
 
 	$q = sanitise_string($q);
 
@@ -267,10 +305,9 @@ function input_livesearch_page_handler($page) {
 		$match_on = array('users', 'groups');
 	}
 
+	$owner_guid = ELGG_ENTITIES_ANY_VALUE;
 	if (get_input('match_owner', false)) {
-		$owner_where = 'AND e.owner_guid = ' . $user->getGUID();
-	} else {
-		$owner_where = '';
+		$owner_guid = $user->getGUID();
 	}
 
 	$limit = sanitise_int(get_input('limit', 10));
@@ -280,23 +317,20 @@ function input_livesearch_page_handler($page) {
 	foreach ($match_on as $match_type) {
 		switch ($match_type) {
 			case 'users':
-				$query = "SELECT * FROM {$CONFIG->dbprefix}users_entity as ue, {$CONFIG->dbprefix}entities as e
-					WHERE e.guid = ue.guid
-						AND e.enabled = 'yes'
-						AND ue.banned = 'no'
-						AND (ue.name LIKE '$q%' OR ue.name LIKE '% $q%' OR ue.username LIKE '$q%')
-					LIMIT $limit
-				";
-
-				if ($entities = get_data($query)) {
+				$options = array(
+					'type' => 'user',
+					'limit' => $limit,
+					'joins' => array("JOIN {$dbprefix}users_entity ue ON e.guid = ue.guid"),
+					'wheres' => array(
+						"ue.banned = 'no'",
+						"(ue.name LIKE '$q%' OR ue.name LIKE '% $q%' OR ue.username LIKE '$q%')"
+					)
+				);
+				
+				$entities = elgg_get_entities($options);
+				if (!empty($entities)) {
 					foreach ($entities as $entity) {
-						// @todo use elgg_get_entities (don't query in a loop!)
-						$entity = get_entity($entity->guid);
-						/* @var ElggUser $entity */
-						if (!$entity) {
-							continue;
-						}
-
+						
 						if (in_array('groups', $match_on)) {
 							$value = $entity->guid;
 						} else {
@@ -305,7 +339,9 @@ function input_livesearch_page_handler($page) {
 
 						$output = elgg_view_list_item($entity, array(
 							'use_hover' => false,
+							'use_link' => false,
 							'class' => 'elgg-autocomplete-item',
+							'title' => $entity->name, // Default title would be a link
 						));
 
 						$icon = elgg_view_entity_icon($entity, 'tiny', array(
@@ -321,6 +357,10 @@ function input_livesearch_page_handler($page) {
 							'value' => $value,
 							'icon' => $icon,
 							'url' => $entity->getURL(),
+							'html' => elgg_view('input/userpicker/item', array(
+								'entity' => $entity,
+								'input_name' => $input_name,
+							)),
 						);
 						$results[$entity->name . rand(1, 100)] = $result;
 					}
@@ -332,25 +372,27 @@ function input_livesearch_page_handler($page) {
 				if (!elgg_is_active_plugin('groups')) {
 					continue;
 				}
-				$query = "SELECT * FROM {$CONFIG->dbprefix}groups_entity as ge, {$CONFIG->dbprefix}entities as e
-					WHERE e.guid = ge.guid
-						AND e.enabled = 'yes'
-						$owner_where
-						AND (ge.name LIKE '$q%' OR ge.name LIKE '% $q%' OR ge.description LIKE '% $q%')
-					LIMIT $limit
-				";
-				if ($entities = get_data($query)) {
+				
+				$options = array(
+					'type' => 'group',
+					'limit' => $limit,
+					'owner_guid' => $owner_guid,
+					'joins' => array("JOIN {$dbprefix}groups_entity ge ON e.guid = ge.guid"),
+					'wheres' => array(
+						"(ge.name LIKE '$q%' OR ge.name LIKE '% $q%' OR ge.description LIKE '% $q%')"
+					)
+				);
+				
+				$entities = elgg_get_entities($options);
+				if (!empty($entities)) {
 					foreach ($entities as $entity) {
-						// @todo use elgg_get_entities (don't query in a loop!)
-						$entity = get_entity($entity->guid);
-						/* @var ElggGroup $entity */
-						if (!$entity) {
-							continue;
-						}
-
+						
 						$output = elgg_view_list_item($entity, array(
 							'use_hover' => false,
 							'class' => 'elgg-autocomplete-item',
+							'full_view' => false,
+							'href' => false,
+							'title' => $entity->name, // Default title would be a link
 						));
 
 						$icon = elgg_view_entity_icon($entity, 'tiny', array(
@@ -374,32 +416,27 @@ function input_livesearch_page_handler($page) {
 				break;
 
 			case 'friends':
-				$query = "SELECT * FROM
-						{$CONFIG->dbprefix}users_entity as ue,
-						{$CONFIG->dbprefix}entity_relationships as er,
-						{$CONFIG->dbprefix}entities as e
-					WHERE er.relationship = 'friend'
-						AND er.guid_one = {$user->getGUID()}
-						AND er.guid_two = ue.guid
-						AND e.guid = ue.guid
-						AND e.enabled = 'yes'
-						AND ue.banned = 'no'
-						AND (ue.name LIKE '$q%' OR ue.name LIKE '% $q%' OR ue.username LIKE '$q%')
-					LIMIT $limit
-				";
-
-				if ($entities = get_data($query)) {
+				$options = array(
+					'type' => 'user',
+					'limit' => $limit,
+					'relationship' => 'friend',
+					'relationship_guid' => $user->getGUID(),
+					'joins' => array("JOIN {$dbprefix}users_entity ue ON e.guid = ue.guid"),
+					'wheres' => array(
+						"ue.banned = 'no'",
+						"(ue.name LIKE '$q%' OR ue.name LIKE '% $q%' OR ue.username LIKE '$q%')"
+					)
+				);
+				
+				$entities = elgg_get_entities_from_relationship($options);
+				if (!empty($entities)) {
 					foreach ($entities as $entity) {
-						// @todo use elgg_get_entities (don't query in a loop!)
-						$entity = get_entity($entity->guid);
-						/* @var ElggUser $entity */
-						if (!$entity) {
-							continue;
-						}
-
+						
 						$output = elgg_view_list_item($entity, array(
 							'use_hover' => false,
+							'use_link' => false,
 							'class' => 'elgg-autocomplete-item',
+							'title' => $entity->name, // Default title would be a link
 						));
 
 						$icon = elgg_view_entity_icon($entity, 'tiny', array(
@@ -415,6 +452,10 @@ function input_livesearch_page_handler($page) {
 							'value' => $entity->username,
 							'icon' => $icon,
 							'url' => $entity->getURL(),
+							'html' => elgg_view('input/userpicker/item', array(
+								'entity' => $entity,
+								'input_name' => $input_name,
+							)),
 						);
 						$results[$entity->name . rand(1, 100)] = $result;
 					}
@@ -436,66 +477,63 @@ function input_livesearch_page_handler($page) {
 }
 
 /**
- * Register input functions and sanitize input
+ * Strip slashes from array keys
+ *
+ * @param array $array Array of values
+ *
+ * @return array Sanitized array
+ * @access private
+ */
+function _elgg_stripslashes_arraykeys($array) {
+	if (is_array($array)) {
+		$array2 = array();
+		foreach ($array as $key => $data) {
+			if ($key != stripslashes($key)) {
+				$array2[stripslashes($key)] = $data;
+			} else {
+				$array2[$key] = $data;
+			}
+		}
+		return $array2;
+	} else {
+		return $array;
+	}
+}
+
+/**
+ * Strip slashes
+ *
+ * @param mixed $value The value to remove slashes from
+ *
+ * @return mixed
+ * @access private
+ */
+function _elgg_stripslashes_deep($value) {
+	if (is_array($value)) {
+		$value = _elgg_stripslashes_arraykeys($value);
+		$value = array_map('_elgg_stripslashes_deep', $value);
+	} else {
+		$value = stripslashes($value);
+	}
+	return $value;
+}
+
+/**
+ * Initialize the input library
  *
  * @return void
  * @access private
  */
-function input_init() {
+function _elgg_input_init() {
 	// register an endpoint for live search / autocomplete.
 	elgg_register_page_handler('livesearch', 'input_livesearch_page_handler');
 
-	if (ini_get_bool('magic_quotes_gpc')) {
-
-		/**
-		 * do keys as well, cos array_map ignores them
-		 *
-		 * @param array $array Array of values
-		 *
-		 * @return array Sanitized array
-		 */
-		function stripslashes_arraykeys($array) {
-			if (is_array($array)) {
-				$array2 = array();
-				foreach ($array as $key => $data) {
-					if ($key != stripslashes($key)) {
-						$array2[stripslashes($key)] = $data;
-					} else {
-						$array2[$key] = $data;
-					}
-				}
-				return $array2;
-			} else {
-				return $array;
-			}
-		}
-
-		/**
-		 * Strip slashes on everything
-		 *
-		 * @param mixed $value The value to remove slashes from
-		 *
-		 * @return mixed
-		 */
-		function stripslashes_deep($value) {
-			if (is_array($value)) {
-				$value = stripslashes_arraykeys($value);
-				$value = array_map('stripslashes_deep', $value);
-			} else {
-				$value = stripslashes($value);
-			}
-			return $value;
-		}
-
-		$_POST = stripslashes_arraykeys($_POST);
-		$_GET = stripslashes_arraykeys($_GET);
-		$_COOKIE = stripslashes_arraykeys($_COOKIE);
-		$_REQUEST = stripslashes_arraykeys($_REQUEST);
-
-		$_POST = array_map('stripslashes_deep', $_POST);
-		$_GET = array_map('stripslashes_deep', $_GET);
-		$_COOKIE = array_map('stripslashes_deep', $_COOKIE);
-		$_REQUEST = array_map('stripslashes_deep', $_REQUEST);
+	// backward compatible for plugins directly accessing globals
+	if (get_magic_quotes_gpc()) {
+		$_POST = array_map('_elgg_stripslashes_deep', $_POST);
+		$_GET = array_map('_elgg_stripslashes_deep', $_GET);
+		$_COOKIE = array_map('_elgg_stripslashes_deep', $_COOKIE);
+		$_REQUEST = array_map('_elgg_stripslashes_deep', $_REQUEST);
 		if (!empty($_SERVER['REQUEST_URI'])) {
 			$_SERVER['REQUEST_URI'] = stripslashes($_SERVER['REQUEST_URI']);
 		}
@@ -517,4 +555,4 @@ function input_init() {
 	}
 }
 
-elgg_register_event_handler('init', 'system', 'input_init');
+elgg_register_event_handler('init', 'system', '_elgg_input_init');

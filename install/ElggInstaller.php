@@ -56,11 +56,13 @@ class ElggInstaller {
 		// load ElggRewriteTester as we depend on it
 		require_once(dirname(__FILE__) . "/ElggRewriteTester.php");
 
-		$this->isAction = $_SERVER['REQUEST_METHOD'] === 'POST';
+		$this->isAction = isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST';
 
 		$this->bootstrapConfig();
 
 		$this->bootstrapEngine();
+
+		_elgg_services()->setValue('session', new ElggSession(new Elgg_Http_MockSessionStorage()));
 
 		elgg_set_viewtype('installation');
 
@@ -76,8 +78,13 @@ class ElggInstaller {
 	 * @param string $step The installation step to run
 	 *
 	 * @return void
+	 * @throws InstallationException
 	 */
 	public function run($step) {
+		global $CONFIG;
+
+		// language needs to be set before the first call to elgg_echo()
+		$CONFIG->language = 'en';
 
 		// check if this is a URL rewrite test coming in
 		$this->processRewriteTest();
@@ -107,8 +114,8 @@ class ElggInstaller {
 	 *
 	 * @return void
 	 */
-	public function setAutoLogin(bool $flag) {
-		$this->autoLogin = $value;
+	public function setAutoLogin($flag) {
+		$this->autoLogin = (bool) $flag;
 	}
 
 	/**
@@ -168,7 +175,7 @@ class ElggInstaller {
 
 		if ($createHtaccess) {
 			$rewriteTester = new ElggRewriteTester();
-			if (!$rewriteTester->createHtaccess($CONFIG->path)) {
+			if (!$rewriteTester->createHtaccess($params['wwwroot'], $CONFIG->path)) {
 				throw new InstallationException(elgg_echo('install:error:htaccess'));
 			}
 		}
@@ -395,12 +402,12 @@ class ElggInstaller {
 				'required' => TRUE,
 				),
 			'siteemail' => array(
-				'type' => 'text',
+				'type' => 'email',
 				'value' => '',
 				'required' => FALSE,
 				),
 			'wwwroot' => array(
-				'type' => 'text',
+				'type' => 'url',
 				'value' => elgg_get_site_url(),
 				'required' => TRUE,
 				),
@@ -471,7 +478,7 @@ class ElggInstaller {
 				'required' => TRUE,
 				),
 			'email' => array(
-				'type' => 'text',
+				'type' => 'email',
 				'value' => '',
 				'required' => TRUE,
 				),
@@ -484,6 +491,7 @@ class ElggInstaller {
 				'type' => 'password',
 				'value' => '',
 				'required' => TRUE,
+				'pattern' => '.{6,}',
 				),
 			'password2' => array(
 				'type' => 'password',
@@ -491,7 +499,7 @@ class ElggInstaller {
 				'required' => TRUE,
 				),
 		);
-		
+
 		if ($this->isAction) {
 			do {
 				if (!$this->validateAdminVars($submissionVars, $formVars)) {
@@ -587,7 +595,6 @@ class ElggInstaller {
 	 * @return string
 	 */
 	protected function getNextStepUrl($currentStep) {
-		global $CONFIG;
 		$nextStep = $this->getNextStep($currentStep);
 		return elgg_get_site_url() . "install.php?step=$nextStep";
 	}
@@ -596,6 +603,7 @@ class ElggInstaller {
 	 * Check the different install steps for completion
 	 *
 	 * @return void
+	 * @throws InstallationException
 	 */
 	protected function setInstallStatus() {
 		global $CONFIG;
@@ -620,8 +628,7 @@ class ElggInstaller {
 		}
 
 		if (!include_once("{$CONFIG->path}engine/lib/database.php")) {
-			$msg = elgg_echo('InstallationException:MissingLibrary', array('database.php'));
-			throw new InstallationException($msg);
+			throw new InstallationException(elgg_echo('InstallationException:MissingLibrary', array('database.php')));
 		}
 
 		// check that the config table has been created
@@ -687,8 +694,6 @@ class ElggInstaller {
 	 * @return string
 	 */
 	protected function resumeInstall($step) {
-		global $CONFIG;
-
 		// only do a resume from the first step
 		if ($step !== 'welcome') {
 			return;
@@ -726,9 +731,19 @@ class ElggInstaller {
 
 		// bootstrapping with required files in a required order
 		$required_files = array(
-			'elgglib.php', 'views.php', 'access.php', 'system_log.php', 'export.php', 
-			'configuration.php', 'sessions.php', 'languages.php', 'pageowner.php',
-			'input.php', 'cache.php', 'output.php',
+			'autoloader.php',
+			'elgglib.php',
+			'views.php',
+			'access.php',
+			'system_log.php',
+			'configuration.php',
+			'database.php',
+			'sessions.php',
+			'languages.php',
+			'pageowner.php',
+			'input.php',
+			'cache.php',
+			'output.php',
 		);
 
 		foreach ($required_files as $file) {
@@ -748,6 +763,7 @@ class ElggInstaller {
 	 *                     boot strapping is different until the DB is populated.
 	 *
 	 * @return void
+	 * @throws InstallationException
 	 */
 	protected function finishBootstraping($step) {
 
@@ -776,32 +792,50 @@ class ElggInstaller {
 
 			$lib_files = array(
 				// these want to be loaded first apparently?
-				'database.php', 'actions.php',
+				'autoloader.php',
+				'database.php',
+				'actions.php',
 
-				'admin.php', 'annotations.php',
-				'calendar.php', 'cron.php', 'entities.php',
-				'extender.php', 'filestore.php', 'group.php',
-				'location.php', 'mb_wrapper.php',
-				'memcache.php', 'metadata.php', 'metastrings.php',
-				'navigation.php', 'notification.php',
-				'objects.php', 'opendd.php', 'pagehandler.php',
-				'pam.php', 'plugins.php',
-				'private_settings.php', 'relationships.php', 'river.php',
-				'sites.php', 'statistics.php', 'tags.php', 'user_settings.php',
-				'users.php', 'upgrade.php', 'web_services.php',
-				'widgets.php', 'xml.php', 'xml-rpc.php',
-				'deprecated-1.7.php', 'deprecated-1.8.php',
+				'admin.php',
+				'annotations.php',
+				'cron.php',
+				'entities.php',
+				'extender.php',
+				'filestore.php',
+				'group.php',
+				'mb_wrapper.php',
+				'memcache.php',
+				'metadata.php',
+				'metastrings.php',
+				'navigation.php',
+				'notification.php',
+				'objects.php',
+				'pagehandler.php',
+				'pam.php',
+				'plugins.php',
+				'private_settings.php',
+				'relationships.php',
+				'river.php',
+				'sites.php',
+				'statistics.php',
+				'tags.php',
+				'user_settings.php',
+				'users.php',
+				'upgrade.php',
+				'widgets.php',
+				'deprecated-1.7.php',
+				'deprecated-1.8.php',
+				'deprecated-1.9.php',
 			);
 
 			foreach ($lib_files as $file) {
 				$path = $lib_dir . $file;
 				if (!include_once($path)) {
-					$msg = elgg_echo('InstallationException:MissingLibrary', array($file));
-					throw new InstallationException($msg);
+					throw new InstallationException('InstallationException:MissingLibrary', array($file));
 				}
 			}
 
-			setup_db_connections();
+			_elgg_services()->db->setupConnections();
 			register_translations(dirname(dirname(__FILE__)) . "/languages/");
 
 			if ($stepIndex > $settingsIndex) {
@@ -809,7 +843,7 @@ class ElggInstaller {
 				$CONFIG->site_id = $CONFIG->site_guid;
 				$CONFIG->site = get_entity($CONFIG->site_guid);
 				$CONFIG->dataroot = datalist_get('dataroot');
-				_elgg_session_boot(NULL, NULL, NULL);
+				_elgg_session_boot();
 			}
 
 			elgg_trigger_event('init', 'system');
@@ -834,6 +868,17 @@ class ElggInstaller {
 		$CONFIG->pluginspath = $CONFIG->path . 'mod/';
 		$CONFIG->context = array();
 		$CONFIG->entity_types = array('group', 'object', 'site', 'user');
+		// required by elgg_view_page()
+		$CONFIG->sitename = '';
+		$CONFIG->sitedescription = '';
+	}
+
+	/**
+	 * @return bool Whether the install process is encrypted.
+	 */
+	private function isHttps() {
+	    return (!empty($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == "on") ||
+	        $_SERVER['SERVER_PORT'] == 443;
 	}
 
 	/**
@@ -845,20 +890,22 @@ class ElggInstaller {
 	 * @return string
 	 */
 	protected function getBaseUrl() {
-		$protocol = 'http';
-		if (!empty($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == "on") {
-			$protocol = 'https';
+		$protocol = $this->isHttps() ? 'https' : 'http';
+
+		if (isset($_SERVER["SERVER_PORT"])) {
+			$port = ':' . $_SERVER["SERVER_PORT"];
+		} else {
+			$port = '';
 		}
-		$port = ':' . $_SERVER["SERVER_PORT"];
 		if ($port == ':80' || $port == ':443') {
 			$port = '';
 		}
-		$uri = $_SERVER['REQUEST_URI'];
+		$uri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
 		$cutoff = strpos($uri, 'install.php');
 		$uri = substr($uri, 0, $cutoff);
+		$serverName = isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : '';
 
-		$url = "$protocol://{$_SERVER['SERVER_NAME']}$port{$uri}";
-		return $url;
+		return "$protocol://{$serverName}$port{$uri}";
 	}
 
 	/**
@@ -871,8 +918,7 @@ class ElggInstaller {
 		global $CONFIG;
 
 		if (!include_once("{$CONFIG->path}engine/settings.php")) {
-			$msg = elgg_echo('InstallationException:CannotLoadSettings');
-			throw new InstallationException($msg);
+			throw new InstallationException(elgg_echo('InstallationException:CannotLoadSettings'));
 		}
 	}
 
@@ -1185,7 +1231,7 @@ class ElggInstaller {
 		$mysql_dblink = mysql_connect($host, $user, $password, true);
 		if ($mysql_dblink == FALSE) {
 			register_error(elgg_echo('install:error:databasesettings'));
-			return $FALSE;
+			return FALSE;
 		}
 
 		$result = mysql_select_db($dbname, $mysql_dblink);
@@ -1248,19 +1294,18 @@ class ElggInstaller {
 		global $CONFIG;
 
 		if (!include_once("{$CONFIG->path}engine/settings.php")) {
-			register_error(elgg_echo('InstallationException:CannotLoadSettings'));
+			register_error('Elgg could not load the settings file. It does not exist or there is a file permissions issue.');
 			return FALSE;
 		}
 
 		if (!include_once("{$CONFIG->path}engine/lib/database.php")) {
-			$msg = elgg_echo('InstallationException:MissingLibrary', array('database.php'));
-			register_error($msg);
+			register_error('Could not load database.php');
 			return FALSE;
 		}
 
 		try  {
-			setup_db_connections();
-		} catch (Exception $e) {
+			_elgg_services()->db->setupConnections();
+		} catch (DatabaseException $e) {
 			register_error($e->getMessage());
 			return FALSE;
 		}
@@ -1427,15 +1472,17 @@ class ElggInstaller {
 
 		// bootstrap site info
 		$CONFIG->site_guid = $guid;
+		$CONFIG->site_id = $guid;
 		$CONFIG->site = $site;
 
 		datalist_set('installed', time());
 		datalist_set('path', $submissionVars['path']);
 		datalist_set('dataroot', $submissionVars['dataroot']);
 		datalist_set('default_site', $site->getGUID());
-		datalist_set('version', get_version());
+		datalist_set('version', elgg_get_version());
 		datalist_set('simplecache_enabled', 1);
 		datalist_set('system_cache_enabled', 1);
+		datalist_set('simplecache_lastupdate', time());
 
 		// new installations have run all the upgrades
 		$upgrades = elgg_get_upgrade_files($submissionVars['path'] . 'engine/lib/upgrades/');
@@ -1448,9 +1495,24 @@ class ElggInstaller {
 		set_config('walled_garden', FALSE, $site->getGUID());
 		set_config('allow_user_default_access', '', $site->getGUID());
 
+		$this->setSubtypeClasses();
+
 		$this->enablePlugins();
 
 		return TRUE;
+	}
+
+	/**
+	 * Register classes for core objects
+	 *
+	 * @return void
+	 */
+	protected function setSubtypeClasses() {
+		add_subtype("object", "plugin", "ElggPlugin");
+		add_subtype("object", "file", "ElggFile");
+		add_subtype("object", "widget", "ElggWidget");
+		add_subtype("object", "comment", "ElggComment");
+		add_subtype("object", "elgg_upgrade", 'ElggUpgrade');
 	}
 
 	/**
@@ -1459,12 +1521,15 @@ class ElggInstaller {
 	 * @return void
 	 */
 	protected function enablePlugins() {
-		elgg_generate_plugin_entities();
+		_elgg_generate_plugin_entities();
 		$plugins = elgg_get_plugins('any');
 		foreach ($plugins as $plugin) {
 			if ($plugin->getManifest()) {
 				if ($plugin->getManifest()->getActivateOnInstall()) {
 					$plugin->activate();
+				}
+				if (in_array('theme', $plugin->getManifest()->getCategories())) {
+					$plugin->setPriority('last');
 				}
 			}
 		}
@@ -1527,8 +1592,6 @@ class ElggInstaller {
 	 * @return bool
 	 */
 	protected function createAdminAccount($submissionVars, $login = FALSE) {
-		global $CONFIG;
-
 		try {
 			$guid = register_user(
 					$submissionVars['username'],
@@ -1547,7 +1610,7 @@ class ElggInstaller {
 		}
 
 		$user = get_entity($guid);
-		if (!$user) {
+		if (!$user instanceof ElggUser) {
 			register_error(elgg_echo('install:error:loadadmin'));
 			return false;
 		}
@@ -1565,6 +1628,11 @@ class ElggInstaller {
 		create_metadata($guid, 'validated_method', 'admin_user', '', 0, ACCESS_PUBLIC);
 
 		if ($login) {
+			$handler = new Elgg_Http_DatabaseSessionHandler(_elgg_services()->db);
+			$storage = new Elgg_Http_NativeSessionStorage(array(), $handler);
+			$session = new ElggSession($storage);
+			$session->setName('Elgg');
+			_elgg_services()->setValue('session', $session);
 			if (login($user) == FALSE) {
 				register_error(elgg_echo('install:error:adminlogin'));
 			}

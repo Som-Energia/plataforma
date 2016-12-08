@@ -41,7 +41,7 @@ function get_system_log($by_user = "", $event = "", $class = "", $type = "", $su
 	} else {
 		$by_user = (int)$by_user;
 	}
-	
+
 	$event = sanitise_string($event);
 	$class = sanitise_string($class);
 	$type = sanitise_string($type);
@@ -129,27 +129,51 @@ function get_log_entry($entry_id) {
 /**
  * Return the object referred to by a given log entry
  *
- * @param int $entry_id The log entry
+ * @param stdClass|int $entry The log entry row or its ID
  *
  * @return mixed
  */
-function get_object_from_log_entry($entry_id) {
-	$entry = get_log_entry($entry_id);
-
-	if ($entry) {
-		$class = $entry->object_class;
-		// surround with try/catch because object could be disabled
-		try {
-			$object = new $class($entry->object_id);
-		} catch (Exception $e) {
-			
-		}
-		if ($object) {
-			return $object;
+function get_object_from_log_entry($entry) {
+	if (is_numeric($entry)) {
+		$entry = get_log_entry($entry);
+		if (!$entry) {
+			return false;
 		}
 	}
 
-	return false;
+	$class = $entry->object_class;
+	$id = $entry->object_id;
+
+	if (!class_exists($class)) {
+		// failed autoload
+		return false;
+	}
+
+	$getters = array(
+		'ElggAnnotation' => 'elgg_get_annotation_from_id',
+		'ElggMetadata' => 'elgg_get_metadata_from_id',
+		'ElggRelationship' => 'get_relationship',
+	);
+
+	if (isset($getters[$class]) && is_callable($getters[$class])) {
+		$object = call_user_func($getters[$class], $id);
+	} elseif (preg_match('~^Elgg[A-Z]~', $class)) {
+		$object = get_entity($id);
+	} else {
+		// surround with try/catch because object could be disabled
+		try {
+			$object = new $class($entry->object_id);
+			return $object;
+		} catch (Exception $e) {
+
+		}
+	}
+
+	if (!is_object($object) || get_class($object) !== $class) {
+		return false;
+	}
+
+	return $object;
 }
 
 /**
@@ -182,21 +206,15 @@ function system_log($object, $event) {
 
 		// Has loggable interface, extract the necessary information and store
 		$object_id = (int)$object->getSystemLogID();
-		$object_class = $object->getClassName();
+		$object_class = get_class($object);
 		$object_type = $object->getType();
 		$object_subtype = $object->getSubtype();
 		$event = sanitise_string($event);
 		$time = time();
-
-		if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-			$ip_address = array_pop(explode(',', $_SERVER['HTTP_X_FORWARDED_FOR']));
-		} elseif (!empty($_SERVER['HTTP_X_REAL_IP'])) {
-			$ip_address = array_pop(explode(',', $_SERVER['HTTP_X_REAL_IP']));
-		} else {
-			$ip_address = $_SERVER['REMOTE_ADDR'];
+		$ip_address = sanitize_string(_elgg_services()->request->getClientIp());
+		if (!$ip_address) {
+			$ip_address = '0.0.0.0';
 		}
-		$ip_address = sanitise_string($ip_address);
-
 		$performed_by = elgg_get_logged_in_user_guid();
 
 		if (isset($object->access_id)) {

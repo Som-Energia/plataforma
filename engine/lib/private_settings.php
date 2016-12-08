@@ -17,11 +17,11 @@
  *
  * @param array $options Array in format:
  *
- * 	private_setting_names => NULL|ARR private setting names
+ * 	private_setting_names => null|ARR private setting names
  *
- * 	private_setting_values => NULL|ARR metadata values
+ * 	private_setting_values => null|ARR metadata values
  *
- * 	private_setting_name_value_pairs => NULL|ARR (
+ * 	private_setting_name_value_pairs => null|ARR (
  *                                         name => 'name',
  *                                         value => 'value',
  *                                         'operand' => '=',
@@ -30,7 +30,7 @@
  *                               an array (value => array('value1', 'value2')
  *                               the pair's operand will be forced to "IN".
  *
- * 	private_setting_name_value_pairs_operator => NULL|STR The operator to use for combining
+ * 	private_setting_name_value_pairs_operator => null|STR The operator to use for combining
  *                                        (name = value) OPERATOR (name = value); default AND
  *
  *  private_setting_name_prefix => STR A prefix to apply to all private settings. Used to
@@ -55,7 +55,7 @@ function elgg_get_entities_from_private_settings(array $options = array()) {
 	$singulars = array('private_setting_name', 'private_setting_value',
 		'private_setting_name_value_pair');
 
-	$options = elgg_normalise_plural_options_array($options, $singulars);
+	$options = _elgg_normalize_plural_options_array($options, $singulars);
 
 	$clauses = elgg_get_entity_private_settings_where_sql('e', $options['private_setting_names'],
 		$options['private_setting_values'], $options['private_setting_name_value_pairs'],
@@ -97,8 +97,8 @@ function elgg_get_entities_from_private_settings(array $options = array()) {
  * @since 1.8.0
  * @access private
  */
-function elgg_get_entity_private_settings_where_sql($table, $names = NULL, $values = NULL,
-$pairs = NULL, $pair_operator = 'AND', $name_prefix = '') {
+function elgg_get_entity_private_settings_where_sql($table, $names = null, $values = null,
+$pairs = null, $pair_operator = 'AND', $name_prefix = '') {
 
 	global $CONFIG;
 
@@ -116,7 +116,7 @@ $pairs = NULL, $pair_operator = 'AND', $name_prefix = '') {
 
 	// get names wheres
 	$names_where = '';
-	if ($names !== NULL) {
+	if ($names !== null) {
 		if (!is_array($names)) {
 			$names = array($names);
 		}
@@ -135,7 +135,7 @@ $pairs = NULL, $pair_operator = 'AND', $name_prefix = '') {
 
 	// get values wheres
 	$values_where = '';
-	if ($values !== NULL) {
+	if ($values !== null) {
 		if (!is_array($values)) {
 			$values = array($values);
 		}
@@ -266,12 +266,11 @@ $pairs = NULL, $pair_operator = 'AND', $name_prefix = '') {
  * @param int    $entity_guid The entity GUID
  * @param string $name        The name of the setting
  *
- * @return mixed The setting value, or false on failure
+ * @return mixed The setting value, or null if does not exist
  * @see set_private_setting()
  * @see get_all_private_settings()
  * @see remove_private_setting()
  * @see remove_all_private_settings()
- * @link http://docs.elgg.org/DataModel/Entities/PrivateSettings
  */
 function get_private_setting($entity_guid, $name) {
 	global $CONFIG;
@@ -280,7 +279,7 @@ function get_private_setting($entity_guid, $name) {
 
 	$entity = get_entity($entity_guid);
 	if (!$entity instanceof ElggEntity) {
-		return false;
+		return null;
 	}
 
 	$query = "SELECT value from {$CONFIG->dbprefix}private_settings
@@ -290,7 +289,7 @@ function get_private_setting($entity_guid, $name) {
 	if ($setting) {
 		return $setting->value;
 	}
-	return false;
+	return null;
 }
 
 /**
@@ -298,12 +297,11 @@ function get_private_setting($entity_guid, $name) {
  *
  * @param int $entity_guid The entity GUID
  *
- * @return array|false
+ * @return array|empty array if no settings
  * @see set_private_setting()
  * @see get_private_settings()
  * @see remove_private_setting()
  * @see remove_all_private_settings()
- * @link http://docs.elgg.org/DataModel/Entities/PrivateSettings
  */
 function get_all_private_settings($entity_guid) {
 	global $CONFIG;
@@ -325,7 +323,7 @@ function get_all_private_settings($entity_guid) {
 		return $return;
 	}
 
-	return false;
+	return array();
 }
 
 /**
@@ -340,7 +338,6 @@ function get_all_private_settings($entity_guid) {
  * @see get_all_private_settings()
  * @see remove_private_setting()
  * @see remove_all_private_settings()
- * @link http://docs.elgg.org/DataModel/Entities/PrivateSettings
  */
 function set_private_setting($entity_guid, $name, $value) {
 	global $CONFIG;
@@ -368,7 +365,6 @@ function set_private_setting($entity_guid, $name, $value) {
  * @see get_all_private_settings()
  * @see set_private_setting()
  * @see remove_all_private_settings()
- * @link http://docs.elgg.org/DataModel/Entities/PrivateSettings
  */
 function remove_private_setting($entity_guid, $name) {
 	global $CONFIG;
@@ -397,7 +393,6 @@ function remove_private_setting($entity_guid, $name) {
  * @see get_all_private_settings()
  * @see set_private_setting()
  * @see remove_private_settings()
- * @link http://docs.elgg.org/DataModel/Entities/PrivateSettings
  */
 function remove_all_private_settings($entity_guid) {
 	global $CONFIG;

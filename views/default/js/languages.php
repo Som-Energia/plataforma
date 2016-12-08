@@ -29,5 +29,5 @@ $translations = $all_translations['en'];
 if ($language != 'en') {
 	$translations = array_merge($translations, $all_translations[$language]);
 }
-
-echo json_encode($translations);
+?>
+define(<?php echo json_encode($translations); ?>);

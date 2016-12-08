@@ -35,7 +35,7 @@ class ElggMemcache extends ElggSharedMemoryCache {
 	 *
 	 * @throws ConfigurationException
 	 */
-	function __construct($namespace = 'default') {
+	public function __construct($namespace = 'default') {
 		global $CONFIG;
 
 		$this->setNamespace($namespace);
@@ -59,11 +59,11 @@ class ElggMemcache extends ElggSharedMemoryCache {
 					$this->memcache->addServer(
 						$server[0],
 						isset($server[1]) ? $server[1] : 11211,
-						isset($server[2]) ? $server[2] : FALSE,
+						isset($server[2]) ? $server[2] : false,
 						isset($server[3]) ? $server[3] : 1,
 						isset($server[4]) ? $server[4] : 1,
 						isset($server[5]) ? $server[5] : 15,
-						isset($server[6]) ? $server[6] : TRUE
+						isset($server[6]) ? $server[6] : true
 					);
 
 				} else {
@@ -148,7 +148,9 @@ class ElggMemcache extends ElggSharedMemoryCache {
 
 		$result = $this->memcache->set($key, $data, null, $expires);
 		if ($result === false) {
-			elgg_log("MEMCACHE: FAILED TO SAVE $key", 'ERROR');
+			elgg_log("MEMCACHE: SAVE FAIL $key", 'ERROR');
+		} else {
+			elgg_log("MEMCACHE: SAVE SUCCESS $key", 'INFO');
 		}
 
 		return $result;
@@ -168,7 +170,9 @@ class ElggMemcache extends ElggSharedMemoryCache {
 
 		$result = $this->memcache->get($key);
 		if ($result === false) {
-			elgg_log("MEMCACHE: FAILED TO LOAD $key", 'ERROR');
+			elgg_log("MEMCACHE: LOAD MISS $key", 'INFO');
+		} else {
+			elgg_log("MEMCACHE: LOAD HIT $key", 'INFO');
 		}
 
 		return $result;

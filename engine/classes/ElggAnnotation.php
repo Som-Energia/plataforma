@@ -2,18 +2,14 @@
 /**
  * Elgg Annotations
  *
- * Annotations allow you to attach bits of information to entities.
- * They are essentially the same as metadata, but with additional
- * helper functions.
+ * Annotations allow you to attach bits of information to entities. They are
+ * essentially the same as metadata, but with additional helper functions for
+ * performing calculations.
  *
  * @internal Annotations are stored in the annotations table.
  *
  * @package    Elgg.Core
  * @subpackage DataModel.Annotations
- * @link       http://docs.elgg.org/DataModel/Annotations
- *
- * @property string $value_type
- * @property string $enabled
  */
 class ElggAnnotation extends ElggExtender {
 
@@ -33,15 +29,18 @@ class ElggAnnotation extends ElggExtender {
 	/**
 	 * Construct a new annotation object
 	 *
-	 * @param mixed $id The annotation ID or a database row as stdClass object
+	 * Plugin developers will probably never use the constructor.
+	 * See ElggEntity for its API for adding annotations.
+	 *
+	 * @param stdClass $row Database row as stdClass object
 	 */
-	function __construct($id = null) {
+	public function __construct($row = null) {
 		$this->initializeAttributes();
 
-		if (!empty($id)) {
+		if (!empty($row)) {
 			// Create from db row
-			if ($id instanceof stdClass) {
-				$annotation = $id;
+			if ($row instanceof stdClass) {
+				$annotation = $row;
 
 				$objarray = (array) $annotation;
 				foreach ($objarray as $key => $value) {
@@ -49,7 +48,8 @@ class ElggAnnotation extends ElggExtender {
 				}
 			} else {
 				// get an ElggAnnotation object and copy its attributes
-				$annotation = elgg_get_annotation_from_id($id);
+				elgg_deprecated_notice('Passing an ID to constructor is deprecated. Use elgg_get_annotation_from_id()', 1.9);
+				$annotation = elgg_get_annotation_from_id($row);
 				$this->attributes = $annotation->attributes;
 			}
 		}
@@ -62,7 +62,7 @@ class ElggAnnotation extends ElggExtender {
 	 *
 	 * @throws IOException
 	 */
-	function save() {
+	public function save() {
 		if ($this->id > 0) {
 			return update_annotation($this->id, $this->name, $this->value, $this->value_type,
 				$this->owner_guid, $this->access_id);
@@ -71,7 +71,7 @@ class ElggAnnotation extends ElggExtender {
 				$this->value_type, $this->owner_guid, $this->access_id);
 
 			if (!$this->id) {
-				throw new IOException(elgg_echo('IOException:UnableToSaveNew', array(get_class())));
+				throw new IOException("Unable to save new " . get_class());
 			}
 			return $this->id;
 		}
@@ -82,9 +82,13 @@ class ElggAnnotation extends ElggExtender {
 	 *
 	 * @return bool
 	 */
-	function delete() {
-		elgg_delete_river(array('annotation_id' => $this->id));
-		return elgg_delete_metastring_based_object_by_id($this->id, 'annotations');
+	public function delete() {
+		$result = _elgg_delete_metastring_based_object_by_id($this->id, 'annotation');
+		if ($result) {
+			elgg_delete_river(array('annotation_id' => $this->id));
+		}
+
+		return $result;
 	}
 
 	/**
@@ -93,8 +97,8 @@ class ElggAnnotation extends ElggExtender {
 	 * @return bool
 	 * @since 1.8
 	 */
-	function disable() {
-		return elgg_set_metastring_based_object_enabled_by_id($this->id, 'no', 'annotations');
+	public function disable() {
+		return _elgg_set_metastring_based_object_enabled_by_id($this->id, 'no', 'annotations');
 	}
 
 	/**
@@ -103,17 +107,47 @@ class ElggAnnotation extends ElggExtender {
 	 * @return bool
 	 * @since 1.8
 	 */
-	function enable() {
-		return elgg_set_metastring_based_object_enabled_by_id($this->id, 'yes', 'annotations');
+	public function enable() {
+		return _elgg_set_metastring_based_object_enabled_by_id($this->id, 'yes', 'annotations');
 	}
 
 	/**
-	 * Get a url for this annotation.
+	 * Determines whether or not the user can edit this annotation
 	 *
-	 * @return string
+	 * @param int $user_guid The GUID of the user (defaults to currently logged in user)
+	 *
+	 * @return bool
+	 * @see elgg_set_ignore_access()
 	 */
-	public function getURL() {
-		return get_annotation_url($this->id);
+	public function canEdit($user_guid = 0) {
+
+		if ($user_guid) {
+			$user = get_user($user_guid);
+			if (!$user) {
+				return false;
+			}
+		} else {
+			$user = elgg_get_logged_in_user_entity();
+			$user_guid = elgg_get_logged_in_user_guid();
+		}
+
+		$result = false;
+		if ($user) {
+			// If the owner of annotation is the specified user, they can edit.
+			if ($this->getOwnerGUID() == $user_guid) {
+				$result = true;
+			}
+
+			// If the user can edit the entity this is attached to, they can edit.
+			$entity = $this->getEntity();
+			if ($result == false && $entity->canEdit($user->getGUID())) {
+				$result = true;
+			}
+		}
+
+		// Trigger plugin hook - note that $user may be null
+		$params = array('entity' => $entity, 'user' => $user, 'annotation' => $this);
+		return elgg_trigger_plugin_hook('permissions_check', 'annotation', $params, $result);
 	}
 
 	// SYSTEM LOG INTERFACE

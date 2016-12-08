@@ -1,47 +1,52 @@
-ElggPriorityListTest = TestCase("ElggPriorityListTest");
+define(function(require) {
 
-ElggPriorityListTest.prototype.setUp = function() {
-	this.list = new elgg.ElggPriorityList();
-};
+	var elgg = require('elgg');
 
-ElggPriorityListTest.prototype.tearDown = function() {
-	this.list = null;
-};
+	describe("elgg.ElggPriorityList", function() {
+		var list;
 
-ElggPriorityListTest.prototype.testInsert = function() {
-	this.list.insert('foo');
+		beforeEach(function() {
+			list = new elgg.ElggPriorityList();
+		});
 
-	assertEquals('foo', this.list.priorities_[500][0]);
+		describe("insert()", function() {
+			it("defaults priority to 500", function() {
+				list.insert('foo');
 
-	this.list.insert('bar', 501);
+				expect(list.priorities_[500][0], 'foo');
+			});
+		});
 
-	assertEquals('bar', this.list.priorities_[501][0]);
-};
+		describe("forEach()", function() {
+			it("returns elements in priority order", function() {
+				var values = [5, 4, 3, 2, 1, 0];
 
-ElggPriorityListTest.prototype.testInsertRespectsPriority = function() {
-	var values = [5, 4, 3, 2, 1, 0];
+				for (var i in values) {
+					list.insert(values[i], values[i]);
+				}
 
-	for (var i in values) {
-		this.list.insert(values[i], values[i]);
-	}
+				list.forEach(function(elem, idx) {
+					expect(elem).toBe(idx);
+				});
+			});
 
-	this.list.forEach(function(elem, idx) {
-		assertEquals(elem, idx);
-	})
-};
+			it("returns same-priority elements in inserted order", function() {
+				values = [0, 1, 2, 3, 4, 5, 6, 7, 8 , 9];
 
-ElggPriorityListTest.prototype.testInsertHandlesDuplicatePriorities = function() {
-	values = [0, 1, 2, 3, 4, 5, 6, 7, 8 , 9];
+				for (var i in values) {
+					list.insert(values[i], values[i]/3);
+				}
 
-	for (var i in values) {
-		this.list.insert(values[i], values[i]/3);
-	}
+				list.forEach(function(elem, idx) {
+					expect(elem).toBe(idx);
+				});
+			});
+		});
 
-	this.list.forEach(function(elem, idx) {
-		assertEquals(elem, idx);
+		describe("every()", function() {
+			it("defaults to true", function() {
+				expect(list.every(function() {})).toBe(true);
+			});
+		});
 	});
-};
-
-ElggPriorityListTest.prototype.testEveryDefaultsToTrue = function() {
-	assertTrue(this.list.every(function() {}));
-};
+});

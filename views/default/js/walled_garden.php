@@ -42,7 +42,7 @@ elgg.walled_garden.load = function(view) {
 	return function(event) {
 		var id = '#elgg-walledgarden-' + view;
 		id = id.replace('_', '-');
-		//@todo display some visual element that indicates that loading of content is running
+		// @todo display some visual element that indicates that loading of content is running
 		elgg.get('walled_garden/' + view, {
 			'success' : function(data) {
 				var $wg = $('.elgg-body-walledgarden');
@@ -50,7 +50,7 @@ elgg.walled_garden.load = function(view) {
 				$(id).find('input.elgg-button-submit').after(<?php echo $cancel_button; ?>);
 
 				if (view == 'register' && $wg.hasClass('hidden')) {
-					// this was a failed register, display the register form ASAP
+					// this was a failed registration, display the register form ASAP
 					$('#elgg-walledgarden-login').toggle(false);
 					$(id).toggle();
 					$wg.removeClass('hidden');

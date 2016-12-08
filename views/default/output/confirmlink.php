@@ -13,8 +13,8 @@
  * @uses $vars['encode_text'] Run $vars['text'] through htmlspecialchars() (false)
  */
 
-$vars['rel'] = elgg_extract('confirm', $vars, elgg_echo('question:areyousure'));
-$vars['rel'] = addslashes($vars['rel']);
+$vars['data-confirm'] = elgg_extract('confirm', $vars, elgg_echo('question:areyousure'));
+
 $encode = elgg_extract('encode_text', $vars, false);
 
 // always generate missing action tokens
@@ -26,7 +26,7 @@ if ($encode) {
 }
 
 if (!isset($vars['title']) && isset($vars['confirm'])) {
-	$vars['title'] = $vars['rel'];
+	$vars['title'] = $vars['confirm'];
 }
 
 if (isset($vars['class'])) {

@@ -11,7 +11,7 @@
 
 if ($site = elgg_get_site_entity()) {
 	if (!($site instanceof ElggSite)) {
-		throw new InstallationException(elgg_echo('InvalidParameterException:NonElggSite'));
+		throw new InstallationException("Passing a non-ElggSite to an ElggSite constructor!");
 	}
 
 	$site->url = rtrim(get_input('wwwroot', '', false), '/') . '/';
@@ -36,13 +36,16 @@ if ($site = elgg_get_site_entity()) {
 
 	datalist_set('dataroot', $dataroot);
 
-	if (get_input('simplecache_enabled')) {
+	if ('on' === get_input('simplecache_enabled')) {
 		elgg_enable_simplecache();
 	} else {
 		elgg_disable_simplecache();
 	}
 
-	if (get_input('system_cache_enabled')) {
+	set_config('simplecache_minify_js', 'on' === get_input('simplecache_minify_js'), $site->getGUID());
+	set_config('simplecache_minify_css', 'on' === get_input('simplecache_minify_css'), $site->getGUID());
+
+	if ('on' === get_input('system_cache_enabled')) {
 		elgg_enable_system_cache();
 	} else {
 		elgg_disable_system_cache();
@@ -50,7 +53,7 @@ if ($site = elgg_get_site_entity()) {
 
 	set_config('default_access', get_input('default_access', ACCESS_PRIVATE), $site->getGUID());
 
-	$user_default_access = (get_input('allow_user_default_access')) ? 1 : 0;
+	$user_default_access = ('on' === get_input('allow_user_default_access'));
 	set_config('allow_user_default_access', $user_default_access, $site->getGUID());
 
 	$debug = get_input('debug');
@@ -61,31 +64,17 @@ if ($site = elgg_get_site_entity()) {
 	}
 
 	// allow new user registration?
-	if (get_input('allow_registration', FALSE)) {
-		set_config('allow_registration', TRUE, $site->getGUID());
-	} else {
-		set_config('allow_registration', FALSE, $site->getGUID());
-	}
+	$allow_registration = ('on' === get_input('allow_registration', false));
+	set_config('allow_registration', $allow_registration, $site->getGUID());
 
 	// setup walled garden
-	if (get_input('walled_garden', FALSE)) {
-		set_config('walled_garden', TRUE, $site->getGUID());
-	} else {
-		set_config('walled_garden', FALSE, $site->getGUID());
-	}
+	$walled_garden = ('on' === get_input('walled_garden', false));
+	set_config('walled_garden', $walled_garden, $site->getGUID());
 
-	$https_login = get_input('https_login');
-	if ($https_login) {
+	if ('on' === get_input('https_login')) {
 		set_config('https_login', 1, $site->getGUID());
 	} else {
 		unset_config('https_login', $site->getGUID());
-	}
-
-	$api = get_input('api');
-	if ($api) {
-		unset_config('disable_api', $site->getGUID());
-	} else {
-		set_config('disable_api', 'disabled', $site->getGUID());
 	}
 
 	$regenerate_site_secret = get_input('regenerate_site_secret', false);
@@ -94,6 +83,8 @@ if ($site = elgg_get_site_entity()) {
 		elgg_reset_system_cache();
 
 		system_message(elgg_echo('admin:site:secret_regenerated'));
+
+		elgg_delete_admin_notice('weak_site_key');
 	}
 
 	if ($site->save()) {

@@ -32,9 +32,9 @@
  * Any view can extend any other view if registered with
  * {@link elgg_extend_view()}.
  *
- * View types are set by passing $_REQUEST['view'].  The view type
+ * Viewtypes are set by passing $_REQUEST['view'].  The viewtype
  * 'default' is a standard HTML view.  Types can be defined on the fly
- * and you can get the current view type with {@link get_current_view()}.
+ * and you can get the current viewtype with {@link elgg_get_viewtype()}.
  *
  * @internal Plugin views are autoregistered before their init functions
  * are called, so the init order doesn't affect views.
@@ -44,11 +44,10 @@
  *
  * @package Elgg.Core
  * @subpackage Views
- * @link http://docs.elgg.org/Views
  */
 
 /**
- * The view type override.
+ * The viewtype override.
  *
  * @global string $CURRENT_SYSTEM_VIEWTYPE
  * @see elgg_set_viewtype()
@@ -67,8 +66,6 @@ $CURRENT_SYSTEM_VIEWTYPE = "";
  * @param string $viewtype The view type, e.g. 'rss', or 'default'.
  *
  * @return bool
- * @link http://docs.elgg.org/Views/Viewtype
- * @example views/viewtype.php
  */
 function elgg_set_viewtype($viewtype = "") {
 	global $CURRENT_SYSTEM_VIEWTYPE;
@@ -81,18 +78,15 @@ function elgg_set_viewtype($viewtype = "") {
 /**
  * Return the current view type.
  *
- * View types are automatically detected and can be set with $_REQUEST['view']
+ * Viewtypes are automatically detected and can be set with $_REQUEST['view']
  * or {@link elgg_set_viewtype()}.
  *
- * @internal View type is determined in this order:
+ * @internal Viewtype is determined in this order:
  *  - $CURRENT_SYSTEM_VIEWTYPE Any overrides by {@link elgg_set_viewtype()}
  *  - $CONFIG->view  The default view as saved in the DB.
- *  - $_SESSION['view']
  *
  * @return string The view.
  * @see elgg_set_viewtype()
- * @link http://docs.elgg.org/Views
- * @todo This function's sessions stuff needs rewritten, removed, or explained.
  */
 function elgg_get_viewtype() {
 	global $CURRENT_SYSTEM_VIEWTYPE, $CONFIG;
@@ -102,14 +96,11 @@ function elgg_get_viewtype() {
 	}
 
 	$viewtype = get_input('view', '', false);
-	if (is_string($viewtype) && $viewtype !== '') {
-		// only word characters allowed.
-		if (!preg_match('/\W/', $viewtype)) {
-			return $viewtype;
-		}
+	if (_elgg_is_valid_viewtype($viewtype)) {
+		return $viewtype;
 	}
 
-	if (!empty($CONFIG->view)) {
+	if (isset($CONFIG->view) && _elgg_is_valid_viewtype($CONFIG->view)) {
 		return $CONFIG->view;
 	}
 
@@ -117,42 +108,63 @@ function elgg_get_viewtype() {
 }
 
 /**
- * Register a view type as valid.
+ * Register a viewtype.
  *
- * @param string $view_type The view type to register
+ * @param string $viewtype The view type to register
  * @return bool
  */
-function elgg_register_viewtype($view_type) {
+function elgg_register_viewtype($viewtype) {
 	global $CONFIG;
 
 	if (!isset($CONFIG->view_types) || !is_array($CONFIG->view_types)) {
 		$CONFIG->view_types = array();
 	}
 
-	if (!in_array($view_type, $CONFIG->view_types)) {
-		$CONFIG->view_types[] = $view_type;
+	if (!in_array($viewtype, $CONFIG->view_types)) {
+		$CONFIG->view_types[] = $viewtype;
 	}
 
 	return true;
 }
 
 /**
- * Checks if $view_type is valid on this installation.
+ * Checks if $viewtype is registered.
  *
- * @param string $view_type View type
+ * @param string $viewtype The viewtype name
  *
  * @return bool
- * @since 1.7.2
- * @access private
+ * @since 1.9.0
  */
-function elgg_is_valid_view_type($view_type) {
+function elgg_is_registered_viewtype($viewtype) {
 	global $CONFIG;
 
 	if (!isset($CONFIG->view_types) || !is_array($CONFIG->view_types)) {
-		return FALSE;
+		return false;
 	}
 
-	return in_array($view_type, $CONFIG->view_types);
+	return in_array($viewtype, $CONFIG->view_types);
+}
+
+
+/**
+ * Checks if $viewtype is a string suitable for use as a viewtype name
+ *
+ * @param string $viewtype Potential viewtype name. Alphanumeric chars plus _ allowed.
+ *
+ * @return bool
+ * @access private
+ * @since 1.9
+ */
+function _elgg_is_valid_viewtype($viewtype) {
+	if (!is_string($viewtype) || $viewtype === '') {
+		return false;
+	}
+
+	if (preg_match('/\W/', $viewtype)) {
+		return false;
+	}
+
+	return true;
 }
 
 /**
@@ -165,20 +177,9 @@ function elgg_is_valid_view_type($view_type) {
  *
  * @return void
  * @since 1.7.2
- * @example views/viewtype_fallback.php Fallback from mobile to default.
  */
 function elgg_register_viewtype_fallback($viewtype) {
-	global $CONFIG;
-
-	if (!isset($CONFIG->viewtype)) {
-		$CONFIG->viewtype = new stdClass;
-	}
-
-	if (!isset($CONFIG->viewtype->fallback)) {
-		$CONFIG->viewtype->fallback = array();
-	}
-
-	$CONFIG->viewtype->fallback[] = $viewtype;
+	_elgg_services()->views->registerViewtypeFallback($viewtype);
 }
 
 /**
@@ -190,30 +191,22 @@ function elgg_register_viewtype_fallback($viewtype) {
  * @since 1.7.2
  */
 function elgg_does_viewtype_fallback($viewtype) {
-	global $CONFIG;
-
-	if (isset($CONFIG->viewtype) && isset($CONFIG->viewtype->fallback)) {
-		return in_array($viewtype, $CONFIG->viewtype->fallback);
-	}
-
-	return FALSE;
+	return _elgg_services()->views->doesViewtypeFallback($viewtype);
 }
 
 /**
  * Register a view to be available for ajax calls
+ *
+ * @warning Only views that begin with 'js/' and 'css/' have their content
+ * type set to 'text/javascript' and 'text/css'. Other views are served as
+ * 'text/html'.
  *
  * @param string $view The view name
  * @return void
  * @since 1.8.3
  */
 function elgg_register_ajax_view($view) {
-	global $CONFIG;
-
-	if (!isset($CONFIG->allowed_ajax_views)) {
-		$CONFIG->allowed_ajax_views = array();
-	}
-
-	$CONFIG->allowed_ajax_views[$view] = true;
+	elgg_register_external_view($view, false);
 }
 
 /**
@@ -224,6 +217,51 @@ function elgg_register_ajax_view($view) {
  * @since 1.8.3
  */
 function elgg_unregister_ajax_view($view) {
+	elgg_unregister_external_view($view);
+}
+
+/**
+ * Registers a view as being available externally (i.e. via URL).
+ *
+ * @param string  $view      The name of the view.
+ * @param boolean $cacheable Whether this view can be cached.
+ * @return void
+ * @since 1.9.0
+ */
+function elgg_register_external_view($view, $cacheable = false) {
+	global $CONFIG;
+
+	if (!isset($CONFIG->allowed_ajax_views)) {
+		$CONFIG->allowed_ajax_views = array();
+	}
+
+	$CONFIG->allowed_ajax_views[$view] = true;
+
+	if ($cacheable) {
+		_elgg_services()->views->registerCacheableView($view);
+	}
+}
+
+/**
+ * Check whether a view is registered as cacheable.
+ *
+ * @param string $view The name of the view.
+ * @return boolean
+ * @access private
+ * @since 1.9.0
+ */
+function _elgg_is_view_cacheable($view) {
+	return _elgg_services()->views->isCacheableView($view);
+}
+
+/**
+ * Unregister a view for ajax calls
+ *
+ * @param string $view The view name
+ * @return void
+ * @since 1.9.0
+ */
+function elgg_unregister_external_view($view) {
 	global $CONFIG;
 
 	if (isset($CONFIG->allowed_ajax_views[$view])) {
@@ -243,21 +281,7 @@ function elgg_unregister_ajax_view($view) {
  * @return string
  */
 function elgg_get_view_location($view, $viewtype = '') {
-	global $CONFIG;
-
-	if (empty($viewtype)) {
-		$viewtype = elgg_get_viewtype();
-	}
-
-	if (!isset($CONFIG->views->locations[$viewtype][$view])) {
-		if (!isset($CONFIG->viewpath)) {
-			return dirname(dirname(dirname(__FILE__))) . "/views/";
-		} else {
-			return $CONFIG->viewpath;
-		}
-	} else {
-		return $CONFIG->views->locations[$viewtype][$view];
-	}
+	return _elgg_services()->views->getViewLocation($view, $viewtype);
 }
 
 /**
@@ -277,25 +301,7 @@ function elgg_get_view_location($view, $viewtype = '') {
  * @return void
  */
 function elgg_set_view_location($view, $location, $viewtype = '') {
-	global $CONFIG;
-
-	if (empty($viewtype)) {
-		$viewtype = 'default';
-	}
-
-	if (!isset($CONFIG->views)) {
-		$CONFIG->views = new stdClass;
-	}
-
-	if (!isset($CONFIG->views->locations)) {
-		$CONFIG->views->locations = array($viewtype => array($view => $location));
-
-	} else if (!isset($CONFIG->views->locations[$viewtype])) {
-		$CONFIG->views->locations[$viewtype] = array($view => $location);
-
-	} else {
-		$CONFIG->views->locations[$viewtype][$view] = $location;
-	}
+	_elgg_services()->views->setViewLocation($view, $location, $viewtype);
 }
 
 /**
@@ -310,44 +316,7 @@ function elgg_set_view_location($view, $location, $viewtype = '') {
  * @return bool
  */
 function elgg_view_exists($view, $viewtype = '', $recurse = true) {
-	global $CONFIG;
-
-	// Detect view type
-	if (empty($viewtype)) {
-		$viewtype = elgg_get_viewtype();
-	}
-
-	if (!isset($CONFIG->views->locations[$viewtype][$view])) {
-		if (!isset($CONFIG->viewpath)) {
-			$location = dirname(dirname(dirname(__FILE__))) . "/views/";
-		} else {
-			$location = $CONFIG->viewpath;
-		}
-	} else {
-		$location = $CONFIG->views->locations[$viewtype][$view];
-	}
-
-	if (file_exists("{$location}{$viewtype}/{$view}.php")) {
-		return true;
-	}
-
-	// If we got here then check whether this exists as an extension
-	// We optionally recursively check whether the extended view exists also for the viewtype
-	if ($recurse && isset($CONFIG->views->extensions[$view])) {
-		foreach ($CONFIG->views->extensions[$view] as $view_extension) {
-			// do not recursively check to stay away from infinite loops
-			if (elgg_view_exists($view_extension, $viewtype, false)) {
-				return true;
-			}
-		}
-	}
-
-	// Now check if the default view exists if the view is registered as a fallback
-	if ($viewtype != 'default' && elgg_does_viewtype_fallback($viewtype)) {
-		return elgg_view_exists($view, 'default');
-	}
-
-	return false;
+	return _elgg_services()->views->viewExists($view, $viewtype, $recurse);
 }
 
 /**
@@ -381,153 +350,26 @@ function elgg_view_exists($view, $viewtype = '', $recurse = true) {
  *                          this value (default: standard detection)
  *
  * @return string The parsed view
- * @see set_template_handler()
- * @example views/elgg_view.php
- * @link http://docs.elgg.org/View
  */
 function elgg_view($view, $vars = array(), $bypass = false, $ignored = false, $viewtype = '') {
-	global $CONFIG;
+	return _elgg_services()->views->renderView($view, $vars, $bypass, $viewtype);
+}
 
-	if (!is_string($view) || !is_string($viewtype)) {
-		elgg_log("View and Viewtype in views must be a strings: $view", 'NOTICE');
-		return '';
-	}
-	// basic checking for bad paths
-	if (strpos($view, '..') !== false) {
-		return '';
-	}
-
-	if (!is_array($vars)) {
-		elgg_log("Vars in views must be an array: $view", 'ERROR');
-		$vars = array();
-	}
-
-	// Get the current viewtype
-	if ($viewtype === '') {
-		$viewtype = elgg_get_viewtype();
-	} elseif (preg_match('/\W/', $viewtype)) {
-		// Viewtypes can only be alphanumeric
-		return '';
-	}
-
-	$view_orig = $view;
-
-	// Trigger the pagesetup event
-	if (!isset($CONFIG->pagesetupdone) && $CONFIG->boot_complete) {
-		$CONFIG->pagesetupdone = true;
-		elgg_trigger_event('pagesetup', 'system');
-	}
-
-	// @warning - plugin authors: do not expect user, config, and url to be
-	// set by elgg_view() in the future. Instead, use elgg_get_logged_in_user_entity(),
-	// elgg_get_config(), and elgg_get_site_url() in your views.
-	if (!isset($vars['user'])) {
-		$vars['user'] = elgg_get_logged_in_user_entity();
-	}
-	if (!isset($vars['config'])) {
-		$vars['config'] = $CONFIG;
-	}
-	if (!isset($vars['url'])) {
-		$vars['url'] = elgg_get_site_url();
-	}
-
-	// full_view is the new preferred key for full view on entities @see elgg_view_entity()
-	// check if full_view is set because that means we've already rewritten it and this is
-	// coming from another view passing $vars directly.
-	if (isset($vars['full']) && !isset($vars['full_view'])) {
-		elgg_deprecated_notice("Use \$vars['full_view'] instead of \$vars['full']", 1.8, 2);
-		$vars['full_view'] = $vars['full'];
-	}
-	if (isset($vars['full_view'])) {
-		$vars['full'] = $vars['full_view'];
-	}
-
-	// internalname => name (1.8)
-	if (isset($vars['internalname']) && !isset($vars['__ignoreInternalname']) && !isset($vars['name'])) {
-		elgg_deprecated_notice('You should pass $vars[\'name\'] now instead of $vars[\'internalname\']', 1.8, 2);
-		$vars['name'] = $vars['internalname'];
-	} elseif (isset($vars['name'])) {
-		if (!isset($vars['internalname'])) {
-			$vars['__ignoreInternalname'] = '';
-		}
-		$vars['internalname'] = $vars['name'];
-	}
-
-	// internalid => id (1.8)
-	if (isset($vars['internalid']) && !isset($vars['__ignoreInternalid']) && !isset($vars['name'])) {
-		elgg_deprecated_notice('You should pass $vars[\'id\'] now instead of $vars[\'internalid\']', 1.8, 2);
-		$vars['id'] = $vars['internalid'];
-	} elseif (isset($vars['id'])) {
-		if (!isset($vars['internalid'])) {
-			$vars['__ignoreInternalid'] = '';
-		}
-		$vars['internalid'] = $vars['id'];
-	}
-
-	// If it's been requested, pass off to a template handler instead
-	if ($bypass == false && isset($CONFIG->template_handler) && !empty($CONFIG->template_handler)) {
-		$template_handler = $CONFIG->template_handler;
-		if (is_callable($template_handler)) {
-			return call_user_func($template_handler, $view, $vars);
-		}
-	}
-
-	// Set up any extensions to the requested view
-	if (isset($CONFIG->views->extensions[$view])) {
-		$viewlist = $CONFIG->views->extensions[$view];
-	} else {
-		$viewlist = array(500 => $view);
-	}
-
-	// Start the output buffer, find the requested view file, and execute it
-	ob_start();
-
-	foreach ($viewlist as $priority => $view) {
-
-		$view_location = elgg_get_view_location($view, $viewtype);
-		$view_file = "$view_location$viewtype/$view.php";
-
-		// try to include view
-		if (!file_exists($view_file) || !include($view_file)) {
-			// requested view does not exist
-			$error = "$viewtype/$view view does not exist.";
-
-			// attempt to load default view
-			if ($viewtype !== 'default' && elgg_does_viewtype_fallback($viewtype)) {
-
-				$default_location = elgg_get_view_location($view, 'default');
-				$default_view_file = "{$default_location}default/$view.php";
-
-				if (file_exists($default_view_file) && include($default_view_file)) {
-					// default view found
-					$error .= " Using default/$view instead.";
-				} else {
-					// no view found at all
-					$error = "Neither $viewtype/$view nor default/$view view exists.";
-				}
-			}
-
-			// log warning
-			elgg_log($error, 'NOTICE');
-		}
-	}
-
-	// Save the output buffer into the $content variable
-	$content = ob_get_clean();
-
-	// Plugin hook
-	$params = array('view' => $view_orig, 'vars' => $vars, 'viewtype' => $viewtype);
-	$content = elgg_trigger_plugin_hook('view', $view_orig, $params, $content);
-
-	// backward compatibility with less granular hook will be gone in 2.0
-	$content_tmp = elgg_trigger_plugin_hook('display', 'view', $params, $content);
-
-	if ($content_tmp !== $content) {
-		$content = $content_tmp;
-		elgg_deprecated_notice('The display:view plugin hook is deprecated by view:view_name', 1.8);
-	}
-
-	return $content;
+/**
+ * Display a view with a deprecation notice. No missing view NOTICE is logged
+ *
+ * @see elgg_view()
+ *
+ * @param string  $view       The name and location of the view to use
+ * @param array   $vars       Variables to pass to the view
+ * @param string  $suggestion Suggestion with the deprecation message
+ * @param string  $version    Human-readable *release* version: 1.7, 1.8, ...
+ *
+ * @return string The parsed view
+ * @access private
+ */
+function elgg_view_deprecated($view, array $vars, $suggestion, $version) {
+	return _elgg_services()->views->renderDeprecatedView($view, $vars, $suggestion, $version);
 }
 
 /**
@@ -539,7 +381,7 @@ function elgg_view($view, $vars = array(), $bypass = false, $ignored = false, $v
  * the output of the extended view will be appended to the original view.
  *
  * Views can be extended multiple times, and extensions are not checked for
- * uniqueness. Use {@see elgg_unextend_view()} to help manage duplicates.
+ * uniqueness. Use {@link elgg_unextend_view()} to help manage duplicates.
  *
  * Priority can be specified and affects the order in which extensions
  * are appended or prepended.
@@ -551,33 +393,13 @@ function elgg_view($view, $vars = array(), $bypass = false, $ignored = false, $v
  * @param string $view_extension This view is added to $view
  * @param int    $priority       The priority, from 0 to 1000,
  *                               to add at (lowest numbers displayed first)
+ * @param string $viewtype       I'm not sure why this is here @todo
  *
  * @return void
  * @since 1.7.0
- * @link http://docs.elgg.org/Views/Extend
- * @example views/extend.php
  */
-function elgg_extend_view($view, $view_extension, $priority = 501) {
-	global $CONFIG;
-
-	if (!isset($CONFIG->views)) {
-		$CONFIG->views = (object) array(
-			'extensions' => array(),
-		);
-		$CONFIG->views->extensions[$view][500] = (string)$view;
-	} else {
-		if (!isset($CONFIG->views->extensions[$view])) {
-			$CONFIG->views->extensions[$view][500] = (string)$view;
-		}
-	}
-
-	// raise priority until it doesn't match one already registered
-	while (isset($CONFIG->views->extensions[$view][$priority])) {
-		$priority++;
-	}
-
-	$CONFIG->views->extensions[$view][$priority] = (string)$view_extension;
-	ksort($CONFIG->views->extensions[$view]);
+function elgg_extend_view($view, $view_extension, $priority = 501, $viewtype = '') {
+	_elgg_services()->views->extendView($view, $view_extension, $priority, $viewtype);
 }
 
 /**
@@ -590,20 +412,7 @@ function elgg_extend_view($view, $view_extension, $priority = 501) {
  * @since 1.7.2
  */
 function elgg_unextend_view($view, $view_extension) {
-	global $CONFIG;
-
-	if (!isset($CONFIG->views->extensions[$view])) {
-		return FALSE;
-	}
-
-	$priority = array_search($view_extension, $CONFIG->views->extensions[$view]);
-	if ($priority === FALSE) {
-		return FALSE;
-	}
-
-	unset($CONFIG->views->extensions[$view][$priority]);
-
-	return TRUE;
+	return _elgg_services()->views->unextendView($view, $view_extension);
 }
 
 /**
@@ -613,21 +422,30 @@ function elgg_unextend_view($view, $view_extension) {
  * can be HTML for a browser, RSS for a feed reader, or
  * Javascript, PHP and a number of other formats.
  *
+ * For HTML pages, use the 'head', 'page' plugin hook for setting meta elements
+ * and links.
+ *
  * @param string $title      Title
  * @param string $body       Body
  * @param string $page_shell Optional page shell to use. See page/shells view directory
  * @param array  $vars       Optional vars array to pass to the page
- *                           shell. Automatically adds title, body, and sysmessages
+ *                           shell. Automatically adds title, body, head, and sysmessages
  *
  * @return string The contents of the page
  * @since  1.8
  */
 function elgg_view_page($title, $body, $page_shell = 'default', $vars = array()) {
 
+	$params = array();
+	$params['identifier'] = _elgg_services()->request->getFirstUrlSegment();
+	$params['segments'] = _elgg_services()->request->getUrlSegments();
+	array_shift($params['segments']);
+	$page_shell = elgg_trigger_plugin_hook('shell', 'page', $params, $page_shell);
+
 	$messages = null;
 	if (count_messages()) {
 		// get messages - try for errors first
-		$messages = system_messages(NULL, "error");
+		$messages = system_messages(null, "error");
 		if (count($messages["error"]) == 0) {
 			// no errors so grab rest of messages
 			$messages = system_messages(null, "");
@@ -641,8 +459,12 @@ function elgg_view_page($title, $body, $page_shell = 'default', $vars = array())
 	$vars['body'] = $body;
 	$vars['sysmessages'] = $messages;
 
+	// head has keys 'title', 'metas', 'links'
+	$head_params = _elgg_views_prepare_head($title);
+	$vars['head'] = elgg_trigger_plugin_hook('head', 'page', $vars, $head_params);
+
 	$vars = elgg_trigger_plugin_hook('output:before', 'page', null, $vars);
-	
+
 	// check for deprecated view
 	if ($page_shell == 'default' && elgg_view_exists('pageshells/pageshell')) {
 		elgg_deprecated_notice("pageshells/pageshell is deprecated by page/$page_shell", 1.8);
@@ -653,8 +475,111 @@ function elgg_view_page($title, $body, $page_shell = 'default', $vars = array())
 
 	$vars['page_shell'] = $page_shell;
 
-	// Allow plugins to mod output
+	// Allow plugins to modify the output
 	return elgg_trigger_plugin_hook('output', 'page', $vars, $output);
+}
+
+/**
+ * Prepare the variables for the html head
+ *
+ * @param string $title Page title for <head>
+ * @return array
+ * @access private
+ */
+function _elgg_views_prepare_head($title) {
+	$params = array(
+		'links' => array(),
+		'metas' => array(),
+	);
+
+	if (empty($title)) {
+		$params['title'] = elgg_get_config('sitename');
+	} else {
+		$params['title'] = $title . ' : ' . elgg_get_config('sitename');
+	}
+
+	$params['metas'][] = array(
+		'http-equiv' => 'Content-Type',
+		'content' => 'text/html; charset=utf-8',
+	);
+
+	$params['metas'][] = array(
+		'name' => 'description',
+		'content' => elgg_get_config('sitedescription')
+	);
+
+	// https://developer.chrome.com/multidevice/android/installtohomescreen
+	$data['metas'][] = array(
+		'name' => 'viewport',
+		'content' => 'width=device-width',
+	);
+	$data['metas'][] = array(
+		'name' => 'mobile-web-app-capable',
+		'content' => 'yes',
+	);
+	$data['metas'][] = array(
+		'name' => 'apple-mobile-web-app-capable',
+		'content' => 'yes',
+	);
+	$data['links'][] = array(
+		'rel' => 'apple-touch-icon',
+		'href' => elgg_normalize_url('_graphics/favicon-128.png'),
+	);
+
+	// favicons
+	$params['links'][] = array(
+		'rel' => 'icon',
+		'href' => elgg_normalize_url('_graphics/favicon.ico'),
+	);
+	$params['links'][] = array(
+		'rel' => 'icon',
+		'sizes' => '16x16 32x32 48x48 64x64 128x128',
+		'type' => 'image/svg+xml',
+		'href' => elgg_normalize_url('_graphics/favicon.svg'),
+	);
+	$params['links'][] = array(
+		'rel' => 'icon',
+		'sizes' => '16x16',
+		'type' => 'image/png',
+		'href' => elgg_normalize_url('_graphics/favicon-16.png'),
+	);
+	$params['links'][] = array(
+		'rel' => 'icon',
+		'sizes' => '32x32',
+		'type' => 'image/png',
+		'href' => elgg_normalize_url('_graphics/favicon-32.png'),
+	);
+	$params['links'][] = array(
+		'rel' => 'icon',
+		'sizes' => '64x64',
+		'type' => 'image/png',
+		'href' => elgg_normalize_url('_graphics/favicon-64.png'),
+	);
+	$params['links'][] = array(
+		'rel' => 'icon',
+		'sizes' => '128x128',
+		'type' => 'image/png',
+		'href' => elgg_normalize_url('_graphics/favicon-128.png'),
+	);
+
+	// RSS feed link
+	global $autofeed;
+	if (isset($autofeed) && $autofeed == true) {
+		$url = current_page_url();
+		if (substr_count($url,'?')) {
+			$url .= "&view=rss";
+		} else {
+			$url .= "?view=rss";
+		}
+		$params['links'][] = array(
+			'rel' => 'alternative',
+			'type' => 'application/rss+xml',
+			'title' => 'RSS',
+			'href' => elgg_format_url($url),
+		);
+	}
+
+	return $params;
 }
 
 /**
@@ -691,6 +616,12 @@ function elgg_view_page($title, $body, $page_shell = 'default', $vars = array())
  */
 function elgg_view_layout($layout_name, $vars = array()) {
 
+	$params = array();
+	$params['identifier'] = _elgg_services()->request->getFirstUrlSegment();
+	$params['segments'] = _elgg_services()->request->getUrlSegments();
+	array_shift($params['segments']);
+	$layout_name = elgg_trigger_plugin_hook('layout', 'page', $params, $layout_name);
+
 	if (is_string($vars) || $vars === null) {
 		elgg_deprecated_notice("The use of unlimited optional string arguments in elgg_view_layout() was deprecated in favor of an options array", 1.8);
 		$arg = 1;
@@ -702,6 +633,7 @@ function elgg_view_layout($layout_name, $vars = array()) {
 	} else {
 		$param_array = $vars;
 	}
+	$param_array['layout'] = $layout_name;
 
 	$params = elgg_trigger_plugin_hook('output:before', 'layout', null, $param_array);
 
@@ -784,6 +716,50 @@ function elgg_view_menu($menu_name, array $vars = array()) {
 }
 
 /**
+ * Render a menu item (usually as a link)
+ *
+ * @param ElggMenuItem $item The menu item
+ * @param array        $vars Options to pass to output/url if a link
+ * @return string
+ * @since 1.9.0
+ */
+function elgg_view_menu_item(ElggMenuItem $item, array $vars = array()) {
+	if (!isset($vars['class'])) {
+		$vars['class'] = 'elgg-menu-content';
+	}
+
+	$vars = array_merge($item->getValues(), $vars);
+
+	if ($item->getLinkClass()) {
+		$vars['class'] .= ' ' . $item->getLinkClass();
+	}
+
+	if ($item->getHref() === false) {
+		$text = $item->getText();
+
+		// if contains elements, don't wrap
+		if (preg_match('~<[a-z]~', $text)) {
+			return $text;
+		} else {
+			return elgg_format_element('span', array('class' => 'elgg-non-link'), $text);
+		}
+	}
+
+	if (!isset($vars['rel']) && !isset($vars['is_trusted'])) {
+		$vars['is_trusted'] = true;
+	}
+
+	if ($item->getConfirmText()) {
+		$vars['confirm'] = $item->getConfirmText();
+		return elgg_view('output/confirmlink', $vars);
+	} else {
+		unset($vars['confirm']);
+	}
+
+	return elgg_view('output/url', $vars);
+}
+
+/**
  * Returns a string of a rendered entity.
  *
  * Entity views are either determined by setting the view property on the entity
@@ -795,7 +771,7 @@ function elgg_view_menu($menu_name, array $vars = array()) {
  *  - ElggEntity 'entity' The entity being viewed
  *
  * Other common view $vars paramters:
- *  - bool 'full_view' Whether to show a full or condensed view.
+ *  - bool 'full_view' Whether to show a full or condensed view. (Default: true)
  *
  * @tip This function can automatically appends annotations to entities if in full
  * view and a handler is registered for the entity:annotate.  See https://github.com/Elgg/Elgg/issues/964 and
@@ -804,16 +780,14 @@ function elgg_view_menu($menu_name, array $vars = array()) {
  * @param ElggEntity $entity The entity to display
  * @param array      $vars   Array of variables to pass to the entity view.
  *                           In Elgg 1.7 and earlier it was the boolean $full_view
- * @param boolean    $bypass If false, will not pass to a custom template handler.
- *                           {@see set_template_handler()}
+ * @param boolean    $bypass If true, will not pass to a custom template handler.
+ *                           {@link set_template_handler()}
  * @param boolean    $debug  Complain if views are missing
  *
  * @return string HTML to display or false
- * @link http://docs.elgg.org/Views/Entity
- * @link http://docs.elgg.org/Entities
  * @todo The annotation hook might be better as a generic plugin hook to append content.
  */
-function elgg_view_entity(ElggEntity $entity, $vars = array(), $bypass = true, $debug = false) {
+function elgg_view_entity(ElggEntity $entity, $vars = array(), $bypass = false, $debug = false) {
 
 	// No point continuing if entity is null
 	if (!$entity || !($entity instanceof ElggEntity)) {
@@ -824,7 +798,7 @@ function elgg_view_entity(ElggEntity $entity, $vars = array(), $bypass = true, $
 	$autofeed = true;
 
 	$defaults = array(
-		'full_view' => false,
+		'full_view' => true,
 	);
 
 	if (is_array($vars)) {
@@ -855,8 +829,7 @@ function elgg_view_entity(ElggEntity $entity, $vars = array(), $bypass = true, $
 	$contents = '';
 	if (elgg_view_exists("$entity_type/$subtype")) {
 		$contents = elgg_view("$entity_type/$subtype", $vars, $bypass, $debug);
-	}
-	if (empty($contents)) {
+	} else {
 		$contents = elgg_view("$entity_type/default", $vars, $bypass, $debug);
 	}
 
@@ -931,13 +904,13 @@ function elgg_view_entity_icon(ElggEntity $entity, $size = 'medium', $vars = arr
  *
  * @param ElggAnnotation $annotation The annotation to display
  * @param array          $vars       Variable array for view.
- * @param bool           $bypass     If false, will not pass to a custom
- *                                   template handler. {@see set_template_handler()}
+ * @param bool           $bypass     If true, will not pass to a custom
+ *                                   template handler. {@link set_template_handler()}
  * @param bool           $debug      Complain if views are missing
  *
  * @return string/false Rendered annotation
  */
-function elgg_view_annotation(ElggAnnotation $annotation, array $vars = array(), $bypass = true, $debug = false) {
+function elgg_view_annotation(ElggAnnotation $annotation, array $vars = array(), $bypass = false, $debug = false) {
 	global $autofeed;
 	$autofeed = true;
 
@@ -979,15 +952,16 @@ function elgg_view_annotation(ElggAnnotation $annotation, array $vars = array(),
  *
  * @param array $entities Array of entities
  * @param array $vars     Display variables
- *		'count'            The total number of entities across all pages
- *		'offset'           The current indexing offset
- *		'limit'            The number of entities to display per page
- *		'full_view'        Display the full view of the entities?
- *		'list_class'       CSS class applied to the list
- *		'item_class'       CSS class applied to the list items
- *		'pagination'       Display pagination?
- *		'list_type'        List type: 'list' (default), 'gallery'
- *		'list_type_toggle' Display the list type toggle?
+ *      'count'            The total number of entities across all pages
+ *      'offset'           The current indexing offset
+ *      'limit'            The number of entities to display per page
+ *      'full_view'        Display the full view of the entities?
+ *      'list_class'       CSS class applied to the list
+ *      'item_class'       CSS class applied to the list items
+ *      'pagination'       Display pagination?
+ *      'list_type'        List type: 'list' (default), 'gallery'
+ *      'list_type_toggle' Display the list type toggle?
+ *      'no_results'       Message to display if no results
  *
  * @return string The rendered list of entities
  * @access private
@@ -1056,12 +1030,13 @@ $list_type_toggle = true, $pagination = true) {
  *
  * @param array $annotations Array of annotations
  * @param array $vars        Display variables
- *		'count'      The total number of annotations across all pages
- *		'offset'     The current indexing offset
- *		'limit'      The number of annotations to display per page
- *		'full_view'  Display the full view of the annotation?
- *		'list_class' CSS Class applied to the list
- *		'offset_key' The url parameter key used for offset
+ *      'count'      The total number of annotations across all pages
+ *      'offset'     The current indexing offset
+ *      'limit'      The number of annotations to display per page
+ *      'full_view'  Display the full view of the annotation?
+ *      'list_class' CSS Class applied to the list
+ *      'offset_key' The url parameter key used for offset
+ *      'no_results' Message to display if no results
  *
  * @return string The list of annotations
  * @access private
@@ -1075,9 +1050,9 @@ function elgg_view_annotation_list($annotations, array $vars = array()) {
 		'full_view' => true,
 		'offset_key' => 'annoff',
 	);
-	
+
 	$vars = array_merge($defaults, $vars);
-	
+
 	if (!$vars["limit"] && !$vars["offset"]) {
 		// no need for pagination if listing is unlimited
 		$vars["pagination"] = false;
@@ -1165,8 +1140,6 @@ function elgg_view_friendly_time($time) {
  * @param array      $vars        Variables to pass to comment view
  *
  * @return string|false Rendered comments or false on failure
- * @link http://docs.elgg.org/Entities/Comments
- * @link http://docs.elgg.org/Annotations/Comments
  */
 function elgg_view_comments($entity, $add_comment = true, array $vars = array()) {
 	if (!($entity instanceof ElggEntity)) {
@@ -1222,7 +1195,8 @@ function elgg_view_image_block($image, $body, $vars = array()) {
  * @since 1.8.0
  */
 function elgg_view_module($type, $title, $body, array $vars = array()) {
-	$vars['class'] = elgg_extract('class', $vars, '') . " elgg-module-$type";
+	$vars['type'] = $type;
+	$vars['class'] = elgg_extract('class', $vars, '');
 	$vars['title'] = $title;
 	$vars['body'] = $body;
 	return elgg_view('page/components/module', $vars);
@@ -1258,7 +1232,7 @@ function elgg_view_river_item($item, array $vars = array()) {
 	// see https://github.com/elgg/elgg/issues/4789
 	//	else {
 	//		// hide based on object's container
-	//		$visibility = ElggGroupItemVisibility::factory($object->container_guid);
+	//		$visibility = Elgg_GroupItemVisibility::factory($object->container_guid);
 	//		if ($visibility->shouldHideItems) {
 	//			return '';
 	//		}
@@ -1320,7 +1294,42 @@ function elgg_view_form($action, $form_vars = array(), $body_vars = array()) {
 		$form_vars['class'] = $form_class;
 	}
 
-	return elgg_view('input/form', array_merge($defaults, $form_vars));
+	$form_vars = array_merge($defaults, $form_vars);
+	$form_vars['action_name'] = $action;
+
+	return elgg_view('input/form', $form_vars);
+}
+
+/**
+ * Create a tagcloud for viewing
+ *
+ * @see elgg_get_tags
+ *
+ * @param array $options Any elgg_get_tags() options except:
+ *
+ * 	type => must be single entity type
+ *
+ * 	subtype => must be single entity subtype
+ *
+ * @return string
+ * @since 1.7.1
+ */
+function elgg_view_tagcloud(array $options = array()) {
+
+	$type = $subtype = '';
+	if (isset($options['type'])) {
+		$type = $options['type'];
+	}
+	if (isset($options['subtype'])) {
+		$subtype = $options['subtype'];
+	}
+
+	$tag_data = elgg_get_tags($options);
+	return elgg_view("output/tagcloud", array(
+		'value' => $tag_data,
+		'type' => $type,
+		'subtype' => $subtype,
+	));
 }
 
 /**
@@ -1359,11 +1368,14 @@ function elgg_view_list_item($item, array $vars = array()) {
  * @return string The html for displaying an icon
  */
 function elgg_view_icon($name, $class = '') {
-	// @todo deprecate boolean in Elgg 1.9
 	if ($class === true) {
+		elgg_deprecated_notice("Using a boolean to float the icon is deprecated. Use the class float.", 1.9);
 		$class = 'float';
 	}
-	return "<span class=\"elgg-icon elgg-icon-$name $class\"></span>";
+
+	$icon_class = array("elgg-icon-$name" , $class);
+
+	return elgg_view("output/icon", array("class" => $icon_class));
 }
 
 /**
@@ -1377,9 +1389,16 @@ function elgg_view_icon($name, $class = '') {
  */
 function elgg_view_access_collections($owner_guid) {
 	if ($collections = get_user_access_collections($owner_guid)) {
+		$user = get_user($owner_guid);
+		if ($user) {
+			$entities = $user->getFriends(array('limit' => 0));
+		} else {
+			$entities = array();
+		}
+
 		foreach ($collections as $key => $collection) {
 			$collections[$key]->members = get_members_of_access_collection($collection->id, true);
-			$collections[$key]->entities = get_user_friends($owner_guid, "", 9999);
+			$collections[$key]->entities = $entities;
 		}
 	}
 
@@ -1405,7 +1424,6 @@ function elgg_view_access_collections($owner_guid) {
  *
  * @return bool
  * @see elgg_view()
- * @link http://docs.elgg.org/Views/TemplateHandlers
  */
 function set_template_handler($function_name) {
 	global $CONFIG;
@@ -1415,96 +1433,6 @@ function set_template_handler($function_name) {
 		return true;
 	}
 	return false;
-}
-
-/**
- * Returns the name of views for in a directory.
- *
- * Use this to get all namespaced views under the first element.
- *
- * @param string $dir  The main directory that holds the views. (mod/profile/views/)
- * @param string $base The root name of the view to use, without the viewtype. (profile)
- *
- * @return array
- * @since 1.7.0
- * @todo Why isn't this used anywhere else but in elgg_view_tree()?
- * Seems like a useful function for autodiscovery.
- * @access private
- */
-function elgg_get_views($dir, $base) {
-	$return = array();
-	if (file_exists($dir) && is_dir($dir)) {
-		if ($handle = opendir($dir)) {
-			while ($view = readdir($handle)) {
-				if (!in_array($view, array('.', '..', '.svn', 'CVS'))) {
-					if (is_dir($dir . '/' . $view)) {
-						if ($val = elgg_get_views($dir . '/' . $view, $base . '/' . $view)) {
-							$return = array_merge($return, $val);
-						}
-					} else {
-						$view = str_replace('.php', '', $view);
-						$return[] = $base . '/' . $view;
-					}
-				}
-			}
-		}
-	}
-
-	return $return;
-}
-
-/**
- * Returns all views below a partial view.
- *
- * Settings $view_root = 'profile' will show all available views under
- * the "profile" namespace.
- *
- * @param string $view_root The root view
- * @param string $viewtype  Optionally specify a view type
- *                          other than the current one.
- *
- * @return array A list of view names underneath that root view
- * @todo This is used once in the deprecated get_activity_stream_data() function.
- * @access private
- */
-function elgg_view_tree($view_root, $viewtype = "") {
-	global $CONFIG;
-	static $treecache = array();
-
-	// Get viewtype
-	if (!$viewtype) {
-		$viewtype = elgg_get_viewtype();
-	}
-
-	// A little light internal caching
-	if (!empty($treecache[$view_root])) {
-		return $treecache[$view_root];
-	}
-
-	// Examine $CONFIG->views->locations
-	if (isset($CONFIG->views->locations[$viewtype])) {
-		foreach ($CONFIG->views->locations[$viewtype] as $view => $path) {
-			$pos = strpos($view, $view_root);
-			if ($pos === 0) {
-				$treecache[$view_root][] = $view;
-			}
-		}
-	}
-
-	// Now examine core
-	$location = $CONFIG->viewpath;
-	$viewtype = elgg_get_viewtype();
-	$root = $location . $viewtype . '/' . $view_root;
-
-	if (file_exists($root) && is_dir($root)) {
-		$val = elgg_get_views($root, $view_root);
-		if (!is_array($treecache[$view_root])) {
-			$treecache[$view_root] = array();
-		}
-		$treecache[$view_root] = array_merge($treecache[$view_root], $val);
-	}
-
-	return $treecache[$view_root];
 }
 
 /**
@@ -1522,39 +1450,63 @@ function elgg_view_tree($view_root, $viewtype = "") {
  * @return bool returns false if folder can't be read
  * @since 1.7.0
  * @see elgg_set_view_location()
- * @todo This seems overly complicated.
  * @access private
  */
 function autoregister_views($view_base, $folder, $base_location_path, $viewtype) {
-	if ($handle = opendir($folder)) {
-		while ($view = readdir($handle)) {
-			if (!in_array($view, array('.', '..', '.svn', 'CVS')) && !is_dir($folder . "/" . $view)) {
-				// this includes png files because some icons are stored within view directories.
-				// See commit [1705]
-				if ((substr_count($view, ".php") > 0) || (substr_count($view, ".png") > 0)) {
-					if (!empty($view_base)) {
-						$view_base_new = $view_base . "/";
-					} else {
-						$view_base_new = "";
-					}
+	return _elgg_services()->views->autoregisterViews($view_base, $folder, $base_location_path, $viewtype);
+}
 
-					elgg_set_view_location($view_base_new . str_replace('.php', '', $view),
-						$base_location_path, $viewtype);
-				}
-			} else if (!in_array($view, array('.', '..', '.svn', 'CVS')) && is_dir($folder . "/" . $view)) {
-				if (!empty($view_base)) {
-					$view_base_new = $view_base . "/";
-				} else {
-					$view_base_new = "";
-				}
-				autoregister_views($view_base_new . $view, $folder . "/" . $view,
-					$base_location_path, $viewtype);
-			}
-		}
-		return TRUE;
+/**
+ * Minifies simplecache CSS and JS views by handling the "simplecache:generate" hook
+ *
+ * @param string $hook    The name of the hook
+ * @param string $type    View type (css, js, or unknown)
+ * @param string $content Content of the view
+ * @param array  $params  Array of parameters
+ *
+ * @return string|null View content minified (if css/js type)
+ * @access private
+ */
+function _elgg_views_minify($hook, $type, $content, $params) {
+	static $autoload_registered;
+	if (!$autoload_registered) {
+		$path = elgg_get_root_path() . 'vendors/minify/lib';
+		elgg_get_class_loader()->addFallback($path);
+		$autoload_registered = true;
 	}
 
-	return FALSE;
+	if (preg_match('~[\.-]min\.~', $params['view'])) {
+		// bypass minification
+		return;
+	}
+
+	if ($type == 'js') {
+		if (elgg_get_config('simplecache_minify_js')) {
+			return JSMin::minify($content);
+		}
+	} elseif ($type == 'css') {
+		if (elgg_get_config('simplecache_minify_css')) {
+			$cssmin = new CSSMin();
+			return $cssmin->run($content);
+		}
+	}
+}
+
+
+/**
+ * Inserts module names into anonymous modules by handling the "simplecache:generate" hook.
+ *
+ * @param string $hook    The name of the hook
+ * @param string $type    View type (css, js, or unknown)
+ * @param string $content Content of the view
+ * @param array  $params  Array of parameters
+ *
+ * @return string|null View content minified (if css/js type)
+ * @access private
+ */
+function _elgg_views_amd($hook, $type, $content, $params) {
+	$filter = new Elgg_Amd_ViewFilter();
+	return $filter->filter($params['view'], $content);
 }
 
 /**
@@ -1566,7 +1518,7 @@ function autoregister_views($view_base, $folder, $base_location_path, $viewtype)
 function elgg_views_add_rss_link() {
 	global $autofeed;
 	if (isset($autofeed) && $autofeed == true) {
-		$url = full_url();
+		$url = current_page_url();
 		if (substr_count($url, '?')) {
 			$url .= "&view=rss";
 		} else {
@@ -1581,6 +1533,15 @@ function elgg_views_add_rss_link() {
 			'title' => elgg_echo('feed:rss'),
 		));
 	}
+}
+
+/**
+ * Sends X-Frame-Options header on page requests
+ *
+ * @access private
+ */
+function _elgg_views_send_header_x_frame_options() {
+	header('X-Frame-Options: SAMEORIGIN');
 }
 
 /**
@@ -1608,30 +1569,39 @@ function elgg_views_boot() {
 	global $CONFIG;
 
 	elgg_register_simplecache_view('css/ie');
-	elgg_register_simplecache_view('css/ie6');
 	elgg_register_simplecache_view('css/ie7');
+	elgg_register_simplecache_view('css/ie8');
 
-	elgg_register_js('jquery', '/vendors/jquery/jquery-1.6.4.min.js', 'head');
-	elgg_register_js('jquery-ui', '/vendors/jquery/jquery-ui-1.8.16.min.js', 'head');
-	elgg_register_js('jquery.form', '/vendors/jquery/jquery.form.js');
+	elgg_register_simplecache_view('js/text.js');
 
-	elgg_register_simplecache_view('js/elgg');
+	elgg_register_js('elgg.require_config', elgg_get_simplecache_url('js', 'elgg/require_config'), 'head');
+	elgg_register_js('require', '/vendors/requirejs/require-2.1.10.min.js', 'head');
+	elgg_register_js('jquery', '/vendors/jquery/jquery-1.11.0.min.js', 'head');
+	elgg_register_js('jquery-migrate', '/vendors/jquery/jquery-migrate-1.2.1.min.js', 'head');
+	elgg_register_js('jquery-ui', '/vendors/jquery/jquery-ui-1.10.4.min.js', 'head');
+
+	// this is the only lib that isn't required to be loaded sync in head
+	elgg_define_js('jquery.form', array(
+		'src' => '/vendors/jquery/jquery.form.min.js',
+		'deps' => array('jquery'),
+		'exports' => 'jQuery.fn.ajaxForm',
+	));
+
 	$elgg_js_url = elgg_get_simplecache_url('js', 'elgg');
 	elgg_register_js('elgg', $elgg_js_url, 'head');
 
+	elgg_load_js('elgg.require_config');
+	elgg_load_js('require');
 	elgg_load_js('jquery');
+	elgg_load_js('jquery-migrate');
 	elgg_load_js('jquery-ui');
 	elgg_load_js('elgg');
 
-	elgg_register_simplecache_view('js/lightbox');
 	$lightbox_js_url = elgg_get_simplecache_url('js', 'lightbox');
 	elgg_register_js('lightbox', $lightbox_js_url);
 
-	elgg_register_simplecache_view('css/lightbox');
-	$lightbox_css_url = elgg_get_simplecache_url('css', 'lightbox');
-	elgg_register_css('lightbox', $lightbox_css_url);
+	elgg_register_css('lightbox', 'vendors/jquery/colorbox/theme/colorbox.css');
 
-	elgg_register_simplecache_view('css/elgg');
 	$elgg_css_url = elgg_get_simplecache_url('css', 'elgg');
 	elgg_register_css('elgg', $elgg_css_url);
 
@@ -1639,29 +1609,32 @@ function elgg_views_boot() {
 
 	elgg_register_ajax_view('js/languages');
 
+	elgg_register_plugin_hook_handler('simplecache:generate', 'js', '_elgg_views_amd');
+	elgg_register_plugin_hook_handler('simplecache:generate', 'css', '_elgg_views_minify');
+	elgg_register_plugin_hook_handler('simplecache:generate', 'js', '_elgg_views_minify');
+
 	elgg_register_plugin_hook_handler('output:before', 'layout', 'elgg_views_add_rss_link');
+	elgg_register_plugin_hook_handler('output:before', 'page', '_elgg_views_send_header_x_frame_options');
 
-	// discover the built-in view types
-	// @todo the cache is loaded in load_plugins() but we need to know view_types earlier
+	// discover the core viewtypes
+	// @todo the cache is loaded in load_plugins() but we need to know viewtypes earlier
 	$view_path = $CONFIG->viewpath;
-
-	$views = scandir($view_path);
-
-	foreach ($views as $view) {
-		if ($view[0] !== '.' && is_dir($view_path . $view)) {
-			elgg_register_viewtype($view);
+	$viewtype_dirs = scandir($view_path);
+	foreach ($viewtype_dirs as $viewtype) {
+		if (_elgg_is_valid_viewtype($viewtype) && is_dir($view_path . $viewtype)) {
+			elgg_register_viewtype($viewtype);
 		}
 	}
 
 	// set default icon sizes - can be overridden in settings.php or with plugin
 	if (!isset($CONFIG->icon_sizes)) {
 		$icon_sizes = array(
-			'topbar' => array('w' => 16, 'h' => 16, 'square' => TRUE, 'upscale' => TRUE),
-			'tiny' => array('w' => 25, 'h' => 25, 'square' => TRUE, 'upscale' => TRUE),
-			'small' => array('w' => 40, 'h' => 40, 'square' => TRUE, 'upscale' => TRUE),
-			'medium' => array('w' => 100, 'h' => 100, 'square' => TRUE, 'upscale' => TRUE),
-			'large' => array('w' => 200, 'h' => 200, 'square' => FALSE, 'upscale' => FALSE),
-			'master' => array('w' => 550, 'h' => 550, 'square' => FALSE, 'upscale' => FALSE),
+			'topbar' => array('w' => 16, 'h' => 16, 'square' => true, 'upscale' => true),
+			'tiny' => array('w' => 25, 'h' => 25, 'square' => true, 'upscale' => true),
+			'small' => array('w' => 40, 'h' => 40, 'square' => true, 'upscale' => true),
+			'medium' => array('w' => 100, 'h' => 100, 'square' => true, 'upscale' => true),
+			'large' => array('w' => 200, 'h' => 200, 'square' => false, 'upscale' => false),
+			'master' => array('w' => 550, 'h' => 550, 'square' => false, 'upscale' => false),
 		);
 		elgg_set_config('icon_sizes', $icon_sizes);
 	}

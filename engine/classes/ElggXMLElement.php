@@ -13,7 +13,7 @@ class ElggXMLElement {
 
 	/**
 	 * Creates an ElggXMLParser from a string or existing SimpleXMLElement
-	 * 
+	 *
 	 * @param string|SimpleXMLElement $xml The XML to parse
 	 */
 	public function __construct($xml) {
@@ -83,11 +83,11 @@ class ElggXMLElement {
 
 	/**
 	 * Override ->
-	 * 
+	 *
 	 * @param string $name Property name
 	 * @return mixed
 	 */
-	function __get($name) {
+	public function __get($name) {
 		switch ($name) {
 			case 'name':
 				return $this->getName();
@@ -107,11 +107,11 @@ class ElggXMLElement {
 
 	/**
 	 * Override isset
-	 * 
+	 *
 	 * @param string $name Property name
 	 * @return boolean
 	 */
-	function __isset($name) {
+	public function __isset($name) {
 		switch ($name) {
 			case 'name':
 				return $this->getName() !== null;

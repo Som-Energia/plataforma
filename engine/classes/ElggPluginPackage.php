@@ -32,7 +32,7 @@ class ElggPluginPackage {
 	 * @var array
 	 */
 	private $textFiles = array(
-		'README.txt', 'CHANGES.txt', 
+		'README.txt', 'CHANGES.txt',
 		'INSTALL.txt', 'COPYRIGHT.txt', 'LICENSE.txt',
 
 		'README', 'README.md', 'README.markdown'
@@ -53,18 +53,13 @@ class ElggPluginPackage {
 	 * @var array
 	 */
 	private $depsSupportedTypes = array(
-		'elgg_version', 'elgg_release', 'php_extension', 'php_ini', 'plugin', 'priority',
+		'elgg_version', 'elgg_release', 'php_version', 'php_extension', 'php_ini', 'plugin', 'priority',
 	);
 
 	/**
 	 * An invalid plugin error.
 	 */
 	private $errorMsg = '';
-
-	/**
-	 * Any dependencies messages
-	 */
-	private $depsMsgs = array();
 
 	/**
 	 * The plugin's manifest object
@@ -139,8 +134,6 @@ class ElggPluginPackage {
 				throw new PluginException(elgg_echo('PluginException:InvalidPlugin', array($plugin)));
 			}
 		}
-
-		return true;
 	}
 
 	/********************************
@@ -161,10 +154,16 @@ class ElggPluginPackage {
 	 * @return bool
 	 */
 	public function isValid() {
-		if (isset($this->valid)) {
-			return $this->valid;
+		if (!isset($this->valid)) {
+			$this->valid = $this->validate();
 		}
+		return $this->valid;
+	}
 
+	/**
+	 * @return bool
+	 */
+	private function validate() {
 		// check required files.
 		$have_req_files = true;
 		foreach ($this->requiredFiles as $file) {
@@ -172,7 +171,7 @@ class ElggPluginPackage {
 				$have_req_files = false;
 				$this->errorMsg =
 					elgg_echo('ElggPluginPackage:InvalidPlugin:MissingFile', array($file));
-				break;
+				return false;
 			}
 		}
 
@@ -183,16 +182,39 @@ class ElggPluginPackage {
 
 		// check for valid manifest.
 		if (!$this->loadManifest()) {
-			return $this->valid = false;
+			return false;
+		}
+
+		if (!$this->isNamedCorrectly()) {
+			return false;
 		}
 
 		// can't require or conflict with yourself or something you provide.
 		// make sure provides are all valid.
-		if (!$this->isSaneDeps()) {
-			return $this->valid = false;
+		if (!$this->hasSaneDependencies()) {
+			return false;
 		}
 
-		return $this->valid = true;
+		return true;
+	}
+
+	/**
+	 * Check that the plugin is installed in the directory with name specified
+	 * in the manifest's "id" element.
+	 *
+	 * @return bool
+	 */
+	private function isNamedCorrectly() {
+		$manifest = $this->getManifest();
+		if ($manifest) {
+			$required_id = $manifest->getID();
+			if (!empty($required_id) && ($required_id !== $this->id)) {
+				$this->errorMsg =
+					elgg_echo('ElggPluginPackage:InvalidPlugin:InvalidId', array($required_id));
+				return false;
+			}
+		}
+		return true;
 	}
 
 	/**
@@ -206,7 +228,7 @@ class ElggPluginPackage {
 	 *
 	 * @return bool
 	 */
-	private function isSaneDeps() {
+	private function hasSaneDependencies() {
 		// protection against plugins with no manifest file
 		if (!$this->getManifest()) {
 			return false;
@@ -382,11 +404,12 @@ class ElggPluginPackage {
 			foreach (${$dep_type} as $dep) {
 				switch ($dep['type']) {
 					case 'elgg_version':
-						$result = $this->checkDepElgg($dep, get_version(), $inverse);
+						elgg_deprecated_notice("elgg_version in manifest.xml files is deprecated. Use elgg_release", 1.9);
+						$result = $this->checkDepElgg($dep, elgg_get_version(), $inverse);
 						break;
 
 					case 'elgg_release':
-						$result = $this->checkDepElgg($dep, get_version(true), $inverse);
+						$result = $this->checkDepElgg($dep, elgg_get_version(true), $inverse);
 						break;
 
 					case 'plugin':
@@ -397,6 +420,10 @@ class ElggPluginPackage {
 						$result = $this->checkDepPriority($dep, $enabled_plugins, $inverse);
 						break;
 
+					case 'php_version':
+						$result = $this->checkDepPhpVersion($dep, $inverse);
+						break;
+
 					case 'php_extension':
 						$result = $this->checkDepPhpExtension($dep, $inverse);
 						break;
@@ -404,20 +431,26 @@ class ElggPluginPackage {
 					case 'php_ini':
 						$result = $this->checkDepPhpIni($dep, $inverse);
 						break;
+
+					default:
+						$result = null;//skip further check
+						break;
 				}
 
-				// unless we're doing a full report, break as soon as we fail.
-				if (!$full_report && !$result['status']) {
-					$this->errorMsg = "Missing dependencies.";
-					return $result['status'];
-				} else {
-					// build report element and comment
-					$report[] = array(
-						'type' => $dep_type,
-						'dep' => $dep,
-						'status' => $result['status'],
-						'value' => $result['value']
-					);
+				if ($result !== null) {
+					// unless we're doing a full report, break as soon as we fail.
+					if (!$full_report && !$result['status']) {
+						$this->errorMsg = "Missing dependencies.";
+						return $result['status'];
+					} else {
+						// build report element and comment
+						$report[] = array(
+							'type' => $dep_type,
+							'dep' => $dep,
+							'status' => $result['status'],
+							'value' => $result['value']
+						);
+					}
 				}
 			}
 		}
@@ -450,7 +483,7 @@ class ElggPluginPackage {
 	 * @return bool
 	 */
 	private function checkDepPlugin(array $dep, array $plugins, $inverse = false) {
-		$r = elgg_check_plugins_provides('plugin', $dep['name'], $dep['version'], $dep['comparison']);
+		$r = _elgg_check_plugins_provides('plugin', $dep['name'], $dep['version'], $dep['comparison']);
 
 		if ($inverse) {
 			$r['status'] = !$r['status'];
@@ -536,6 +569,27 @@ class ElggPluginPackage {
 	}
 
 	/**
+	 * Checks if $php_version meets the requirement by $dep.
+	 *
+	 * @param array $dep     An Elgg manifest.xml deps array
+	 * @param bool  $inverse Inverse the result to use as a conflicts.
+	 * @return bool
+	 */
+	private function checkDepPhpVersion(array $dep, $inverse = false) {
+		$php_version = phpversion();
+		$status = version_compare($php_version, $dep['version'], $dep['comparison']);
+
+		if ($inverse) {
+			$status = !$status;
+		}
+
+		return array(
+			'status' => $status,
+			'value' => $php_version
+		);
+	}
+
+	/**
 	 * Checks if the PHP extension in $dep is loaded.
 	 *
 	 * @todo Can this be merged with the plugin checker?
@@ -572,7 +626,7 @@ class ElggPluginPackage {
 
 		// some php extensions can be emulated, so check provides.
 		if ($status == false) {
-			$provides = elgg_check_plugins_provides('php_extension', $name, $version, $comparison);
+			$provides = _elgg_check_plugins_provides('php_extension', $name, $version, $comparison);
 			$status = $provides['status'];
 			$ext_version = $provides['value'];
 		}
@@ -631,7 +685,7 @@ class ElggPluginPackage {
 
 	/**
 	 * Returns the last error message.
-	 * 
+	 *
 	 * @return string
 	 */
 	public function getError() {

@@ -1,10 +1,10 @@
 <?php
 /**
  * Core CSS
- * 
+ *
  * This file holds all the complicated/hacky stuff that you really
  * shouldn't touch or override unless you're sure you know what you're doing.
- * 
+ *
  * Provides classes that implement cross-browser support for the following features:
  *   * clearfix
  *   * fluid-width content area that doesn't wrap around floats
@@ -14,6 +14,7 @@
  *   * fluid gallery without using tables
  */
 ?>
+/* <style> /**/
 
 /* Clearfix */
 .clearfix:after,
@@ -25,12 +26,13 @@
 .elgg-head:after,
 .elgg-foot:after,
 .elgg-col:after,
+.elgg-col-alt:after,
 .elgg-image-block:after {
 	content: ".";
 	display: block;
 	height: 0;
 	clear: both;
-	visibility: hidden;	
+	visibility: hidden;
 }
 
 /* Fluid width container that does not wrap floats */
@@ -40,7 +42,7 @@
 	width: auto;
 	word-wrap: break-word;
 	overflow: hidden;
-	
+
 	/* IE 6, 7 */
 	zoom:1;
 	*overflow:visible;
@@ -68,7 +70,7 @@
 	height: 0 !important;
 	line-height: 0;
 	overflow: hidden;
-	
+
 	/* Stretch to fill up available space */
 	font-size: xx-large;
 	content: " x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x ";

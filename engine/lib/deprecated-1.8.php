@@ -1,79 +1,4 @@
 <?php
-/**
- * ***************************************************************************
- * NOTE: If this is ever removed from Elgg, sites lose the ability to upgrade
- * from 1.7.x and earlier to the latest version of Elgg without upgrading to
- * 1.8 first.
- * ***************************************************************************
- *
- * Upgrade the database schema in an ordered sequence.
- *
- * Executes all upgrade files in elgg/engine/schema/upgrades/ in sequential order.
- * Upgrade files must be in the standard Elgg release format of YYYYMMDDII.sql
- * where II is an incrementor starting from 01.
- *
- * Files that are < $version will be ignored.
- *
- * @warning Plugin authors should not call this function directly.
- *
- * @param int    $version The version you are upgrading from in the format YYYYMMDDII.
- * @param string $fromdir Optional directory to load upgrades from. default: engine/schema/upgrades/
- * @param bool   $quiet   If true, suppress all error messages. Only use for the upgrade from <=1.6.
- *
- * @return int The number of upgrades run.
- * @see upgrade.php
- * @see version.php
- * @deprecated 1.8 Use PHP upgrades for sql changes.
- */
-function db_upgrade($version, $fromdir = "", $quiet = FALSE) {
-	global $CONFIG;
-
-	elgg_deprecated_notice('db_upgrade() is deprecated by using PHP upgrades.', 1.8);
-
-	$version = (int) $version;
-
-	if (!$fromdir) {
-		$fromdir = $CONFIG->path . 'engine/schema/upgrades/';
-	}
-	
-	$i = 0;
-
-	if ($handle = opendir($fromdir)) {
-		$sqlupgrades = array();
-
-		while ($sqlfile = readdir($handle)) {
-			if (!is_dir($fromdir . $sqlfile)) {
-				if (preg_match('/^([0-9]{10})\.(sql)$/', $sqlfile, $matches)) {
-					$sql_version = (int) $matches[1];
-					if ($sql_version > $version) {
-						$sqlupgrades[] = $sqlfile;
-					}
-				}
-			}
-		}
-
-		asort($sqlupgrades);
-
-		if (sizeof($sqlupgrades) > 0) {
-			foreach ($sqlupgrades as $sqlfile) {
-
-				// hide all errors.
-				if ($quiet) {
-					try {
-						run_sql_script($fromdir . $sqlfile);
-					} catch (DatabaseException $e) {
-						error_log($e->getmessage());
-					}
-				} else {
-					run_sql_script($fromdir . $sqlfile);
-				}
-				$i++;
-			}
-		}
-	}
-
-	return $i;
-}
 
 /**
  * Lists entities from an access collection
@@ -342,7 +267,7 @@ function list_entities_from_annotation_count($entity_type = "", $entity_subtype 
  * Adds an entry in $CONFIG[$register_name][$subregister_name].
  *
  * @deprecated 1.8 Use the new menu system.
- * 
+ *
  * This is only used for the site-wide menu.  See {@link add_menu()}.
  *
  * @param string $register_name     The name of the top-level register
@@ -485,7 +410,7 @@ function events($event = "", $object_type = "", $function = "", $priority = 500,
  * Alias function for events, that registers a function to a particular kind of event
  *
  * @deprecated 1.8 Use elgg_register_event_handler() instead
- * 
+ *
  * @param string $event The event type
  * @param string $object_type The object type
  * @param string $function The function name
@@ -498,7 +423,7 @@ function register_elgg_event_handler($event, $object_type, $callback, $priority 
 
 /**
  * Unregisters a function to a particular kind of event
- * 
+ *
  * @deprecated 1.8 Use elgg_unregister_event_handler instead
  *
  * @param string $event The event type
@@ -515,7 +440,7 @@ function unregister_elgg_event_handler($event, $object_type, $callback) {
  * Alias function for events, that triggers a particular kind of event
  *
  * @deprecated 1.8 Use elgg_trigger_event() instead
- * 
+ *
  * @param string $event The event type
  * @param string $object_type The object type
  * @param string $function The function name
@@ -530,7 +455,7 @@ function trigger_elgg_event($event, $object_type, $object = null) {
  * Register a function to a plugin hook for a particular entity type, with a given priority.
  *
  * @deprecated 1.8 Use elgg_register_plugin_hook_handler() instead
- * 
+ *
  * eg if you want the function "export_user" to be called when the hook "export" for "user" entities
  * is run, use:
  *
@@ -560,7 +485,7 @@ function register_plugin_hook($hook, $type, $callback, $priority = 500) {
  * Unregister a function to a plugin hook for a particular entity type
  *
  * @deprecated 1.8 Use elgg_unregister_plugin_hook_handler() instead
- * 
+ *
  * @param string $hook The name of the hook
  * @param string $entity_type The name of the type of entity (eg "user", "object" etc)
  * @param string $function The name of a valid function to be run
@@ -759,7 +684,7 @@ function callpath_gatekeeper($path, $include_subdirs = true, $strict_mode = fals
 function elgg_get_entity_owner_where_sql($table, $owner_guids) {
 	elgg_deprecated_notice('elgg_get_entity_owner_where_sql() is deprecated by elgg_get_guid_based_where_sql().', 1.8);
 
-	return elgg_get_guid_based_where_sql("{$table}.owner_guid", $owner_guids);
+	return _elgg_get_guid_based_where_sql("{$table}.owner_guid", $owner_guids);
 }
 
 /**
@@ -778,7 +703,7 @@ function elgg_get_entity_owner_where_sql($table, $owner_guids) {
 function elgg_get_entity_container_where_sql($table, $container_guids) {
 	elgg_deprecated_notice('elgg_get_entity_container_where_sql() is deprecated by elgg_get_guid_based_where_sql().', 1.8);
 
-	return elgg_get_guid_based_where_sql("{$table}.container_guid", $container_guids);
+	return _elgg_get_guid_based_where_sql("{$table}.container_guid", $container_guids);
 }
 
 /**
@@ -796,7 +721,7 @@ function elgg_get_entity_container_where_sql($table, $container_guids) {
 function elgg_get_entity_site_where_sql($table, $site_guids) {
 	elgg_deprecated_notice('elgg_get_entity_site_where_sql() is deprecated by elgg_get_guid_based_where_sql().', 1.8);
 
-	return elgg_get_guid_based_where_sql("{$table}.site_guid", $site_guids);
+	return _elgg_get_guid_based_where_sql("{$table}.site_guid", $site_guids);
 }
 
 /**
@@ -880,7 +805,7 @@ function get_objects_in_group($group_guid, $subtype = "", $owner_guid = 0, $site
 	}
 
 	// Add access controls
-	$query .= get_access_sql_suffix('e');
+	$query .= _elgg_get_access_where_sql();
 	if (!$count) {
 		$query .= " order by $order_by";
 
@@ -1012,7 +937,7 @@ function get_entities_from_metadata_groups($group_guid, $meta_name, $meta_value 
 	}
 
 	// Add access controls
-	$query .= get_access_sql_suffix("e");
+	$query .= _elgg_get_access_where_sql();
 
 	if (!$count) {
 		$query .= " order by $order_by limit $offset, $limit"; // Add order and limit
@@ -1118,7 +1043,7 @@ function get_entities_from_metadata_groups_multi($group_guid, $meta_array, $enti
 	foreach ($where as $w) {
 		$query .= " $w and ";
 	}
-	$query .= get_access_sql_suffix("e"); // Add access controls
+	$query .= _elgg_get_access_where_sql();
 
 	if (!$count) {
 		$query .= " order by $order_by limit $offset, $limit"; // Add order and limit
@@ -1690,16 +1615,16 @@ function regenerate_plugin_list($pluginorder = FALSE) {
 
 	// they're probably trying to set it?
 	if ($pluginorder) {
-		if (elgg_generate_plugin_entities()) {
+		if (_elgg_generate_plugin_entities()) {
 			// sort the plugins by the index numerically since we used
 			// weird indexes in the old system.
 			ksort($pluginorder, SORT_NUMERIC);
-			return elgg_set_plugin_priorities($pluginorder);
+			return _elgg_set_plugin_priorities($pluginorder);
 		}
 		return false;
 	} else {
 		// they're probably trying to regenerate from disk?
-		return elgg_generate_plugin_entities();
+		return _elgg_generate_plugin_entities();
 	}
 }
 
@@ -1725,8 +1650,6 @@ function get_plugin_name($mainfilename = false) {
 
 /**
  * Load and parse a plugin manifest from a plugin XML file.
- *
- * @example plugins/manifest.xml Example 1.8-style manifest file.
  *
  * @deprecated 1.8 Use ElggPlugin->getManifest()
  *
@@ -1759,7 +1682,7 @@ function load_plugin_manifest($plugin) {
 function check_plugin_compatibility($manifest_elgg_version_string) {
 	elgg_deprecated_notice('check_plugin_compatibility() is deprecated by ElggPlugin->canActivate()', 1.8);
 
-	$version = get_version();
+	$version = elgg_get_version();
 
 	if (strpos($manifest_elgg_version_string, '.') === false) {
 		// Using version
@@ -2533,7 +2456,7 @@ $owner_guid = "", $owner_relationship = "") {
 
 			$access = "";
 			if ($details['type'] != 'relationship') {
-				$access = " and " . get_access_sql_suffix('sl');
+				$access = " and " . _elgg_get_access_where_sql(array('table_alias' => 'sl'));
 			}
 
 			$obj_query .= "( sl.object_type='{$details['type']}'
@@ -3159,7 +3082,7 @@ function isadminloggedin() {
  */
 function load_plugins() {
 	elgg_deprecated_notice('load_plugins() is deprecated by elgg_load_plugins()', 1.8);
-	return elgg_load_plugins();
+	return _elgg_load_plugins();
 }
 
 /**
@@ -4004,7 +3927,7 @@ function register_page_handler($handler, $function){
  *
  * @param string $handler The page type identifier
  * @since 1.7.2
- * 
+ *
  * @deprecated 1.8 Use {@link elgg_unregister_page_handler()}
  */
 function unregister_page_handler($handler) {
@@ -4050,7 +3973,7 @@ function register_extender_url_handler($function, $type = "all", $name = "all") 
  * @param string $type The type of entity (object, site, user, group)
  * @param string $subtype The subtype to register (may be blank)
  * @return true|false Depending on success
- * 
+ *
  * @deprecated 1.8 Use {@link elgg_register_entity_type()}
  */
 function register_entity_type($type, $subtype = null) {
@@ -4063,7 +3986,7 @@ function register_entity_type($type, $subtype = null) {
  *
  * @param string $function_name The function.
  * @param string $extender_name The name, default 'all'.
- * 
+ *
  * @deprecated 1.8 Use {@link elgg_register_metadata_url_handler()}
  */
 function register_metadata_url_handler($function, $extender_name = "all") {
@@ -4076,7 +3999,7 @@ function register_metadata_url_handler($function, $extender_name = "all") {
  * @param string $function_name The function to register
  * @param string $relationship_type The relationship type.
  * @return true|false Depending on success
- * 
+ *
  * @deprecated 1.8 Use {@link elgg_register_relationship_url_handler()}
  */
 function register_relationship_url_handler($function_name, $relationship_type = "all") {
@@ -4118,7 +4041,7 @@ function elgg_view_regenerate_simplecache($viewtype = NULL) {
  * Enables the simple cache.
  *
  * @see elgg_view_register_simplecache()
- * 
+ *
  * @deprecated 1.8 Use {@link elgg_enable_simplecache()}
  */
 function elgg_view_enable_simplecache() {
@@ -4130,7 +4053,7 @@ function elgg_view_enable_simplecache() {
  * Disables the simple cache.
  *
  * @see elgg_view_register_simplecache()
- * 
+ *
  * @deprecated 1.8 Use {@link elgg_disable_simplecache()}
  */
 function elgg_view_disable_simplecache() {
@@ -4229,7 +4152,7 @@ function pam_authenticate($credentials = NULL, $policy = "user") {
 function save_widget_location(ElggObject $widget, $order, $column) {
 	elgg_deprecated_notice('save_widget_location() is deprecated', 1.8);
 	if ($widget instanceof ElggObject) {
-		if ($widget->subtype == "widget") {
+		if ($widget->getSubtype() == "widget") {
 			// If you can't move the widget, don't save a new location
 			if (!$widget->draggable) {
 				return false;
@@ -4271,7 +4194,7 @@ function save_widget_location(ElggObject $widget, $order, $column) {
 
 			return true;
 		} else {
-			register_error($widget->subtype);
+			register_error($widget->getSubtype());
 		}
 
 	}
@@ -4457,7 +4380,7 @@ function save_widget_info($widget_guid, $params) {
 				))) {
 					if (is_array($value)) {
 						// @todo Handle arrays securely
-						$widget->setMetaData($name, $value, "", true);
+						$widget->setMetadata($name, $value, "", true);
 					} else {
 						$widget->$name = $value;
 					}
@@ -4566,7 +4489,9 @@ function reorder_widgets_from_panel($panelstring1, $panelstring2, $panelstring3,
 						$return = false;
 					} else {
 						// Remove state cookie
-						setcookie('widget' + $dbguid, null);
+						$cookie = new ElggCookie("widget$dbguid");
+						$cookie->value = NULL;
+						elgg_set_cookie($cookie);
 					}
 				}
 			}
@@ -4639,7 +4564,7 @@ function using_widgets() {
  *
  * @param ElggObject $widget The widget to display
  * @return string The HTML for the widget, including JavaScript wrapper
- * 
+ *
  * @deprecated 1.8 Use elgg_view_entity()
  */
 function display_widget(ElggObject $widget) {

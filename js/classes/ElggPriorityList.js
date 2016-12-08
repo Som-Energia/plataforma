@@ -12,12 +12,12 @@ elgg.ElggPriorityList = function() {
  *
  * @param {Object} obj          The object to insert
  * @param {Number} opt_priority An optional priority to insert at.
- * 
+ *
  * @return {Void}
  */
 elgg.ElggPriorityList.prototype.insert = function(obj, opt_priority) {
 	var priority = 500;
-	if (arguments.length == 2 && opt_priority != undefined) {
+	if (arguments.length == 2 && opt_priority !== undefined) {
 		priority = parseInt(opt_priority, 10);
 	}
 

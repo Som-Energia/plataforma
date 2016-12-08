@@ -52,7 +52,6 @@
  *
  * @package    Elgg.Core
  * @subpackage DataModel
- * @link       http://docs.elgg.org/DataModel/ElggBatch
  * @since      1.8
  */
 class ElggBatch
@@ -183,11 +182,11 @@ class ElggBatch
 	 *                           and hitting the db server too often.
 	 * @param bool   $inc_offset Increment the offset on each fetch. This must be false for
 	 *                           callbacks that delete rows. You can set this after the
-	 *                           object is created with {@see ElggBatch::setIncrementOffset()}.
+	 *                           object is created with {@link ElggBatch::setIncrementOffset()}.
 	 */
 	public function __construct($getter, $options, $callback = null, $chunk_size = 25,
 			$inc_offset = true) {
-		
+
 		$this->getter = $getter;
 		$this->options = $options;
 		$this->callback = $callback;
@@ -210,11 +209,7 @@ class ElggBatch
 			$all_results = null;
 
 			foreach ($batch as $result) {
-				if (is_string($callback)) {
-					$result = $callback($result, $getter, $options);
-				} else {
-					$result = call_user_func_array($callback, array($result, $getter, $options));
-				}
+				$result = call_user_func($callback, $result, $getter, $options);
 
 				if (!isset($all_results)) {
 					if ($result === true || $result === false || $result === null) {
@@ -297,10 +292,10 @@ class ElggBatch
 		$options = array_merge($this->options, $current_options);
 
 		$this->incompleteEntities = array();
-		$this->results = call_user_func_array($this->getter, array($options));
+		$this->results = call_user_func($this->getter, $options);
 
 		// batch result sets tend to be large; we don't want to cache these.
-		_elgg_invalidate_query_cache();
+		_elgg_services()->db->disableQueryCache();
 
 		$num_results = count($this->results);
 		$num_incomplete = count($this->incompleteEntities);
@@ -329,8 +324,10 @@ class ElggBatch
 				// offer at least one row to iterate over, or give up.
 				return $this->getNextResultsChunk();
 			}
+			_elgg_services()->db->enableQueryCache();
 			return true;
 		} else {
+			_elgg_services()->db->enableQueryCache();
 			return false;
 		}
 	}
@@ -431,6 +428,6 @@ class ElggBatch
 			return false;
 		}
 		$key = key($this->results);
-		return ($key !== NULL && $key !== FALSE);
+		return ($key !== null && $key !== false);
 	}
 }

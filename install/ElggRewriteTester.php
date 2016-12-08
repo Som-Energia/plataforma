@@ -36,7 +36,7 @@ class ElggRewriteTester {
 
 		if ($this->rewriteTestPassed == FALSE) {
 			if ($this->webserver == 'apache' || $this->webserver == 'unknown') {
-				if ($this->createHtaccess($path)) {
+				if ($this->createHtaccess($url, $path)) {
 					$this->rewriteTestPassed = $this->runRewriteTest($url);
 				}
 			}
@@ -62,44 +62,98 @@ class ElggRewriteTester {
 	}
 
 	/**
+	 * Guess if url contains subdirectory or not.
+	 *
+	 * @param string $url Rewrite test URL
+	 *
+	 * @return string|bool Subdirectory string with beginning and trailing slash or false if were unable to determine subdirectory
+	 * or pointing at root of domain already
+	 */
+	public function guessSubdirectory($url) {
+		$elements = parse_url($url);
+		if (!$elements || !isset($elements['path'])) {
+			return false;
+		}
+		$subdir = trim(dirname($elements['path']), '/');
+		if (!$subdir) {
+			return false;
+		} else {
+			return "/$subdir/";
+		}
+	}
+
+	/**
 	 * Hit the rewrite test URL to determine if the rewrite rules are working
 	 *
 	 * @param string $url Rewrite test URL
 	 *
 	 * @return bool
 	 */
-	protected function runRewriteTest($url) {
+	public function runRewriteTest($url) {
 
-		$this->serverSupportsRemoteRead = TRUE;
+		$this->serverSupportsRemoteRead = true;
 
-		if (function_exists('curl_init')) {
+		if (ini_get('allow_url_fopen')) {
+			$ctx = stream_context_create(array(
+				'http' => array(
+					'follow_location' => 0,
+					'timeout' => 5,
+				),
+			));
+			$response = file_get_contents($url, null, $ctx);
+		} elseif (function_exists('curl_init')) {
 			// try curl if installed
 			$ch = curl_init();
 			curl_setopt($ch, CURLOPT_URL, $url);
 			curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-			curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+			curl_setopt($ch, CURLOPT_TIMEOUT, 5);
 			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 			$response = curl_exec($ch);
 			curl_close($ch);
-			return $response === 'success';
-		} else if (ini_get('allow_url_fopen')) {
-			// use file_get_contents as fallback
-			$response = file_get_contents($url);
-			return $response === 'success';
 		} else {
-			$this->serverSupportsRemoteRead = FALSE;
-			return FALSE;
+			$response = '';
 		}
+
+		if ($response !== 'success') {
+			$this->serverSupportsRemoteRead = false;
+			return false;
+		}
+
+		return true;
+	}
+
+	public function runLocalhostAccessTest() {
+		$url = elgg_get_site_url();
+		if (ini_get('allow_url_fopen')) {
+			$ctx = stream_context_create(array(
+				'http' => array(
+					'follow_location' => 0,
+					'timeout' => 5,
+				),
+			));
+			$response = file_get_contents($url, null, $ctx);
+		} elseif (function_exists('curl_init')) {
+			// try curl if installed
+			$ch = curl_init();
+			curl_setopt($ch, CURLOPT_URL, $url);
+			curl_setopt($ch, CURLOPT_TIMEOUT, 5);
+			curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+			$response = curl_exec($ch);
+			curl_close($ch);
+		}
+
+		return $response !== false;
 	}
 
 	/**
 	 * Create Elgg's .htaccess file or confirm that it exists
 	 *
+	 * @param string $url  URL of rewrite test
 	 * @param string $path Elgg's root directory with trailing slash
 	 *
 	 * @return bool
 	 */
-	public function createHtaccess($path) {
+	public function createHtaccess($url, $path) {
 		$filename = "{$path}.htaccess";
 		if (file_exists($filename)) {
 			// check that this is the Elgg .htaccess
@@ -134,6 +188,18 @@ class ElggRewriteTester {
 			return FALSE;
 		}
 
+		// does default RewriteBase work already?
+		if (!$this->runRewriteTest($url)) {
+			//try to rewrite to guessed subdirectory
+			if ($subdir = $this->guessSubdirectory($url)) {
+				$contents = file_get_contents($filename);
+				$contents = preg_replace("/#RewriteBase \/(\r?\n)/", "RewriteBase $subdir\$1", $contents);
+				if ($contents) {
+					file_put_contents($filename, $contents);
+				}
+			}
+		}
+
 		return TRUE;
 	}
 
@@ -155,7 +221,7 @@ class ElggRewriteTester {
 		if ($this->serverSupportsRemoteRead == FALSE) {
 			$msg = elgg_echo('install:warning:rewrite:unknown', array($url));
 			$msg .= elgg_view('install/js_rewrite_check', array('url' => $url));
-			
+
 			return array(
 				'severity' => 'warning',
 				'message' => $msg,
@@ -168,7 +234,7 @@ class ElggRewriteTester {
 			if (!isset($this->htaccessIssue)) {
 				$msg .= elgg_echo('install:error:rewrite:allowoverride');
 				$msg .= elgg_view('install/js_rewrite_check', array('url' => $url));
-			
+
 				return array(
 					'severity' => 'failure',
 					'message' => $msg,

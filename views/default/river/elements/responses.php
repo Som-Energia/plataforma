@@ -15,23 +15,24 @@ if ($responses) {
 
 $item = $vars['item'];
 $object = $item->getObjectEntity();
+$target = $item->getTargetEntity();
 
-// annotations do not have comments
-if ($item->annotation_id != 0 || !$object) {
+// annotations and comments do not have responses
+if ($item->annotation_id != 0 || !$object || elgg_instanceof($target, 'object', 'comment')) {
 	return true;
 }
 
 $comment_count = $object->countComments();
 
-$options = array(
-	'guid' => $object->getGUID(),
-	'annotation_name' => 'generic_comment',
-	'limit' => 3,
-	'order_by' => 'n_table.time_created desc'
-);
-$comments = elgg_get_annotations($options);
+if ($comment_count) {
+	$comments = elgg_get_entities(array(
+		'type' => 'object',
+		'subtype' => 'comment',
+		'container_guid' => $object->getGUID(),
+		'limit' => 3,
+		'order_by' => 'e.time_created desc'
+	));
 
-if ($comments) {
 	// why is this reversing it? because we're asking for the 3 latest
 	// comments by sorting desc and limiting by 3, but we want to display
 	// these comments with the latest at the bottom.
@@ -42,7 +43,7 @@ if ($comments) {
 
 <?php
 
-	echo elgg_view_annotation_list($comments, array('list_class' => 'elgg-river-comments'));
+	echo elgg_view_entity_list($comments, array('list_class' => 'elgg-river-comments'));
 
 	if ($comment_count > count($comments)) {
 		$num_more_comments = $comment_count - count($comments);
@@ -60,4 +61,4 @@ if ($comments) {
 // inline comment form
 $form_vars = array('id' => "comments-add-{$object->getGUID()}", 'class' => 'hidden');
 $body_vars = array('entity' => $object, 'inline' => true);
-echo elgg_view_form('comments/add', $form_vars, $body_vars);
+echo elgg_view_form('comment/save', $form_vars, $body_vars);

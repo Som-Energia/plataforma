@@ -10,6 +10,7 @@
  * @subpackage Plugins
  */
 
+/* @var ElggPlugin $plugin */
 $plugin = $vars['entity'];
 
 $id = $plugin->getID();
@@ -24,7 +25,7 @@ $css_id = preg_replace('/[^a-z0-9-]/i', '-', $plugin->getID());
 	<div class="elgg-body">
 		<p class="elgg-state-error"><?php echo $message; ?></p>
 		<p><?php echo elgg_echo('admin:plugins:warning:invalid:check_docs'); ?></p>
-		
+
 		<div class="pts">
 			<?php
 				echo elgg_view('output/url', array(
