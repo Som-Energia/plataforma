@@ -1,22 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin_manifest xmlns="http://www.elgg.org/plugin_manifest/1.8">
 	<name>Threads</name>
-	<author>Lorea Developers</author>
-	<version>1.8.2</version>
+	<author>Lorea</author>
+	<version>2.0</version>
 	<category>enhancement</category>
-	<category>lorea</category>
 	<description>Allow threaded discussions into group forums.</description>
 	<website>https://lorea.cc/</website>
-	<copyright>(C) 2011-13 Lorea</copyright>
-	<license>GNU Public License version 2 or higher</license>
+	<copyright>(C) 2011 Lorea</copyright>
+	<license>GNU Public License version 2</license>
 	<requires>
-		<type>elgg_release</type>
-		<version>1.8</version>
-	</requires>
-        <requires>
-		<type>priority</type>
-		<priority>after</priority>
-		<plugin>groups</plugin>
+		<type>elgg_version</type>
+		<version>2010030101</version>
 	</requires>
 	<activate_on_install>true</activate_on_install>
+	<admin_interface>simple</admin_interface>
 </plugin_manifest>

@@ -1,8 +1,6 @@
 <?php
 /**
  * Reply river view
- * 
- * @override mod/groups/views/default/river/annotation/group_topic_post/reply.php
  */
 $object = $vars['item']->getObjectEntity();
 // Trick: Annotation id contains the reply guid.
