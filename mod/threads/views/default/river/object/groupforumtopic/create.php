@@ -1,8 +1,6 @@
 <?php
 /**
  * Group forum topic create river view.
- * 
- * @override views/default/groups/river/object/groupforumtopic/create.php
  */
 
 $object = $vars['item']->getObjectEntity();
