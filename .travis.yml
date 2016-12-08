@@ -12,4 +12,5 @@ before_script:
  - php -f ./install/cli/travis_installer.php
 
 script:
+ - phpunit
  - php -f ./engine/tests/suite.php
