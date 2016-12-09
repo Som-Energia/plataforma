@@ -25,8 +25,6 @@ class TheWireRegexTest extends ElggCoreUnitTest {
 	 * Called after each test method.
 	 */
 	public function tearDown() {
-		// do not allow SimpleTest to interpret Elgg notices as exceptions
-		$this->swallowErrors();
 	}
 
 	/**
@@ -103,7 +101,7 @@ class TheWireRegexTest extends ElggCoreUnitTest {
 		$expected = "test " . $this->getUserWireLink('user') . ", test";
 		$result = thewire_filter($text);
 		$this->assertEqual($result, $expected);
-		
+
 		// preceded by comma
 		$text = "test ,@user test";
 		$expected = "test ," . $this->getUserWireLink('user') . " test";
