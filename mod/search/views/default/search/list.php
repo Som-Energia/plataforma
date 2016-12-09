@@ -30,6 +30,7 @@ $query = http_build_query(
 		'limit' => $vars['params']['limit'],
 		'offset' => $vars['params']['offset'],
 		'search_type' => $vars['params']['search_type'],
+		'container_guid' => $vars['params']['container_guid'],
 	//@todo include vars for sorting, order, and friend-only.
 	)
 );
@@ -88,9 +89,7 @@ if ($show_more) {
 	$more_link = '';
 }
 
-// @todo once elgg_view_title() supports passing a $vars array use it
-$body = elgg_view('page/elements/title', array(
-	'title' => $type_str,
+$body = elgg_view_title($type_str, array(
 	'class' => 'search-heading-category',
 ));
 

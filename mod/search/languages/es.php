@@ -1,18 +1,20 @@
 <?php
 
-$spanish = array( 
-	 'search:enter_term'  =>  "Introduce un término de búsqueda" , 
-	 'search:no_results'  =>  "No hay resultados." , 
-	 'search:matched'  =>  "Coinciden:" , 
-	 'search:results'  =>  "Resultados de %s" , 
-	 'search:no_query'  =>  "Por favor, introduce una consulta a buscar." , 
-	 'search:search_error'  =>  "Error" , 
-	 'search:more'  =>  "+%s más %s" , 
-	 'search_types:tags'  =>  "Etiquetas" , 
-	 'search_types:comments'  =>  "Comentarios" , 
-	 'search:comment_on'  =>  "Comentarios de \"%s\"" , 
-	 'search:comment_by' => 'por',
-	 'search:unavailable_entity'  =>  "Entidad no disponible"
-); 
+return array(
+	'search:enter_term' => 'Ingresa un t&eacute;rmino para buscar:',
+	'search:no_results' => 'Sin resultados.',
+	'search:matched' => 'Coincide: ',
+	'search:results' => 'Resultados para %s',
+	'search:no_query' => 'Por favor ingresa una consulta para buscar.',
+	'search:search_error' => 'Error',
 
-add_translation('es', $spanish); 
+	'search:more' => '+%s m&aacute;s %s',
+
+	'search_types:tags' => 'Tags',
+
+	'search_types:comments' => 'Comments',
+	'search:comment_on' => 'Comment on "%s"',
+	'search:comment_by' => 'por',
+	'search:unavailable_entity' => 'Entrada no disponible',
+	'search:unknown_entity' => 'Tipo de Entidad Desconocida',
+);
