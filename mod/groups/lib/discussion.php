@@ -17,11 +17,14 @@ function discussion_handle_all_page() {
 		'order_by' => 'e.last_action desc',
 		'limit' => 20,
 		'full_view' => false,
+		'no_results' => elgg_echo('discussion:none'),
 	));
+
+	$title = elgg_echo('discussion:latest');
 
 	$params = array(
 		'content' => $content,
-		'title' => elgg_echo('discussion:latest'),
+		'title' => $title,
 		'filter' => '',
 	);
 	$body = elgg_view_layout('content', $params);
@@ -38,6 +41,8 @@ function discussion_handle_list_page($guid) {
 
 	elgg_set_page_owner_guid($guid);
 
+	elgg_group_gatekeeper();
+
 	$group = get_entity($guid);
 	if (!elgg_instanceof($group, 'group')) {
 		forward('', '404');
@@ -47,10 +52,8 @@ function discussion_handle_list_page($guid) {
 
 	elgg_register_title_button();
 
-	group_gatekeeper();
-
 	$title = elgg_echo('item:object:groupforumtopic');
-	
+
 	$options = array(
 		'type' => 'object',
 		'subtype' => 'groupforumtopic',
@@ -58,12 +61,9 @@ function discussion_handle_list_page($guid) {
 		'order_by' => 'e.last_action desc',
 		'container_guid' => $guid,
 		'full_view' => false,
+		'no_results' => elgg_echo('discussion:none'),
 	);
 	$content = elgg_list_entities($options);
-	if (!$content) {
-		$content = elgg_echo('discussion:none');
-	}
-
 
 	$params = array(
 		'content' => $content,
@@ -83,11 +83,11 @@ function discussion_handle_list_page($guid) {
  * @param int    $guid GUID of group or topic
  */
 function discussion_handle_edit_page($type, $guid) {
-	gatekeeper();
+	elgg_gatekeeper();
 
 	if ($type == 'add') {
 		$group = get_entity($guid);
-		if (!$group) {
+		if (!elgg_instanceof($group, 'group')) {
 			register_error(elgg_echo('group:notfound'));
 			forward();
 		}
@@ -107,12 +107,12 @@ function discussion_handle_edit_page($type, $guid) {
 		$content = elgg_view_form('discussion/save', array(), $body_vars);
 	} else {
 		$topic = get_entity($guid);
-		if (!$topic || !$topic->canEdit()) {
+		if (!elgg_instanceof($topic, 'object', 'groupforumtopic') || !$topic->canEdit()) {
 			register_error(elgg_echo('discussion:topic:notfound'));
 			forward();
 		}
 		$group = $topic->getContainerEntity();
-		if (!$group) {
+		if (!elgg_instanceof($group, 'group')) {
 			register_error(elgg_echo('group:notfound'));
 			forward();
 		}
@@ -138,6 +138,55 @@ function discussion_handle_edit_page($type, $guid) {
 }
 
 /**
+ * Edit discussion reply
+ *
+ * @param string $type 'edit'
+ * @param int    $guid GUID of group or topic
+ */
+function discussion_handle_reply_edit_page($type, $guid) {
+	elgg_gatekeeper();
+
+	if ($type == 'edit') {
+		$reply = get_entity($guid);
+		if (!elgg_instanceof($reply, 'object', 'discussion_reply', 'ElggDiscussionReply') || !$reply->canEdit()) {
+			register_error(elgg_echo('discussion:reply:error:notfound'));
+			forward();
+		}
+		$topic = $reply->getContainerEntity();
+		if (!elgg_instanceof($topic, 'object', 'groupforumtopic')) {
+			register_error(elgg_echo('discussion:topic:notfound'));
+			forward();
+		}
+		$group = $topic->getContainerEntity();
+		if (!elgg_instanceof($group, 'group')) {
+			register_error(elgg_echo('group:notfound'));
+			forward();
+		}
+
+		$title = elgg_echo('discussion:reply:edit');
+
+		elgg_push_breadcrumb($group->name, "discussion/owner/$group->guid");
+		elgg_push_breadcrumb($topic->title, $topic->getURL());
+		elgg_push_breadcrumb($title);
+
+		$params = array(
+			'guid' => $reply->guid,
+			'hidden' => false,
+		);
+		$content = elgg_view('ajax/discussion/reply/edit', $params);
+	}
+
+	$params = array(
+		'content' => $content,
+		'title' => $title,
+		'filter' => '',
+	);
+	$body = elgg_view_layout('content', $params);
+
+	echo elgg_view_page($title, $body);
+}
+
+/**
  * View a discussion topic
  *
  * @param int $guid GUID of topic
@@ -147,43 +196,39 @@ function discussion_handle_view_page($guid) {
 	global $autofeed;
 	$autofeed = true;
 
+	elgg_entity_gatekeeper($guid, 'object', 'groupforumtopic');
+
 	$topic = get_entity($guid);
-	if (!$topic) {
-		register_error(elgg_echo('noaccess'));
-		$_SESSION['last_forward_from'] = current_page_url();
-		forward('');
-	}
 
 	$group = $topic->getContainerEntity();
-	if (!$group) {
+	if (!elgg_instanceof($group, 'group')) {
 		register_error(elgg_echo('group:notfound'));
 		forward();
 	}
 
+	elgg_load_js('elgg.discussion');
+
 	elgg_set_page_owner_guid($group->getGUID());
 
-	group_gatekeeper();
+	elgg_group_gatekeeper();
 
 	elgg_push_breadcrumb($group->name, "discussion/owner/$group->guid");
 	elgg_push_breadcrumb($topic->title);
 
+	$params = array(
+		'topic' => $topic,
+		'show_add_form' => false,
+	);
+
 	$content = elgg_view_entity($topic, array('full_view' => true));
 	if ($topic->status == 'closed') {
-		$content .= elgg_view('discussion/replies', array(
-			'entity' => $topic,
-			'show_add_form' => false,
-		));
+		$content .= elgg_view('discussion/replies', $params);
 		$content .= elgg_view('discussion/closed');
 	} elseif ($group->canWriteToContainer(0, 'object', 'groupforumtopic') || elgg_is_admin_logged_in()) {
-		$content .= elgg_view('discussion/replies', array(
-			'entity' => $topic,
-			'show_add_form' => true,
-		));
+		$params['show_add_form'] = true;
+		$content .= elgg_view('discussion/replies', $params);
 	} else {
-		$content .= elgg_view('discussion/replies', array(
-			'entity' => $topic,
-			'show_add_form' => false,
-		));
+		$content .= elgg_view('discussion/replies', $params);
 	}
 
 	$params = array(
@@ -212,7 +257,7 @@ function discussion_prepare_form_vars($topic = NULL) {
 		'tags' => '',
 		'container_guid' => elgg_get_page_owner_guid(),
 		'guid' => null,
-		'entity' => $topic,
+		'topic' => $topic,
 	);
 
 	if ($topic) {

@@ -62,7 +62,7 @@ if (sizeof($input) > 0) {
 			if ($acl) {
 				// @todo Elgg api does not support updating access collection name
 				$db_prefix = elgg_get_config('dbprefix');
-				$query = "UPDATE {$db_prefix}access_collections SET name = '$ac_name' 
+				$query = "UPDATE {$db_prefix}access_collections SET name = '$ac_name'
 					WHERE id = $group->group_acl";
 				update_data($query);
 			}
@@ -93,6 +93,8 @@ if ($tool_options) {
 $is_public_membership = (get_input('membership') == ACCESS_PUBLIC);
 $group->membership = $is_public_membership ? ACCESS_PUBLIC : ACCESS_PRIVATE;
 
+$group->setContentAccessMode(get_input('content_access_mode'));
+
 if ($is_new_group) {
 	$group->access_id = ACCESS_PUBLIC;
 }
@@ -104,7 +106,7 @@ $owner_has_changed = false;
 $old_icontime = null;
 if (!$is_new_group && $new_owner_guid && $new_owner_guid != $old_owner_guid) {
 	// verify new owner is member and old owner/admin is logged in
-	if (is_group_member($group_guid, $new_owner_guid) && ($old_owner_guid == $user->guid || $user->isAdmin())) {
+	if ($group->isMember(get_user($new_owner_guid)) && ($old_owner_guid == $user->guid || $user->isAdmin())) {
 		$group->owner_guid = $new_owner_guid;
 		$group->container_guid = $new_owner_guid;
 
@@ -129,21 +131,29 @@ if (!$is_new_group && $new_owner_guid && $new_owner_guid != $old_owner_guid) {
 
 $must_move_icons = ($owner_has_changed && $old_icontime);
 
-$group->save();
+if ($is_new_group) {
+	// if new group, we need to save so group acl gets set in event handler
+	$group->save();
+}
 
 // Invisible group support
 // @todo this requires save to be called to create the acl for the group. This
 // is an odd requirement and should be removed. Either the acl creation happens
 // in the action or the visibility moves to a plugin hook
 if (elgg_get_plugin_setting('hidden_groups', 'groups') == 'yes') {
-	$visibility = (int)get_input('vis', '', false);
-	if ($visibility != ACCESS_PUBLIC && $visibility != ACCESS_LOGGED_IN) {
+	$visibility = (int)get_input('vis');
+
+	if ($visibility == ACCESS_PRIVATE) {
+		// Make this group visible only to group members. We need to use
+		// ACCESS_PRIVATE on the form and convert it to group_acl here
+		// because new groups do not have acl until they have been saved once.
 		$visibility = $group->group_acl;
+
+		// Force all new group content to be available only to members
+		$group->setContentAccessMode(ElggGroup::CONTENT_ACCESS_MODE_MEMBERS_ONLY);
 	}
 
-	if ($group->access_id != $visibility) {
-		$group->access_id = $visibility;
-	}
+	$group->access_id = $visibility;
 }
 
 $group->save();
@@ -158,7 +168,12 @@ if ($is_new_group) {
 	elgg_set_page_owner_guid($group->guid);
 
 	$group->join($user);
-	add_to_river('river/group/create', 'create', $user->guid, $group->guid, $group->access_id);
+	elgg_create_river_item(array(
+		'view' => 'river/group/create',
+		'action_type' => 'create',
+		'subject_guid' => $user->guid,
+		'object_guid' => $group->guid,
+	));
 }
 
 $has_uploaded_icon = (!empty($_FILES['icon']['type']) && substr_count($_FILES['icon']['type'], 'image/'));
@@ -227,6 +242,38 @@ if ($must_move_icons) {
 		foreach ($sizes as $size) {
 			rename("$old_path/{$group_guid}{$size}.jpg", "$new_path/{$group_guid}{$size}.jpg");
 		}
+	}
+
+	if ($owner_changed_flag && $old_icontime) { // @todo Remove this when #4683 fixed
+
+		$filehandler = new ElggFile();
+		$filehandler->setFilename('groups');
+
+		$filehandler->owner_guid = $old_owner_guid;
+		$old_path = $filehandler->getFilenameOnFilestore();
+
+		$sizes = array('', 'tiny', 'small', 'medium', 'large');
+
+		foreach($sizes as $size) {
+			unlink("$old_path/{$group_guid}{$size}.jpg");
+		}
+	}
+
+} elseif ($owner_changed_flag && $old_icontime) { // @todo Remove this when #4683 fixed
+
+	$filehandler = new ElggFile();
+	$filehandler->setFilename('groups');
+
+	$filehandler->owner_guid = $old_owner_guid;
+	$old_path = $filehandler->getFilenameOnFilestore();
+
+	$filehandler->owner_guid = $group->owner_guid;
+	$new_path = $filehandler->getFilenameOnFilestore();
+
+	$sizes = array('', 'tiny', 'small', 'medium', 'large');
+
+	foreach($sizes as $size) {
+		rename("$old_path/{$group_guid}{$size}.jpg", "$new_path/{$group_guid}{$size}.jpg");
 	}
 }
 
