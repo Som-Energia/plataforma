@@ -1,17 +1,17 @@
 <?php
 return array(
-	'admin:administer_utilities:diagnostics' => 'Diagn&oacute;sticos de sistema',
-	'diagnostics' => 'Diagn&oacute;sticos',
-	'diagnostics:report' => 'Reporte de Diagn&oacute;sticos',
-	'diagnostics:description' => 'Los siguientes reportes de diagn&oacute;stico pueden ser &uacute;tiles para encontrar problemas en Elgg. Los desarrolladores de Elgg requieren que incluya estos resultados en los reportes de error.',
+	'admin:administer_utilities:diagnostics' => 'Diagnósticos do sistema',
+	'diagnostics' => 'Diagnósticos do sistema',
+	'diagnostics:report' => 'Informe de diagnósticos',
+	'diagnostics:description' => 'O seguinte informe de diagnósticos pode resultar útil para diagnosticar problemas con Elgg. Pode que os desenvolvedores de Elgg lle pidan que anexe estes datos cando informe dun erro.',
 	'diagnostics:header' => '========================================================================
-Elgg Diagnostic Report
-Generated %s by %s
+Informe de diagnósticos de Elgg
+Xerado %s por %s.
 ========================================================================
 
 ',
 	'diagnostics:report:basic' => '
-Elgg Release %s, version %s
+Elgg, publicación %s, versión %s.
 
 ------------------------------------------------------------------------',
 	'diagnostics:report:php' => '
@@ -19,18 +19,18 @@ PHP info:
 %s
 ------------------------------------------------------------------------',
 	'diagnostics:report:plugins' => '
-Installed plugins and details:
+Complementos instalados e detalles:
 
 %s
 ------------------------------------------------------------------------',
 	'diagnostics:report:md5' => '
-Installed files and checksums:
+Ficheiros instalados e sumas de comprobación:
 
 %s
 ------------------------------------------------------------------------',
 	'diagnostics:report:globals' => '
-Global variables:
+Variábeis globais:
 
 %s
--------------------------------------------------------------------------',
+------------------------------------------------------------------------',
 );

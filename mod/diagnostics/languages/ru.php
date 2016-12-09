@@ -1,9 +1,9 @@
 <?php
 return array(
-	'admin:administer_utilities:diagnostics' => 'System Diagnostics',
-	'diagnostics' => 'System diagnostics',
-	'diagnostics:report' => 'Diagnostics Report',
-	'diagnostics:description' => 'The following diagnostic report can be useful for diagnosing problems with Elgg. The developers of Elgg may request that you attach it to a bug report.',
+	'admin:administer_utilities:diagnostics' => 'Диагностика системы',
+	'diagnostics' => 'Диагностика системы',
+	'diagnostics:report' => 'Диагностические отчеты',
+	'diagnostics:description' => 'Этот отчет о диагностике полезен для диагностирования проблем Elgg и должен быть приложен к любому сообщаемому багу.',
 	'diagnostics:header' => '========================================================================
 Elgg Diagnostic Report
 Generated %s by %s
@@ -11,25 +11,25 @@ Generated %s by %s
 
 ',
 	'diagnostics:report:basic' => '
-Elgg Release %s, version %s
+Elgg релиз %s, версия %s
 
 ------------------------------------------------------------------------',
 	'diagnostics:report:php' => '
-PHP info:
+PHP-сведения:
 %s
 ------------------------------------------------------------------------',
 	'diagnostics:report:plugins' => '
-Installed plugins and details:
+Установленные плагины и детали:
 
 %s
 ------------------------------------------------------------------------',
 	'diagnostics:report:md5' => '
-Installed files and checksums:
+Установленные файлы и их сумма:
 
 %s
 ------------------------------------------------------------------------',
 	'diagnostics:report:globals' => '
-Global variables:
+Глобальные переменные:
 
 %s
 ------------------------------------------------------------------------',

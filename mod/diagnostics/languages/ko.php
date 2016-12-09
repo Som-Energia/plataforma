@@ -1,12 +1,12 @@
 <?php
 return array(
-	'admin:administer_utilities:diagnostics' => 'Diagn&oacute;sticos de sistema',
-	'diagnostics' => 'Diagn&oacute;sticos',
-	'diagnostics:report' => 'Reporte de Diagn&oacute;sticos',
-	'diagnostics:description' => 'Los siguientes reportes de diagn&oacute;stico pueden ser &uacute;tiles para encontrar problemas en Elgg. Los desarrolladores de Elgg requieren que incluya estos resultados en los reportes de error.',
+	'admin:administer_utilities:diagnostics' => '시스템 진단',
+	'diagnostics' => '시스템 진단',
+	'diagnostics:report' => '진단 보고서',
+	'diagnostics:description' => '아래의 진단보고서는 Elgg의 문제점을 진단하는데 유용할 수 있습니다. Elgg의 개발자들은 오류보고서에 이것을 포함하도록 요청할 수 있습니다.',
 	'diagnostics:header' => '========================================================================
-Elgg Diagnostic Report
-Generated %s by %s
+Elgg 진단보고서
+ %s 를 %s 가 만듬.
 ========================================================================
 
 ',
@@ -15,22 +15,22 @@ Elgg Release %s, version %s
 
 ------------------------------------------------------------------------',
 	'diagnostics:report:php' => '
-PHP info:
+PHP 정보:
 %s
 ------------------------------------------------------------------------',
 	'diagnostics:report:plugins' => '
-Installed plugins and details:
+설치된 플러긴과 세부정보:
 
 %s
 ------------------------------------------------------------------------',
 	'diagnostics:report:md5' => '
-Installed files and checksums:
+설치된 파일과 검증값:
 
 %s
 ------------------------------------------------------------------------',
 	'diagnostics:report:globals' => '
-Global variables:
+전역변수:
 
 %s
--------------------------------------------------------------------------',
+------------------------------------------------------------------------',
 );

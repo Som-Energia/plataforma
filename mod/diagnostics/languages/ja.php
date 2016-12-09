@@ -1,9 +1,9 @@
 <?php
 return array(
-	'admin:administer_utilities:diagnostics' => 'Diagn&oacute;sticos de sistema',
-	'diagnostics' => 'Diagn&oacute;sticos',
-	'diagnostics:report' => 'Reporte de Diagn&oacute;sticos',
-	'diagnostics:description' => 'Los siguientes reportes de diagn&oacute;stico pueden ser &uacute;tiles para encontrar problemas en Elgg. Los desarrolladores de Elgg requieren que incluya estos resultados en los reportes de error.',
+	'admin:administer_utilities:diagnostics' => 'システム診断',
+	'diagnostics' => 'システム診断',
+	'diagnostics:report' => '診断報告書',
+	'diagnostics:description' => 'Elggの障害の解析に有効なレポートです。開発者はバグレートを送る際にこれを添付することをお勧めします。',
 	'diagnostics:header' => '========================================================================
 Elgg Diagnostic Report
 Generated %s by %s
@@ -32,5 +32,5 @@ Installed files and checksums:
 Global variables:
 
 %s
--------------------------------------------------------------------------',
+------------------------------------------------------------------------',
 );

@@ -1,17 +1,17 @@
 <?php
 return array(
-	'admin:administer_utilities:diagnostics' => 'Diagn&oacute;sticos de sistema',
-	'diagnostics' => 'Diagn&oacute;sticos',
-	'diagnostics:report' => 'Reporte de Diagn&oacute;sticos',
-	'diagnostics:description' => 'Los siguientes reportes de diagn&oacute;stico pueden ser &uacute;tiles para encontrar problemas en Elgg. Los desarrolladores de Elgg requieren que incluya estos resultados en los reportes de error.',
+	'admin:administer_utilities:diagnostics' => 'Systemüberprüfung',
+	'diagnostics' => 'Systemüberprüfung',
+	'diagnostics:report' => 'Report',
+	'diagnostics:description' => 'Der Report, der im folgenden erstellt werden kann, kann bei der Fehlersuche hilfreich sein. In manchen Fällen bitten die Entwickler von Elgg, dass er zu einem Bugreport beigefügt wird.',
 	'diagnostics:header' => '========================================================================
-Elgg Diagnostic Report
-Generated %s by %s
+Elgg-Diagnose-Report
+Generiert %s von %s
 ========================================================================
 
 ',
 	'diagnostics:report:basic' => '
-Elgg Release %s, version %s
+Elgg-Release %s, Version %s
 
 ------------------------------------------------------------------------',
 	'diagnostics:report:php' => '
@@ -19,18 +19,18 @@ PHP info:
 %s
 ------------------------------------------------------------------------',
 	'diagnostics:report:plugins' => '
-Installed plugins and details:
+Einzelheiten zu den installierten Plugins:
 
 %s
 ------------------------------------------------------------------------',
 	'diagnostics:report:md5' => '
-Installed files and checksums:
+Installierte Dateien und Prüfsummen:
 
 %s
 ------------------------------------------------------------------------',
 	'diagnostics:report:globals' => '
-Global variables:
+Globale Variablen:
 
 %s
--------------------------------------------------------------------------',
+------------------------------------------------------------------------',
 );
