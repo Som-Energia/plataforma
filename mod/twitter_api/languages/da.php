@@ -2,36 +2,36 @@
 return array(
 	'twitter_api' => 'Twitter Services',
 
-	'twitter_api:requires_oauth' => 'Twitter Services requires the OAuth Libraries plugin to be enabled.',
+	'twitter_api:requires_oauth' => 'Twitter Services kræver at OAuth Libraries plugin er aktiveret.',
 
 	'twitter_api:consumer_key' => 'Consumer Key',
 	'twitter_api:consumer_secret' => 'Consumer Secret',
 
-	'twitter_api:settings:instructions' => 'You must obtain a consumer key and secret from <a href="https://dev.twitter.com/apps/new" target="_blank">Twitter</a>. Fill out the new app application. Select "Browser" as the application type and "Read & Write" for the access type. The callback url is %stwitter_api/authorize',
+	'twitter_api:settings:instructions' => 'Du skal indhente en Consumer Key og Consumer Secret fra <a href="https://dev.twitter.com/apps/new" target="_blank">Twitter</a>. Udfyld den nye app ansøgning. Vælg "Browser" som ansøgningstype og "Read & Write" som adgangstype. Callback url er %stwitter_api/authorize',
 
-	'twitter_api:usersettings:description' => "Link your %s account with Twitter.",
-	'twitter_api:usersettings:request' => "You must first <a href=\"%s\">authorize</a> %s to access your Twitter account.",
+	'twitter_api:usersettings:description' => "Link din %s konto med Twitter.",
+	'twitter_api:usersettings:request' => "Du skal først <a href=\"%s\">autorisere</a> %s for at få adgang til din Twitter konto.",
 	'twitter_api:usersettings:cannot_revoke' => "You cannot unlink you account with Twitter because you haven't provided an email address or password. <a href=\"%s\">Provide them now</a>.",
-	'twitter_api:authorize:error' => 'Unable to authorize Twitter.',
-	'twitter_api:authorize:success' => 'Twitter access has been authorized.',
+	'twitter_api:authorize:error' => 'Kunne ikke autorisere Twitter.',
+	'twitter_api:authorize:success' => 'Twitter adgang er blevet autoriseret.',
 
-	'twitter_api:usersettings:authorized' => "You have authorized %s to access your Twitter account: @%s.",
-	'twitter_api:usersettings:revoke' => 'Click <a href="%s">here</a> to revoke access.',
+	'twitter_api:usersettings:authorized' => "Du har autoriseret %s til at tilgå din Twitter konto: @%s.",
+	'twitter_api:usersettings:revoke' => 'Klik <a href="%s">her</a> for at tilbagekalde adgangstilladelse.',
 	'twitter_api:usersettings:site_not_configured' => 'An administrator must first configure Twitter before it can be used.',
 
-	'twitter_api:revoke:success' => 'Twitter access has been revoked.',
+	'twitter_api:revoke:success' => 'Twitter adgang er blevet tilbagekaldt.',
 
-	'twitter_api:post_to_twitter' => "Send users' wire posts to Twitter?",
+	'twitter_api:post_to_twitter' => "Send brugernes wire indlæg til Twitter?",
 
-	'twitter_api:login' => 'Allow users to sign in with Twitter?',
-	'twitter_api:new_users' => 'Allow new users to sign up using their Twitter account even if user registration is disabled?',
-	'twitter_api:login:success' => 'You have been logged in.',
-	'twitter_api:login:error' => 'Unable to login with Twitter.',
-	'twitter_api:login:email' => "You must enter a valid email address for your new %s account.",
+	'twitter_api:login' => 'Tillad nye brugere at registrere sig med Twitter?',
+	'twitter_api:new_users' => 'Tillad nye brugere at tilmelde sig ved hjælp af deres Twitter konto, selvom brugerregistrering er deaktiveret?',
+	'twitter_api:login:success' => 'Du er blevet logget ind.',
+	'twitter_api:login:error' => 'Kunne ikke logge ind med Twitter.',
+	'twitter_api:login:email' => "Du skal indtaste en gyldig e-mail adresse til din nye %s konto.",
 
 	'twitter_api:invalid_page' => 'Invalid page',
 
-	'twitter_api:deprecated_callback_url' => 'The callback URL has changed for Twitter API to %s.  Please ask your administrator to change it.',
+	'twitter_api:deprecated_callback_url' => 'Callback URL\'en er ændret for Twitter API til %s.  Bed din administrator om at ændre det.',
 
 	'twitter_api:interstitial:settings' => 'Configure your settings',
 	'twitter_api:interstitial:description' => 'You\'re almost ready to use %s! We need a few more details before you can continue. These are optional, but will allow you login if Twitter goes down or you decide to unlink your accounts.',
