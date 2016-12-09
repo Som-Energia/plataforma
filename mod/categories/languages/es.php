@@ -1,16 +1,9 @@
 <?php
-
-// Generado por translationbrowser 
-
-$spanish = array( 
-	 'categories'  =>  "Categorías" , 
-	 'categories:settings'  =>  "Edita las categorías del sitio" , 
-	 'categories:explanation'  =>  "Para establecer algunas categorías globales para el sitio que serán usadas a través de tu sistema, introdúcelas abajo separadas por comas. Serán mostradas por las herramientas compatibles cuando el usuario cree o edite contenido." , 
-	 'categories:save:success'  =>  "Las categorías del sitio se han grabado correctamente.",
-	 'categories:results' => "Resultados del sitio para la categoría: %s",
-	 'categories:on_activate_reminder' => "Las categorías del sitio no se encuentran disponibles hasta que agregue alguna. <a href=\"%s\">A&ntilde;adir categorías ahora.</a>",
-); 
-
-add_translation('es', $spanish); 
-
-?>
+return array(
+	'categories' => 'Categor&iacute;as',
+	'categories:settings' => 'Configurar las categor&iacute;as del sitio',
+	'categories:explanation' => 'Para configurar las categorias del sistema predeterminadas, ingr&eacute;salas a continuaci&oacute;n, separadas por comas. Compatible tools will then display them when the user creates or edits content.',
+	'categories:save:success' => 'Categori&iacute;as guardadas exitosamente.',
+	'categories:results' => "Resultados para esta categor&iacute;a: %s",
+	'categories:on_activate_reminder' => "Las categor&iacute;s del sitio no funcionan si no hay categir&iacute;as. <a href=\"%s\">Agrega categor&iacute;as ahora.</a>",
+);

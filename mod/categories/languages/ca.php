@@ -1,15 +1,9 @@
 <?php
-
-// Generat per la traducció del navegador 
-
-$catalan = array( 
-	 'categories'  =>  "Categories" , 
-	 'categories:settings'  =>  "Edita les categories del lloc" , 
-	 'categories:explanation'  =>  "Per establir algunes categories globals pel lloc que seran utilitzades a través del teu sistema, introdueix-les a sota separades per comes. Seran mostrades per les eines compatibles quan l'usuari cregui o editi contingut." , 
-	 'categories:save:success'  =>  "Les categories del lloc s'han desat correctament." , 
-	 'categories:results'  =>  "Resultats per a la categoria: %s"
-); 
-
-add_translation('ca', $catalan); 
-
-?>
+return array(
+	'categories' => 'Categories',
+	'categories:settings' => 'Defineix les categories de la xarxa',
+	'categories:explanation' => 'Per definir les categories que s\'usaran arreu el sistema, escriu-les aquí separades per comes. Les eines compatibles les mostraran quan l\'habitant creï o editi contingut.',
+	'categories:save:success' => 'Les categories de la xarxa s\'han guardat correctament.',
+	'categories:results' => "Resultats per la categoria: %s",
+	'categories:on_activate_reminder' => "Les categories no funcionaran almenys que n'afegeixis alguna. <a href=\"%s\">Afegeix categories ara.</a>",
+);
