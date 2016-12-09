@@ -5,12 +5,13 @@
 * @package ElggMessages
 */
 
-gatekeeper();
+elgg_gatekeeper();
 
-$message = get_entity(get_input('guid'));
-if (!$message || !elgg_instanceof($message, "object", "messages")) {
-	forward('messages/inbox/' . elgg_get_logged_in_user_entity()->username);
-}
+$guid = get_input('guid');
+
+elgg_entity_gatekeeper($guid, 'object', 'messages');
+
+$message = get_entity($guid);
 
 // mark the message as read
 $message->readYet = true;
@@ -39,12 +40,12 @@ if ($inbox) {
 	$body_params = array('message' => $message);
 	$content .= elgg_view_form('messages/reply', $form_params, $body_params);
 	$from_user = get_user($message->fromId);
-	
+
 	if ((elgg_get_logged_in_user_guid() == elgg_get_page_owner_guid()) && $from_user) {
 		elgg_register_menu_item('title', array(
 			'name' => 'reply',
 			'href' => '#messages-reply-form',
-			'text' => elgg_echo('messages:answer'),
+			'text' => elgg_echo('reply'),
 			'link_class' => 'elgg-button elgg-button-action',
 			'rel' => 'toggle',
 		));

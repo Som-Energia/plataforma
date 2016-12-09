@@ -1,93 +1,83 @@
 <?php
-/**
-* Elgg send a message action page
-* 
-* @package ElggMessages
-*/
-
-$spanish = array(
+return array(
 	/**
 	* Menu items and titles
 	*/
 
 	'messages' => "Mensajes",
-	'messages:back' => "regresar a mensajes",
+	'messages:unreadcount' => "%s no leidos",
+	'messages:back' => "regresar a los mensajes",
 	'messages:user' => "Bandeja de entrada de %s",
 	'messages:posttitle' => "Mensajes de %s: %s",
 	'messages:inbox' => "Bandeja de entrada",
-	'messages:send' => "Enviar",
 	'messages:sent' => "Enviado",
 	'messages:message' => "Mensaje",
 	'messages:title' => "Asunto",
-	'messages:to' => "Para",
-	'messages:from' => "De",
-	'messages:fly' => "Enviar",
-	'messages:replying' => "Mensaje en respuesta a",
+	'messages:to:help' => "Write recipient's username here.",
+	'messages:replying' => "Mensaje respondiendo a",
 	'messages:inbox' => "Bandeja de entrada",
 	'messages:sendmessage' => "Enviar un mensaje",
-	'messages:compose' => "Redactar",
-	'messages:add' => "Redactar",
+	'messages:add' => "Escribir un mensaje",
 	'messages:sentmessages' => "Mensajes enviados",
 	'messages:recent' => "Mensajes recientes",
 	'messages:original' => "Mensaje original",
-	'messages:yours' => "Su mensaje",
-	'messages:answer' => "Responder",
-	'messages:toggle' => 'Invertir todos',
-	'messages:markread' => 'Marcar como le&iacute;do',
-	'messages:recipient' => 'Elegir un destinatario&hellip;',
-	'messages:to_user' => 'Para: %s',
+	'messages:yours' => "Tu mensaje",
+	'messages:toggle' => 'Activar/desactivar todos',
+	'messages:markread' => 'Marcar como leido',
+	'messages:recipient' => 'Selecciona un receptor&hellip;',
+	'messages:to_user' => 'para: %s',
 
-	'messages:new' => 'Nuevo mensaje',
+	'messages:new' => 'Mensajes nuevos',
 
-	'notification:method:site' => 'Mensajes',
+	'notification:method:site' => 'Sitio',
 
-	'messages:error' => 'Ha ocurrido un error al guardar el mensaje, por favor intente nuevamente.',
+	'messages:error' => 'Ocurri&oacute; un problema al guardar el mensaje. Por favor intenta de nuevo.',
 
 	'item:object:messages' => 'Mensajes',
 
 	/**
 	* Status messages
 	*/
-	'messages:posted' => "Mensaje enviado correctamente.",
-	'messages:success:delete:single' => 'Mensaje eliminado',
-	'messages:success:delete' => 'Mensajes eliminados',
-	'messages:success:read' => 'Mensajes marcados como le&iacute;dos',
+
+	'messages:posted' => "Tu mensaje ha sido enviado.",
+	'messages:success:delete:single' => 'El mensaje fue borrado',
+	'messages:success:delete' => 'Mensajes borrados',
+	'messages:success:read' => 'Mensaje(s) marcado(s) como leido(s)',
 	'messages:error:messages_not_selected' => 'No hay mensajes seleccionados',
-	'messages:error:delete:single' => 'No se puede eliminar el mensaje',
+	'messages:error:delete:single' => 'No se puede borrar el mensaje',
 
 	/**
 	* Email messages
 	*/
-	'messages:email:subject' => 'Tienes un nuevo mensaje!',
-	'messages:email:body' => "Tienes un nuevo mensaje de %s. Dice:
 
+	'messages:email:subject' => 'Tienes un nuevo mensaje',
+	'messages:email:body' => "Tienes un nuevo mensaje de %s. Dice lo siguiente:
 
-	%s
+ %s
 
+ Para ver tus mensajes, ház click aquí:
 
-	Para ver sus mensajes, haga click aqu&iacute;:
+ %s
 
-	%s
+ Para enviar un mensaje a  %s, ház click aquí:
+ 
+%s
 
-	Para enviar un mensaje a %s, haga click aqu&iacute;:
-
-	%s
-
-	Por favor no responda a este mail.",
+ Por favor no respondas a este correo electrónico.",
 
 	/**
 	* Error messages
 	*/
-	'messages:blank' => "Debe ingresar texto en el cuerpo del mensaje para poder guardarlo.",
-	'messages:notfound' => "Lo sentimos, no se pudo encontrar el mensaje especificado.",
-	'messages:notdeleted' => "Lo sentimos, no se pudo eliminar el mensaje.",
-	'messages:nopermission' => "No posee los permisos necesarios para modificar el mensaje.",
-	'messages:nomessages' => "No hay mensajes.",
-	'messages:user:nonexist' => "No se pudo encontrar al destinatario en la base de datos de usuarios.",
-	'messages:user:blank' => "No se ha seleccionado a un destinatario.",
 
-	'messages:deleted_sender' => 'Usuario eliminado',
+	'messages:blank' => "Debes escribir algo en el cuerpo del mensaje antes de guardar.",
+	'messages:notfound' => "No se pudo encontrar el mensaje especificado.",
+	'messages:notdeleted' => "No se pudo borrar este mensaje.",
+	'messages:nopermission' => "No tienes permiso para modificar este mensaje.",
+	'messages:nomessages' => "No hay mensajes.",
+	'messages:user:nonexist' => "No se pudo encontrar al receptor entre los usuarios registrados.",
+	'messages:user:blank' => "No has seleccionado a nadie a quien enviar el mensaje.",
+	'messages:user:self' => "No puedes enviarte un mensaje a ti mismo.",
+
+	'messages:deleted_sender' => 'Usuario borrado',
 
 );
-		
-add_translation("es", $spanish);
