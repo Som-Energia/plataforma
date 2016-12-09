@@ -14,6 +14,7 @@ if (!$user) {
 $icon = elgg_view_entity_icon($user, 'large', array(
 	'use_hover' => false,
 	'use_link' => false,
+	'img_class' => 'photo u-photo',
 ));
 
 // grab the actions and admin menu items from user hover
@@ -27,7 +28,8 @@ $profile_actions = '';
 if (elgg_is_logged_in() && $actions) {
 	$profile_actions = '<ul class="elgg-menu profile-action-menu mvm">';
 	foreach ($actions as $action) {
-		$profile_actions .= '<li>' . $action->getContent(array('class' => 'elgg-button elgg-button-action')) . '</li>';
+		$item = elgg_view_menu_item($action, array('class' => 'elgg-button elgg-button-action'));
+		$profile_actions .= "<li class=\"{$action->getItemClass()}\">$item</li>";
 	}
 	$profile_actions .= '</ul>';
 }
@@ -45,7 +47,7 @@ if (elgg_is_admin_logged_in() && elgg_get_logged_in_user_guid() != elgg_get_page
 	}
 	$admin_links .= '</ul>';
 	$admin_links .= '</li>';
-	$admin_links .= '</ul>';	
+	$admin_links .= '</ul>';
 }
 
 // content links
