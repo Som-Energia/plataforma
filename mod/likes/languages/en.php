@@ -1,9 +1,5 @@
 <?php
-/**
- * Likes English language file
- */
-
-$english = array(
+return array(
 	'likes:this' => 'liked this',
 	'likes:deleted' => 'Your like has been removed',
 	'likes:see' => 'See who liked this',
@@ -39,7 +35,5 @@ or view %2$s\'s profile here:
 Thanks,
 %4$s
 ',
-	
-);
 
-add_translation('en', $english);
+);

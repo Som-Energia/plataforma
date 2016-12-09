@@ -1,44 +1,38 @@
 <?php
-/**
- * Likes Catalan language file
- */
+return array(
+	'likes:this' => 'li agrada això',
+	'likes:deleted' => 'El teu "m\'agrada" s\'ha eliminat',
+	'likes:see' => 'Mira a qui li agrada',
+	'likes:remove' => 'Ja no m\'agrada',
+	'likes:notdeleted' => 'Hi ha algun problema eliminant el teu "m\'agrada"',
+	'likes:likes' => 'Ara t\'agrada això',
+	'likes:failure' => 'Hi ha hagut un problema al marcar això',
+	'likes:alreadyliked' => 'Ja t\'agrada això',
+	'likes:notfound' => 'L\'objecte que estàs tractant de marcar no es troba',
+	'likes:likethis' => 'M\'agrada això',
+	'likes:userlikedthis' => 'Li agrada a %s',
+	'likes:userslikedthis' => 'Els "m\'agrada" de %s',
+	'likes:river:annotate' => 'li agrada',
+	'likes:delete:confirm' => 'Estàs segur de voler esborrar aquest "m\'agrada"?',
 
-$catalan = array(
-    'likes:this' => "li agrada",
-    'likes:deleted' => "Ja no us agrada",
-    'likes:see' => "Visualitzar a qui li agrada",
-    'likes:remove' => "Ja no m'agrada",
-    'likes:notdeleted' => "S'ha produït un error al suprimir el m'agrada",
-    'likes:likes' => "Ara us agrada",
-    'likes:failure' => "S'ha produït un error a l'afegir el m'agrada",
-    'likes:alreadyliked' => "Ja us agrada",
-    'likes:notfound' => "No s'ha pogut trobar l'element que us agrada",
-    'likes:likethis' => "M'agrada",
-    'likes:userlikedthis' => "%s li agrada",
-    'likes:userslikedthis' => "%s els agrada",
-    'likes:river:annotate' => "m'agrada",
+	'river:likes' => 'li agrada %s %s',
 
-    'river:likes' => "m'agraden %s %s",
-
-    // notifications. yikes.
-    'likes:notifications:subject' => "%s m'agrada la vostra publicació \"%s\"",
-    'likes:notifications:body' =>
+	// notifications. yikes.
+	'likes:notifications:subject' => 'a %s li agrada el teu missatge "%s"',
+	'likes:notifications:body' =>
 'Hola %1$s,
 
-a %2$s li agrada la vostra publicació "%3$s" a %4$s!
+A %2$s li agrada el teu missatge "%3$s" a %4$s
 
-Visualitzar la publicació original:
+Mira el teu missatge original aquí:
 
 %5$s
 
-o veure el perfil de %2$s aquí:
+o mira el perfil de %2$s aquí:
 
 %6$s
 
 Gràcies,
-%4$s
-',
-
+%4$s',
+	
 );
-
-add_translation("ca", $catalan);

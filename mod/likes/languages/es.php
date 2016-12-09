@@ -1,43 +1,39 @@
 <?php
-/**
- * Likes Spanish language file
- */
-
-$spanish = array(
+return array(
 	'likes:this' => 'le gusta esto',
-	'likes:deleted' => 'Ya no te gusta esto',
-	'likes:see' => 'Ver a quienes les gusta esto',
+	'likes:deleted' => 'Tu Like ha sido removido',
+	'likes:see' => 'Ver quienes les gusta esto',
 	'likes:remove' => 'Ya no me gusta',
-	'likes:notdeleted' => 'Ocurri&oacute; un problema al intentar quitar el me gusta',
-	'likes:likes' => 'Ahora te gusta esto',
-	'likes:failure' => 'Ocurri&oacute; un problema al agregar el me gusta',
-	'likes:alreadyliked' => 'Ya te gusta esto',
-	'likes:notfound' => 'No se pudo encontrar el item que te gusta',
-	'likes:likethis' => 'Me gusta',
-	'likes:userlikedthis' => '%s me gusta',
-	'likes:userslikedthis' => '%s me gusta',
-	'likes:river:annotate' => 'me gusta',
+	'likes:notdeleted' => 'Hubo un problema al quitar el Like',
+	'likes:likes' => 'Ahora puedes marcar que te gusta este elemento',
+	'likes:failure' => 'Hubo un problema al marcar que te gusta este elemento',
+	'likes:alreadyliked' => 'Ya has marcado que te gusta este elemento',
+	'likes:notfound' => 'El elemento que tratas de marcar no est&aacute; disponnible',
+	'likes:likethis' => 'Me gusta esto',
+	'likes:userlikedthis' => '%s like',
+	'likes:userslikedthis' => '%s likes',
+	'likes:river:annotate' => 'likes',
+	'likes:delete:confirm' => '&iquest;Seguro que ya no te gusta esto?',
 
-	'river:likes' => 'me gustan %s %s',
+	'river:likes' => 'likes %s %s',
 
 	// notifications. yikes.
-	'likes:notifications:subject' => '%s me gusta en tu publicaci&oacute;n "%s"',
+	'likes:notifications:subject' => '%s Me gusta en tu post "%s"',
 	'likes:notifications:body' =>
 'Hola %1$s,
 
-a %2$s le gusta tu publicaci&oacute;n "%3$s" en %4$s!
+%2$s le(s) gusta tu post "%3$s" en %4$s
 
-Ver publicaci&oacute;n original aqu&iacute;:
+ver el post original aqu&iacute;:
 
 %5$s
 
-o ver el perfil de %2$s aqu&iacute;:
+o ver el perfil de %2$s\ aqu&iacute;:
 
 %6$s
 
 Gracias,
 %4$s
 ',
+	
 );
-
-add_translation('es', $spanish);
