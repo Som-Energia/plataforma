@@ -23,6 +23,7 @@
 		$cloudflare = elgg_get_plugin_setting("cloudflare","metatags");
 	        if($cloudflare == "yes") {
 			elgg_register_plugin_hook_handler('entity:icon:url', 'user', 'user_icon_url_override');
+			elgg_register_plugin_hook_handler('entity:icon:url', 'group', 'group_icon_url_override');
 		}
 		
 		//Unregister systemlog since it is not very usefull	 
@@ -44,6 +45,27 @@ function user_icon_url_override($hook, $type, $returnvalue, $params) {
                return "_graphics/icons/user/default{$size}.gif";
           }
      }
+}
+
+function group_icon_url_override($hook, $type, $returnvalue, $params) {
+
+	$group = $params['entity'];
+	$size = $params['size'];
+
+	$icontime = $group->icontime;
+	if (null === $icontime) {
+		$file = new ElggFile();
+		$file->owner_guid = $group->owner_guid;
+		$file->setFilename("groups/" . $group->guid . "large.jpg");
+		$icontime = $file->exists() ? time() : 0;
+		create_metadata($group->guid, 'icontime', $icontime, 'integer', $group->owner_guid, ACCESS_PUBLIC);
+        }
+	if ($icontime) {
+		// return thumbnail
+		return "groupicon/$group->guid/$size/$group->name.jpg";
+	}
+
+	return "mod/groups/graphics/default{$size}.gif";
 }
 
 elgg_register_event_handler('init','system','metatagsgen_init');
