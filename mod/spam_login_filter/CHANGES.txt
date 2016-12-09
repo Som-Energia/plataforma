@@ -1,0 +1,54 @@
+Validate login against blacklist databases.
+
+2.1.1 (12/18/2015):
+ - fix email/ip whitelist logic
+ - cache bad ips on SFS failure
+ - check cached ips on each check
+
+2.1.0 - (09/04/2015):
+ - remove fassim related code :(
+ - javascript confirmation on "delete and report" user hover menu item
+
+2.0.3 - (08/29/2015):
+ - Fix 403 page rendering
+ - Check for spammers on first login regardless of event plugin setting
+
+2.0.2 - (03/29/2015):
+ - update deprecated login event
+ - add readme
+
+2.0.1 - (12/16/2014):
+ - more readable output for check_spammer function
+ - correct return value for register hook
+
+12/01/2014
+- General code cleanup/refactoring
+- Removal of 'tracker' plugin dependency
+- performance: track blacklisted ips as annotations instead of entities
+- performance: daily cron uses ElggBatch to prevent OOM errors
+- check for spam on user register hook (catches email checks unavailable on register page, or custom actions)
+- security: request json results from stopforumspam endpoint instead of serialized PHP
+
+
+09/20/2014
+- Made sure it works on Elgg 1.9 (fixed one deprecation issue),
+- Made cronjob for cleaning IP addresses cache to work correctly,
+- Code cleanup,
+- Some little rework in translations (mainly for plugin settings page),
+- German translations added.
+
+07/15/2014
+- Add IP address whitelist wildcard,
+- Move readme.txt to CHANGES.txt.
+
+07/24/2013
+- Fix for Fatal Exception when notify admin is set with invalid email address,
+- General code cleanup,
+- Adds support for cloud hosting/load balancers for getting IP address,
+- Support for protecting multiple configurable pages with IP cache,
+- Support for whitelisting IP addresses and emails,
+- Support for spam check on login (to catch spammers reported since initial registration).
+These fixes/improvements funded by Connecting Conservation.
+
+02/06/2013
+- Fix for blocked IP address pagination funded by: Connecting Conservation.

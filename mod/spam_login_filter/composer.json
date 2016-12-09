@@ -1,0 +1,20 @@
+{
+    "name": "beck24/spam_login_filter",
+    "type": "elgg-plugin",
+    "description": "Elgg plugin that validates login against blacklist databases.",
+    "homepage": "https://github.com/beck24/spam_login_filter",
+    "keywords": ["elgg", "plugin", "spam", "analyzer"],
+    "license": "GPL-2.0",
+    "authors": [
+        {
+            "name": "Ray J",
+            "name": "Matt Beckett"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/beck24/spam_login_filter/issues"
+    },
+    "require": {
+        "composer/installers": ">=1.0.8"
+    }
+}
