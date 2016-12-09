@@ -1,15 +1,14 @@
 <?php
+return array(
+	'embed:embed' => 'Incrustat',
+	'embed:media' => 'Contingut incrustat',
+	'embed:instructions' => 'Prem a qualsevol fitxer per incrustar-lo al teu contingut.',
+	'embed:upload' => 'Puja multimèdia',
+	'embed:upload_type' => 'Tipus:',
 
-// Generado por translationbrowser 
+	// messages
+	'embed:no_upload_content' => 'No hi ha contingut!',
+	'embed:no_section_content' => 'No s\'ha trobat res.',
 
-$catalan = array( 
-	 'media:insert'  =>  "Inserir / Pujar fitxer" , 
-	 'embed:instructions'  =>  "Selecciona el fitxer que desitgis inserir en el comentari. Simplement fes \"click\" damunt d'ell" , 
-	 'embed:media'  =>  "Inserir fitxer" , 
-	 'upload:media'  =>  "Pujar fitxer" , 
-	 'embed:file:required'  =>  "No tens una aplicació per pujar fitxers instal·lada. Posa't en contacte amb l'equip 'administrador per a que habiliti el pluguin."
-); 
-
-add_translation('ca', $catalan); 
-
-?>
+	'embed:no_sections' => 'No s\'han trobat extensions suportades. Consulta-ho amb l\'administrador del lloc per a que habiliti una extensió amb suport per incrustar recursos.',
+);

@@ -22,9 +22,8 @@ function embed_init() {
 
 	// Page handler for the modal media embed
 	elgg_register_page_handler('embed', 'embed_page_handler');
-	
+
 	$embed_js = elgg_get_simplecache_url('js', 'embed/embed');
-	elgg_register_simplecache_view('js/embed/embed');
 	elgg_register_js('elgg.embed', $embed_js, 'footer');
 }
 
@@ -50,20 +49,44 @@ function embed_longtext_menu($hook, $type, $items, $vars) {
 		$url = 'embed?container_guid=' . $page_owner->getGUID();
 	}
 
+	elgg_load_js('lightbox');
+	elgg_load_css('lightbox');
+	elgg_require_js('jquery.form');
+	elgg_load_js('elgg.embed');
+
+	$text = elgg_echo('embed:media');
+
+	// if loaded through ajax (like on /activity), pull in JS libs manually
+	// hack for #6422 because we haven't converted everything to amd yet
+	if (elgg_in_context('ajax')) {
+		$externals = elgg_get_config('externals_map');
+		$embed = elgg_extract('elgg.embed', $externals['js']);
+		$lightbox_js = elgg_extract('lightbox', $externals['js']);
+		$lightbox_css = elgg_extract('lightbox', $externals['css']);
+
+		$text .= <<<___JS
+<script>
+	require(['jquery.form']);
+	if (typeof $.fancybox === 'undefined') {
+		$.getScript('$lightbox_js->url');
+		$('head').append('<link rel="stylesheet" href="$lightbox_css->url"></link>');
+	}
+	if (typeof elgg.embed === 'undefined') {
+		$.getScript('$embed->url');
+	}
+</script>
+___JS;
+	}
+
 	$items[] = ElggMenuItem::factory(array(
 		'name' => 'embed',
 		'href' => $url,
-		'text' => elgg_echo('embed:media'),
+		'text' => $text,
 		'rel' => "embed-lightbox-{$vars['id']}",
 		'link_class' => "elgg-longtext-control elgg-lightbox embed-control embed-control-{$vars['id']}",
 		'priority' => 10,
 	));
 
-	elgg_load_js('lightbox');
-	elgg_load_css('lightbox');
-	elgg_load_js('jquery.form');
-	elgg_load_js('elgg.embed');
-	
 	return $items;
 }
 
@@ -110,6 +133,8 @@ function embed_page_handler($page) {
 		}
 	}
 
+	set_input('page', $page[1]);
+
 	echo elgg_view('embed/layout');
 
 	// exit because this is in a modal display.
@@ -119,7 +144,7 @@ function embed_page_handler($page) {
 /**
  * A special listing function for selectable content
  *
- * This calls a custom list view for entities. 
+ * This calls a custom list view for entities.
  *
  * @param array $entities Array of ElggEntity objects
  * @param array $vars     Display parameters
