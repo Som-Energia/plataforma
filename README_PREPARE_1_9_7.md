@@ -8,7 +8,8 @@
 ## 2. Pre Actualización
   1. Desactivar mod tydipics
   2. Desactivar mod bright-theme
-
+  3. Desactivar mod following
+  4. Desactivar mod embed-extender
 ## 3. Actualización
   1. Subir la actualización.
   2. Ejecutar upgrade.php desde el navegador
