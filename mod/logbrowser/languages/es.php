@@ -1,27 +1,20 @@
 <?php
-/**
- * Elgg log browser plugin language pack
- *
- * @package ElggLogBrowser
- */
+return array(
+	'admin:administer_utilities:logbrowser' => 'Navegador de registros',
+	'logbrowser' => 'Navegador de registros',
+	'logbrowser:browse' => 'Navegar por los registros del sistema',
+	'logbrowser:search' => 'Buscar',
+	'logbrowser:user' => 'Nombre de usuario a buscar',
+	'logbrowser:starttime' => 'Fecha/hora de inicio (por ejemplo, "&uacute;ltimo lunes" o "1 hora atr&aacute;s")',
+	'logbrowser:endtime' => 'End time',
 
-$spanish = array(
-	'admin:utilities:logbrowser' => 'Visor de Eventos',
-	'logbrowser' => 'Visor de eventos',
-	'logbrowser:browse' => 'Ver eventos del sistema',
-	'logbrowser:search' => 'Refinar resultados',
-	'logbrowser:user' => 'Buscar por nombre de usuario',
-	'logbrowser:starttime' => 'Tiempo de inicio (por ejemplo "lunes anterior", "hace 1 hora")',
-	'logbrowser:endtime' => 'Tiempo de fin',
-
-	'logbrowser:explore' => 'Explorar log',
+	'logbrowser:explore' => 'Explorar registros',
 
 	'logbrowser:date' => 'Fecha y hora',
-	'logbrowser:user:name' => 'Usuario',
-	'logbrowser:user:guid' => 'GUID del Usuario',
+	'logbrowser:ip_address' => 'Direcci&oacute;n IP',
+	'logbrowser:user:name' => 'Uusario',
+	'logbrowser:user:guid' => 'GUID de usuario',
 	'logbrowser:object' => 'Tipo de objeto',
-	'logbrowser:object:guid' => 'GUID del objecto',
+	'logbrowser:object:guid' => 'GUID de objeto',
 	'logbrowser:action' => 'Acci&oacute;n',
 );
-
-add_translation("es", $spanish);

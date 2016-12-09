@@ -1,11 +1,5 @@
 <?php
-/**
- * Elgg log browser plugin language pack
- *
- * @package ElggLogBrowser
- */
-
-$english = array(
+return array(
 	'admin:administer_utilities:logbrowser' => 'Log browser',
 	'logbrowser' => 'Log browser',
 	'logbrowser:browse' => 'Browse system log',
@@ -23,8 +17,4 @@ $english = array(
 	'logbrowser:object' => 'Object type',
 	'logbrowser:object:guid' => 'Object GUID',
 	'logbrowser:action' => 'Action',
-
-	'logbrowser:no_result' => 'No results',
 );
-
-add_translation("en", $english);

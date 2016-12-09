@@ -1,17 +1,20 @@
 <?php
+return array(
+	'admin:administer_utilities:logbrowser' => 'Log browser',
+	'logbrowser' => 'Log browser',
+	'logbrowser:browse' => 'Browse system log',
+	'logbrowser:search' => 'Refine results',
+	'logbrowser:user' => 'Username to search by',
+	'logbrowser:starttime' => 'Beginning time (for example "last monday", "1 hour ago")',
+	'logbrowser:endtime' => 'End time',
 
-// Generado por translationbrowser 
+	'logbrowser:explore' => 'Explore log',
 
-$catalan = array( 
-	 'logbrowser'  =>  "Navegador de registres" , 
-	 'logbrowser:browse'  =>  "Explorar el sistema de registres" , 
-	 'logbrowser:search'  =>  "Cercar paràmetres" , 
-	 'logbrowser:user'  =>  "Persona usuària que vols cercar" , 
-	 'logbrowser:starttime'  =>  "Temps de començament (per exemple \"darrer dilluns\", \"fa 1 hora\")" , 
-	 'logbrowser:endtime'  =>  "Temps final" , 
-	 'logbrowser:explore'  =>  "Explorar registre"
-); 
-
-add_translation('ca', $catalan); 
-
-?>
+	'logbrowser:date' => 'Date and time',
+	'logbrowser:ip_address' => 'IP address',
+	'logbrowser:user:name' => 'User',
+	'logbrowser:user:guid' => 'User GUID',
+	'logbrowser:object' => 'Object type',
+	'logbrowser:object:guid' => 'Object GUID',
+	'logbrowser:action' => 'Action',
+);
