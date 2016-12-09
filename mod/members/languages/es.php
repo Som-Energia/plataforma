@@ -1,21 +1,11 @@
 <?php
-
-// Generado por translationbrowser 
-
-$spanish = array( 
-	 'members:members'  =>  "Miembros registrados en la red social" , 
-	 'members:online'  =>  "Miembros online" , 
-	 'members:active'  =>  "Miembros registrados" , 
-	 'members:searchtag'  =>  "Buscar miembros por etiquetas" , 
-	 'members:searchname'  =>  "Buscar miembros por nombre" , 
-	 'members:label:newest'  =>  "Nuevos" , 
-	 'members:label:popular'  =>  "Populares" , 
-	 'members:label:online' => 'Conectados',
-	 'members:label:active'  =>  "Conectados" , 
-	 'members:search:name'  =>  "Nombres de usuario" , 
-	 'members:search:tags'  =>  "Etiquetas",
-	 'members:title:searchname' => 'Buscar miembros para %s',
-	 'members:title:searchtag' => 'Miembros con tags %s',
-); 
-
-add_translation('es', $spanish); 
+return array(
+	'members:label:online' => 'En linea',
+	'members:search' => 'Buscar miembros',
+	'members:title:search' => 'B&uacute;squeda de miembros por %s',
+	'members:total' => 'Total de miembros: %s',
+	'members:title:newest' => 'Nuevos miembros',
+	'members:title:popular' => 'Miembros más populares',
+	'members:title:online' => 'Miembros en línea',
+	'members:list:popular:none' => 'Ningún miembro tiene amigos',
+);
