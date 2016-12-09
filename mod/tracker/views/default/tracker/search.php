@@ -3,8 +3,8 @@
  * Elgg Tracker plugin
  * @license: GPL v 2.
  * @author slyhne
- * @copyright Zurf.dk
- * @link http://zurd.dk/elgg
+ * @copyright tiger-inc.eu
+ * @link http://tiger-inc.eu
  */
 
 // Simple IP address search
@@ -24,9 +24,8 @@ $tracker_link = "<a href='{$tracker_url}' target='_blank' class='elgg-button elg
 ?>
 
 <h5><?php echo elgg_echo('tracker:searchip'); ?></h5>
-<form id="trackersearchform" action="<?php echo $vars['url']; ?>tracker/" method="post">
-	<input type="text" name="ip" value="<?php echo $ip_address; ?>" class="search_input" />
-	<br>
+<form id="trackersearchform" action="<?php echo elgg_get_site_url(); ?>tracker/" method="post">
+	<input class="mbm" type="text" name="ip" value="<?php echo $ip_address; ?>" class="search_input" />
 	<input type="submit" class="elgg-button elgg-button-submit" value="<?php echo elgg_echo('search'); ?>" />
 </form>
 

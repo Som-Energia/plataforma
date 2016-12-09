@@ -3,8 +3,8 @@
  * Elgg Tracker plugin
  * @license: GPL v 2.
  * @author slyhne
- * @copyright Zurf.dk
- * @link http://zurd.dk/elgg
+ * @copyright tiger-inc.eu
+ * @link http://tiger-inc.eu
  */
 
 elgg_register_event_handler('init','system','tracker_init');
@@ -15,9 +15,8 @@ function tracker_init() {
 	elgg_register_page_handler('tracker', 'tracker_page_handler');
 
 	// IP logging at create/login events
-	elgg_register_event_handler('login', 'user', 'tracker_log_ip');
+	elgg_register_event_handler('login:after', 'user', 'tracker_log_ip');
 	elgg_register_event_handler('create', 'user', 'tracker_log_ip');
-
 
 	// Show IP address on profile
 	if (elgg_is_admin_logged_in()) {
@@ -28,10 +27,7 @@ function tracker_init() {
 			elgg_register_plugin_hook_handler('register', 'menu:user_hover', 'tracker_admin_hover_menu');
 		}
 	}
-
-
-}	
-
+}
 
 // Function to save IP address on login
 function tracker_log_ip($event, $object_type, $object) {
@@ -62,9 +58,11 @@ function tracker_log_ip($event, $object_type, $object) {
 		}
 
 		if (!empty($ip_address)) {
-			create_metadata($object->guid, 'ip_address', $ip_address, '', 0, ACCESS_PUBLIC);
+			create_metadata($object->guid, 'ip_address', $ip_address, 'text', $object->guid);
 		}
 	}
+
+	return true;
 }
 
 function tracker_page_handler($page_elements, $handler) {
@@ -78,29 +76,32 @@ function tracker_page_handler($page_elements, $handler) {
 	}
 
 	// Set title
-	$title = sprintf(elgg_echo('tracker:title'), $ip);
+	$title = elgg_echo('tracker:title', array($ip));
 
 	// Get the list of all IP's
 	$content = elgg_list_entities_from_metadata(array(
-							'metadata_name' => 'ip_address',
-							'metadata_value' => $ip,
-							'type' => 'user',
-							'limit' => 25
-							));	
+		'metadata_name' => 'ip_address',
+		'metadata_value' => $ip,
+		'type' => 'user',
+		'limit' => 25
+	));
+
+	if (empty($content)) {
+		$content = elgg_echo('tracker:ip_unused');
+	}
 
 	// Search box for the sidebar
 	set_input( 'ip', $ip );
 	$sidebar = elgg_view_module('aside',  elgg_echo("search"), elgg_view('tracker/search'));
 
 	$body = elgg_view_layout('content', array(
-						'filter' => '',
-						'content' => $content,
-						'title' => $title,
-						'sidebar' => $sidebar,
-						));
+		'filter' => '',
+		'content' => $content,
+		'title' => $title,
+		'sidebar' => $sidebar,
+	));
 
 	echo elgg_view_page($title, $body);
-
 }
 
 // Add to the user hover admin menu
@@ -117,6 +118,3 @@ function tracker_admin_hover_menu($hook, $type, $return, $params) {
 
 	return $return;
 }
-
-elgg_register_event_handler('pagesetup', 'system', 'tracker_pagesetup');
-
