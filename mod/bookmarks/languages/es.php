@@ -1,52 +1,84 @@
 <?php
+return array(
 
-// Generado por translationbrowser 
+	/**
+	 * Menu items and titles
+	 */
+	'bookmarks' => "Marcadores",
+	'bookmarks:add' => "Agregar un marcador",
+	'bookmarks:edit' => "Editar marcador",
+	'bookmarks:owner' => "Marcadores de %s",
+	'bookmarks:friends' => "Marcadores de amigos",
+	'bookmarks:everyone' => "Todos los marcadores",
+	'bookmarks:this' => "Marcar esta p&aacute;gina",
+	'bookmarks:this:group' => "Marcar en %s",
+	'bookmarks:bookmarklet' => "Obtener marcadores",
+	'bookmarks:bookmarklet:group' => "Obtener widget de marcadores del grupo",
+	'bookmarks:inbox' => "Bandeja de entrada de marcadores",
+	'bookmarks:with' => "Compartir con",
+	'bookmarks:new' => "Un nuevo marcador",
+	'bookmarks:address' => "Direcciones del marcador",
+	'bookmarks:none' => 'No hay marcadores',
 
-$spanish = array( 
-	 'bookmarks'  =>  "Favoritos" , 
-	 'bookmarks:add'  =>  "A&ntilde;adir a favoritos" , 
-	 'bookmarks:read'  =>  "Art&iacute;culos marcados" , 
-	 'bookmarks:edit' => "Editar favorito",
-	 'bookmarks:owner' => "Favoritos de %s",
-	 'bookmarks:friends'  =>  "Favoritos de tus amigos" , 
-	 'bookmarks:everyone'  =>  "Todos los favoritos" , 
-	 'bookmarks:this'  =>  "Marcar como favorito" , 
-	 'bookmarks:bookmarklet'  =>  "Obtener marcadores" , 
-	 'bookmarks:inbox'  =>  "Entradas de favoritos" , 
-	 'bookmarks:more'  =>  "M&aacute;s favoritos" , 
-	 'bookmarks:shareditem'  =>  "Art&iacute;culos marcados" , 
-	 'bookmarks:with'  =>  "Compartir informaci&oacute;n" , 
-	 'bookmarks:address'  =>  "Direcci&oacute;n de los recursos de los favoritos" , 
-	 'bookmarks:delete:confirm'  =>  "Seguro que quieres eliminar este recurso?" , 
-	 'bookmarks:shared'  =>  "A&ntilde;adido a favoritos" , 
-	 'bookmarks:visit'  =>  "Visitar el recurso" , 
-	 'bookmarks:recent'  =>  "Favoritos recientes" , 
-	 'bookmarks:river:created'  =>  "%s marca como favorito" , 
-	 'bookmarks:river:annotate'  =>  "un comentario en este favorito" , 
-	 'bookmarks:river:item'  =>  "un art&iacute;culo" , 
-	 'item:object:bookmarks'  =>  "Art&iacute;culos marcados" , 
-	 'bookmarks:widget:description'  =>  "Este componente está diseñado para el interfaz de su escritorio y mostrará las entradas a los artículos favoritos que creas precisos" , 
-	 'bookmarks:bookmarklet:description'  =>  "Los favoritos marcados permiten compartir cualquier recurso de la web de forma r&aacute;pida y sencilla, con sus amigos. Para usarlo, muevelo a trav&eacute;s del navegador a la zona:" , 
-	 'bookmarks:bookmarklet:descriptionie'  =>  "Si est&aacute;s usando Internet Explorer, necesitar&aacute;s pulsar el bot&oacute;n derecho del icono marcador y seleccionar 'a&ntilde;adir a favoritos'' indicando el link correspondiente" , 
-	 'bookmarks:bookmarklet:description:conclusion'  =>  "Puedes guardar cualquier p&aacute;gina que visites puls&aacute;ndolo en cualquier momento" , 
-	 'bookmarks:save:success'  =>  "Su art&iacute;culo ha sido marcado correctamente." , 
-	 'bookmarks:delete:success'  =>  "Su art&iacute;culo ha sido eliminado correctamente." , 
-	 'bookmarks:save:failed'  =>  "Su art&iacute;culo marcado no puede guardarse, int&eacute;ntelo de nuevo." , 
-	 'bookmarks:delete:failed'  =>  "Su art&iacute;culo marcado no puede ser eliminado, int&eacute;ntelo de nuevo." , 
-	 'bookmarks:this:group'  =>  "Añadido en %s" , 
-	 'bookmarks:bookmarklet:group'  =>  "Obtener bookmarklet del grupo" , 
-	 'bookmarks:new'  =>  "Un nuevo objeto marcado" , 
-	 'bookmarks:via'  =>  "via marcadores" , 
-	 'bookmarks:numbertodisplay'  =>  "Número de favoritos a mostrar" , 
-	 'bookmarks:group'  =>  "Favoritos del grupo" , 
-	 'bookmarks:enablebookmarks'  =>  "Habilitar marcadores de grupos",
-	 'river:create:object:bookmarks' => '%s agreg&oacute; %s como favorito',
-	 'river:comment:object:bookmarks' => '%s coment&oacute; en el favorito %s',
-	 'bookmarks:none' => 'Sin favoritos',
-	 'bookmarks:nogroup' => 'Este grupo no posee favoritos a&uacute;n',
-	 'bookmarks:no_title' => 'Sin t&iacute;tulo',
-); 
+	'bookmarks:notify:summary' => 'Nuevo marcador llamado %s',
+	'bookmarks:notify:subject' => 'Nuevo marcador: %s',
+	'bookmarks:notify:body' =>
+'%s agrego un nuevo marcador: %s
 
-add_translation('es', $spanish); 
+Dirección: %s
 
-?>
+%s
+
+Ver y comentar en el marcador:
+%s
+',
+
+	'bookmarks:delete:confirm' => "&ntilde;Seguro que deseas borrar este marcador?",
+
+	'bookmarks:numbertodisplay' => 'N&uacute;mero de marcadores a mostrar',
+
+	'bookmarks:shared' => "Marcado",
+	'bookmarks:visit' => "Visitar fuente",
+	'bookmarks:recent' => "Marcadores recientes",
+
+	'river:create:object:bookmarks' => '%s ha marcado %s',
+	'river:comment:object:bookmarks' => '%s ha comentado en el marcador %s',
+	'bookmarks:river:annotate' => 'ha comentado este marcador',
+	'bookmarks:river:item' => 'un item',
+
+	'item:object:bookmarks' => 'Marcadores',
+
+	'bookmarks:group' => 'Marcadores de grupos',
+	'bookmarks:enablebookmarks' => 'Habilitar marcadores para Grupos',
+	'bookmarks:nogroup' => 'Este Grupo no tiene marcadores a&uacute;n',
+	
+	/**
+	 * Widget and bookmarklet
+	 */
+	'bookmarks:widget:description' => "Mostrar los &uacute;ltimo0s marcadores.",
+
+	'bookmarks:bookmarklet:description' =>
+			"El widget de marcadores permite compartir cualquier recurso de la Web con tus amigos, o sinmplemente para ti mismo. Para usarlo, simplemente arrastra el enlace a la barra de marcadores de tu navegador:",
+
+	'bookmarks:bookmarklet:descriptionie' =>
+			"Si usas Internet Explorer, necesitas hacer click con el bot&oacute;n derecho del rat&oacute;n al enlace, select 'add to favorites', y entonces a la barra de marcadores.",
+
+	'bookmarks:bookmarklet:description:conclusion' =>
+			"A continuación, puedes guardar cualquier página que visite haciendo clic en él en cualquier momento.",
+
+	/**
+	 * Status messages
+	 */
+
+	'bookmarks:save:success' => "El item fue marcado exitosamente.",
+	'bookmarks:delete:success' => "El marcador ha sido borrado.",
+
+	/**
+	 * Error messages
+	 */
+
+	'bookmarks:save:failed' => "El marcador no pudo ser guardado. Aseg&uacute;rate de que el t&iacute;tulo y el enlace est&eacute;n correctamente escritos.",
+	'bookmarks:save:invalid' => "La direcci&oacute;n es inv&aacute;lida y no pudo ser guardada.",
+	'bookmarks:delete:failed' => "El marcador no pudo ser borrado. Intenta de nuevo.",
+	'bookmarks:unknown_bookmark' => 'No se puede encontrar el marcador requerido',
+);

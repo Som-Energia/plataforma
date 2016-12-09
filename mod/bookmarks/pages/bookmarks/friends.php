@@ -17,10 +17,15 @@ elgg_register_title_button();
 
 $title = elgg_echo('bookmarks:friends');
 
-$content = list_user_friends_objects($page_owner->guid, 'bookmarks', 10, false);
-if (!$content) {
-	$content = elgg_echo('bookmarks:none');
-}
+$content = elgg_list_entities_from_relationship(array(
+	'type' => 'object',
+	'subtype' => 'bookmarks',
+	'full_view' => false,
+	'relationship' => 'friend',
+	'relationship_guid' => $page_owner->guid,
+	'relationship_join_on' => 'container_guid',
+	'no_results' => elgg_echo('bookmarks:none'),
+));
 
 $params = array(
 	'filter_context' => 'friends',

@@ -1,48 +1,84 @@
 <?php
+return array(
 
-// Generat per la traducció del navegador 
+	/**
+	 * Menu items and titles
+	 */
+	'bookmarks' => "Adreces d'interès",
+	'bookmarks:add' => "Afegir un enllaç",
+	'bookmarks:edit' => "Edita l'enllaç",
+	'bookmarks:owner' => "Enllaços de %s",
+	'bookmarks:friends' => "Adreces d'interès de les amistats",
+	'bookmarks:everyone' => "Totes les adreces d'interès",
+	'bookmarks:this' => "Marca això com a adreça d'interès",
+	'bookmarks:this:group' => "Marca com adreça d'interès a %s",
+	'bookmarks:bookmarklet' => "Descarrega els marcadors dinàmics",
+	'bookmarks:bookmarklet:group' => "Descarrega un grup de marcadors dinàmics",
+	'bookmarks:inbox' => "Safata d'entrada de les adreces d'interès",
+	'bookmarks:with' => "Compartir amb",
+	'bookmarks:new' => "Nou element marcat com adreça d'interès",
+	'bookmarks:address' => "URL del recurs a marcar com adreça d'interès",
+	'bookmarks:none' => 'No hi ha enllaços',
 
-$catalan = array( 
-	 'bookmarks'  =>  "Enllaços" , 
-	 'bookmarks:add'  =>  "Afegir enllaç" , 
-	 'bookmarks:read'  =>  "Articles marcats" , 
-	 'bookmarks:friends'  =>  "Enllaços de les teves amistats" , 
-	 'bookmarks:everyone'  =>  "Tots els enllaços" , 
-	 'bookmarks:this'  =>  "Marcar com a enllaç" , 
-	 'bookmarks:bookmarklet'  =>  "Obtenir marcadors" , 
-	 'bookmarks:inbox'  =>  "Entrades d'enllaços" , 
-	 'bookmarks:more'  =>  "Més enllaços" , 
-	 'bookmarks:shareditem'  =>  "Articles marcats" , 
-	 'bookmarks:with'  =>  "Compartir informació" , 
-	 'bookmarks:address'  =>  "Adreça dels recursos dels enllaços" , 
-	 'bookmarks:delete:confirm'  =>  "Estàs segura que vols eliminar aquest recurs?" , 
-	 'bookmarks:shared'  =>  "Afegit a enllaços" , 
-	 'bookmarks:visit'  =>  "Visitar el recurs" , 
-	 'bookmarks:recent'  =>  "Enllaços recents" , 
-	 'bookmarks:river:created'  =>  "%s marca com a enllaç" , 
-	 'bookmarks:river:annotate'  =>  "un comentari en" , 
-	 'bookmarks:river:item'  =>  "un article" , 
-	 'item:object:bookmarks'  =>  "Articles marcats" , 
-	 'bookmarks:widget:description'  =>  "Aquest component esta dissenyat per la interfície del teu escriptori i mostrarà les entrades als articles favorits que creguis necessari" , 
-	 'bookmarks:bookmarklet:description'  =>  "Els enllaços permeten compartir qualsevol recurs de la web de forma ràpida i senzilla, amb les teves amistats. Per fer-lo, mou-lo a través del navegador a la zona:" , 
-	 'bookmarks:bookmarklet:descriptionie'  =>  "Si estàs fent servir Internet Explorer, necessitaràs clicar el botó dret de la icona marcador i seleccionar \"afegir a enllaços\" indicant el link corresponent" , 
-	 'bookmarks:bookmarklet:description:conclusion'  =>  "Pots enregistrar qualsevol pàgina que visitis clicant en qualsevol moment" , 
-	 'bookmarks:save:success'  =>  "El teu article ha estat marcat correctament." , 
-	 'bookmarks:delete:success'  =>  "El teu article ha estat eliminat correctament" , 
-	 'bookmarks:save:failed'  =>  "El teu article marcat no es pot enregistrar, intenta-ho de nou." , 
-	 'bookmarks:delete:failed'  =>  "El teu article marcat no pot ser eliminat, intenta-ho de nou." , 
-	 'bookmarks:this:group'  =>  "Afegit el %s" , 
-	 'bookmarks:bookmarklet:group'  =>  "Obtenir bookmarklet del grup" , 
-	 'bookmarks:new'  =>  "Un nou objecte marcat" , 
-	 'bookmarks:via'  =>  "via marcadors" , 
-	 'bookmarks:numbertodisplay'  =>  "Nombre d'enllaços a mostrar" , 
-	 'bookmarks:group'  =>  "Enllaços del grup" , 
-	 'bookmarks:enablebookmarks'  =>  "Habilitar marcadors de grups" , 
-	 'bookmarks:morebookmarks'  =>  "Més enllaços" , 
-	 'groups:enablebookmarks'  =>  "Habilitar enllaços del grup" , 
-	 'bookmarks:nogroup'  =>  "Aquest grup no té cap enllaç encara"
-); 
+	'bookmarks:notify:summary' => '´Nou enllaç anomenat %s',
+	'bookmarks:notify:subject' => 'Nou enllaç: %s',
+	'bookmarks:notify:body' =>
+'%s ha afagit un nou enllaç: %s
 
-add_translation('ca', $catalan); 
+Adreça: %s
 
-?>
+%s
+
+Veure i afegir comentaris a l\'enllaç:
+%s
+',
+
+	'bookmarks:delete:confirm' => "Estàs segur que vols esborrar aquest recurs?",
+
+	'bookmarks:numbertodisplay' => 'Nombre d\'elements marcats com adreces d\'interès a mostrar',
+
+	'bookmarks:shared' => "Afegit com adreça d'interès",
+	'bookmarks:visit' => "Visitar el recurs",
+	'bookmarks:recent' => "Adreces d'interès recents",
+
+	'river:create:object:bookmarks' => '%s ha enllaçat %s',
+	'river:comment:object:bookmarks' => '%s ha comentat l\'enllaç %s',
+	'bookmarks:river:annotate' => 'un comentari per aquest element marcat com adreça d\'interés',
+	'bookmarks:river:item' => 'un element',
+
+	'item:object:bookmarks' => 'elements marcats com adreces d\'interés',
+
+	'bookmarks:group' => 'Adreces',
+	'bookmarks:enablebookmarks' => 'Activa l\'agrupació d\'adreces d\'interés',
+	'bookmarks:nogroup' => 'Aquest grup no té cap enllaç encara',
+	
+	/**
+	 * Widget and bookmarklet
+	 */
+	'bookmarks:widget:description' => "Aquest giny mostra les darreres adreces d'interés",
+
+	'bookmarks:bookmarklet:description' =>
+			"El marcador dinàmic de les adreces d'interès et permet compartir qualsevol recurs que trobis a la xarxa amb les teves amistats, o simplement marcar-los per a tu mateix/a. Utilitza'ls, simplement arrossega el botó a la teva barra de direcció:",
+
+	'bookmarks:bookmarklet:descriptionie' =>
+			"Si estàs fent servir Internet Explorer, hauràs de fer botó dret sobre la icona del marcador dinàmic, escollir 'afegir a adreces d'interès' i aleshores a la barra d'enllaços.",
+
+	'bookmarks:bookmarklet:description:conclusion' =>
+			"Aleshores podràs desar qualsevol pàgina que visitis simplement prement-la cada cop.",
+
+	/**
+	 * Status messages
+	 */
+
+	'bookmarks:save:success' => "S'ha afegit correctament.",
+	'bookmarks:delete:success' => "S'ha esborrat correctament.",
+
+	/**
+	 * Error messages
+	 */
+
+	'bookmarks:save:failed' => "No es pot desar l'adreça interés. Siusplau, torna-ho a provar.",
+	'bookmarks:save:invalid' => "L'enllaç és invàlid i no es pot guardar.",
+	'bookmarks:delete:failed' => "No es pot esborrar l'adreça d'interés. Siusplau, torna-ho a provar.",
+	'bookmarks:unknown_bookmark' => 'No es pot trobar l\'enllaç especificat.',
+);

@@ -19,12 +19,9 @@ $content .= elgg_list_entities(array(
 	'subtype' => 'bookmarks',
 	'container_guid' => $page_owner->guid,
 	'full_view' => false,
-	'view_toggle_type' => false
+	'view_toggle_type' => false,
+	'no_results' => elgg_echo('bookmarks:none'),
 ));
-
-if (!$content) {
-	$content = elgg_echo('bookmarks:none');
-}
 
 $title = elgg_echo('bookmarks:owner', array($page_owner->name));
 
