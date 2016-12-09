@@ -35,14 +35,12 @@ function file_init() {
 	elgg_register_widget_type('filerepo', elgg_echo("file"), elgg_echo("file:widget:description"));
 
 	// Register URL handlers for files
-	elgg_register_entity_url_handler('object', 'file', 'file_url_override');
-	elgg_register_plugin_hook_handler('entity:icon:url', 'object', 'file_icon_url_override');
+	elgg_register_plugin_hook_handler('entity:url', 'object', 'file_set_url');
+	elgg_register_plugin_hook_handler('entity:icon:url', 'object', 'file_set_icon_url');
 
-	// Register granular notification for this object type
-	register_notification_object('object', 'file', elgg_echo('file:newupload'));
-
-	// Listen to notification events and supply a more useful message
-	elgg_register_plugin_hook_handler('notify:entity:message', 'object', 'file_notify_message');
+	// Register for notifications
+	elgg_register_notification_event('object', 'file', array('create'));
+	elgg_register_plugin_hook_handler('prepare', 'notification:create:object:file', 'file_prepare_notification');
 
 	// add the group files tool option
 	add_group_tool_option('file', elgg_echo('groups:enablefiles'), true);
@@ -121,10 +119,6 @@ function file_page_handler($page) {
 			file_register_toggle();
 			include "$file_dir/friends.php";
 			break;
-		case 'read': // Elgg 1.7 compatibility
-			register_error(elgg_echo("changebookmark"));
-			forward("file/view/{$page[1]}");
-			break;
 		case 'view':
 			set_input('guid', $page[1]);
 			include "$file_dir/view.php";
@@ -189,29 +183,34 @@ function file_register_toggle() {
 }
 
 /**
- * Creates the notification message body
+ * Prepare a notification message about a new file
  *
- * @param string $hook
- * @param string $entity_type
- * @param string $returnvalue
- * @param array  $params
+ * @param string                          $hook         Hook name
+ * @param string                          $type         Hook type
+ * @param Elgg_Notifications_Notification $notification The notification to prepare
+ * @param array                           $params       Hook parameters
+ * @return Elgg_Notifications_Notification
  */
-function file_notify_message($hook, $entity_type, $returnvalue, $params) {
-	$entity = $params['entity'];
-	$to_entity = $params['to_entity'];
+function file_prepare_notification($hook, $type, $notification, $params) {
+	$entity = $params['event']->getObject();
+	$owner = $params['event']->getActor();
+	$recipient = $params['recipient'];
+	$language = $params['language'];
 	$method = $params['method'];
-	if (($entity instanceof ElggEntity) && ($entity->getSubtype() == 'file')) {
-		$descr = $entity->description;
-		$title = $entity->title;
-		$owner = $entity->getOwnerEntity();
-		return elgg_echo('file:notification', array(
-			$owner->name,
-			$title,
-			$descr,
-			$entity->getURL()
-		));
-	}
-	return null;
+
+	$descr = $entity->description;
+	$title = $entity->title;
+
+	$notification->subject = elgg_echo('file:notify:subject', array($entity->title), $language);
+	$notification->body = elgg_echo('file:notify:body', array(
+		$owner->name,
+		$title,
+		$descr,
+		$entity->getURL()
+	), $language);
+	$notification->summary = elgg_echo('file:notify:summary', array($entity->title), $language);
+
+	return $notification;
 }
 
 /**
@@ -241,40 +240,38 @@ function file_owner_block_menu($hook, $type, $return, $params) {
  */
 function file_get_simple_type($mimetype) {
 
+	$simple_type = null;
+
 	switch ($mimetype) {
 		case "application/msword":
 		case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
-			return "document";
+			$simple_type = "document";
 			break;
 		case "application/pdf":
-			return "document";
+			$simple_type = "document";
 			break;
 		case "application/ogg":
-			return "audio";
+			$simple_type = "audio";
+			break;
+		default:
+			if (substr_count($mimetype, 'text/')) {
+				$simple_type = "document";
+			} elseif (substr_count($mimetype, 'audio/')) {
+				$simple_type = "audio";
+			} elseif (substr_count($mimetype, 'image/')) {
+				$simple_type = "image";
+			} elseif (substr_count($mimetype, 'video/')) {
+				$simple_type = "video";
+			} elseif (substr_count($mimetype, 'opendocument')) {
+				$simple_type = "document";
+			} else {
+				$simple_type = "general";
+			}
 			break;
 	}
 
-	if (substr_count($mimetype, 'text/')) {
-		return "document";
-	}
-
-	if (substr_count($mimetype, 'audio/')) {
-		return "audio";
-	}
-
-	if (substr_count($mimetype, 'image/')) {
-		return "image";
-	}
-
-	if (substr_count($mimetype, 'video/')) {
-		return "video";
-	}
-
-	if (substr_count($mimetype, 'opendocument')) {
-		return "document";
-	}
-
-	return "general";
+	$params = array('mime_type' => $mimetype);
+	return elgg_trigger_plugin_hook('simple_type', 'file', $params, $simple_type);
 }
 
 // deprecated and will be removed
@@ -293,11 +290,12 @@ function get_general_file_type($mimetype) {
 function file_get_type_cloud($container_guid = "", $friends = false) {
 
 	$container_guids = $container_guid;
+	$container = get_entity($container_guid);
 
-	if ($friends) {
+	if ($friends && $container) {
 		// tags interface does not support pulling tags on friends' content so
 		// we need to grab all friends
-		$friend_entities = get_user_friends($container_guid, "", 999999, 0);
+		$friend_entities = $container->getFriends(array('limit' => 0));
 		if ($friend_entities) {
 			$friend_guids = array();
 			foreach ($friend_entities as $friend) {
@@ -334,13 +332,18 @@ function get_filetype_cloud($owner_guid = "", $friends = false) {
 /**
  * Populates the ->getUrl() method for file objects
  *
- * @param ElggEntity $entity File entity
+ * @param string $hook
+ * @param string $type
+ * @param string $url
+ * @param array  $params
  * @return string File URL
  */
-function file_url_override($entity) {
-	$title = $entity->title;
-	$title = elgg_get_friendly_title($title);
-	return "file/view/" . $entity->getGUID() . "/" . $title;
+function file_set_url($hook, $type, $url, $params) {
+	$entity = $params['entity'];
+	if (elgg_instanceof($entity, 'object', 'file')) {
+		$title = elgg_get_friendly_title($entity->title);
+		return "file/view/" . $entity->getGUID() . "/" . $title;
+	}
 }
 
 /**
@@ -348,9 +351,13 @@ function file_url_override($entity) {
  *
  * Plugins can override or extend the icons using the plugin hook: 'file:icon:url', 'override'
  *
+ * @param string $hook
+ * @param string $type
+ * @param string $url
+ * @param array  $params
  * @return string Relative URL
  */
-function file_icon_url_override($hook, $type, $returnvalue, $params) {
+function file_set_icon_url($hook, $type, $url, $params) {
 	$file = $params['entity'];
 	$size = $params['size'];
 	if (elgg_instanceof($file, 'object', 'file')) {
@@ -408,7 +415,7 @@ function file_icon_url_override($hook, $type, $returnvalue, $params) {
 		} else {
 			$ext = '';
 		}
-		
+
 		$url = "mod/file/graphics/icons/{$type}{$ext}.gif";
 		$url = elgg_trigger_plugin_hook('file:icon:url', 'override', $params, $url);
 		return $url;

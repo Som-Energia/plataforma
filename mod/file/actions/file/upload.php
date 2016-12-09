@@ -19,9 +19,11 @@ if ($container_guid == 0) {
 
 elgg_make_sticky_form('file');
 
-// check if upload failed
+// check if upload attempted and failed
 if (!empty($_FILES['upload']['name']) && $_FILES['upload']['error'] != 0) {
-	register_error(elgg_echo('file:cannotload'));
+	$error = elgg_get_friendly_upload_error($_FILES['upload']['error']);
+
+	register_error($error);
 	forward(REFERER);
 }
 
@@ -93,7 +95,8 @@ if (isset($_FILES['upload']['name']) && !empty($_FILES['upload']['name'])) {
 	}
 
 	$file->setFilename($prefix . $filestorename);
-	$mime_type = ElggFile::detectMimeType($_FILES['upload']['tmp_name'], $_FILES['upload']['type']);
+	$file->originalfilename = $_FILES['upload']['name'];
+	$mime_type = $file->detectMimeType($_FILES['upload']['tmp_name'], $_FILES['upload']['type']);
 
 	// hack for Microsoft zipped formats
 	$info = pathinfo($_FILES['upload']['name']);
@@ -118,7 +121,6 @@ if (isset($_FILES['upload']['name']) && !empty($_FILES['upload']['name'])) {
 	}
 
 	$file->setMimeType($mime_type);
-	$file->originalfilename = $_FILES['upload']['name'];
 	$file->simpletype = file_get_simple_type($mime_type);
 
 	// Open the file to guarantee the directory exists
@@ -131,7 +133,7 @@ if (isset($_FILES['upload']['name']) && !empty($_FILES['upload']['name'])) {
 	// if image, we need to create thumbnails (this should be moved into a function)
 	if ($guid && $file->simpletype == "image") {
 		$file->icontime = time();
-		
+
 		$thumbnail = get_resized_image_from_existing_file($file->getFilenameOnFilestore(), 60, 60, true);
 		if ($thumbnail) {
 			$thumb = new ElggFile();
@@ -168,17 +170,17 @@ if (isset($_FILES['upload']['name']) && !empty($_FILES['upload']['name'])) {
 	} elseif ($file->icontime) {
 		// if it is not an image, we do not need thumbnails
 		unset($file->icontime);
-		
+
 		$thumb = new ElggFile();
-		
+
 		$thumb->setFilename($prefix . "thumb" . $filestorename);
 		$thumb->delete();
 		unset($file->thumbnail);
-		
+
 		$thumb->setFilename($prefix . "smallthumb" . $filestorename);
 		$thumb->delete();
 		unset($file->smallthumb);
-		
+
 		$thumb->setFilename($prefix . "largethumb" . $filestorename);
 		$thumb->delete();
 		unset($file->largethumb);
@@ -197,7 +199,12 @@ if ($new_file) {
 	if ($guid) {
 		$message = elgg_echo("file:saved");
 		system_message($message);
-		add_to_river('river/object/file/create', 'create', elgg_get_logged_in_user_guid(), $file->guid);
+		elgg_create_river_item(array(
+			'view' => 'river/object/file/create',
+			'action_type' => 'create',
+			'subject_guid' => elgg_get_logged_in_user_guid(),
+			'object_guid' => $file->guid,
+		));
 	} else {
 		// failed to save file object - nothing we can do about this
 		$error = elgg_echo("file:uploadfailed");

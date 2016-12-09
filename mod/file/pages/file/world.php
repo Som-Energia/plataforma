@@ -14,14 +14,12 @@ $title = elgg_echo('file:all');
 $content = elgg_list_entities(array(
 	'type' => 'object',
 	'subtype' => 'file',
-	'full_view' => FALSE
+	'full_view' => false,
+	'no_results' => elgg_echo("file:none"),
 ));
-if (!$content) {
-	$content = elgg_echo('file:none');
-}
 
 $sidebar = file_get_type_cloud();
-$sidebar = elgg_view('file/sidebar');
+$sidebar .= elgg_view('file/sidebar');
 
 $body = elgg_view_layout('content', array(
 	'filter_context' => 'all',

@@ -6,7 +6,7 @@
  */
 
 // access check for closed groups
-group_gatekeeper();
+elgg_group_gatekeeper();
 
 $owner = elgg_get_page_owner_entity();
 if (!$owner) {
@@ -39,14 +39,12 @@ $content = elgg_list_entities(array(
 	'type' => 'object',
 	'subtype' => 'file',
 	'container_guid' => $owner->guid,
-	'full_view' => FALSE,
+	'full_view' => false,
+	'no_results' => elgg_echo("file:none"),
 ));
-if (!$content) {
-	$content = elgg_echo("file:none");
-}
 
 $sidebar = file_get_type_cloud(elgg_get_page_owner_guid());
-$sidebar = elgg_view('file/sidebar');
+$sidebar .= elgg_view('file/sidebar');
 
 $params['content'] = $content;
 $params['title'] = $title;
