@@ -1,17 +1,8 @@
 <?php
-
-	$spanish = array(
-	
-			'custom:bookmarks' => "Últimos favoritos",
-			'custom:groups' => "Últimos grupos",
-			'custom:files' => "Últimos ficheros subidos",
-			'custom:blogs' => "Últimas entradas",
-			'custom:members' => "Nuevos miembros de la red",
-			'custom:nofiles' => "No existen ficheros todavia",
-			'custom:nogroups' => "No existen grupos todavia",	
-	
-	);
-					
-	add_translation("es",$spanish);
-
-?>
+return array(	
+	'custom:bookmarks' => "&uacute;ltimos marcadores",
+	'custom:groups' => "&uacute;ltimos grupos",
+	'custom:files' => "&uacute;ltimos archivos",
+	'custom:blogs' => "&uacute;ltimos blogs",
+	'custom:members' => "Nuevos miembros",
+);

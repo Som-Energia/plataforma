@@ -1,10 +1,10 @@
 <?php
 /**
  * Elgg custom index layout
- * 
- * You can edit the layout of this page with your own layout and style. 
+ *
+ * You can edit the layout of this page with your own layout and style.
  * Whatever you put in this view will appear on the front page of your site.
- * 
+ *
  */
 
 $mod_params = array('class' => 'elgg-module-highlight');
@@ -12,8 +12,8 @@ $mod_params = array('class' => 'elgg-module-highlight');
 ?>
 
 <div class="custom-index elgg-main elgg-grid clearfix">
-	<div class="elgg-col elgg-col-1of2">
-		<div class="elgg-inner pvm prl">
+	<div class="elgg-col elgg-col-1of2 custom-index-col1">
+		<div class="elgg-inner pvm">
 <?php
 // left column
 
@@ -42,7 +42,7 @@ if (elgg_is_active_plugin('groups')) {
 ?>
 		</div>
 	</div>
-	<div class="elgg-col elgg-col-1of2">
+	<div class="elgg-col elgg-col-1of2 custom-index-col2">
 		<div class="elgg-inner pvm">
 <?php
 // right column
