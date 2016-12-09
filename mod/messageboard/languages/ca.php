@@ -1,47 +1,70 @@
 <?php
 
-// Generado por translationbrowser 
+return array(
 
-$catalan = array( 
-	 'messageboard:board'  =>  "Tauler d'anuncis" , 
-	 'messageboard:messageboard'  =>  "Tauler d'anuncis" , 
-	 'messageboard:viewall'  =>  "Veure tots" , 
-	 'messageboard:postit'  =>  "Publicar" , 
-	 'messageboard:history'  =>  "història" , 
-	 'messageboard:none'  =>  "No hi ha res en aquest tauler d'anuncis, encara" , 
-	 'messageboard:num_display'  =>  "Nombre de missatges a veure" , 
-	 'messageboard:desc'  =>  "Aquest és un tauler d'anuncis que pots posar en el teu perfil i on altres persones usuàries poden deixar un comentari." , 
-	 'messageboard:user'  =>  "Tauler d'anuncis de %s" , 
-	 'messageboard:replyon'  =>  "Donar resposta a" , 
-	 'messageboard:river:annotate'  =>  "%s tens un comentari nou en el teu tauler d'anuncis. " , 
-	 'messageboard:river:create'  =>  "%s ha afegit el widget de tauler d'anuncis." , 
-	 'messageboard:river:update'  =>  "%s has actualitzat el teu widget en el tauler d'anuncis. " , 
-	 'messageboard:river:added'  =>  "%s ha escrit un missatge a" , 
-	 'messageboard:river:messageboard'  =>  "tauler d'anuncis" , 
-	 'messageboard:posted'  =>  "El comentari ha estat publicat correctament en el tauler d'anuncis." , 
-	 'messageboard:deleted'  =>  "El comentari ha estat esborrat." , 
-	 'messageboard:email:subject'  =>  "Tens un missatge nou en el tauler d'anuncis!" , 
-	 'messageboard:email:body'  =>  "%s t'ha deixat el següent comentari:
+	/**
+	 * Menu items and titles
+	 */
+
+	'messageboard:board' => "Safata de comentaris",
+	'messageboard:messageboard' => "safata de comentaris",
+	'messageboard:viewall' => "Veure tots",
+	'messageboard:postit' => "Nou",
+	'messageboard:history:title' => "Historial",
+	'messageboard:none' => "No hi ha cap comentari a la teva safata",
+	'messageboard:num_display' => "Nombre de comentaris a mostrar",
+	'messageboard:desc' => "Aquesta és la safata dels comentaris. Qualsevol, fins i tot tu, pot deixar un missatge al teu perfil.",
+
+	'messageboard:user' => "a la safata personal de %s",
+
+	'messageboard:replyon' => 'respondre a',
+	'messageboard:history' => "Historial",
+
+	'messageboard:owner' => 'Safata personal de %s',
+	'messageboard:owner_history' => 'Comentaris de %s a la safata personal de %s',
+
+	/**
+	 * Message board widget river
+	 */
+	'river:messageboard:user:default' => "%s ha comentat a la safata personal de %s",
+
+	/**
+	 * Status messages
+	 */
+
+	'messageboard:posted' => "S'ha escrit el comentari",
+	'messageboard:deleted' => "S'ha esborrat el comentari",
+
+	/**
+	 * Email messages
+	 */
+
+	'messageboard:email:subject' => 'Tens un nou comentari a la safata',
+	'messageboard:email:body' => "%s t'ha deixat aquest comentari:
+
 
 %s
 
-Per veure els comentaris en el teu tauler d'anuncis, fes click en el següent link:
+
+Per a veure els comentaris de la teva safata de missatges, prem en aquest vincle:
 
 %s
 
-Per consultar el perfil de %s, fes click en aquest link:
+Per a consultar el perfil de %s, prem en aquest altre:
 
 %s
 
-No donis resposta a aquest email." , 
-	 'messageboard:blank'  =>  "Necessites posar alguna cosa en l'àrea de missatge abans d'enviar-ho." , 
-	 'messageboard:notfound'  =>  "No s'ha trobat l'element especificat." , 
-	 'messageboard:notdeleted'  =>  "El missatge no ha pogut esborrar-se." , 
-	 'messageboard:somethingwentwrong'  =>  "Alguna cosa estranya ha passat. Prova de nou o posa't en contacte amb l'equip administrador." , 
-	 'messageboard:failure'  =>  "S'ha produit un error en el moment d'afegir el teu missatge. Prova de nou. " , 
-	 'messageboard:history:title'  =>  "Història"
-); 
+Siusplau, no responguis aquest correu electrònic, recorda que és el sistema qui te l'ha enviat per art de màgia. Si tens algun problema o comentari sobre la xarxa, posa't en contacte amb les/les administrador/es.",
 
-add_translation('ca', $catalan); 
+	/**
+	 * Error messages
+	 */
 
-?>
+	'messageboard:blank' => "Has de posar alguna cosa a la safata de comentaris abans d'enviar-ho, sinó anem malament!",
+	'messageboard:notfound' => "mmm, no trobo el què em dius. Torna-ho a provar o posa't en contacte amb els/les administradors/es.",
+	'messageboard:notdeleted' => "No s'ha pogut esborrar el comentari, torna-ho a provar o posa't en contacte amb els/les administradors/es.",
+	'messageboard:somethingwentwrong' => "Avui no és el teu dia de sort, això està fent coses estranyes. Torna-ho a provar o posa't en contacte amb els/les administradors/es.",
+
+	'messageboard:failure' => "Error xungo, el sistema no en té ni idea de què està passant. Torna-ho a provar o posa't en contacte amb els/les administradors/es.",
+
+);

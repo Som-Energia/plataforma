@@ -1,68 +1,68 @@
 <?php
 
-$spanish = array( 
+return array(
+
 	/**
 	 * Menu items and titles
 	 */
-	'messageboard:board' => "Muro",
-	'messageboard:messageboard' => "muro",
+
+	'messageboard:board' => "Tabl&oacute;n de mensajes",
+	'messageboard:messageboard' => "tabl&oacute;n de mensajes",
 	'messageboard:viewall' => "Ver todo",
-	'messageboard:postit' => "Publicar",
+	'messageboard:postit' => "Post",
 	'messageboard:history:title' => "Historial",
-	'messageboard:none' => "A&uacute;n no hay nada en este muro",
-	'messageboard:num_display' => "Mensajes a mostra",
-	'messageboard:desc' => "Esto es un muro en el cual pueden comentar otros usuarios y tu puedes comentar en el de otros a la vez.",
+	'messageboard:none' => "No hay nada en este tabl&oacute;n de mensajes",
+	'messageboard:num_display' => "N&uacute;mero de mensajes a mostrar",
+	'messageboard:desc' => "este es un tabl&oacute;n de mensajes en el que puedes poner contenido y otros usuarios pueden comentar.",
 
-	'messageboard:user' => "Muro de %s",
+	'messageboard:user' => "Tabl&oacute;n de mensajes de %s",
 
-	'messageboard:replyon' => 'responder',
+	'messageboard:replyon' => 'responder en',
 	'messageboard:history' => "historial",
 
-	'messageboard:owner' => 'muro de %s',
-	'messageboard:owner_history' => '%s coment&oacute; en el muro de %s',
+	'messageboard:owner' => 'Tabl&oacute;n de mensajes de %s',
+	'messageboard:owner_history' => 'Posts de %s en el tabl&oacute;n de mensajes %s',
 
 	/**
 	 * Message board widget river
 	 */
-	'river:messageboard:user:default' => "%s coment&oacute; en el muro de %s",
+	'river:messageboard:user:default' => "%s ha publicado en el tabl&oacute;n de mensajes %s",
 
 	/**
 	 * Status messages
 	 */
-	'messageboard:posted' => "Comentario en el muro agregado.",
-	'messageboard:deleted' => "Comentario eliminado.",
+
+	'messageboard:posted' => "Se ha publicado en tu tabl&oacute;n de mensajes exitosamente.",
+	'messageboard:deleted' => "Se ha borrado el mensaje.",
 
 	/**
 	 * Email messages
 	 */
-	'messageboard:email:subject' => 'Tienes un nuevo mensaje en el muro!',
-	'messageboard:email:body' => "Tienes un nuevo comentario en el muro de %s. Dice:
+
+	'messageboard:email:subject' => 'Tienes nuevos comentarios en el tabl&oacute;n de mensajes',
+	'messageboard:email:body' => "Tienes comentarios en tu tabl&oacute;n de mensajes %s. Leelo:
 
 %s
 
-
-Par ver los comentarios del muro, haz click aqu&iacute;:
-
-	%s
-
-Para ver el perfil de %s, haz click aqu&iacute;:
+Para ver los comentarios en tu tabl&oacute;n de mensajes, haz click a continuaci&oacute;n:
 
 	%s
 
-Por favor, no responda a este mail.",
+Para ver el perfil de %s, haz click a continuaci&oacute;n:
+
+	%s
+
+No se puede responder a este email.",
 
 	/**
 	 * Error messages
 	 */
-	'messageboard:blank' => "Lo sentimos, debe ingresar contenido en el &aacute;rea de mensaje para poder grabar.",
-	'messageboard:notfound' => "Lo sentimos, no se pudo encontrar el item especificado.",
-	'messageboard:notdeleted' => "Lo sentimos, no se pudo eliminar el mensaje.",
-	'messageboard:somethingwentwrong' => "Aseg&uacute;rese de haber escrito un mensaje.",
 
-	'messageboard:failure' => "Ha ocurrido un error inesperado al intentar publicar el mensaje, por favor intente nuevamente",
+	'messageboard:blank' => "Es necesario poner algo en el campo del mensaje antes de guardar.",
+	'messageboard:notfound' => "No se pudo encontrar el elemento especificado.",
+	'messageboard:notdeleted' => "No se pudo borrar este mensaje.",
+	'messageboard:somethingwentwrong' => "Algo sali&oacute; mal al guardar el mensaje. Aseg&uacute;rate de haberlo escrito.",
+
+	'messageboard:failure' => "Ocurri&oacute; un error desconocido al guardar el mensaje. Intenta de nuevo.",
 
 );
-
-add_translation('es', $spanish); 
-
-?>
