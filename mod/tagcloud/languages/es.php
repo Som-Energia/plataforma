@@ -1,12 +1,8 @@
 <?php
-/**
- * Tag cloud English language file
- */
-
-$spanish = array(
-	'tagcloud:widget:title' => 'Nube de Tags',
-	'tagcloud:widget:description' => 'Nube de Tags',
-	'tagcloud:widget:numtags' => 'Cantidad de tags a mostrar',
+return array(
+	'tagcloud:widget:title' => 'Nube de etiquetas',
+	'tagcloud:widget:description' => 'Nube de etiquetas',
+	'tagcloud:widget:numtags' => 'N&uacute;mero de etiquetas a mostrar',
+	'tagcloud:site_cloud' => 'Nube de Tags del Sitio',
+	'tagcloud:allsitetags' => 'Tags de todo el sitio',
 );
-
-add_translation('es', $spanish);
