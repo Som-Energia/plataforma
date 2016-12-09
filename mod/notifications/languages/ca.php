@@ -1,23 +1,24 @@
 <?php
 
-// Generat per la traducció del navegador 
+return array(
 
-$catalan = array( 
-	 'friends:all'  =>  "Totes les amistats" , 
-	 'notifications:subscriptions:personal:description'  =>  "Rep notificacions quan hi hagi modificacions de contingut" , 
-	 'notifications:subscriptions:personal:title'  =>  "Notificacions personals" , 
-	 'notifications:subscriptions:collections:title'  =>  "Configuració de les notificacions de les amistats i dels llistats d'amistats creats" , 
-	 'notifications:subscriptions:collections:edit'  =>  "Per editar els llistats d'amistats que has creat, clica aquí" , 
-	 'notifications:subscriptions:changesettings'  =>  "Notificacions" , 
-	 'notifications:subscriptions:changesettings:groups'  =>  "Notificacions del grup" , 
-	 'notification:method:email'  =>  "Email" , 
-	 'notifications:subscriptions:title'  =>  "Notificacions per persona usuària" , 
-	 'notifications:subscriptions:success'  =>  "Les característiques de les teves notificacions s`'han desat correctament." , 
-	 'notifications:subscriptions:collections:description'  =>  "Determina les notificacions que rebràs de les teves amistats o llistats d'amistats que  has creat." , 
-	 'notifications:subscriptions:description'  =>  "Rep notificacions quan les teves amistats creïn nous continguts a la xarxa; selecciona les teves amistats aquí sota i configura el tipus de notificacions que t'agradaria." , 
-	 'notifications:subscriptions:groups:description'  =>  "Rep notificacions quan s'incorpori nou contingut en els teus grups; selecciona'ls aquí sota i configura el tipus de notificacions que t'agradaria."
-); 
+	'friends:all' => 'Totes les teves amistats',
 
-add_translation('ca', $catalan); 
+	'notifications:subscriptions:personal:description' => 'Rebre notificacions quan es modifiquin els teus continguts',
+	'notifications:subscriptions:personal:title' => 'Notificacions personals',
 
-?>
+	'notifications:subscriptions:friends:title' => 'Contactes',
+	'notifications:subscriptions:friends:description' => 'Això és una col·lecció automàtica de les teves amigues. Per rebre actualitzacions, selecciona-ho a sota. Això afectarà les usuàries que corresponguin amb el panell principal de notificacions al final de la pàgina.',
+	'notifications:subscriptions:collections:edit' => 'Modifica les opcions de les amistats',
+
+	'notifications:subscriptions:changesettings' => 'Notificacions',
+	'notifications:subscriptions:changesettings:groups' => 'Notificacions de grup',
+
+	'notifications:subscriptions:title' => 'Notificacions per usuaris',
+	'notifications:subscriptions:description' => 'Per a rebe notificacions quan les teves amistats creïn nou contingut, cerca\'ls per la xarxa i escull el tipus de notificació que vols rebre.',
+
+	'notifications:subscriptions:groups:description' => 'Per a rebre notificacions quan s\'afegeixi nou contingut a un grup del que en formes part, cerca\'l i escull el tipus de notificació que vols rebre',
+
+	'notifications:subscriptions:success' => 'La teva configuració de notificacions s\'ha desat correctament.',
+
+);

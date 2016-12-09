@@ -1,7 +1,7 @@
 <?php
 /**
  * Elgg notifications CSS
- * 
+ *
  * @package notifications
  */
 ?>
@@ -23,7 +23,7 @@
 #notificationstable td.namefield a img {
 	float:left;
 	width:25px;
-	height:25px; 
+	height:25px;
 	margin:5px 10px 5px 5px;
 }
 #notificationstable td.emailtogglefield,
@@ -47,7 +47,6 @@
 	height:24px;
 	cursor: pointer;
 	display: block;
-	outline: none;
 }
 #notificationstable td.sitetogglefield {
 	width:50px;
@@ -63,7 +62,6 @@
 	height:24px;
 	cursor: pointer;
 	display: block;
-	outline: none;
 }
 #notificationstable td.emailtogglefield a.emailtoggleOff {
 	background: url(<?php echo elgg_get_site_url(); ?>mod/notifications/graphics/icon_notifications_email.gif) no-repeat right 2px;

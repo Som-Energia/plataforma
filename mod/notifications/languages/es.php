@@ -1,27 +1,24 @@
 <?php
 
-$spanish = array(
+return array(
 
 	'friends:all' => 'Todos los amigos',
 
-	'notifications:subscriptions:personal:description' => 'Recibir notificaciones cuando se modifiquen tus contenidos',
+	'notifications:subscriptions:personal:description' => 'Recibir notificaciones por acciones hechas en tus contenidos',
 	'notifications:subscriptions:personal:title' => 'Notificaciones personales',
 
 	'notifications:subscriptions:friends:title' => 'Amigos',
-	'notifications:subscriptions:friends:description' => 'La siguiente es una colecci&oacute;n autom&aacute;tica de sus amigos. Para recibir actualizaciones selecciona debajo. Esto afectar&aacute; a los usuarios que se corresopndan con el panel principal de notificaciones al final de la p&aacute;gina',
-	'notifications:subscriptions:collections:edit' => 'Para habilitar notificaciones compartidas haga click aqu&iacute;',
+	'notifications:subscriptions:friends:description' => 'A continuaci&oacute;n est&aacute; la colecci&oacute;n de amigos. Seleccionar una colecci&oacute; habilitar&aacute; las notificaciones de los amigos en esa colecci&oacute;n.',
+	'notifications:subscriptions:collections:edit' => 'Para habilitar el acceso compartido a la notificaciones, haz click aqu&iacute;.',
 
-	'notifications:subscriptions:changesettings' => 'Notificaciones',
-	'notifications:subscriptions:changesettings:groups' => 'Notificaciones de grupos',
-	'notification:method:email' => 'Email',	
+	'notifications:subscriptions:changesettings' => 'Notificationes',
+	'notifications:subscriptions:changesettings:groups' => 'Notificationes de Grupos',
 
-	'notifications:subscriptions:title' => 'Notificaciones por usuario',
-	'notifications:subscriptions:description' => 'Para recibir noticificaciones de tus amigos cuando crean nuevo contenido, b&uacute;scalos en la red y selecciona el tipo de notificaci&oacute;n que quieres recibir',
+	'notifications:subscriptions:title' => 'Notificationes por usuario',
+	'notifications:subscriptions:description' => 'Para recibir notificaciones de tus amigos cuando creen nuevo contenido, busca a continuaci&oacute;n y selecciona las notificaciones que desees recibir.',
 
-	'notifications:subscriptions:groups:description' => 'Para recibir noticificaciones cuando se cree nuevo contenido en grupos en los que eres miembro, b&uacute;scalos en la red y selecciona el tipo de notificaci&oacute;n que quieres recibir',
+	'notifications:subscriptions:groups:description' => 'Para recibir notificaciones de contenidos nuevos de los grupos en el que eres miembro, busca a continuaci&oacute;n y selecciona las notificaciones que desees recibir.',
 
-	'notifications:subscriptions:success' => 'Su configuraci&oacute;n de notificaciones ha sido guardada',
+	'notifications:subscriptions:success' => 'Tu configuraci&oacute;n de notoficaciones ha sido guardada.',
 
 );
-
-add_translation("es", $spanish);
