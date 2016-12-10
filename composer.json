@@ -1,22 +1,10 @@
 {
-    "name": "elgg/elgg",
-    "version": "1.9.8",
-    "description": "Elgg is an award-winning social networking engine, delivering the building blocks that enable businesses, schools, universities and associations to create their own fully-featured social networks and applications.",
+    "name": "SomEnergia/plataforma",
+    "version": "1.2.0",
+    "description": "Plataforma Som Energia",
     "license": "GPL-2.0",
     "type": "project",
     "require": {
-        "php": ">=5.2",
-        "ext-mysql": "*",
-        "ext-gd": "*",
-        "ext-json": "*",
-        "ext-xml": "*"
-    },
-    "suggest": {
-        "ext-mbstring": "*"
-    },
-    "require-dev": {
-        "phpunit/phpunit": "4.1",
-        "elgg/sniffs": "dev-master",
-        "squizlabs/php_codesniffer": "~1.5"
+        "php": ">=5.2"
     }
 }
