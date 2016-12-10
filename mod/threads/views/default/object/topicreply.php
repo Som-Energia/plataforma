@@ -66,9 +66,12 @@ if (get_input('guid') == $entity->guid && get_input('box')) {
 	}
 } elseif ($entity->canAnnotate() && $topic->status != 'closed') {
 	if ($group->canWriteToContainer($user)) {
+            $current_url = current_page_url();
+            $query = ['box' => 'reply', 'guid' => $entity->guid];
+            $reply_url = elgg_http_add_url_query_elements($current_url, $query);
 		echo elgg_view('output/url', array(
 			'text' => elgg_echo('reply'),
-			'href' => current_page_url() . "?box=reply&guid=$entity->guid",
+			'href' => $reply_url,
 			'class' => 'elgg-button elgg-button-submit mtm',
 		));
 	}
