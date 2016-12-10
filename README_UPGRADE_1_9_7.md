@@ -10,7 +10,10 @@
 
 ## 3. Actualización
   1. Subir la actualización.
-  2. Ejecutar upgrade.php desde el navegador
+  2. Actualizar .htacces desde el nuevo htaccess_dist
+  3. Ejecutar upgrade.php desde el navegador
 
 ## 4. Post Actualización
-  
+  1. Activar modo mantenimento
+  2. Ejecutar actualizaciones desde el panel de admin
+  3. Desactivar modo manteniminento  
