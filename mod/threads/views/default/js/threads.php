@@ -1,6 +1,8 @@
 $(function() {
-guid = $.parseQuery(this.href).guid;
-if (guid !== undefined) {
-    $(window).scrollTop($('#reply-topicreply-' + guid).offset().top - 100);
+query = $.parseQuery(this.href);
+guid = query.guid;
+box = query.box;
+if (guid !== undefined && box !== undefined && (box === 'reply' || box === 'edit')) {
+$(window).scrollTop($('#' + box + '-topicreply-' + guid).offset().top - 100);
 }
 });
