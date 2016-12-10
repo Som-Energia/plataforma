@@ -1,15 +1,8 @@
 <?php
 /**
  * Manage subscribe in comment tracker plugin
- * 
- * @package ElggCommentTracker
- * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU Public License version 2
- * @copyright Copyright (c) 2007-2011 Cubet Technologies. (http://cubettechnologies.com)
- * @version 1.0
- * @author Akhilesh @ Cubet Technologies
- * 
- * updated/improved by Matt Beckett
  */
+
 $subscribe = get_input('subscribe', true);
 $entity_guid = get_input('guid');
 $user_guid = get_input('user');

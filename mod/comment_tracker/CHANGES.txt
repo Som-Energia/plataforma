@@ -2,6 +2,21 @@
 
 x.x:
 
+2.0.2 (01/24/2016):
+ - make subscribe button respect the owner notification setting
+
+2.0.1 (10/22/2015):
+ - fix for discussions wsod
+
+2.0.0 (10/22/2015):
+ - Upgrade for Elgg 1.9+
+ - restore auto subscription option that somehow got lost...
+
+1.6 ():
+ - Removes old useless plugin settings
+ - adds support for comment tracker to handle owner notifications
+ - subscribe only to registered entity types
+
 1.5 (07/10/2013):
  - adds better language for large subscription button
  - better styling to associate subscription button to comments

@@ -1,0 +1,21 @@
+{
+    "name": "au/comment_tracker",
+    "type": "elgg-plugin",
+    "description": "Manage notifications/subscriptions for comment threads",
+    "homepage": "https://github.com/AU-Landing-Project/au_widgets",
+    "keywords": ["elgg", "plugin", "comments", "subscriptions", "comment tracker", "AU"],
+    "license": "GPL-2.0",
+    "authors": [
+        {
+            "name": "Matt Beckett",
+            "name": "Juho Jaakkola"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/AU-Landing-Project/comment_tracker/issues"
+    },
+    "require": {
+        "php": ">=5.4",
+        "composer/installers": ">=1.0.8"
+    }
+}

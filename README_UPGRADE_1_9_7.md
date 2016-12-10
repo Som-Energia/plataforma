@@ -7,6 +7,7 @@
 
 ## 2. Pre Actualización
   1. Desactivar mod TinyMCE  
+
 ## 3. Actualización
   1. Subir la actualización.
   2. Ejecutar upgrade.php desde el navegador
