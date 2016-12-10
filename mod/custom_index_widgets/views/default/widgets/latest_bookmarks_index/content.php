@@ -21,7 +21,7 @@
 		'container_guids' => $widget_group,
 		'limit'=>$num_items,
 		'full_view' => false,
-		'view_type_toggle' => false,
+		'list_type_toggle' => false,
 		'pagination' => false));
 } else {
 
@@ -31,7 +31,7 @@
 		'container_guids' => $widget_group,
 		'limit'=>$num_items,
 		'full_view' => false,
-		'view_type_toggle' => false,
+		'list_type_toggle' => false,
 		'pagination' => false,
 		'metadata_name' => 'universal_categories',
 		'metadata_value' => $widget_categorie,

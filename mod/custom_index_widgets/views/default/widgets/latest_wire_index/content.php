@@ -8,7 +8,7 @@
 		'subtype'=>'thewire',
 		'limit'=>$num_items,
 		'full_view' => false,
-		'view_type_toggle' => false,
+		'list_type_toggle' => false,
 		'pagination' => false));
 	
 	echo $widget_datas;
