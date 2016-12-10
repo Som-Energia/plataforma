@@ -15,6 +15,7 @@
 
 ## 4. Post Actualización
   1. Activar mod tydipics
-  2. Ejecutar upgrade.php desde el navegador
-  3. Ejecutar actualizaciones base datos del mod tydipics
-  4. Reconfigurar mod custom_index_widgets
+  2. Activar mod somenergia translations
+  3. Ejecutar upgrade.php desde el navegador
+  4. Ejecutar actualizaciones base datos del mod tydipics
+  5. Reconfigurar mod custom_index_widgets

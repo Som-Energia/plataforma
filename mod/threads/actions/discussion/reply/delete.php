@@ -1,6 +1,8 @@
 <?php
 /**
  * Delete discussion reply
+ *
+ * @override mod/groups/actions/discussion/reply/delete.php
  */
 
 $entity_guid = (int) get_input('entity_guid');
