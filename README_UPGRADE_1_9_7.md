@@ -7,6 +7,7 @@
 
 ## 2. Pre Actualización
   1. Desactivar mod TinyMCE  
+  2. Desactivar mod recaptcha
 
 ## 3. Actualización
   1. Subir la actualización.
