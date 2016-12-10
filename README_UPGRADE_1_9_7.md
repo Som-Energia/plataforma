@@ -17,4 +17,5 @@
 ## 4. Post Actualización
   1. Activar modo mantenimento
   2. Ejecutar actualizaciones desde el panel de admin
+  4. Activar mod elgg recaptcha y configurar al gusto
   3. Desactivar modo manteniminento  
