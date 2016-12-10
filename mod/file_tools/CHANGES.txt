@@ -1,4 +1,15 @@
-= Version History =
+Version History
+===============
+
+2.0 (2015-07-08):
+
+- fixed: input for getEntitiesFromRelationship to array as per deprecation message #53
+
+2.0-rc.1 (2015-01-22):
+
+- If you come from a version < 1.1 please upgrade to version 1.2 before installing version 2.0
+- fixed: WSOD when viewing a folder structure with an empty folder title
+- fixed: wrong function call for folder url's
 
 1.2 (2015-01-05):
 

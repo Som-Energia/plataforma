@@ -32,8 +32,8 @@ elgg.file_tools.uploadify.init = function() {
 		$('#file-tools-multi-form').submit(elgg.file_tools.uploadify.upload);
 		
 		$uploadifyButton.uploadify({
-			swf: "<?php echo $vars["url"]; ?>mod/file_tools/vendors/uploadify/uploadify.swf",
-			uploader: "<?php echo $vars["url"]; ?>mod/file_tools/procedures/upload/multi.php",
+			swf: elgg.normalize_url("mod/file_tools/vendors/uploadify/uploadify.swf"),
+			uploader: elgg.normalize_url("mod/file_tools/procedures/upload/multi.php"),
 			formData: {"X-Requested-With": "XMLHttpRequest"},
 			buttonText: elgg.echo("file_tools:forms:browse"),
 			queueID: "uploadify-queue-wrapper",
@@ -305,7 +305,7 @@ elgg.file_tools.new_folder = function(event) {
 	var hash = window.location.hash.substr(1);
 	var link = elgg.get_site_url() + "file_tools/folder/new/" + elgg.get_page_owner_guid() + "?folder_guid=" + hash;
 	
-	$.fancybox({
+	$.colorbox({
 		href: link,
 		titleShow: false
 	});
@@ -360,7 +360,6 @@ elgg.file_tools.show_more_files = function() {
 }
 
 elgg.file_tools.initialize_file_draggable = function() {
-	$("#file_tools_list_files .file-tools-file").draggable("destroy");
 	
 	$("#file_tools_list_files .file-tools-file").draggable({
 		revert: "invalid",
