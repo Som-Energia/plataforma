@@ -1,28 +1,24 @@
 <?php
 /**
- * Validate and repair an Elgg database
+ * Validate an Elgg database
  *
- * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU Public License version 2
+ * @license MIT license http://opensource.org/licenses/MIT
  * @author Cash Costello
- * @copyright Cash Costello 2010
+ * @copyright Cash Costello 2010-2014
  */
 
 set_time_limit(0);
 
-$users_string = elgg_echo('users');
-echo "<h3>$users_string</h3>";
+echo "<h3>" . elgg_echo('dbvalidate:users') . "</h3>";
 
-$users = dbvalidate_get_bad_users();
+$users = dbvalidate_count_bad_users();
 
 // write html for bad users
-if ($users !== false && count($users) > 0) {
-	echo elgg_echo('dbvalidate:badusernames');
+if ($users) {
 	echo "<ul>";
-	foreach ($users as $user) {
 		echo "<li>";
-		echo "GUID: {$user->guid}";
+		echo elgg_echo('dbvalidate:badusers:count', array($users));
 		echo "</li>";
-	}
 	echo "</ul>";
 } else {
 	echo elgg_echo('dbvalidate:nobadusernames');
@@ -31,47 +27,37 @@ if ($users !== false && count($users) > 0) {
 
 echo "<br />";
 
-$entities_string = elgg_echo('entities');
-echo "<h3>$entities_string</h3>";
+echo "<h3>" . elgg_echo('dbvalidate:entities') . "</h3>";
 
-$bad_guids = dbvalidate_get_bad_entities();
+
+$incomplete_entities = dbvalidate_count_incomplete_entities();
+
+// write html for incomplete entities
+if ($incomplete_entities) {
+	echo "<ul>";
+		echo "<li>";
+		echo elgg_echo('dbvalidate:incomplete_entities:count', array($incomplete_entities));
+		echo "</li>";
+	echo "</ul>";
+} else {
+	echo elgg_echo('dbvalidate:noincompleteentities');
+	echo "<br />";
+}
+
+$entities = dbvalidate_count_bad_entities();
 
 // write html for bad entities
-if (count($bad_guids) > 0) {
-	echo elgg_echo('dbvalidate:badowners');
+if ($entities) {
 	echo "<ul>";
-	foreach ($bad_guids as $guid) {
 		echo "<li>";
-		echo "GUID: {$guid} - " . elgg_echo('dbvalidate:type') . ': ' . dbvalidate_get_object_type($guid);
+		echo elgg_echo('dbvalidate:badentities:count', array($entities));
 		echo "</li>";
-	}
 	echo "</ul>";
 } else {
 	echo elgg_echo('dbvalidate:nobadowners');
 }
 
 echo "<br />";
-
-
-$incomplete_entities = dbvalidate_get_incomplete_entities();
-
-// write html for incomplete entities
-if ($incomplete_entities !== false && count($incomplete_entities) > 0) {
-	echo elgg_echo('dbvalidate:incompleteentities');
-	echo "<ul>";
-	foreach ($incomplete_entities as $entity) {
-		echo "<li>";
-		echo "GUID: {$entity->guid}, " . elgg_echo('dbvalidate:type') . ": {$entity->type}";
-		if ($subtype = get_subtype_from_id($entity->subtype)) {
-			echo ":$subtype";
-		}
-		echo "</li>";
-	}
-	echo "</ul>";
-} else {
-	echo elgg_echo('dbvalidate:noincompleteentities');
-	echo "<br />";
-}
 
 
 exit;

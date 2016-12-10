@@ -19,6 +19,7 @@ elgg.dbvalidate.submit = function(event) {
 	// actions in Elgg send back json so we use $.ajax
 	$.ajax({
 		type: "GET",
+		timeout: 3600000,
 		url: $(this).attr('href'),
 		dataType: "html",
 		success: function(htmlData) {
@@ -27,6 +28,10 @@ elgg.dbvalidate.submit = function(event) {
 			if (htmlData.length > 0) {
 				$("#dbv-results").html(htmlData);
 			}
+		},
+		error: function(jqXHR, textStatus, error) {
+			$("dbv-ajax-spinner").hide();
+			$("#dbv-results").html(textStatus);
 		}
 	});
 

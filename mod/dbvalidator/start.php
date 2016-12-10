@@ -2,9 +2,9 @@
 /**
  * Validate and repair an Elgg database
  *
- * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.html GNU Public License version 2
+ * @license MIT license http://opensource.org/licenses/MIT
  * @author Cash Costello
- * @copyright Cash Costello 2010-2011
+ * @copyright Cash Costello 2010-2014
  */
 
 elgg_register_event_handler('init', 'system', 'dbvalidate_init');
@@ -27,23 +27,70 @@ function dbvalidate_init() {
  * Look for users without a username
  */
 function dbvalidate_get_bad_users() {
-	global $CONFIG;
+	$db_prefix = elgg_get_config('dbprefix');
 	
-	$query = "SELECT * from {$CONFIG->dbprefix}users_entity WHERE username=''";
+	$query = "SELECT * from {$db_prefix}users_entity WHERE username=''";
 	$users = get_data($query);
 	return $users;
+}
+
+/**
+ * Count users without a username
+ */
+function dbvalidate_count_bad_users() {
+	$db_prefix = elgg_get_config('dbprefix');
+	
+	$query = "SELECT COUNT(ue.guid) as count from {$db_prefix}users_entity ue WHERE username=''";
+	$users = get_data($query);
+	return $users[0]->count;
+}
+
+function dbvalidate_fix_bad_users() {
+	$db_prefix = elgg_get_config('dbprefix');
+	$query = "UPDATE {$db_prefix}users_entity ue SET ue.username = CONCAT('dbvfixeduser', ue.guid) WHERE ue.username = ''";
+	update_data($query);
+}
+
+function dbvalidate_count_bad_entities() {
+
+	$db_prefix = elgg_get_config('dbprefix');
+
+	$query = "SELECT COUNT(e.guid) as count from {$db_prefix}entities e "
+	. "LEFT JOIN {$db_prefix}entities o ON e.owner_guid = o.guid "
+	. "WHERE (e.type='object' OR e.type='group') AND (o.guid IS NULL OR o.guid = 0)";
+	
+	$result = get_data($query);
+	$num_entities = $result[0]->count;
+	
+	return $num_entities;
+}
+
+function dbvalidate_fix_bad_entities() {
+	$db_prefix = elgg_get_config('dbprefix');
+	
+	$guid = elgg_get_logged_in_user_guid();
+	
+	$query = "UPDATE {$db_prefix}entities e LEFT JOIN {$db_prefix}entities o ON e.owner_guid = o.guid"
+	. " SET e.owner_guid = {$guid}"
+	. " WHERE (e.type = 'object' OR e.type='group') AND (o.guid IS NULL OR o.guid = 0)";
+	
+	update_data($query);
 }
 
 /**
  * Look for entities with an owner that cannot be loaded
  */
 function dbvalidate_get_bad_entities() {
-	global $ENTITY_SHOW_HIDDEN_OVERRIDE;
-	global $CONFIG;
-	global $DB_QUERY_CACHE, $DB_PROFILE, $ENTITY_CACHE;
+	global $ENTITY_CACHE;
 
-	$ENTITY_SHOW_HIDDEN_OVERRIDE = TRUE;
-	$query = "SELECT COUNT(*) as total from {$CONFIG->dbprefix}entities WHERE type='object' OR type='group'";
+	$access_status = access_get_show_hidden_status();
+	access_show_hidden_entities(true);
+
+	$db_prefix = elgg_get_config('dbprefix');
+
+	_elgg_services()->db->disableQueryCache();
+
+	$query = "SELECT COUNT(*) as total from {$db_prefix}entities WHERE type='object' OR type='group'";
 	$result = get_data_row($query);
 	$num_entities = $result->total;
 
@@ -54,9 +101,9 @@ function dbvalidate_get_bad_entities() {
 	$step = 1000;
 	while ($count < $num_entities) {
 		// flush caches so that we don't have memory issues
-		$DB_QUERY_CACHE = $DB_PROFILE = $ENTITY_CACHE = array();
+		$ENTITY_CACHE = array();
 
-		$query = "SELECT guid, owner_guid from {$CONFIG->dbprefix}entities WHERE type='object' OR type='group' LIMIT $count, $step";
+		$query = "SELECT guid, owner_guid from {$db_prefix}entities WHERE type='object' OR type='group' LIMIT $count, $step";
 		$guids = get_data($query);
 		$count = $count += $step;
 
@@ -68,32 +115,82 @@ function dbvalidate_get_bad_entities() {
 				$bad_guids[] = $guid->guid;
 			}
 		}
-
 	}
+
+	_elgg_services()->db->enableQueryCache();
+	access_show_hidden_entities($access_status);
 
 	return $bad_guids;
 }
+
+
+/**
+ * Looks for entities without a corresponding entry in the correct type table.
+ */
+function dbvalidate_count_incomplete_entities() {
+
+	$db_prefix = elgg_get_config('dbprefix');
+
+	$types = array('user', 'site', 'group', 'object');
+
+	$total = 0;
+	
+	foreach ($types as $type) {
+		// thank you for consistent table naming
+		$query = "SELECT count(e.guid) as count FROM {$db_prefix}entities e WHERE e.type='{$type}'
+			AND NOT EXISTS (SELECT t.guid FROM {$db_prefix}{$type}s_entity t WHERE t.guid = e.guid)";
+
+		if ($result = get_data($query)) {
+			$total += $result[0]->count;
+		}
+	}
+
+	return $total;
+}
+
+
+function dbvalidate_fix_incomplete_entities() {
+	$db_prefix = elgg_get_config('dbprefix');
+
+	$types = array('user', 'site', 'group', 'object');
+
+	$total = 0;
+	//1966915
+	foreach ($types as $type) {
+		// thank you for consistent table naming
+		$query = "DELETE e.* FROM {$db_prefix}entities e WHERE e.type = '{$type}'"
+		. " AND NOT EXISTS (SELECT t.guid as guid FROM {$db_prefix}{$type}s_entity t WHERE t.guid = e.guid)";
+
+		delete_data($query);
+	}
+
+	return $total;
+}
+
 
 /**
  * Looks for entities without a corresponding entry in the correct type table.
  */
 function dbvalidate_get_incomplete_entities() {
-	global $CONFIG;
+	$access_status = access_get_show_hidden_status();
+	access_show_hidden_entities(true);
+
+	$db_prefix = elgg_get_config('dbprefix');
 
 	$types = array('user', 'site', 'group', 'object');
 	$bad_guids = array();
 
 	foreach ($types as $type) {
-		$ENTITY_SHOW_HIDDEN_OVERRIDE = TRUE;
-
 		// thank you for consistent table naming
-		$query = "SELECT guid, type, subtype FROM {$CONFIG->dbprefix}entities WHERE type='{$type}'
-			AND guid NOT IN (SELECT guid FROM {$CONFIG->dbprefix}{$type}s_entity)";
+		$query = "SELECT guid, type, subtype FROM {$db_prefix}entities WHERE type='{$type}'
+			AND guid NOT IN (SELECT guid FROM {$db_prefix}{$type}s_entity)";
 
 		if ($result = get_data($query)) {
 			$bad_guids = array_merge($bad_guids, $result);
 		}
 	}
+
+	access_show_hidden_entities($access_status);
 
 	return $bad_guids;
 }
@@ -102,10 +199,10 @@ function dbvalidate_get_incomplete_entities() {
  * Get the object type or group as a string for a guid
  */
 function dbvalidate_get_object_type($guid) {
-	global $CONFIG;
+	$db_prefix = elgg_get_config('dbprefix');
 	
 	$guid = (int)$guid;
-	$query = "SELECT type, subtype FROM {$CONFIG->dbprefix}entities WHERE guid={$guid}";
+	$query = "SELECT type, subtype FROM {$db_prefix}entities WHERE guid={$guid}";
 	$result = get_data_row($query);
 	
 	if ($result->type == 'group') {
