@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "af87e12a5a86f4fc140d24081e935cec",
-    "content-hash": "d7049996a9495f6e32e4c16f2d3659a5",
+    "hash": "33714c2ec0f506750f13591c15e655d8",
+    "content-hash": "c04050058fa7655a7411e8b67a3e8482",
     "packages": [
         {
             "name": "au/au_subgroups",
@@ -119,6 +119,36 @@
                 "spam"
             ],
             "time": "2015-12-18 09:45:11"
+        },
+        {
+            "name": "blackleg/threads",
+            "version": "1.8.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/blackleg/threads.git",
+                "reference": "0072f49aa4a629a6665ec110b0b0c11b97c99e72"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/blackleg/threads/zipball/0072f49aa4a629a6665ec110b0b0c11b97c99e72",
+                "reference": "0072f49aa4a629a6665ec110b0b0c11b97c99e72",
+                "shasum": ""
+            },
+            "require": {
+                "composer/installers": "^1.0.8"
+            },
+            "type": "elgg-plugin",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0"
+            ],
+            "description": "Allow threaded discussions into group forums.",
+            "homepage": "http://www.blackleg.es",
+            "keywords": [
+                "elgg",
+                "plugin"
+            ],
+            "time": "2016-12-10 21:07:40"
         },
         {
             "name": "coldtrick/file_tools",
