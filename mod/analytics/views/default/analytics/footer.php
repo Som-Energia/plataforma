@@ -1,30 +1,34 @@
 <?php
 
 // do we have the plugin configured correctly
-if (elgg_get_plugin_setting("analyticsSiteID", "analytics")) {
+if (!elgg_get_plugin_setting('analyticsSiteID', 'analytics')) {
+	return;
+}
 
-	$trackActions = elgg_get_plugin_setting("trackActions", "analytics");
-	$trackEvents = elgg_get_plugin_setting("trackEvents", "analytics");
+$trackActions = analytics_google_track_actions_enabled();
+$trackEvents = analytics_google_track_events_enabled();
 
-	// do we track actions/events
-	if ($trackActions == "yes" || $trackEvents == "yes") {
+// do we track actions/events
+if (!$trackActions && !$trackEvents) {
+	return;
+}
+
 ?>
-<script type="text/javascript" id="analytics_ajax_result">
-	$('#analytics_ajax_result').ajaxSuccess(function(event, XMLHttpRequest, ajaxOptions) {
-		if (ajaxOptions.url != "<?php echo elgg_get_site_url(); ?>analytics/ajax_success") {
-			
-			$.get("<?php echo elgg_get_site_url(); ?>analytics/ajax_success", function(data) {
+<script type='text/javascript' id='analytics_ajax_result'>
+
+	$(document).ajaxSuccess(function(event, XMLHttpRequest, ajaxOptions) {
+		
+		elgg.get('analytics/ajax_success', {
+			global: false,
+			success: function(data) {
 				if (data) {
-					var temp = document.createElement("script");
-					temp.setAttribute("type", "text/javascript");
+					var temp = document.createElement('script');
+					temp.setAttribute('type', 'text/javascript');
 					temp.innerHTML = data;
 					
 					$('#analytics_ajax_result').after(temp);
 				}
-			});
-		}
+			}
+		});
 	});
 </script>
-<?php
-	}
-}

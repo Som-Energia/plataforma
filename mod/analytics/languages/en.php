@@ -8,7 +8,7 @@
  * @link http://www.coldtrick.com/
  */
 	
-$english = array(
+return [
 	'analytics:settings:google' => "Google Analytics settings",
 	'analytics:settings:google:description' => "You can use Google Analytics to track the usage of your site. To enable Google Analytics tracking please enter a Tracking ID. To disable tracking remove the Tracking ID.",
 	'analytics:settings:trackid' => "Tracking ID:",
@@ -26,6 +26,4 @@ $english = array(
 	'analytics:settings:piwik:url:description' => "This includes http:// or https:// and a trailing /",
 	'analytics:settings:piwik:site_id' => "The Site ID use for tracking",
 	'' => "",
-);
-
-add_translation("en", $english);
+];
