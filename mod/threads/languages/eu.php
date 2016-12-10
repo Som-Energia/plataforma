@@ -7,4 +7,4 @@ $language = array(
     'item:object:topicreply' => "Respuestas a la discusión",
 );
 
-add_translation('es', $language);
+add_translation('eu', $language);
