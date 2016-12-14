@@ -8,15 +8,16 @@ elgg_register_event_handler('init', 'system', 'mentions_init');
 
 function mentions_init() {
 	elgg_extend_view('css/elgg', 'css/mentions');
-	elgg_extend_view('js/elgg', 'js/mentions');
-	
+
+	elgg_register_simplecache_view('js/mentions/editor');
+	elgg_require_js('mentions/editor');
+
 	elgg_extend_view('input/longtext', 'mentions/popup');
 	elgg_extend_view('input/plaintext', 'mentions/popup');
 
 	elgg_register_event_handler('pagesetup', 'system', 'mentions_get_views');
 
 	// can't use notification hooks here because of many reasons
-	// only check against annotations:generic_comment and entity:object
 	elgg_register_event_handler('create', 'object', 'mentions_notification_handler');
 	elgg_register_event_handler('create', 'annotation', 'mentions_notification_handler');
 
@@ -56,7 +57,7 @@ function mentions_rewrite($hook, $entity_type, $returnvalue, $params) {
 
 	$regexp = mentions_get_regex();
 	$returnvalue =  preg_replace_callback($regexp, 'mentions_preg_callback', $returnvalue);
-	
+
 	return $returnvalue;
 }
 
@@ -182,7 +183,12 @@ function mentions_notification_handler($event, $event_type, $object) {
 						$link,
 					));
 
-					notify_user($user->getGUID(), $owner->getGUID(), $subject, $body);
+					$params = array(
+						'object' => $object,
+						'action' => 'mention',
+					);
+
+					notify_user($user->getGUID(), $owner->getGUID(), $subject, $body, $params);
 				}
 			}
 		}
