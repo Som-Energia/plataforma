@@ -21,7 +21,7 @@ To see the full post, click on the link below:
 	'mentions:settings:send_notification' => 'Recibir notificaciones cuando alguien te @nombre ?',
 	// admin
 	'mentions:fancy_links' => 'Replce @mentions with a small picture of the user in addition to the user\'s name',
-	'mentions:settings:failed' => 'Could not save mentions settings.'
+	'mentions:settings:failed' => 'Could not save mentions settings.',
     'file_tools' => "File Tools",
     'file_tools:file:actions' => 'Acciones',
     'file_tools:list:sort:type' => 'Tipo',
