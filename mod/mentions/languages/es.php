@@ -5,8 +5,8 @@
  */
 
 $spanish = array(
-	'mentions:notification:subject' => '%s mentioned you in %s',
-	'mentions:notification:body' => '%s mentioned you in %s.
+	'mentions:notification:subject' => '%s te ha nombrado en %s',
+	'mentions:notification:body' => '%s te ha nombrado en %s.
 
 To see the full post, click on the link below:
 %s
