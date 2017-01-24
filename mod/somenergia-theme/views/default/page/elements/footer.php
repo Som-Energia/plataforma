@@ -32,6 +32,6 @@ echo '</div>';
 
 echo '<div class="elgg-menu elgg-menu-footer elgg-menu-hz">';
 
-echo '<a target="_blank" href="http://www.germinadorsocial.com"><img style="margin-top:30px;padding-bottom:30px" src="https://dl.dropboxusercontent.com/u/175272/germinador_social_plataforma.jpg" alt="Germinador Social Banner"/></a>';
+echo '<a target="_blank" href="http://bit.ly/bannerplataformagerminador"><img style="margin-top:30px;padding-bottom:30px" src="https://dl.dropboxusercontent.com/u/175272/germinador_social_plataforma.jpg" alt="Germinador Social Banner"/></a>';
 
 echo '</div>';
