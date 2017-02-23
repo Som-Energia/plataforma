@@ -1,0 +1,287 @@
+<?php
+
+$catalan = array( 
+		
+    'item:object:event_calendar' => "Calendari",
+    'tag_names:event_tags' => "Etiquetes",
+    'event_calendar:optional' => "Opcional.",
+    'event_calendar:required' => "Obligatori.",
+    'event_calendar:new_event' => "Nou esdeveniment",
+    'event_calendar:no_such_event_edit_error' => "Error: L'esdeveniment no existeix o no teniu permisos per a editar-lo.",
+    'event_calendar:add_event_title' => "Afegir un esdeveniment",
+    'event_calendar:manage_event_title' => "Editar un esdeveniment",
+    'event_calendar:manage_event_description' => "Introduïu la informació de l'esdeveniment. "
+        ."El títol, el lloc i la data d'inici són obligatoris. "
+        ."Per especificar la data d'inici i de finalització premeu les icones del calendari.",
+    'event_calendar:title_label' => "Títol",
+    'event_calendar:title_description' => "D'una a quatre paraules",
+    'event_calendar:brief_description_label' => "Descripció breu",
+    'event_calendar:brief_description_description' => "Una frase breu.",
+    'event_calendar:venue_label' => "Lloc",
+    'event_calendar:venue_description' => "On es durà a terme l'esdeveniment?",
+    'event_calendar:start_date_label' => "Data d'inici",
+    'event_calendar:start_date_description'    => "Quan començarà l'esdeveniment?",
+    'event_calendar:end_date_label' => "Data de finalització",
+    'event_calendar:end_date_description'    => "Quan finalitzarà l'esdeveniment? En cas de no especificar la data de finalització "
+            ." s'utilitzarà la data d'inici.",
+    'event_calendar:start_time_label' => "Hora d'inici",
+    'event_calendar:start_time_description'    => "A quina hora començarà l'esdeveniment?",
+    'event_calendar:end_time_label' => "Hora de finalització",
+    'event_calendar:end_time_description'    => "A quina hora finalitzarà l'esdeveniment?",
+    'event_calendar:fees_label' => "Cost",
+    'event_calendar:fees_description'    => "El cost de l'entrada (si és de pagament).",
+    'event_calendar:contact_label' => "Contacte",
+    'event_calendar:contact_description'    => "La persona de contacte per obtenir-ne més informació, "
+            ."preferiblement un número de telèfon o una adreça de correu electrònic.",
+    'event_calendar:organiser_label' => "Organitzador",
+    'event_calendar:organiser_description'    => "L'individu o organització responsable de l'esdeveniment.",
+    'event_calendar:event_tags_label' => "Etiquetes",
+    'event_calendar:event_tags_description'    => "Una llista separada per comes de les etiquetes relacionades amb l'esdeveniment.",
+    'event_calendar:long_description_label' => "Descripció",
+    'event_calendar:long_description_description'    => "Pot ser un paràgraf o més.",
+    'event_calendar:manage_event_response' => "S'ha desat l'esdeveniment.",
+    'event_calendar:add_event_response' => "S'ha afegit l'esdeveniment.",
+    'event_calendar:manage_event_error' => "Error: S'ha produït un error desant l'esdeveniment. "
+            ."Assegureu-vos d'haver omplert tots els camps.",
+    'event_calendar:error_nosuchevent' => "Error: L'esdeveniment no existeix.",
+    'event_calendar:show_events_title' => "Calendari d'esdeveniments",
+    'event_calendar:day_label' => "Dia",
+    'event_calendar:week_label' => "Setmana",
+    'event_calendar:month_label' => "Mes",
+    'event_calendar:group' => "Calendari del grup",
+    'event_calendar:new' => "Afegeix un esdeveniment",
+    'event_calendar:submit' => "Enviar",
+    'event_calendar:cancel' => "Cancel·lar",
+    'event_calendar:widget_title' => "Calendari d'esdeveniments",
+    'event_calendar:widget:description' => "Mostra els vostres esdeveniments.",
+    'event_calendar:num_display' => "Nombre d'esdeveniments a visualitzar",
+    'event_calendar:groupprofile' => "Proper esdeveniments",
+    'event_calendar:view_calendar' => "mostrar el calendari",
+    'event_calendar:when_label' => "Quan",
+    'event_calendar:site_wide_link' => "Visualitzar tots els esdeveniments",
+    'event_calendar:view_link' => "Visualitzar l'esdeveniment",
+    'event_calendar:edit_link' => "Editar l'esdeveniment",
+    'event_calendar:delete_link' => "Suprimir l'esdeveniment",
+    'event_calendar:delete_confirm_title' => "Confirmar la supressió de l'esdeveniment",
+    'event_calendar:delete_confirm_description' => "Voleu suprimir l'esdeveniment (\"%s\")? Un cop suprimit no el podreu recuperar.",
+    'event_calendar:delete_response' => "S'ha suprimit l'esdeveniment.",
+    'event_calendar:error_delete' => "L'esdeveniment no existeix o no teniu permisos per suprimir-lo.",
+    'event_calendar:delete_cancel_response' => "S'ha cancel·lat la supressió de l'esdeveniment.",
+    'event_calendar:add_to_my_calendar' => "Afegir al meu calendari",
+    'event_calendar:remove_from_my_calendar' => "Suprimir del meu calendari",
+    'event_calendar:add_to_my_calendar_response' => "L'esdeveniment s'ha afegit al vostre calendari personal.",
+    'event_calendar:add_to_my_calendar_error' => "L'esdeveniment no s'ha afegit al vostre calendari personal. "
+                ."(Potser l'esdeveniment està ple o coincideix amb un altre esdeveniment?)",
+    'event_calendar:remove_from_my_calendar_response' => "L'esdeveniment s'ha suprimit del vostre calendari personal.",
+    'event_calendar:add_to_the_calendar' => "Afegir al calendari",
+    'event_calendar:remove_from_the_calendar' => "Suprimir",
+    'event_calendar:add_to_the_calendar_menu_text' => "Afegir al meu",
+    'event_calendar:remove_from_the_calendar_menu_text' => "Suprimir del meu",
+    'event_calendar:remove_from_the_calendar_button' => "Suprimir del calendari",
+    'event_calendar:added_to_the_calendar' => "S'ha afegit al calendari",
+    'event_calendar:removed_from_the_calendar' => "S'ha suprimit del calendari",
+    'event_calendar:add_to_the_calendar_response' => "L'esdeveniment s'ha afegit al calendari personal.",
+    'event_calendar:add_to_the_calendar_error' => "L'esdeveniment no s'ha pogut afegit al calendari personal. "
+                ."(Potser l'esdeveniment està ple o coincideix amb un altre esdeveniment?)",
+    'event_calendar:remove_from_the_calendar_response' => "L'esdeveniment s'ha suprimit del calendari personal.",
+                
+    'event_calendar:users_for_event_menu_title' => "Persones que mostren l'esdeveniment en el seu calendari personal",
+    'event_calendar:users_for_event_title' => "Calendari personal de \"%s'\"",
+    'event_calendar:personal_event_calendars_link' => "A %s calendaris",
+    'event_calendar:personal_event_calendars_link_one' => "A 1 calendari",
+    'event_calendar:users_for_event_breadcrumb' => "Calendaris personals",
+    'event_calendar:settings:group_profile_display:title' => "Visualització del perfil del calendari de grup (si els calendaris de grup estan habilitats)",
+    'event_calendar:settings:group_profile_display_option:left' => "columna esquerra",
+    'event_calendar:settings:group_profile_display_option:right' => "columna dreta",
+    'event_calendar:settings:group_profile_display_option:none' => "cap",
+    'event_calendar:settings:times:title' => "Afegir l'hora i la data als esdeveniments",
+    'event_calendar:settings:autopersonal:title' => "Afegir automàticament els esdeveniments que crea un usuari al seu calendari personal..",
+    'event_calendar:settings:autogroup:title' => "Afegir automàticament els esdeveniments d'un membre als calendaris personals de tots els membres.",
+    'event_calendar:settings:agenda_view:title' => "Visualitzar en format d'agenda",
+    'event_calendar:settings:venue_view:title' => "Mostrar el lloc en el resum de l'esdeveniment (llista d'esdeveniments)",
+    'event_calendar:settings:yes' => "sí",
+    'event_calendar:settings:no' => "no",
+    'event_calendar:settings:site_calendar:title' => "Calendari del lloc web",
+    'event_calendar:settings:site_calendar:admin' => "sí, només els administradors poden afegir nous esdeveniments",
+    'event_calendar:settings:site_calendar:loggedin' => "sí, els usuaris registrats poden afegir nous esdeveniments",    
+    'event_calendar:settings:group_calendar:title' => "Calendaris de grup",
+    'event_calendar:settings:group_calendar:admin' => "sí, només els administradors i els propietaris del grup poden afegir esdeveniments",
+    'event_calendar:settings:group_calendar:members' => "sí, els membres del grup poden afegir nous esdeveniments",
+    'event_calendar:settings:group_default:title' => "Els nous grups han de tenir, per defecte, un calendari de grup (si els calendaris de grup estan habilitats)",
+    'event_calendar:settings:group_default:no' => "no (però els administradors o propietaris del grup poden habilitar el calendari del grup)",
+    'event_calendar:settings:group_default:yes' => "sí (però els administradors o propietaris del grup poden deshabilitar el calendari del grup)",
+    'event_calendar:settings:group_always_display:title' => "Mostrar el calendari del grup si està habilitat (fins hi tot si està buit)",
+    'event_calendar:settings:region_display:title' => "Afegeix els camps de regió a l'esdeveniment",
+    'event_calendar:settings:region_list:title' => "Llista de regions (una per línia)",
+    'event_calendar:region_label' => "Regió",
+    'event_calendar:region_description' => "Selecciona la regió on es durà a terme l'esdeveniment.",
+    'event_calendar:settings:type_display:title' => "Afegeix el tipus d'esdeveniment a l'esdeveniment",
+    'event_calendar:settings:type_list:title' => "Llista de tipus d'esdeveniments (un per línia)",
+    'event_calendar:type_label' => "Tipus d'esdeveniment",
+    'event_calendar:type_description' => "Seleccioneu el tipus d'esdeveniment.",
+    'event_calendar:all' => "Tots",
+    'event_calendar:region_filter_by_label' => "Filtrar per la regió: ",
+    'event_calendar:settings:first_date:title' => "Primera data (en format YYYY-MM-DD)",
+    'event_calendar:settings:last_date:title' => "Última data (en format YYYY-MM-DD)",
+    'event_calendar:enable_event_calendar' => "Habilita el calendari d'esdeveniments del grup",
+    'event_calendar:no_events_found' => "No s'ha trobat cap esdeveniment.",
+    'event_calendar:mine' => "Els meus",
+    'event_calendar:feature' => "Feature",
+    'event_calendar:unfeature' => "Unfeature",
+    'event_calendar:agenda:column:time' => "Hora",
+    'event_calendar:agenda:column:session' => "Sessió",
+    'event_calendar:agenda:column:venue' => "Lloc",
+    'event_calendar:upcoming_events_title' => "Propers esdeveniments",
+    'event_calendar:settings:paged' => "paginat",
+    'event_calendar:settings:agenda' => "agenda",
+    'event_calendar:settings:month' => "per mes",
+    'event_calendar:settings:full' => "vista completa",
+    'event_calendar:settings:listing_format:title' => "Format de la llista d'esdeveniments",
+    'event_calendar:paged:column:date' => "Data",
+    'event_calendar:paged:column:time'    => "Hora",
+    'event_calendar:paged:column:event' => "Esdeveniment",
+    'event_calendar:paged:column:venue' => "Lloc",
+    'event_calendar:paged:column:calendar' => "Calendari",
+    'event_calendar:settings:spots_display:title' => "Add a spots field for each "
+            ."event to allow you to limit the number of people who can add the event to their calendar",
+    'event_calendar:settings:no_collisions:title' => "Detecció de col·lisions: Evita que les persones afegeixin dos esdeveniments que coincideixin temporalment",
+    'event_calendar:settings:collision_length:title' => "Quina durada (en segons) predeterminada s'ha de considerar en els esdeveniments on no s'ha especificat la data o hora de finalització"
+        ."(s'utilitzar per a la detecció de col·lisions). Per defecte són 3600 segons = 1 hora.",
+    'event_calendar:spots_label' => "Spots",
+    'event_calendar:spots_description' => "Quantes persones poden afegir l'esdeveniment al seu calendari personal?",
+    'event_calendar:open' => "Obert",
+    'event_calendar:settings:add_users:title' => "Permetre als usuaris i administradors afegir esdeveniments a d'altres calendaris personals.",
+    'event_calendar:add_user_label' => "Afegir usuaris",
+    'event_calendar:add_user_description' => "Afegir l'esdeveniment als calendaris personal de l'usuari escrivint dues o més lletres del seu nom. "
+        ."Podeu afegir múltiples usuaris prement \"+\". (Per afegir l'esdeveniment al calendari heu d'enviar el formulari.)",
+    'event_calendar:settings:add_users_notify:title' => "Enviar un correu electrònic als usuaris als quals l'administrador o el propietari han afegit un esdeveniment al seu calendari personal.",
+    'event_calendar:add_users_notify:subject' => "S'ha afegit un esdeveniment al vostre calendari personal",
+    'event_calendar:add_users_notify:body' => "%s,\n\nL'esdeveniment \"%s\" s'ha afegit al vostre calendari personal.\n\nEl podeu visualitzar a: \n\n%s\n",
+        
+    'event_calendar:settings:region_list_handles:title' => "Les cadenes de regió són identificadors de cadena. Utilitzeu el sistema de traducció de l'Elgg per resoldre-les.",
+    'event_calendar:settings:type_list_handles:title' => "Les cadenes de tipus són identificadors de cadena. Utilitzeu el sistema de traducció de l'Elgg per resoldre-les.",
+        
+    'event_calendar:settings:personal_manage:title' => "Permisos del calendari",
+    'event_calendar:settings:personal_manage:description' => "Determina si els usuaris poden afegir esdeveniments al seu calendari personal (obert), "
+            ."si han de fer una petició al propietari del calendari (tancat), si no es poden afegir esdeveniments (privat) o permetre als propietaris del calendari valorar-ho en cada cas (per esdeveniment). "
+            ."Si trieu l'opció de privat probablement haureu d'activar l'opció de permetre als propietaris del calendari i administradors del lloc web "
+            ."afegir els seus esdeveniment a d'altres calendaris personals",
+    'event_calendar:strapline' => "Enviat %s per %s",
+        
+    'event_calendar:request_event_response' => "S'ha enviat la petició per afegir l'esdeveniment.",
+    'event_calendar:request_event_error' => "Error: No s'ha pogut enviar la petició per afegir l'esdeveniment.",
+    'event_calendar:request_subject' => "Heu rebut un petició d'esdeveniment",
+    'event_calendar:request_message' => "%s ha demanat afegir l'esdeveniment \"%s\" a:
+
+%s
+
+Afegit al seu calendari personal.
+
+Podeu gestionar les peticions d'esdeveniments a:
+
+%s
+",
+        
+    'event_calendar:review_requests_error' => "L'esdeveniment no existeix o no teniu permisos per aprovar-ne les peticions.",
+    'event_calendar:review_requests_request_none' => "No hi ha peticions d'esdeveniments pendents de revisar.",
+    'event_calendar:request:remove:check' => "Voleu rebutjar la petició?",
+    'event_calendar:requestkilled' => "S'ha rebutjat la petició.",
+    'event_calendar:request_approved' => "S'ha aprovat la petició.",
+    'event_calendar:review_requests_title' => "Revisar les peticions de \"%s\"",
+    'event_calendar:review_requests_menu_title' => "Revisar les peticions",
+    'event_calendar:make_request_title' => "Fer una petició de l'esdeveniment",
+    'event_calendar:review_requests:reject' => "Rebutjar",
+    'event_calendar:review_requests:reject:title' => "Rebutjar la petició",
+    'event_calendar:review_requests:accept' => "Acceptar",
+    'event_calendar:review_requests:accept:title' => "Acceptar la petició",
+    'event_calendar:review_requests:error:approve' => "Error: No s'ha aprovat la petició.",
+    'event_calendar:review_requests:error:reject' => "Error: No s'ha rebutjat la petició.",
+        
+    'event_calendar:settings:hide_access:title' => "Amagar l'accés a l'esdeveniment",
+    'event_calendar:settings:default_access:title' => "Si l'accés a l'esdeveniment està amagat, què s'ha de fer per defecte?",
+    'event_calendar:settings:hide_end:title' => "Amagar el dia i hora de finalització de l'esdeveniment",
+    'event_calendar:settings:more_required:title' => "Fer obligatoris tots els camps visibles menys la descripció.",
+        
+    'event_calendar:add_to_group:remove_group_title' => "Suprimir l'esdeveniment del grup",
+    'event_calendar:add_to_group:remove_group_button' => "Suprimir del grup",
+    'event_calendar:remove_from_group:success' => "S'ha suprimit l'esdeveniment del calendari del grup",
+    'event_calendar:add_to_group:add_group_title' => "Afegir l'esdeveniment al grup",
+    'event_calendar:add_to_group:add_group_button' => "Afegir al grup",
+    'event_calendar:add_to_group:success' => "S'ha afegit l'esdeveniment al calendari del grup",
+    'event_calendar:settings:add_to_group_calendar:title' => "Permetre que els administradors de grup puguin afegir qualsevol esdeveniment a un calendari del grup",
+        
+    'event_calendar:group_breadcrumb' => "Calendari de grup",
+    'event_calendar:no_group' => "El grup no existeix.",
+    'event_calendar:generic_error_title' => "Error",
+    'event_calendar:error_event_edit' => "Error: L'esdeveniment no existeix o no teniu permisos per editar-lo.",
+    'event_calendar:add' => "Afegir",
+        
+    'feed:ical' => "Canal iCal d'aquesta pàgina",
+    'event_calendar:ical_popup_message' => "Podeu utilitzar l'URL següent per obtenir els esdeveniments públics de la llista a través d'un canal d'iCalendar:",
+    'event_calendar:ical_auth_file_name:title' => "Ubicació del fitxer d'autenticació de l'iCal (experimental - no és necessari per a canals públics)",
+
+    'event_calendar:owner:permissions_error' => "No teniu permisos per visualitzar la pàgina.",
+    'event_calendar:feature_not_activated' => "Aquesta funcionalitat no està activada",
+        
+    'event_calendar:show_all' => "Mostrar-los tots",
+    'event_calendar:show_open' => "Mostrar els oberts",
+    'event_calendar:show_mine' => "El meu calendari",
+    'event_calendar:show_friends' => "Els calendaris dels meus amics",
+    'event_calendar:show_only' => "Mostrar només els que:",
+        
+    'event_calendar:listing_title:all' => "Tots els esdeveniments",
+    'event_calendar:listing_title:open' => "Esdeveniments oberts",
+    'event_calendar:listing_title:mine' => "El meu calendari",
+    'event_calendar:listing_title:friends' => "Calendaris dels amics",    
+    'event_calendar:manage_users:title' => "Gestionar els subscriptors de \"%s\"",
+    'event_calendar:manage_users:breadcrumb' => "Gestionar els subscriptors",
+    'event_calendar:manage_users:description' => "Afegir o suprimir esdeveniments dels calendaris personals.",
+    'event_calendar:manage_users:unauthorized' => "Error: No esteu autoritzat a gestionar calendaris personals.",
+    'event_calendar:add_to_group_members:success' => "S'ha afegit l'esdeveniment al calendari personal dels membres del grup.",
+    'event_calendar:add_to_group_members:error' => "Error: No s'ha afegit l'esdeveniment al calendari personal dels membres del grup.",
+    'event_calendar:remove_from_group_members:success' => "S'ha suprimit l'esdeveniment del calendari personal dels membres del grup.",
+    'event_calendar:remove_from_group_members:error' => "Error: No s'ha suprimit l'esdeveniment del calendari personal dels membres del grup.",
+    'event_calendar:add_to_group_members:button' => "Afegir a tots",
+    'event_calendar:remove_from_group_members:button' => "Suprimir de tots",
+        
+    'event_calendar:manage_subscribers:success' => "S'han actualitzat els calendaris personals.",
+    'event_calendar:manage_subscribers:error' => "Error: No s'han actualitzat els calendaris personals.",
+    'event_calendar:personal_manage:open' => "obert",
+    'event_calendar:personal_manage:closed' => "tancat",
+    'event_calendar:personal_manage:private' => "privat",
+    'event_calendar:personal_manage:by_event' => "per l'esdeveniment",
+    'event_calendar:personal_manage:label' => "Permisos del calendari",
+    'event_calendar:personal_manage:description' => "Determina si els usuaris poden afegir l'esdeveniment al seu calendari personal (obert), "
+            ."si han de demanar permís (tancat) o si no poden afegir esdeveniments (privat - només el propietari o l'administrador del lloc web poden afegir esdeveniments als calendaris).",
+            
+    'event_calendar:settings:full_calendar:title' => "Calendari complet",
+    'event_calendar:modify_full_calendar:error' => "Error: No s'ha modificat el calendari complet",
+    'event_calendar:from_label' => "De:",
+    'event_calendar:to_label' => "A:",
+    'event_calendar:settings:timeformat:title' => "Format de l'hora",
+    'event_calendar:time_format:12hour' => "12 hores (am/pm)",
+    'event_calendar:time_format:24hour' => "24 hores",
+        
+    /**
+     * Event calendar river
+     **/
+             
+    //generic terms to use
+
+    'river:update:object:event_calendar' => "%s ha actualitzat l'esdeveniment %s",
+    'river:create:object:event_calendar' => "%s ha afegit l'esdeveniment %s",
+    'river:comment:object:event_calendar' => "%s ha comentat l'esdeveniment %s",
+    'event_calendar:river:created' => "%s afegit",
+    'event_calendar:river:updated' => "%s actualitzat",
+    'event_calendar:river:annotated1' => "%s afegit",
+    'event_calendar:river:annotated2' => "al seu calendari personal.",
+     
+    //these get inserted into the river links to take the user to the entity
+    'event_calendar:river:create' => "un nou esdeveniment amb el títol",
+    'event_calendar:river:the_event' => "un esdeveniment amb el títol",
+
+		); 
+
+add_translation('ca', $catalan); 
+
+?>

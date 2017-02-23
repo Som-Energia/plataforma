@@ -51,9 +51,14 @@
 		<priority>after</priority>
 		<plugin>custom_index_widgets</plugin>
 	</requires>
-        <requires>
+    <requires>
 		<type>priority</type>
 		<priority>after</priority>
 		<plugin>au_subgroups</plugin>
+	</requires>
+    <requires>
+		<type>priority</type>
+		<priority>after</priority>
+		<plugin>mentions</plugin>
 	</requires>
 </plugin_manifest>
