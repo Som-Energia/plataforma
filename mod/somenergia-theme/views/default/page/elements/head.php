@@ -35,7 +35,6 @@ $css = elgg_get_loaded_css();
 
 $version = get_version();
 $release = get_version(true);
-$mayor_release = substr($release, 0, 3);
 
 /**
  * Initialize Elgg javascript
@@ -69,23 +68,12 @@ $elgg_init = elgg_view('js/initialize_elgg');
 	<!--[if IE 6]>
 		<link rel="stylesheet" type="text/css" href="<?php echo $ie6_url; ?>" />
 	<![endif]-->
-        
-        <?php if ($mayor_release == "1.9") { ?>
             <script type="text/javascript">
                 <?php echo $elgg_init; ?>
             </script>
-        <?php } ?>
-
 <?php foreach ($js as $script) { ?>
 	<script type="text/javascript" src="<?php echo $script; ?>"></script>
 <?php } ?>    
-<?php if ($mayor_release == "1.8") { ?>
-        <script type="text/javascript">
-            // <![CDATA[
-                <?php echo $elgg_init; ?>
-            // ]]>
-        </script>
-<?php } ?>
 <?php
 echo $feedref;
 
