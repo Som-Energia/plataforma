@@ -1,0 +1,7 @@
+#!/bin/bash
+APPPATH=$(realpath "./")
+DATAPATH="$APPPATH/../elggdata"
+PLATAFORMAIMAGE="somenergia/plataforma-devel"
+DATABASEIMAGE="somenergia/plataforma-database-devel"
+docker run -d -p 3336:3306 --name plataforma-mysql-devel "$DATABASEIMAGE"
+docker run -d -p 8000:80 --name plataforma-devel --link plataforma-mysql-devel:mysql -v "${APPPATH}":/app:ro -v "${DATAPATH}":/data "$PLATAFORMAIMAGE"
