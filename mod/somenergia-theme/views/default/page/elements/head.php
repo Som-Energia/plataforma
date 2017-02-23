@@ -14,7 +14,7 @@ if (empty($vars['title'])) {
 
 global $autofeed;
 if (isset($autofeed) && $autofeed == true) {
-	$url = full_url();
+	$url = current_page_url();
 	if (substr_count($url,'?')) {
 		$url .= "&view=rss";
 	} else {
@@ -33,8 +33,8 @@ END;
 $js = elgg_get_loaded_js('head');
 $css = elgg_get_loaded_css();
 
-$version = get_version();
-$release = get_version(true);
+$version = elgg_get_version();
+$release = elgg_get_version(true);
 
 /**
  * Initialize Elgg javascript
