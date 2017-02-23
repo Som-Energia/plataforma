@@ -7,6 +7,21 @@
  * @subpackage Languages.Spanish
  */
 $catalan = array(
+	'mentions:notification:subject' => '%s te ha nombrado en %s',
+	'mentions:notification:body' => '%s te ha nombrado en %s.
+To see the full post, click on the link below:
+%s
+',
+	'mentions:notification_types:object:blog' => 'a blog post',
+	'mentions:notification_types:object:bookmarks' => 'a bookmark',
+	'mentions:notification_types:object:groupforumtopic' => 'a group discussion post',
+	'mentions:notification_types:annotation:group_topic_post' => 'a group discussion reply',
+	'mentions:notification_types:object:thewire' => 'a wire post',
+	'mentions:notification_types:annotation:generic_comment' => 'un comentario',
+	'mentions:settings:send_notification' => 'Recibir notificaciones cuando alguien te @nombre ?',
+	// admin
+	'mentions:fancy_links' => 'Replce @mentions with a small picture of the user in addition to the user\'s name',
+	'mentions:settings:failed' => 'Could not save mentions settings.',
     'file_tools' => "Eines Fitxers",
     'file_tools:file:actions' => 'Accions',
     'file_tools:list:sort:type' => 'Tipus',
