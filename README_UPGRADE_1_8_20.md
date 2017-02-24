@@ -6,7 +6,7 @@
   3. Backup código actual
 
 ## 2. Pre Actualización
-  1. Desactivar mod tydipics
+  1. Desactivar mod tidypics
   2. Desactivar mod oauth_api
 
 ## 3. Actualización
@@ -14,7 +14,7 @@
   2. Ejecutar upgrade.php desde el navegador
 
 ## 4. Post Actualización
-  1. Activar mod tydipics
+  1. Activar mod tidypics
   2. Activar mod somenergia translations
   3. Ejecutar upgrade.php desde el navegador
   4. Ejecutar actualizaciones base datos del mod tydipics
