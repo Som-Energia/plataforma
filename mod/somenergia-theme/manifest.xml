@@ -5,8 +5,7 @@
 	<version>1.0</version>
 	<category>theme</category>
 	<description></description>
-	<website>http://rubenmartin.me</website>
-	
+	<website>http://rubenmartin.me</website>	
 	<requires>
 		<type>elgg_version</type>
 		<version>1.8</version>
