@@ -1,0 +1,11 @@
+#!/bin/bash
+echo "## Build docker database"
+docker build -t somenergia/plataforma-database -f ".dockers/plataforma-database/Dockerfile" .
+echo "## Build docker database devel"
+docker build -t somenergia/plataforma-database-devel -f ".dockers/plataforma-database-devel/Dockerfile" .
+echo "## Build docker core"
+docker build -t somenergia/plataforma-core -f ".dockers/plataforma-core/Dockerfile" .
+echo "## Build docker"
+docker build -t somenergia/plataforma -f ".dockers/plataforma/Dockerfile" .
+echo "## Build devel docker"
+docker build -t somenergia/plataforma-devel -f ".dockers/plataforma-devel/Dockerfile" .

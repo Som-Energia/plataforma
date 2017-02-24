@@ -34,22 +34,24 @@ if (!isset($CONFIG)) {
  *
  * @global string $CONFIG->dbuser
  * @name $CONFIG->dbuser
- */
-$CONFIG->dbuser = 'admin';
+ */		
+$CONFIG->dbuser = getenv("DBUSER");
+
+
 
 /**
  * The database password
  *
  * @global string $CONFIG->dbpass
  */
-$CONFIG->dbpass = 'plataforma';
+$CONFIG->dbpass = getenv("DBPASS");
 
 /**
  * The database name
  *
  * @global string $CONFIG->dbname
  */
-$CONFIG->dbname = 'elgg';
+$CONFIG->dbname = getenv("DBNAME");
 
 /**
  * The database host.
@@ -58,7 +60,7 @@ $CONFIG->dbname = 'elgg';
  *
  * @global string $CONFIG->dbhost
  */
-$CONFIG->dbhost = 'localhost';
+$CONFIG->dbhost = getenv("DBHOST");
 
 /**
  * The database prefix
@@ -69,7 +71,7 @@ $CONFIG->dbhost = 'localhost';
  *
  * @global string $CONFIG->dbprefix
  */
-$CONFIG->dbprefix = 'elgg_';
+$CONFIG->dbprefix = getenv("DBPREFIX");
 
 
 /**

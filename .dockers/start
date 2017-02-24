@@ -1,0 +1,5 @@
+#!/bin/bash
+APPPATH=$(realpath "./")
+DATAPATH="$APPPATH/../elggdata"
+docker start plataforma-mysql-devel
+docker start -i -a plataforma-devel
