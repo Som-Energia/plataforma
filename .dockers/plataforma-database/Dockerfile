@@ -1,0 +1,6 @@
+FROM mysql:5.6
+MAINTAINER  Som Energia
+ENV MYSQL_RANDOM_ROOT_PASSWORD="yes"
+ENV MYSQL_DATABASE="plataforma"
+ENV MYSQL_USER="plataforma"
+ENV MYSQL_PASSWORD="plataforma"
