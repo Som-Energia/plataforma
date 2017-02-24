@@ -10,6 +10,7 @@
 	"au/au_subgroups": "2.0.0",
 	"coldtrick/file_tools": "v2.0",
 	"beck24/spam_login_filter": "2.1.1",
-	"blackleg/threads": "1.8.3"
+	"blackleg/threads": "1.8.3",
+        "elgg/mentions": "dev-master"
     }
 }

@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "33714c2ec0f506750f13591c15e655d8",
-    "content-hash": "c04050058fa7655a7411e8b67a3e8482",
+    "hash": "c36143c128b156561b7705614376cffb",
+    "content-hash": "52ea38397af410a011b7f33c22e36a72",
     "packages": [
         {
             "name": "au/au_subgroups",
@@ -289,6 +289,30 @@
             "time": "2016-08-13 20:53:52"
         },
         {
+            "name": "elgg/mentions",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Elgg/mentions.git",
+                "reference": "53d08418f64d02eb1f7dedc4aceaa0293866fb46"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Elgg/mentions/zipball/53d08418f64d02eb1f7dedc4aceaa0293866fb46",
+                "reference": "53d08418f64d02eb1f7dedc4aceaa0293866fb46",
+                "shasum": ""
+            },
+            "require": {
+                "composer/installers": ">=1.0.8"
+            },
+            "type": "elgg-plugin",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0"
+            ],
+            "time": "2016-07-17 19:21:26"
+        },
+        {
             "name": "google/recaptcha",
             "version": "1.1.2",
             "source": {
@@ -337,7 +361,9 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "elgg/mentions": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
