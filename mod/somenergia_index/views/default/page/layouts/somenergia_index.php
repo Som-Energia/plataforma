@@ -10,7 +10,6 @@ $mod_params = array('class' => 'elgg-module-highlight');
 ?>
 
 <div class="custom-index elgg-main elgg-grid clearfix">
-    <?php if (!elgg_is_logged_in()) { ?>
     <div class="elgg-col elgg-col-2of2">
         <div class="elgg-inner pvm prl">
             <?php
@@ -19,7 +18,6 @@ $mod_params = array('class' => 'elgg-module-highlight');
             ?>
         </div>
     </div>
-    <?php } ?>
     <div class="elgg-col elgg-col-2of3">
         <div class="elgg-inner pvm prl">
             <?php

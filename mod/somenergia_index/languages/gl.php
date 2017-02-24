@@ -1,6 +1,6 @@
 <?php
 
-$basque = array(
+$galician = array(
     'somenergia_index:activity' => "Actividad reciente",
     'somenergia_index:hello' => "Bienvenido/a a la plataforma",
     'somenergia_index:group_welcome' => "Grupo de Bienvenida",
@@ -11,4 +11,4 @@ $basque = array(
     'somenergia_index:intro_second' => "Más información en la guía de introducción, en %s o en %s"
 );
 
-add_translation("eu", $basque);
+add_translation("gl", $galician);
