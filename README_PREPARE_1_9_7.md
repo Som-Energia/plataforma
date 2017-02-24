@@ -6,7 +6,7 @@
   3. Backup código actual
 
 ## 2. Pre Actualización
-  1. Desactivar mod tydipics
+  1. Desactivar mod tidypics
   2. Desactivar mod bright-theme
   3. Desactivar mod following
   4. Desactivar mod embed-extender
