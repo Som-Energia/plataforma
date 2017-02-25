@@ -8,6 +8,7 @@ $english = array(
 	'group_tools:add_users' => "Add users",
 	'group_tools:in' => "in",
 	'group_tools:remove' => "Remove",
+	'group_tools:delete_selected' => "Delete selected",
 	'group_tools:clear_selection' => "Clear selection",
 	'group_tools:all_members' => "All members",
 	'group_tools:explain' => "Explanation",
@@ -21,7 +22,10 @@ $english = array(
 	// menu
 	'group_tools:menu:mail' => "Mail Members",
 	'group_tools:menu:invitations' => "Manage invitations",
+	'admin:administer_utilities:group_bulk_delete' => "Group bulk delete",
 
+	'admin:appearance:group_tool_presets' => "Group tool presets",
+	
 	// plugin settings
 	'group_tools:settings:invite:title' => "Group invitation options",
 	'group_tools:settings:management:title' => "General group options",
@@ -45,6 +49,8 @@ $english = array(
 	'group_tools:settings:domain_based:description' => "Users can join a group based on their e-mail domain. During registration they will auto join groups based on their e-mail domain.",
 
 	'group_tools:settings:mail' => "Allow group mail (allows group admins to send a message to all members)",
+	'group_tools:settings:mail:members' => "Allow group admins to enable group mail for their members",
+	'group_tools:settings:mail:members:description' => "This requires group mail to be enabled",
 
 	'group_tools:settings:listing:default' => "Default group listing tab",
 	'group_tools:settings:listing:available' => "Available group listing tabs",
@@ -76,6 +82,22 @@ $english = array(
 	'group_tools:settings:fix:all' => "Fix all problems",
 	'group_tools:settings:fix:nothing' => "Nothing is wrong with the groups on your site!",
 
+	'group_tools:settings:member_export' => "Allow group admins to export member information",
+	'group_tools:settings:member_export:description' => "This includes the name, username and email address of the user.",
+	
+	// group tool presets
+	'group_tools:admin:group_tool_presets:description' => "Here you can configure group tool presets.
+When a user creates a group he/she gets to choose one of the presets in order to quickly get the correct tools. A blank option is also offered to the user to allow his/her own choices.",
+	'group_tools:admin:group_tool_presets:header' => "Existing presets",
+	'group_tools:create_group:tool_presets:description' => "You can select a group tool preset here. If you do so, you will get a set of tools which are configured for the selected preset. You can always chose to add additional tools to a preset, or remove the ones you do not like.",
+	'group_tools:create_group:tool_presets:active_header' => "Tools for this preset",
+	'group_tools:create_group:tool_presets:more_header' => "Extra tools",
+	'group_tools:create_group:tool_presets:select' => "Select a group type",
+	'group_tools:create_group:tool_presets:show_more' => "More tools",
+	'group_tools:create_group:tool_presets:blank:title' => "Blank group",
+	'group_tools:create_group:tool_presets:blank:description' => "Choose this group to select your own tools.",
+	
+	
 	// group invite message
 	'group_tools:groups:invite:body' => "Hi %s,
 
@@ -119,17 +141,16 @@ To visit the group please click on the following link:
 %s",
 
 	// group edit tabbed
-	'group_tools:group:edit:profile' => "Group profile / tools",
+	'group_tools:group:edit:profile' => "Profile",
+	'group_tools:group:edit:access' => "Access",
+	'group_tools:group:edit:tools' => "Tools",
 	'group_tools:group:edit:other' => "Other options",
 
 	// admin transfer - form
-	'group_tools:admin_transfer:title' => "Transfer the ownership of this group",
-	'group_tools:admin_transfer:transfer' => "Transfer group ownership to",
+	'group_tools:admin_transfer:current' => "Keep current owner: %s",
 	'group_tools:admin_transfer:myself' => "Myself",
 	'group_tools:admin_transfer:submit' => "Transfer",
-	'group_tools:admin_transfer:no_users' => "No members or friends to transfer ownership to.",
-	'group_tools:admin_transfer:confirm' => "Are you sure you wish to transfer ownership?",
-
+	
 	// special states form
 	'group_tools:special_states:title' => "Group special states",
 	'group_tools:special_states:description' => "A group can have several special states, here is an overview of the special states and their current value.",
@@ -183,6 +204,9 @@ To visit the group please click on the following link:
 	'group_tools:profile_widgets:option' => "Allow non members to view widgets on the group profile page:",
 
 	// group mail
+	'group_tools:tools:mail_members' => "Allow group members to mail other group members",
+	'mail_members:group_tool_option:description' => "This will allow normal group members to send an e-mail to other group members. By default this is limited to group admins.",
+	
 	'group_tools:mail:message:from' => "From group",
 
 	'group_tools:mail:title' => "Send a mail to the group members",
@@ -248,6 +272,10 @@ To visit the group please click on the following link:
 	'group_tools:invite_members:title' => "Group members can invite",
 	'group_tools:invite_members:description' => "Allow the members of this group to invite new members",
 
+	// group tool option descriptions
+	'activity:group_tool_option:description' => "Show an activity feed about group related content.",
+	'forum:group_tool_option:description' => "Allow the group members to start a discussion in a simple forum format.",
+	
 	// actions
 	'group_tools:action:error:input' => "Invalid input to perform this action",
 	'group_tools:action:error:entities' => "The given GUIDs didn't result in the correct entities",
@@ -450,6 +478,15 @@ To visit the group please click on the following link:
 	'group_tools:action:remove_related_groups:error:not_related' => "The group is not related",
 	'group_tools:action:remove_related_groups:error:remove' => "An unknown error occured while removing the relationship, please try again",
 	'group_tools:action:remove_related_groups:success' => "The group is no longer related",
+	
+	'group_tools:action:group_tool:presets:saved' => "New group tool presets saved",
+	
+	// group member export
+	'group_tools:member_export:title_button' => "Export members",
+	
+	// group bulk delete
+	'group_tools:action:bulk_delete:success' => "The selected groups were deleted",
+	'group_tools:action:bulk_delete:error' => "An error occured while deleting the groups, please try again",
 );
 
 add_translation("en", $english);

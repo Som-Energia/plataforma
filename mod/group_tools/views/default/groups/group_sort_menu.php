@@ -6,7 +6,7 @@
 
 $tabs = array(
 	"newest" => array(
-		"text" => elgg_echo("groups:newest"),
+		"text" => elgg_echo("sort:newest"),
 		"href" => "groups/all?filter=newest",
 		"priority" => 200,
 	),
@@ -16,7 +16,7 @@ $tabs = array(
 		"priority" => 250,
 	),
 	"popular" => array(
-		"text" => elgg_echo("groups:popular"),
+		"text" => elgg_echo("sort:popular"),
 		"href" => "groups/all?filter=popular",
 		"priority" => 300,
 	),
@@ -61,6 +61,10 @@ foreach ($tabs as $name => $tab) {
 		}
 	} elseif ($show_tab_setting !== "0") {
 		$show_tab = true;
+	}
+	
+	if ($show_tab && in_array($name, array("yours", "suggested")) && !elgg_is_logged_in()) {
+		$show_tab = false;
 	}
 	
 	if ($show_tab) {

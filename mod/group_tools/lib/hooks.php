@@ -87,6 +87,9 @@ function group_tools_route_groups_handler($hook, $type, $return_value, $params) 
 				$result = false;
 				
 				set_input("group_guid", $page[1]);
+				if (isset($page[2])) {
+					set_input("subpage", $page[2]);
+				}
 				
 				include(dirname(dirname(__FILE__)) . "/pages/groups/membershipreq.php");
 				break;
@@ -155,6 +158,15 @@ function group_tools_route_groups_handler($hook, $type, $return_value, $params) 
 					}
 				}
 				break;
+			case "activity":
+				$result = false;
+				
+				if (isset($page[1])) {
+					set_input("guid", $page[1]);
+				}
+				
+				include(dirname(dirname(__FILE__)) . "/pages/groups/river.php");
+				break;
 			default:
 				// check if we have an old group profile link
 				if (isset($page[0]) && is_numeric($page[0])) {
@@ -177,7 +189,7 @@ function group_tools_route_groups_handler($hook, $type, $return_value, $params) 
  * @param string $hook         the 'register' hook
  * @param string $type         for the 'menu:title' menu
  * @param array  $return_value the menu items to show
- * @param arary  $params       params to help extend the menu items
+ * @param array  $params       params to help extend the menu items
  *
  * @return ElggMenuItem[] a list of menu items
  */
@@ -187,11 +199,12 @@ function group_tools_menu_title_handler($hook, $type, $return_value, $params) {
 	$page_owner = elgg_get_page_owner_entity();
 	$user = elgg_get_logged_in_user_entity();
 	
-	if (!empty($result) && is_array($result)) {
-		if (elgg_in_context("groups")) {
-			// modify some group menu items
-			if (!empty($page_owner) && !empty($user) && ($page_owner instanceof ElggGroup)) {
-				$invite_found = false;
+	if (elgg_in_context("groups")) {
+		// modify some group menu items
+		if (!empty($page_owner) && !empty($user) && ($page_owner instanceof ElggGroup)) {
+			$invite_found = false;
+			
+			if (!empty($result) && is_array($result)) {
 				
 				foreach ($result as $menu_item) {
 					
@@ -232,52 +245,65 @@ function group_tools_menu_title_handler($hook, $type, $return_value, $params) {
 					}
 				}
 				
-				// maybe allow normal users to invite new members
-				if (elgg_in_context("group_profile") && !$invite_found) {
-					// this is only allowed for group members
-					if ($page_owner->isMember($user)) {
-						// we're on a group profile page, but haven't found the invite button yet
-						// so check if it should be here
-						$setting = elgg_get_plugin_setting("invite_members", "group_tools");
-						if (in_array($setting, array("yes_off", "yes_on"))) {
-							$invite_members = $page_owner->invite_members;
-							if (empty($invite_members)) {
-								$invite_members = "no";
-								if ($setting == "yes_on") {
-									$invite_members = "yes";
-								}
+				// check if we need to remove the group add button
+				if (!empty($user) && !$user->isAdmin() && group_tools_is_group_creation_limited()) {
+					foreach ($result as $index => $menu_item) {
+						if ($menu_item->getName() == "add") {
+							unset($result[$index]);
+						}
+					}
+				}
+			}
+				
+			// maybe allow normal users to invite new members
+			if (elgg_in_context("group_profile") && !$invite_found) {
+				// this is only allowed for group members
+				if ($page_owner->isMember($user)) {
+					// we're on a group profile page, but haven't found the invite button yet
+					// so check if it should be here
+					$setting = elgg_get_plugin_setting("invite_members", "group_tools");
+					if (in_array($setting, array("yes_off", "yes_on"))) {
+						$invite_members = $page_owner->invite_members;
+						if (empty($invite_members)) {
+							$invite_members = "no";
+							if ($setting == "yes_on") {
+								$invite_members = "yes";
+							}
+						}
+						
+						if ($invite_members == "yes") {
+							// normal users are allowed to invite users
+							$invite = elgg_get_plugin_setting("invite", "group_tools");
+							$invite_email = elgg_get_plugin_setting("invite_email", "group_tools");
+							$invite_csv = elgg_get_plugin_setting("invite_csv", "group_tools");
+							
+							if (in_array("yes", array($invite, $invite_csv, $invite_email))) {
+								$text = elgg_echo("group_tools:groups:invite");
+							} else {
+								$text = elgg_echo("groups:invite");
 							}
 							
-							if ($invite_members == "yes") {
-								// normal users are allowed to invite users
-								$invite = elgg_get_plugin_setting("invite", "group_tools");
-								$invite_email = elgg_get_plugin_setting("invite_email", "group_tools");
-								$invite_csv = elgg_get_plugin_setting("invite_csv", "group_tools");
-								
-								if (in_array("yes", array($invite, $invite_csv, $invite_email))) {
-									$text = elgg_echo("group_tools:groups:invite");
-								} else {
-									$text = elgg_echo("groups:invite");
-								}
-								
-								$result[] = ElggMenuItem::factory(array(
-									"name" => "groups:invite",
-									"href" => "groups/invite/" . $page_owner->getGUID(),
-									"text" => $text,
-									"link_class" => "elgg-button elgg-button-action",
-								));
-							}
+							$result[] = ElggMenuItem::factory(array(
+								"name" => "groups:invite",
+								"href" => "groups/invite/" . $page_owner->getGUID(),
+								"text" => $text,
+								"link_class" => "elgg-button elgg-button-action",
+							));
 						}
 					}
 				}
 			}
 			
-			// check if we need to remove the group add button
-			if (!empty($user) && !$user->isAdmin() && group_tools_is_group_creation_limited()) {
-				foreach ($result as $index => $menu_item) {
-					if ($menu_item->getName() == "add") {
-						unset($result[$index]);
-					}
+			// group member export
+			if (current_page_url() == elgg_normalize_url("groups/members/" . $page_owner->getGUID())) {
+				if ($page_owner->canEdit() && (elgg_get_plugin_setting("member_export", "group_tools") == "yes")) {
+					$result[] = ElggMenuItem::factory(array(
+						"name" => "member_export",
+						"text" => elgg_echo("group_tools:member_export:title_button"),
+						"href" => "action/group_tools/member_export?group_guid=" . $page_owner->getGUID(),
+						"is_action" => true,
+						"class" => "elgg-button elgg-button-action"
+					));
 				}
 			}
 		}
@@ -292,7 +318,7 @@ function group_tools_menu_title_handler($hook, $type, $return_value, $params) {
  * @param string $hook         the 'register' hook
  * @param string $type         for the 'menu:user_hover' menu
  * @param array  $return_value the menu items to show
- * @param arary  $params       params to help extend the menu items
+ * @param array  $params       params to help extend the menu items
  *
  * @return ElggMenuItem[] a list of menu items
  */
@@ -302,37 +328,55 @@ function group_tools_menu_user_hover_handler($hook, $type, $return_value, $param
 	$page_owner = elgg_get_page_owner_entity();
 	$loggedin_user = elgg_get_logged_in_user_entity();
 	
-	if (!empty($page_owner) && ($page_owner instanceof ElggGroup) && !empty($loggedin_user)) {
-		// are multiple admins allowed
-		if (elgg_get_plugin_setting("multiple_admin", "group_tools") == "yes") {
-			if (!empty($params) && is_array($params)) {
-				$user = $params["entity"];
-				
-				// do we have a user
-				if (!empty($user) && ($user instanceof ElggUser)) {
-					// is the user not the owner of the group and noet the current user
-					if (($page_owner->getOwnerGUID() != $user->getGUID()) && ($user->getGUID() != $loggedin_user->getGUID())) {
-						// is the user a member od this group
-						if ($page_owner->isMember($user)) {
-							// can we add/remove an admin
-							if (($page_owner->getOwnerGUID() == $loggedin_user->getGUID()) || ($page_owner->group_multiple_admin_allow_enable == "yes" && $page_owner->canEdit()) || $loggedin_user->isAdmin()) {
-								if (check_entity_relationship($user->getGUID(), "group_admin", $page_owner->getGUID())) {
-									$text = elgg_echo("group_tools:multiple_admin:profile_actions:remove");
-								} else {
-									$text = elgg_echo("group_tools:multiple_admin:profile_actions:add");
-								}
-								
-								$result[] = ElggMenuItem::factory(array(
-									"text" => $text,
-									"name" => "group_admin",
-									"href" => elgg_add_action_tokens_to_url(elgg_get_site_url() . "action/group_tools/toggle_admin?group_guid=" . $page_owner->getGUID() . "&user_guid=" . $user->getGUID())
-								));
-							}
-						}
-					}
-				}
-			}
-		}
+	if (empty($page_owner) || !elgg_instanceof($page_owner, "group") || empty($loggedin_user)) {
+		// not a group or logged in
+		return $result;
+	}
+	
+	if (!$page_owner->canEdit()) {
+		// can't edit the group
+		return $result;
+	}
+	
+	if (empty($params) || !is_array($params)) {
+		// wrong params
+		return $result;
+	}
+	
+	$user = elgg_extract("entity", $params);
+	if (empty($user) || !elgg_instanceof($user, "user")) {
+		// not a user menu
+		return $result;
+	}
+	
+	if (($page_owner->getOwnerGUID() == $user->getGUID()) || ($loggedin_user->getGUID() == $user->getGUID())) {
+		// group owner or current user
+		return $result;
+	}
+	
+	if (!$page_owner->isMember($user)) {
+		// user is not a member of the group
+		return $result;
+	}
+	
+	if (group_tools_group_multiple_admin_enabled($page_owner)) {
+		$is_admin = check_entity_relationship($user->getGUID(), "group_admin", $page_owner->getGUID());
+		
+		$result[] = ElggMenuItem::factory(array(
+			"name" => "group_admin",
+			"text" => elgg_echo("group_tools:multiple_admin:profile_actions:add"),
+			"href" => "action/group_tools/toggle_admin?group_guid=" . $page_owner->getGUID() . "&user_guid=" . $user->getGUID(),
+			"is_action" => true,
+			"item_class" => $is_admin ? "hidden" : ""
+		));
+		
+		$result[] = ElggMenuItem::factory(array(
+			"name" => "group_admin_remove",
+			"text" => elgg_echo("group_tools:multiple_admin:profile_actions:remove"),
+			"href" => "action/group_tools/toggle_admin?group_guid=" . $page_owner->getGUID() . "&user_guid=" . $user->getGUID(),
+			"is_action" => true,
+			"item_class" => $is_admin ? "" : "hidden"
+		));
 	}
 	
 	return $result;
@@ -357,7 +401,7 @@ function group_tools_menu_entity_handler($hook, $type, $return_value, $params) {
 		$page_owner = elgg_get_page_owner_entity();
 		
 		if (elgg_in_context("group_tools_related_groups") && !empty($page_owner) && elgg_instanceof($page_owner, "group") && $page_owner->canEdit() && elgg_instanceof($entity, "group")) {
-			// remove relatede group
+			// remove related group
 			$result[] = ElggMenuItem::factory(array(
 				"name" => "related_group",
 				"text" => elgg_echo("group_tools:related_groups:entity:remove"),
@@ -402,6 +446,41 @@ function group_tools_menu_entity_handler($hook, $type, $return_value, $params) {
 				"href" => false,
 				"priority" => 1
 			));
+		} elseif (!elgg_in_context("widgets") && !empty($page_owner) && elgg_instanceof($page_owner, "group") && $page_owner->canEdit() && elgg_instanceof($entity, "user")) {
+			// user listing in a group
+			if (($page_owner->getOwnerGUID() != $entity->getGUID()) && ($entity->getGUID() != elgg_get_logged_in_user_guid()) && $page_owner->isMember($entity)) {
+				// remove user from group
+				$result[] = ElggMenuItem::factory(array(
+					"name" => "removeuser",
+					"text" => elgg_echo('groups:removeuser'),
+					"href" => "action/groups/remove?user_guid=" . $entity->getGUID() . "&group_guid=" . $page_owner->getGUID(),
+					"confirm" => elgg_echo("question:areyousure"),
+					"priority" => 900
+				));
+				
+				// add/remove group admins
+				if (group_tools_group_multiple_admin_enabled($page_owner)) {
+					$is_admin = check_entity_relationship($entity->getGUID(), "group_admin", $page_owner->getGUID());
+					
+					$result[] = ElggMenuItem::factory(array(
+						"name" => "group_admin",
+						"text" => elgg_echo("group_tools:multiple_admin:profile_actions:add"),
+						"href" => "action/group_tools/toggle_admin?group_guid=" . $page_owner->getGUID() . "&user_guid=" . $entity->getGUID(),
+						"is_action" => true,
+						"priority" => 800,
+						"item_class" => $is_admin ? "hidden" : ""
+					));
+					
+					$result[] = ElggMenuItem::factory(array(
+						"name" => "group_admin_remove",
+						"text" => elgg_echo("group_tools:multiple_admin:profile_actions:remove"),
+						"href" => "action/group_tools/toggle_admin?group_guid=" . $page_owner->getGUID() . "&user_guid=" . $entity->getGUID(),
+						"is_action" => true,
+						"priority" => 801,
+						"item_class" => $is_admin ? "" : "hidden"
+					));
+				}
+			}
 		}
 	}
 	
@@ -499,37 +578,33 @@ function group_tools_widget_url_handler($hook, $type, $return_value, $params) {
  * @return int the access_id to use as default
  */
 function group_tools_access_default_handler($hook, $type, $return_value, $params) {
-	global $GROUP_TOOLS_GROUP_DEFAULT_ACCESS_ENABLED;
-	$GROUP_TOOLS_GROUP_DEFAULT_ACCESS_ENABLED = true;
-	
-	$result = $return_value;
 	
 	// check if the page owner is a group
 	$page_owner = elgg_get_page_owner_entity();
-	if (!empty($page_owner) && elgg_instanceof($page_owner, "group", null, "ElggGroup")) {
-		// check if the group as a default access set
-		$group_access = $page_owner->getPrivateSetting("elgg_default_access");
-		if ($group_access !== false) {
-			$result = (int) $group_access;
-		}
-		
+	if (empty($page_owner) || !elgg_instanceof($page_owner, "group")) {
+		return $return_value;
+	}
+	
+	// check if the group as a default access set
+	$group_access = $page_owner->getPrivateSetting("elgg_default_access");
+	if ($group_access !== null) {
+		$return_value = (int) $group_access;
+	} else {
 		// if the group hasn't set anything check if there is a site setting for groups
-		if ($group_access === false) {
-			$site_group_access = elgg_get_plugin_setting("group_default_access", "group_tools");
-			if ($site_group_access !== null) {
-				switch ($site_group_access) {
-					case GROUP_TOOLS_GROUP_ACCESS_DEFAULT:
-						$result = $page_owner->group_acl;
-						break;
-					default:
-						$result = $site_group_access;
-						break;
-				}
+		$site_group_access = elgg_get_plugin_setting("group_default_access", "group_tools");
+		if ($site_group_access !== null) {
+			switch ($site_group_access) {
+				case GROUP_TOOLS_GROUP_ACCESS_DEFAULT:
+					$return_value = (int) $page_owner->group_acl;
+					break;
+				default:
+					$return_value = (int) $site_group_access;
+					break;
 			}
 		}
 	}
 	
-	return $result;
+	return $return_value;
 }
 
 /**
@@ -702,4 +777,260 @@ function group_tools_action_register_handler($hook, $type, $return_value, $param
 	
 	// enable registration if disabled
 	group_tools_enable_registration();
+}
+
+/**
+ * Take over the livesearch pagehandler in case of group search
+ *
+ * @param string $hook         'route'
+ * @param string $type         'livessearch'
+ * @param array  $return_value the current params for the pagehandler
+ * @param null   $params       null
+ *
+ * @return bool|void
+ */
+function group_tools_route_livesearch_handler($hook, $type, $return_value, $params) {
+	
+	// only return results to logged in users.
+	if (!$user = elgg_get_logged_in_user_entity()) {
+		exit;
+	}
+	
+	if (!$q = get_input("term", get_input("q"))) {
+		exit;
+	}
+	
+	$input_name = get_input("name", "groups");
+	
+	$q = sanitise_string($q);
+	
+	// replace mysql vars with escaped strings
+	$q = str_replace(array("_", "%"), array("\_", "\%"), $q);
+	
+	$match_on = get_input("match_on", "all");
+	
+	if (!is_array($match_on)) {
+		$match_on = array($match_on);
+	}
+	
+	// only take over groups search
+	if (count($match_on) > 1 || !in_array("groups", $match_on)) {
+		return $return_value;
+	}
+	
+	if (get_input("match_owner", false)) {
+		$owner_guid = $user->getGUID();
+	} else {
+		$owner_guid = ELGG_ENTITIES_ANY_VALUE;
+	}
+	
+	$limit = sanitise_int(get_input("limit", 10));
+	
+	// grab a list of entities and send them in json.
+	$results = array();
+	
+	$options = array(
+		"type" => "group",
+		"limit" => $limit,
+		"owner_guid" => $owner_guid,
+		"joins" => array("JOIN " . elgg_get_config("dbprefix") . "groups_entity ge ON e.guid = ge.guid"),
+		"wheres" => array("(ge.name LIKE '%" . $q . "%' OR ge.description LIKE '%" . $q . "%')")
+	);
+	
+	$entities = elgg_get_entities($options);
+	if (!empty($entities)) {
+		foreach ($entities as $entity) {
+			$output = elgg_view_list_item($entity, array(
+				"use_hover" => false,
+				"class" => "elgg-autocomplete-item",
+				"full_view" => false,
+			));
+			
+			$icon = elgg_view_entity_icon($entity, "tiny", array(
+				"use_hover" => false,
+			));
+			
+			$result = array(
+				"type" => "group",
+				"name" => $entity->name,
+				"desc" => $entity->description,
+				"guid" => $entity->getGUID(),
+				"label" => $output,
+				"value" => $entity->getGUID(),
+				"icon" => $icon,
+				"url" => $entity->getURL(),
+				"html" => elgg_view("input/grouppicker/item", array(
+					"entity" => $entity,
+					"input_name" => $input_name,
+				)),
+			);
+			
+			$results[$entity->name . rand(1, 100)] = $result;
+		}
+	}
+	
+	ksort($results);
+	header("Content-Type: application/json");
+	echo json_encode(array_values($results));
+	exit;
+}
+
+/**
+ * Add or remove widgets based on the group tool option
+ *
+ * @param string $hook         'group_tool_widgets'
+ * @param string $type         'widget_manager'
+ * @param array  $return_value current enable/disable widget handlers
+ * @param array  $params       supplied params
+ *
+ * @return array
+ */
+function group_tools_tool_widgets_handler($hook, $type, $return_value, $params) {
+	
+	if (!empty($params) && is_array($params)) {
+		$entity = elgg_extract("entity", $params);
+		
+		if (!empty($entity) && elgg_instanceof($entity, "group")) {
+			if (!is_array($return_value)) {
+				$return_value = array();
+			}
+			
+			if (!isset($return_value["enable"])) {
+				$return_value["enable"] = array();
+			}
+			if (!isset($return_value["disable"])) {
+				$return_value["disable"] = array();
+			}
+			
+			// check different group tools for which we supply widgets
+			if ($entity->forum_enable == "yes") {
+				$return_value["enable"][] = "group_forum_topics";
+			} else {
+				$return_value["disable"][] = "group_forum_topics";
+				$return_value["disable"][] = "start_discussion";
+			}
+			
+			if ($entity->related_groups_enable == "yes") {
+				$return_value["enable"][] = "group_related";
+			} else {
+				$return_value["disable"][] = "group_related";
+			}
+			
+			if ($entity->activity_enable == "yes") {
+				$return_value["enable"][] = "group_river_widget";
+			} else {
+				$return_value["disable"][] = "group_river_widget";
+			}
+		}
+	}
+		
+	return $return_value;
+}
+
+/**
+ * make a filter menu on the membership request page
+ *
+ * @param string         $hook         name of the hook
+ * @param string         $type         type of the hook
+ * @param ElggMenuItem[] $return_value current menu items
+ * @param array          $params       supplied params
+ *
+ * @return ElggMenuItem[]
+ */
+function group_tools_menu_filter_handler($hook, $type, $return_value, $params) {
+	
+	if (!elgg_in_context("group_membershipreq")) {
+		return $return_value;
+	}
+	
+	if (empty($params) || !is_array($params)) {
+		return $return_value;
+	}
+	
+	$entity = elgg_extract("entity", $params);
+	if (empty($entity) || !elgg_instanceof($entity, "group")) {
+		return $return_value;
+	}
+	
+	$return_value = array();
+	
+	$return_value[] = ElggMenuItem::factory(array(
+		"name" => "membershipreq",
+		"text" => elgg_echo("group_tools:groups:membershipreq:requests"),
+		"href" => "groups/requests/" . $entity->getGUID(),
+		"is_trusted" => true,
+		"priority" => 100
+	));
+	$return_value[] = ElggMenuItem::factory(array(
+		"name" => "invites",
+		"text" => elgg_echo("group_tools:groups:membershipreq:invitations"),
+		"href" => "groups/requests/" . $entity->getGUID() . "/invites",
+		"is_trusted" => true,
+		"priority" => 200
+	));
+	$return_value[] = ElggMenuItem::factory(array(
+		"name" => "email_invites",
+		"text" => elgg_echo("group_tools:groups:membershipreq:email_invitations"),
+		"href" => "groups/requests/" . $entity->getGUID() . "/email_invites",
+		"is_trusted" => true,
+		"priority" => 300
+	));
+	
+	return $return_value;
+}
+
+/**
+ * Set the correct url for group thumbnails
+ *
+ * @param string $hook         name of the hook
+ * @param string $type         type of the hook
+ * @param string $return_value current return value
+ * @param array  $params       supplied params
+ *
+ * @return string
+ */
+function groups_tools_group_icon_url_handler($hook, $type, $return_value, $params) {
+	
+	if (empty($params) || !is_array($params)) {
+		return $return_value;
+	}
+	
+	$group = elgg_extract("entity", $params);
+	if (empty($group) || !elgg_instanceof($group, "group")) {
+		return $return_value;
+	}
+	
+	$size = elgg_extract("size", $params, "medium");
+	$iconsizes = elgg_get_config("icon_sizes");
+	if (empty($size) || empty($iconsizes) || !array_key_exists($size, $iconsizes)) {
+		return $return_value;
+	}
+	
+	$icontime = $group->icontime;
+	if (is_null($icontime)) {
+		$icontime = 0;
+		
+		// handle missing metadata (pre 1.7 installations)
+		// @see groups_icon_url_override()
+		$fh = new ElggFile();
+		$fh->owner_guid = $group->getOwnerGUID();
+		$fh->setFilename("groups/{$group->getGUID()}large.jpg");
+		
+		if ($fh->exists()) {
+			$icontime = time();
+		}
+		
+		create_metadata($group->getGUID(), "icontime", $icontime, "integer", $group->getOwnerGUID(), ACCESS_PUBLIC);
+	}
+	if (empty($icontime)) {
+		return $return_value;
+	}
+	
+	$params = array(
+		"group_guid" => $group->getGUID(),
+		"guid" => $group->getOwnerGUID(),
+		"size" => $size,
+		"icontime" => $icontime
+	);
+	return elgg_http_add_url_query_elements("mod/group_tools/pages/groups/thumbnail.php", $params);
 }

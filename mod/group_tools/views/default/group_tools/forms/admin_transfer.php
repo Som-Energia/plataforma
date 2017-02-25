@@ -7,7 +7,9 @@ $group = elgg_extract("entity", $vars);
 $user = elgg_get_logged_in_user_entity();
 
 if (!empty($group) && ($group instanceof ElggGroup) && !empty($user)) {
+	
 	if (($group->getOwnerGUID() == $user->getGUID()) || $user->isAdmin()) {
+		
 		$dbprefix = elgg_get_config("dbprefix");
 		
 		$friends_options = array(
@@ -15,11 +17,11 @@ if (!empty($group) && ($group instanceof ElggGroup) && !empty($user)) {
 			"relationship" => "friend",
 			"relationship_guid" => $user->getGUID(),
 			"limit" => false,
+			"count" => true,
 			"joins" => array("JOIN " . $dbprefix . "users_entity ue ON e.guid = ue.guid"),
 			"wheres" => array("(e.guid <> " . $group->getOwnerGUID() . ")"),
 			"order_by" => "ue.name",
 			"selects" => array("ue.name"),
-			"callback" => "group_tool_admin_transfer_callback"
 		);
 		
 		$member_options = array(
@@ -28,23 +30,24 @@ if (!empty($group) && ($group instanceof ElggGroup) && !empty($user)) {
 			"relationship_guid" => $group->getGUID(),
 			"inverse_relationship" => true,
 			"limit" => false,
+			"count" => true,
 			"joins" => array("JOIN " . $dbprefix . "users_entity ue ON e.guid = ue.guid"),
 			"wheres" => array("(e.guid NOT IN (" . $group->getOwnerGUID() . ", " . $user->getGUID() . "))"),
 			"order_by" => "ue.name",
 			"selects" => array("ue.name"),
-			"callback" => "group_tool_admin_transfer_callback"
 		);
 		
 		$friends = elgg_get_entities_from_relationship($friends_options);
 		$members = elgg_get_entities_from_relationship($member_options);
 		
 		if (!empty($friends) || !empty($members)) {
+			
 			$add_myself = false;
 			$add_friends = false;
 			$add_members = false;
 			
-			$result = elgg_echo("group_tools:admin_transfer:transfer") . ": ";
 			$result .= "<select name='owner_guid'>";
+			$result .= "<option value='" . $group->getOwnerGUID() . "'>" . elgg_echo("group_tools:admin_transfer:current", array($group->getOwnerEntity()->name)) . "</option>";
 			
 			if ($group->getOwnerGUID() != $user->getGUID()) {
 				$add_myself = true;
@@ -53,6 +56,11 @@ if (!empty($group) && ($group instanceof ElggGroup) && !empty($user)) {
 			}
 			
 			if (!empty($friends)) {
+				unset($friends_options["count"]);
+				$friends_options["callback"] = "group_tool_admin_transfer_callback";
+				
+				$friends = new ElggBatch("elgg_get_entities_from_relationship", $friends_options);
+				
 				$add_friends = true;
 				$friends_block = "<optgroup label='" . elgg_echo("friends") . "'>";
 				
@@ -62,12 +70,16 @@ if (!empty($group) && ($group instanceof ElggGroup) && !empty($user)) {
 				
 				$friends_block .= "</optgroup>";
 				
-				if ($add_friends) {
-					$result .= $friends_block;
-				}
+				// add friends to the select
+				$result .= $friends_block;
 			}
 			
 			if (!empty($members)) {
+				unset($member_options["count"]);
+				$member_options["callback"] = "group_tool_admin_transfer_callback";
+				
+				$members = new ElggBatch("elgg_get_entities_from_relationship", $member_options);
+				
 				$add_members = true;
 				$members_block = "<optgroup label='" . elgg_echo("groups:members") . "'>";
 				
@@ -77,30 +89,26 @@ if (!empty($group) && ($group instanceof ElggGroup) && !empty($user)) {
 				
 				$members_block .= "</optgroup>";
 				
-				if ($add_members) {
-					$result .= $members_block;
-				}
+				// add group members to the select
+				$result .= $members_block;
 			}
 			
 			$result .= "</select>";
 			$result .= "<br />";
-			$result .= "<br />";
 			
 			if ($add_myself || $add_friends || $add_members) {
 				
-				$result .= elgg_view("input/hidden", array("name" => "group_guid", "value" => $group->getGUID()));
-				$result .= elgg_view("input/submit", array("value" => elgg_echo("group_tools:admin_transfer:submit")));
+				echo "<div>";
+				echo "<label for='groups-owner-guid'>" . elgg_echo("groups:owner") . "</label><br />";
+				echo $result;
 				
-				$result = elgg_view("input/form", array("body" => $result,
-														"action" => $vars["url"] . "action/group_tools/admin_transfer",
-														"id" => "group_tools_admin_transfer_form"));
-			} else {
-				$result = elgg_echo("group_tools:admin_transfer:no_users");
-			}
-		} else {
-			$result = elgg_echo("group_tools:admin_transfer:no_users");
+				if ($group->getOwnerGUID() == $user->getGUID()) {
+					echo "<span class='elgg-text-help'>" . elgg_echo("groups:owner:warning") . "</span>";
+				}
+				
+				echo "</div>";
+				
+			} 
 		}
-		
-		echo elgg_view_module("info", elgg_echo("group_tools:admin_transfer:title"), $result);
 	}
 }

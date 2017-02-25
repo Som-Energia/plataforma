@@ -14,6 +14,8 @@ if (!empty($user) && $user->isAdmin()) {
 	$group = elgg_extract("entity", $vars);
 	
 	if (!empty($group) && elgg_instanceof($group, "group", null, "ElggGroup")) {
+		elgg_require_js("group_tools/group_edit");
+		
 		$noyes_options = array(
 			"no" => elgg_echo("option:no"),
 			"yes" => elgg_echo("option:yes")
@@ -99,7 +101,7 @@ if (!empty($user) && $user->isAdmin()) {
 			
 			if ($user_count != $member_count) {
 					
-				$link_start = "<a href='" . elgg_add_action_tokens_to_url($vars["url"] . "action/group_tools/fix_auto_join?group_guid=" . $group->getGUID()) . "'>";
+				$link_start = "<a href='" . elgg_add_action_tokens_to_url("action/group_tools/fix_auto_join?group_guid=" . $group->getGUID()) . "'>";
 				$link_end = "</a>";
 					
 				$content .= "<div class='mtm'>";

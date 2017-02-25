@@ -26,8 +26,8 @@ $noyes3_options = array(
 $listing_options = array(
 	"discussion" => elgg_echo("groups:latestdiscussion"),
 	"yours" => elgg_echo("groups:yours"),
-	"newest" => elgg_echo("groups:newest"),
-	"popular" => elgg_echo("groups:popular"),
+	"newest" => elgg_echo("sort:newest"),
+	"popular" => elgg_echo("sort:popular"),
 	"open" => elgg_echo("group_tools:groups:sorting:open"),
 	"closed" => elgg_echo("group_tools:groups:sorting:closed"),
 	"alpha" => elgg_echo("group_tools:groups:sorting:alphabetical"),
@@ -66,13 +66,14 @@ $body .= "</div>";
 
 $body .= "<div>";
 $body .= elgg_echo("group_tools:settings:auto_notification");
-if ($plugin->auto_notification == "yes") { // Backwards compatibility
+if ($plugin->auto_notification == "yes") {
+	// Backwards compatibility
 	$body .= elgg_view("input/hidden", array("name" => "params[auto_notification]", "value" => "0"));
 	$plugin->auto_notification_site = "1";
 	$plugin->auto_notification_email = "1";
 }
 $body .= "<ul class='mll'>";
-global $NOTIFICATION_HANDLERS;
+$NOTIFICATION_HANDLERS = _elgg_services()->notifications->getMethods();
 foreach ($NOTIFICATION_HANDLERS as $method => $foo) {
 	$name = "auto_notification_" . $method;
 	$checkbox_options = array("name" => "params[" . $name . "]", "value" => "1");
@@ -109,6 +110,18 @@ $body .= "</div>";
 $body .= "<div>";
 $body .= elgg_echo("group_tools:settings:mail");
 $body .= elgg_view("input/dropdown", array("name" => "params[mail]", "options_values" => $noyes_options, "value" => $plugin->mail, "class" => "mls"));
+$body .= "</div>";
+
+$body .= "<div>";
+$body .= elgg_echo("group_tools:settings:mail:members");
+$body .= elgg_view("input/dropdown", array("name" => "params[mail_members]", "options_values" => $noyes_options, "value" => $plugin->mail_members, "class" => "mls"));
+$body .= "<div class='elgg-subtext'>" . elgg_echo("group_tools:settings:mail:members:description") . "</div>";
+$body .= "</div>";
+
+$body .= "<div>";
+$body .= elgg_echo("group_tools:settings:member_export");
+$body .= elgg_view("input/dropdown", array("name" => "params[member_export]", "options_values" => $noyes_options, "value" => $plugin->member_export, "class" => "mls"));
+$body .= "<div class='elgg-subtext'>" . elgg_echo("group_tools:settings:member_export:description") . "</div>";
 $body .= "</div>";
 
 $body .= "<br />";
@@ -193,14 +206,6 @@ $body .= "&nbsp;" . elgg_view("input/access", array("name" => "params[group_defa
 elgg_pop_context();
 
 $body .= "</div>";
-
-// check if we need to set a disclaimer
-global $GROUP_TOOLS_GROUP_DEFAULT_ACCESS_ENABLED;
-if (empty($GROUP_TOOLS_GROUP_DEFAULT_ACCESS_ENABLED)) {
-	$body .= "<div class='elgg-admin-notices mtm pbn'>";
-	$body .= "<p class='mbn'>" . elgg_echo("group_tools:settings:default_access:disclaimer") . "</p>";
-	$body .= "</div>";
-}
 
 echo elgg_view_module("inline", $title, $body);
 
