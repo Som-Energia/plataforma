@@ -36,7 +36,7 @@ class ElggMenuItem {
 		// string Identifier of this item's parent
 		'parent_name' => '',
 
-		// ElggMenuItem The parent object or null
+		// \ElggMenuItem The parent object or null
 		'parent' => null,
 
 		// array Array of children objects or empty array
@@ -71,7 +71,7 @@ class ElggMenuItem {
 
 
 	/**
-	 * ElggMenuItem constructor
+	 * \ElggMenuItem constructor
 	 *
 	 * @param string $name Identifier of the menu item
 	 * @param string $text Display text of the menu item (HTML)
@@ -122,7 +122,7 @@ class ElggMenuItem {
 			$options['href'] = '';
 		}
 
-		$item = new ElggMenuItem($options['name'], $options['text'], $options['href']);
+		$item = new \ElggMenuItem($options['name'], $options['text'], $options['href']);
 		unset($options['name']);
 		unset($options['text']);
 		unset($options['href']);
@@ -132,7 +132,7 @@ class ElggMenuItem {
 			$options['contexts'] = $options['context'];
 			unset($options['context']);
 		}
-
+		
 		// make sure contexts is set correctly
 		if (isset($options['contexts'])) {
 			$item->setContext($options['contexts']);
@@ -143,7 +143,7 @@ class ElggMenuItem {
 			$item->setLinkClass($options['link_class']);
 			unset($options['link_class']);
 		} elseif (isset($options['class'])) {
-			elgg_deprecated_notice("ElggMenuItem::factory() does not accept 'class' key anymore, use 'link_class' instead", 1.9);
+			elgg_deprecated_notice("\ElggMenuItem::factory() does not accept 'class' key anymore, use 'link_class' instead", 1.9);
 			$item->setLinkClass($options['class']);
 			unset($options['class']);
 		}
@@ -157,7 +157,7 @@ class ElggMenuItem {
 			$item->setData($options['data']);
 			unset($options['data']);
 		}
-
+		
 		foreach ($options as $key => $value) {
 			if (isset($item->data[$key])) {
 				$item->data[$key] = $value;
@@ -222,7 +222,7 @@ class ElggMenuItem {
 
 	/**
 	 * Set the display text of the menu item
-	 *
+	 * 
 	 * @param string $text The display text as HTML
 	 * @return void
 	 */
@@ -443,7 +443,7 @@ class ElggMenuItem {
 	// @codingStandardsIgnoreStart
 	/**
 	 * Add additional classes
-	 *
+	 * 
 	 * @param array $current    The current array of classes
 	 * @param mixed $additional Additional classes (either array of string)
 	 * @return void
@@ -466,7 +466,7 @@ class ElggMenuItem {
 	 * @deprecated 1.9 Use setPriority()
 	 */
 	public function setWeight($priority) {
-		elgg_deprecated_notice("ElggMenuItem::setWeight() deprecated by ElggMenuItem::setPriority()", 1.9);
+		elgg_deprecated_notice("\ElggMenuItem::setWeight() deprecated by \ElggMenuItem::setPriority()", 1.9);
 		$this->data['priority'] = $priority;
 	}
 
@@ -477,7 +477,7 @@ class ElggMenuItem {
 	 * @deprecated 1.9 Use getPriority()
 	 */
 	public function getWeight() {
-		elgg_deprecated_notice("ElggMenuItem::getWeight() deprecated by ElggMenuItem::getPriority()", 1.9);
+		elgg_deprecated_notice("\ElggMenuItem::getWeight() deprecated by \ElggMenuItem::getPriority()", 1.9);
 		return $this->data['priority'];
 	}
 
@@ -522,7 +522,7 @@ class ElggMenuItem {
 	/**
 	 * Set the parent identifier
 	 *
-	 * @param string $name The identifier of the parent ElggMenuItem
+	 * @param string $name The identifier of the parent \ElggMenuItem
 	 * @return void
 	 */
 	public function setParentName($name) {
@@ -540,10 +540,10 @@ class ElggMenuItem {
 
 	/**
 	 * Set the parent menu item
+	 * 
+	 * This is reserved for the \ElggMenuBuilder.
 	 *
-	 * This is reserved for the ElggMenuBuilder.
-	 *
-	 * @param ElggMenuItem $parent The parent of this menu item
+	 * @param \ElggMenuItem $parent The parent of this menu item
 	 * @return void
 	 * @access private
 	 */
@@ -553,10 +553,10 @@ class ElggMenuItem {
 
 	/**
 	 * Get the parent menu item
+	 * 
+	 * This is reserved for the \ElggMenuBuilder.
 	 *
-	 * This is reserved for the ElggMenuBuilder.
-	 *
-	 * @return ElggMenuItem or null
+	 * @return \ElggMenuItem or null
 	 * @access private
 	 */
 	public function getParent() {
@@ -565,10 +565,10 @@ class ElggMenuItem {
 
 	/**
 	 * Add a child menu item
+	 * 
+	 * This is reserved for the \ElggMenuBuilder.
 	 *
-	 * This is reserved for the ElggMenuBuilder.
-	 *
-	 * @param ElggMenuItem $item A child menu item
+	 * @param \ElggMenuItem $item A child menu item
 	 * @return void
 	 * @access private
 	 */
@@ -578,10 +578,10 @@ class ElggMenuItem {
 
 	/**
 	 * Set the menu item's children
+	 * 
+	 * This is reserved for the \ElggMenuBuilder.
 	 *
-	 * This is reserved for the ElggMenuBuilder.
-	 *
-	 * @param array $children Array of ElggMenuItems
+	 * @param array $children Array of \ElggMenuItems
 	 * @return void
 	 * @access private
 	 */
@@ -591,8 +591,8 @@ class ElggMenuItem {
 
 	/**
 	 * Get the children menu items
-	 *
-	 * This is reserved for the ElggMenuBuilder.
+	 * 
+	 * This is reserved for the \ElggMenuBuilder.
 	 *
 	 * @return array
 	 * @access private
@@ -603,8 +603,8 @@ class ElggMenuItem {
 
 	/**
 	 * Sort the children
-	 *
-	 * This is reserved for the ElggMenuBuilder.
+	 * 
+	 * This is reserved for the \ElggMenuBuilder.
 	 *
 	 * @param string $sortFunction A function that is passed to usort()
 	 * @return void
@@ -619,7 +619,7 @@ class ElggMenuItem {
 
 	/**
 	 * Get all the values for this menu item. Useful for rendering.
-	 *
+	 * 
 	 * @return array
 	 * @since 1.9.0
 	 */
@@ -638,7 +638,7 @@ class ElggMenuItem {
 	 * @deprecated 1.9 Use elgg_view_menu_item()
 	 */
 	public function getContent(array $vars = array()) {
-		elgg_deprecated_notice("ElggMenuItem::getContent() deprecated by elgg_view_menu_item()", 1.9);
+		elgg_deprecated_notice("\ElggMenuItem::getContent() deprecated by elgg_view_menu_item()", 1.9);
 		return elgg_view_menu_item($this, $vars);
 	}
 }

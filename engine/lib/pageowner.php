@@ -46,7 +46,7 @@ function elgg_get_page_owner_guid($guid = 0) {
  *
  * @note Access is disabled when getting the page owner entity.
  *
- * @return ElggUser|ElggGroup|false The current page owner or false if none.
+ * @return \ElggUser|\ElggGroup|false The current page owner or false if none.
  *
  * @since 1.8.0
  */
@@ -183,7 +183,7 @@ function default_page_owner_handler($hook, $entity_type, $returnvalue, $params) 
  * output could be different for those two contexts ('blog' vs 'widget').
  *
  * Pages that pass through the page handling system set the context to the
- * first string after the root url. Example: http://example.org/elgg/bookmarks/
+ * first string after the root url. Example: http://example.org/elgg/bookmarks/ 
  * results in the initial context being set to 'bookmarks'.
  *
  * The context is a stack so that for a widget on a profile, the context stack
@@ -199,20 +199,7 @@ function default_page_owner_handler($hook, $entity_type, $returnvalue, $params) 
  * @since 1.8.0
  */
 function elgg_set_context($context) {
-	global $CONFIG;
-
-	$context = trim($context);
-
-	if (empty($context)) {
-		return false;
-	}
-
-	$context = strtolower($context);
-
-	array_pop($CONFIG->context);
-	array_push($CONFIG->context, $context);
-
-	return true;
+	return _elgg_services()->context->set($context);
 }
 
 /**
@@ -224,13 +211,7 @@ function elgg_set_context($context) {
  * @since 1.8.0
  */
 function elgg_get_context() {
-	global $CONFIG;
-
-	if (!$CONFIG->context) {
-		return null;
-	}
-
-	return $CONFIG->context[count($CONFIG->context) - 1];
+	return _elgg_services()->context->peek();
 }
 
 /**
@@ -241,9 +222,7 @@ function elgg_get_context() {
  * @since 1.8.0
  */
 function elgg_push_context($context) {
-	global $CONFIG;
-
-	array_push($CONFIG->context, $context);
+	return _elgg_services()->context->push($context);
 }
 
 /**
@@ -253,9 +232,7 @@ function elgg_push_context($context) {
  * @since 1.8.0
  */
 function elgg_pop_context() {
-	global $CONFIG;
-
-	return array_pop($CONFIG->context);
+	return _elgg_services()->context->pop();
 }
 
 /**
@@ -271,9 +248,7 @@ function elgg_pop_context() {
  * @since 1.8.0
  */
 function elgg_in_context($context) {
-	global $CONFIG;
-
-	return in_array($context, $CONFIG->context);
+	return _elgg_services()->context->contains($context);
 }
 
 /**
@@ -285,7 +260,7 @@ function elgg_in_context($context) {
  * @access private
  */
 function page_owner_boot() {
-
+	
 	elgg_register_plugin_hook_handler('page_owner', 'system', 'default_page_owner_handler');
 
 	// Bootstrap the context stack by setting its first entry to the handler.

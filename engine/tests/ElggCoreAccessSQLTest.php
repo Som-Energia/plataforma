@@ -5,24 +5,23 @@
  * @package Elgg
  * @subpackage Test
  */
-class ElggCoreAccessSQLTest extends ElggCoreUnitTest {
+class ElggCoreAccessSQLTest extends \ElggCoreUnitTest {
 
-	/** @var ElggUser */
+	/** @var \ElggUser */
 	protected $user;
-
+	
 	/**
 	 * Called before each test object.
 	 */
 	public function __construct() {
 		parent::__construct();
 
-		$this->user = new ElggUser();
+		$this->user = new \ElggUser();
 		$this->user->username = 'fake_user_' . rand();
 		$this->user->email = 'fake_email@fake.com' . rand();
 		$this->user->name = 'fake user ' . rand();
 		$this->user->access_id = ACCESS_PUBLIC;
-		$this->user->salt = _elgg_generate_password_salt();
-		$this->user->password = generate_user_password($this->user, rand());
+		$this->user->setPassword(rand());
 		$this->user->owner_guid = 0;
 		$this->user->container_guid = 0;
 		$this->user->save();
@@ -34,7 +33,7 @@ class ElggCoreAccessSQLTest extends ElggCoreUnitTest {
 	public function setUp() {
 		// Replace current hook service with new instance for each test
 		$this->original_hooks = _elgg_services()->hooks;
-		_elgg_services()->hooks = new Elgg_PluginHooksService();
+		_elgg_services()->hooks = new \Elgg\PluginHooksService();
 	}
 
 	/**
@@ -65,7 +64,7 @@ class ElggCoreAccessSQLTest extends ElggCoreUnitTest {
 	public function testTurningEnabledOff() {
 		$sql = _elgg_get_access_where_sql(array('use_enabled_clause' => false));
 		$ans = "((1 = 1))";
-		$this->assertTrue($this->assertSqlEqual($ans, $sql), "$sql does not match $ans");
+		$this->assertTrue($this->assertSqlEqual($ans, $sql), "$sql does not match $ans");		
 	}
 
 	public function testNonAdminUser() {
@@ -122,7 +121,7 @@ class ElggCoreAccessSQLTest extends ElggCoreUnitTest {
 
 	public function testLoggedOutUser() {
 		$originalSession = _elgg_services()->session;
-		_elgg_services()->setValue('session', new ElggSession(new Elgg_Http_MockSessionStorage()));
+		_elgg_services()->setValue('session', new \ElggSession(new \Elgg\Http\MockSessionStorage()));
 
 		$sql = _elgg_get_access_where_sql();
 		$access_clause = $this->getLoggedOutAccessListClause('e');
@@ -156,7 +155,7 @@ class ElggCoreAccessSQLTest extends ElggCoreUnitTest {
 		$clauses['ors'] = array();
 		return $clauses;
 	}
-
+	
 	public function testAccessPluginHookAddOr() {
 		elgg_register_plugin_hook_handler('get_sql', 'access', array($this, 'addOrCallback'));
 		$sql = _elgg_get_access_where_sql();
@@ -190,7 +189,7 @@ class ElggCoreAccessSQLTest extends ElggCoreUnitTest {
 	protected function getFriendsClause($user_guid, $table_alias, $owner_guid = 'owner_guid') {
 		global $CONFIG;
 		$table_alias = $table_alias ? $table_alias . '.' : '';
-
+	
 		return "{$table_alias}access_id = " . ACCESS_FRIENDS . "
 			AND {$table_alias}{$owner_guid} IN (
 				SELECT guid_one FROM {$CONFIG->dbprefix}entity_relationships

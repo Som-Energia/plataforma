@@ -9,6 +9,19 @@ See the administator guides for :doc:`how to upgrade a live site </admin/upgradi
    :local:
    :depth: 2
 
+From 1.9 to 1.10
+================
+
+File uploads
+------------
+
+If your plugin is using a snippet copied from the ``file/upload`` action to fix detected mime types for Microsoft zipped formats, it can now be safely removed.
+
+If your upload action performs other manipulations on detected mime and simple types, it is recommended to make use of available plugin hooks:
+
+- ``'mime_type','file'`` for filtering detected mime types
+- ``'simple_type','file'`` for filtering parsed simple types
+
 From 1.8 to 1.9
 ===============
 
@@ -446,7 +459,7 @@ Use standardized page handlers and scripts
 The ``object/:subtype`` view
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 * Make sure there are views for ``$vars['full_view'] == true`` and ``$vars['full_view'] == false``. ``$vars['full_view']`` replaced ``$vars['full]``.
-* Check for the object in ``$vars['entity']``. Use ``elgg_instance_of()`` to make sure it's the type of entity you want.
+* Check for the object in ``$vars['entity']``. Use ``elgg_instance_of()`` to make sure it's the type of entity you want. 
 * Return ``true`` to short circuit the view if the entity is missing or wrong.
 * Use ``elgg_view(‘object/elements/summary’, array(‘entity’ => $entity));`` and ``elgg_view_menu(‘entity’, array(‘entity’ => $entity));`` to help format. You should use very little markup in these views.
 

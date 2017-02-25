@@ -64,6 +64,7 @@ return array(
 	'groups:featuredon' => '%s is now a featured group.',
 	'groups:unfeatured' => '%s has been removed from the featured groups.',
 	'groups:featured_error' => 'Invalid group.',
+	'groups:nofeatured' => 'No featured groups',
 	'groups:joinrequest' => 'Request membership',
 	'groups:join' => 'Join group',
 	'groups:leave' => 'Leave group',
@@ -174,6 +175,8 @@ View and reply to the discussion:
 	'discussion:reply:error:notfound' => 'The discussion reply was not found',
 	'discussion:reply:error:notdeleted' => 'Could not delete the discussion reply',
 
+	'discussion:search:title' => 'Reply on topic: %s',
+	
 	'admin:groups' => 'Groups',
 
 	'reply:this' => 'Reply to this',

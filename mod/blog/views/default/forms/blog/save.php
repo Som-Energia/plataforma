@@ -20,10 +20,11 @@ $preview_button = '';
 if ($vars['guid']) {
 	// add a delete button if editing
 	$delete_url = "action/blog/delete?guid={$vars['guid']}";
-	$delete_link = elgg_view('output/confirmlink', array(
+	$delete_link = elgg_view('output/url', array(
 		'href' => $delete_url,
 		'text' => elgg_echo('delete'),
-		'class' => 'elgg-button elgg-button-delete float-alt'
+		'class' => 'elgg-button elgg-button-delete float-alt',
+		'confirm' => true,
 	));
 }
 
@@ -32,7 +33,7 @@ if (!$vars['guid'] || ($blog && $blog->status != 'published')) {
 	$preview_button = elgg_view('input/submit', array(
 		'value' => elgg_echo('preview'),
 		'name' => 'preview',
-		'class' => 'mls',
+		'class' => 'elgg-button-submit mls',
 	));
 }
 

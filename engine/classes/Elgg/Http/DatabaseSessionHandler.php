@@ -1,24 +1,25 @@
 <?php
+namespace Elgg\Http;
 
 /**
  * Database session handler
  *
  * @access private
- *
+ * 
  * @package    Elgg.Core
  * @subpackage Http
  */
-class Elgg_Http_DatabaseSessionHandler implements Elgg_Http_SessionHandler {
+class DatabaseSessionHandler implements \Elgg\Http\SessionHandler {
 
-	/** @var Elgg_Database $db */
+	/** @var \Elgg\Database $db */
 	protected $db;
 
 	/**
 	 * Constructor
 	 *
-	 * @param Elgg_Database $db The database
+	 * @param \Elgg\Database $db The database
 	 */
-	public function __construct(Elgg_Database $db) {
+	public function __construct(\Elgg\Database $db) {
 		$this->db = $db;
 	}
 
@@ -33,7 +34,7 @@ class Elgg_Http_DatabaseSessionHandler implements Elgg_Http_SessionHandler {
 	 * {@inheritDoc}
 	 */
 	public function read($session_id) {
-
+		
 		$id = sanitize_string($session_id);
 		$query = "SELECT * FROM {$this->db->getTablePrefix()}users_sessions WHERE session='$id'";
 		$result = $this->db->getDataRow($query);
@@ -74,7 +75,7 @@ class Elgg_Http_DatabaseSessionHandler implements Elgg_Http_SessionHandler {
 	 * {@inheritDoc}
 	 */
 	public function destroy($session_id) {
-
+		
 		$id = sanitize_string($session_id);
 		$query = "DELETE FROM {$this->db->getTablePrefix()}users_sessions WHERE session='$id'";
 		return (bool) $this->db->deleteData($query);
@@ -84,10 +85,11 @@ class Elgg_Http_DatabaseSessionHandler implements Elgg_Http_SessionHandler {
 	 * {@inheritDoc}
 	 */
 	public function gc($max_lifetime) {
-
+		
 		$life = time() - $max_lifetime;
 		$query = "DELETE FROM {$this->db->getTablePrefix()}users_sessions WHERE ts < '$life'";
 		return (bool) $this->db->deleteData($query);
 	}
 
 }
+

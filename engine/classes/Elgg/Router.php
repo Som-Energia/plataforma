@@ -1,4 +1,5 @@
 <?php
+namespace Elgg;
 
 /**
  * Delegates requests to controllers based on the registered configuration.
@@ -12,16 +13,16 @@
  * @since      1.9.0
  * @access private
  */
-class Elgg_Router {
+class Router {
 	private $handlers = array();
 	private $hooks;
 
 	/**
 	 * Constructor
 	 *
-	 * @param Elgg_PluginHooksService $hooks For customized routing.
+	 * @param \Elgg\PluginHooksService $hooks For customized routing.
 	 */
-	public function __construct(Elgg_PluginHooksService $hooks) {
+	public function __construct(\Elgg\PluginHooksService $hooks) {
 		$this->hooks = $hooks;
 	}
 
@@ -31,11 +32,11 @@ class Elgg_Router {
 	 * This function triggers a plugin hook `'route', $identifier` so that plugins can
 	 * modify the routing or handle a request.
 	 *
-	 * @param Elgg_Http_Request $request The request to handle.
+	 * @param \Elgg\Http\Request $request The request to handle.
 	 * @return boolean Whether the request was routed successfully.
 	 * @access private
 	 */
-	public function route(Elgg_Http_Request $request) {
+	public function route(\Elgg\Http\Request $request) {
 		$segments = $request->getUrlSegments();
 		if ($segments) {
 			$identifier = array_shift($segments);
@@ -46,7 +47,7 @@ class Elgg_Router {
 			// to register for the '' (empty string) handler.
 			// allow plugins to override the front page (return true to indicate
 			// that the front page has been served)
-			$result = elgg_trigger_plugin_hook('index', 'system', null, false);
+			$result = _elgg_services()->hooks->trigger('index', 'system', null, false);
 			if ($result === true) {
 				elgg_deprecated_notice("The 'index', 'system' plugin has been deprecated. See elgg_front_page_handler()", 1.9);
 				exit;
@@ -60,7 +61,7 @@ class Elgg_Router {
 			'handler' => $identifier, // backward compatibility
 			'segments' => $segments,
 		);
-		$result = $this->hooks->trigger('route', $identifier, null, $result);
+		$result = $this->hooks->trigger('route', $identifier, $result, $result);
 		if ($result === false) {
 			return true;
 		}
@@ -113,10 +114,11 @@ class Elgg_Router {
 
 	/**
 	 * Get page handlers as array of identifier => callback
-	 *
+	 * 
 	 * @return array
 	 */
 	public function getPageHandlers() {
 		return $this->handlers;
 	}
 }
+

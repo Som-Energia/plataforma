@@ -7,7 +7,7 @@
  * @uses $vars['id']            Optional id for the div
  * @uses $vars['class']         Optional additional class for the div
  * @uses $vars['limit']         Optional limit value (default is 25)
- *
+ * 
  * @todo look into restructuring this so we are not calling elgg_list_entities()
  * in this view
  */
@@ -38,12 +38,11 @@ $html = elgg_list_entities(array(
 	'reverse_order_by' => true,
 	'full_view' => true,
 	'limit' => $limit,
+	'preload_owners' => true,
+	'distinct' => false,
 ));
 
-if ($html) {
-	echo '<h3 id="comments">' . elgg_echo('comments') . '</h3>';
-	echo $html;
-}
+echo $html;
 
 if ($show_add_form) {
 	echo elgg_view_form('comment/save', array(), $vars);

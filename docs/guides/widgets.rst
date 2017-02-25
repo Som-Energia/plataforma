@@ -21,7 +21,10 @@ To create a widget, create two views:
 
 .. note::
    
-   Using HTML checkboxes to set widget flags is problematic because if unchecked, the checkbox input is omitted from form submission. The effect is that you can only set and not clear flags. The "input/checkboxes" view will not work properly in a widget's edit panel.
+   Using HTML checkboxes to set widget flags is problematic because if unchecked,
+   the checkbox input is omitted from form submission.
+   The effect is that you can only set and not clear flags.
+   The "input/checkboxes" view will not work properly in a widget's edit panel.
 
 Initialise the widget
 ---------------------
@@ -119,7 +122,7 @@ Widget edit page:
 
         <p>
         <?php echo elgg_echo("flickr:id"); ?>
-            <input type="text" name="params[title]" value="<?php echo htmlentities($vars['entity']->title); ?>" />
+            <input type="text" name="params[title]" value="<?php echo htmlentities($vars['entity']->title); ?>" />  
         </p>
         
         <p><?php echo elgg_echo("flickr:whatisid"); ?></p>
@@ -163,14 +166,14 @@ Widget view page:
 
     <!-- some css for display -->
     <style type="text/css">
-        #images {
+        #images { 
             height: 180px;
-            width: 100%;
-            padding:0;
-            margin:0 0 10px 0;
+            width: 100%; 
+            padding:0; 
+            margin:0 0 10px 0; 
             overflow: hidden;
          }
-          #images img {
+          #images img { 
               border:none;
           }
     </style>

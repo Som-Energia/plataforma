@@ -19,7 +19,7 @@ if (elgg_in_context('widget')) {
 
 $offset = abs((int) elgg_extract('offset', $vars, 0));
 // because you can say $vars['limit'] = 0
-if (!$limit = (int) elgg_extract('limit', $vars, 10)) {
+if (!$limit = (int) elgg_extract('limit', $vars, elgg_get_config('default_limit'))) {
 	$limit = 10;
 }
 
@@ -114,8 +114,8 @@ foreach ($pages->items as $page) {
 	if ($page == $current_page) {
 		echo "<li class=\"elgg-state-selected\"><span>$page</span></li>";
 	} else {
-		$page_offset = (($page - 1) * $limit);
-		if ($page_offset == 0) {
+		$page_offset = (($page - $current_page) * $limit) + $offset;
+		if ($page_offset <= 0) {
 			// don't include offset=0
 			$page_offset = null;
 		}

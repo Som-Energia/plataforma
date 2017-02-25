@@ -10,7 +10,7 @@
 
 /**
  * Handle a request for an action
- *
+ * 
  * @param array $segments URL segments that make up action name
  *
  * @return void
@@ -126,7 +126,7 @@ function validate_action_token($visible_errors = true, $token = null, $ts = null
  * This function verifies form input for security features (like a generated token),
  * and forwards if they are invalid.
  *
- * @param string $action The action being performed
+ * @param string $action The action being performed 
  *
  * @return mixed True if valid or redirects.
  * @access private
@@ -169,13 +169,7 @@ function generate_action_token($timestamp) {
  * @todo Move to better file.
  */
 function init_site_secret() {
-	$secret = 'z' . _elgg_services()->crypto->getRandomString(31);
-
-	if (datalist_set('__site_secret__', $secret)) {
-		return $secret;
-	}
-
-	return false;
+	return _elgg_services()->siteSecret->init();
 }
 
 /**
@@ -188,12 +182,7 @@ function init_site_secret() {
  * @todo Move to better file.
  */
 function get_site_secret() {
-	$secret = datalist_get('__site_secret__');
-	if (!$secret) {
-		$secret = init_site_secret();
-	}
-
-	return $secret;
+	return _elgg_services()->siteSecret->get();
 }
 
 /**
@@ -203,17 +192,7 @@ function get_site_secret() {
  * @access private
  */
 function _elgg_get_site_secret_strength() {
-	$secret = get_site_secret();
-	if ($secret[0] !== 'z') {
-		$rand_max = getrandmax();
-		if ($rand_max < pow(2, 16)) {
-			return 'weak';
-		}
-		if ($rand_max < pow(2, 32)) {
-			return 'moderate';
-		}
-	}
-	return 'strong';
+	return _elgg_services()->siteSecret->getStrength();
 }
 
 /**
@@ -254,7 +233,7 @@ function elgg_is_xhr() {
  * }
  * </pre>
  * where "system_messages" is all message registers at the point of forwarding
- *
+ * 
  * @internal registered for the 'forward', 'all' plugin hook
  *
  * @param string $hook

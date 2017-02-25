@@ -10,6 +10,7 @@ if (!isset($vars['annotation'])) {
 }
 
 $like = $vars['annotation'];
+/* @var ElggAnnotation $like */
 
 $user = $like->getOwnerEntity();
 if (!$user) {
@@ -29,7 +30,7 @@ $friendlytime = elgg_view_friendly_time($like->time_created);
 
 $delete_button = '';
 if ($like->canEdit()) {
-	$delete_button = elgg_view("output/confirmlink",array(
+	$delete_button = elgg_view("output/url",array(
     	'href' => "action/likes/delete?id={$like->id}",
     	'text' => elgg_view_icon('delete', 'float-alt'),
     	'confirm' => elgg_echo('likes:delete:confirm'),

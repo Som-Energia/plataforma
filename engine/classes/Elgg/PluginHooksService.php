@@ -1,17 +1,18 @@
 <?php
+namespace Elgg;
 
 /**
  * WARNING: API IN FLUX. DO NOT USE DIRECTLY.
- *
+ * 
  * Use the elgg_* versions instead.
- *
+ * 
  * @access private
- *
+ * 
  * @package    Elgg.Core
  * @subpackage Hooks
  * @since      1.9.0
  */
-class Elgg_PluginHooksService extends Elgg_HooksRegistrationService {
+class PluginHooksService extends \Elgg\HooksRegistrationService {
 
 	/**
 	 * Triggers a plugin hook
@@ -21,7 +22,7 @@ class Elgg_PluginHooksService extends Elgg_HooksRegistrationService {
 	 */
 	public function trigger($hook, $type, $params = null, $returnvalue = null) {
 		$hooks = $this->getOrderedHandlers($hook, $type);
-
+		
 		foreach ($hooks as $callback) {
 			if (!is_callable($callback)) {
 				if ($this->logger) {
@@ -37,7 +38,7 @@ class Elgg_PluginHooksService extends Elgg_HooksRegistrationService {
 				$returnvalue = $temp_return_value;
 			}
 		}
-
+	
 		return $returnvalue;
 	}
 }

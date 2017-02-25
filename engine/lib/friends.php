@@ -80,14 +80,14 @@ function _elgg_friends_page_setup() {
  */
 function _elgg_friends_setup_user_hover_menu($hook, $type, $return, $params) {
 	$user = $params['entity'];
-	/* @var ElggUser $user */
+	/* @var \ElggUser $user */
 
 	if (elgg_is_logged_in()) {
 		if (elgg_get_logged_in_user_guid() != $user->guid) {
 			$isFriend = $user->isFriend();
 
 			// Always emit both to make it super easy to toggle with ajax
-			$return[] = ElggMenuItem::factory(array(
+			$return[] = \ElggMenuItem::factory(array(
 				'name' => 'remove_friend',
 				'href' => elgg_add_action_tokens_to_url("action/friends/remove?friend={$user->guid}"),
 				'text' => elgg_echo('friend:remove'),
@@ -95,7 +95,7 @@ function _elgg_friends_setup_user_hover_menu($hook, $type, $return, $params) {
 				'item_class' => $isFriend ? '' : 'hidden',
 			));
 
-			$return[] = ElggMenuItem::factory(array(
+			$return[] = \ElggMenuItem::factory(array(
 				'name' => 'add_friend',
 				'href' => elgg_add_action_tokens_to_url("action/friends/add?friend={$user->guid}"),
 				'text' => elgg_echo('friend:add'),
@@ -156,7 +156,7 @@ function _elgg_collections_page_handler($page_elements) {
 		switch ($page_elements[0]) {
 			case 'add':
 				elgg_set_page_owner_guid(elgg_get_logged_in_user_guid());
-
+				
 				require_once "{$base}pages/friends/collections/add.php";
 				return true;
 				break;
@@ -164,7 +164,7 @@ function _elgg_collections_page_handler($page_elements) {
 				$user = get_user_by_username($page_elements[1]);
 				if ($user) {
 					elgg_set_page_owner_guid($user->getGUID());
-
+					
 					require_once "{$base}pages/friends/collections/view.php";
 					return true;
 				}
@@ -181,10 +181,10 @@ function _elgg_collections_page_handler($page_elements) {
  * @access private
  */
 function _elgg_setup_collections_menu() {
-
+	
 	if (elgg_get_logged_in_user_guid() == elgg_get_page_owner_guid()) {
 		$user = elgg_get_page_owner_entity();
-
+		
 		elgg_register_menu_item('page', array(
 			'name' => 'friends:view:collections',
 			'text' => elgg_echo('friends:collections'),
@@ -199,14 +199,14 @@ function _elgg_setup_collections_menu() {
  *
  * @param string           $event  Event name
  * @param string           $type   Object type
- * @param ElggRelationship $object Object
+ * @param \ElggRelationship $object Object
  *
  * @return bool
  * @access private
  */
 function _elgg_send_friend_notification($event, $type, $object) {
 	$user_one = get_entity($object->guid_one);
-	/* @var ElggUser $user_one */
+	/* @var \ElggUser $user_one */
 
 	$user_two = get_entity($object->guid_two);
 	/* @var ElggUser $user_two */

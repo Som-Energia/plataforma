@@ -3,18 +3,18 @@
  * Test elgg_get_entities_from_relationship() and
  * elgg_get_entities_from_relationship_count()
  */
-class ElggCoreGetEntitiesFromRelationshipTest extends ElggCoreGetEntitiesBaseTest {
+class ElggCoreGetEntitiesFromRelationshipTest extends \ElggCoreGetEntitiesBaseTest {
 
 	// Make sure metadata doesn't affect getting entities by relationship.  See #2274
 	public function testElggApiGettersEntityRelationshipWithMetadata() {
 		$guids = array();
 
-		$obj1 = new ElggObject();
+		$obj1 = new \ElggObject();
 		$obj1->test_md = 'test';
 		$obj1->save();
 		$guids[] = $obj1->guid;
 
-		$obj2 = new ElggObject();
+		$obj2 = new \ElggObject();
 		$obj2->test_md = 'test';
 		$obj2->save();
 		$guids[] = $obj2->guid;
@@ -43,11 +43,11 @@ class ElggCoreGetEntitiesFromRelationshipTest extends ElggCoreGetEntitiesBaseTes
 	public function testElggApiGettersEntityRelationshipWithOutMetadata() {
 		$guids = array();
 
-		$obj1 = new ElggObject();
+		$obj1 = new \ElggObject();
 		$obj1->save();
 		$guids[] = $obj1->guid;
 
-		$obj2 = new ElggObject();
+		$obj2 = new \ElggObject();
 		$obj2->save();
 		$guids[] = $obj2->guid;
 
@@ -75,12 +75,12 @@ class ElggCoreGetEntitiesFromRelationshipTest extends ElggCoreGetEntitiesBaseTes
 	public function testElggApiGettersEntityRelationshipWithMetadataIncludingRealMetadata() {
 		$guids = array();
 
-		$obj1 = new ElggObject();
+		$obj1 = new \ElggObject();
 		$obj1->test_md = 'test';
 		$obj1->save();
 		$guids[] = $obj1->guid;
 
-		$obj2 = new ElggObject();
+		$obj2 = new \ElggObject();
 		$obj2->test_md = 'test';
 		$obj2->save();
 		$guids[] = $obj2->guid;
@@ -111,12 +111,12 @@ class ElggCoreGetEntitiesFromRelationshipTest extends ElggCoreGetEntitiesBaseTes
 	public function testElggApiGettersEntityRelationshipWithMetadataIncludingFakeMetadata() {
 		$guids = array();
 
-		$obj1 = new ElggObject();
+		$obj1 = new \ElggObject();
 		$obj1->test_md = 'test';
 		$obj1->save();
 		$guids[] = $obj1->guid;
 
-		$obj2 = new ElggObject();
+		$obj2 = new \ElggObject();
 		$obj2->test_md = 'test';
 		$obj2->save();
 		$guids[] = $obj2->guid;
@@ -191,7 +191,7 @@ class ElggCoreGetEntitiesFromRelationshipTest extends ElggCoreGetEntitiesBaseTes
 			}
 		}
 	}
-
+	
 	/**
 	 * Make sure elgg_get_entities_from_relationship() returns distinct (unique) results when relationship_guid is not set
 	 * See #5775
@@ -216,7 +216,7 @@ class ElggCoreGetEntitiesFromRelationshipTest extends ElggCoreGetEntitiesBaseTes
 			'inverse_relationship' => false,
 			'count' => true,
 		);
-
+		
 		$count = elgg_get_entities_from_relationship($options);
 		$this->assertIdentical($count, 1);
 
@@ -224,19 +224,19 @@ class ElggCoreGetEntitiesFromRelationshipTest extends ElggCoreGetEntitiesBaseTes
 		$objects = elgg_get_entities_from_relationship($options);
 		$this->assertTrue(is_array($objects));
 		$this->assertIdentical(count($objects), 1);
-
+		
 		$obj1->delete();
 		$obj2->delete();
 		$obj3->delete();
 	}
-
+	
 	/**
 	 * Make sure changes related to #5775 do not affect inverse relationship queries
 	 * @covers elgg_get_entities_from_relationship()
 	 */
 	public function testElggApiGettersEntityRelationshipDistinctResultInverse() {
 
-
+		
 		$obj1 = new ElggObject();
 		$obj1->save();
 
@@ -254,7 +254,7 @@ class ElggCoreGetEntitiesFromRelationshipTest extends ElggCoreGetEntitiesBaseTes
 			'inverse_relationship' => true,
 			'count' => true,
 		);
-
+		
 		$count = elgg_get_entities_from_relationship($options);
 		$this->assertIdentical($count, 2);
 
@@ -262,7 +262,7 @@ class ElggCoreGetEntitiesFromRelationshipTest extends ElggCoreGetEntitiesBaseTes
 		$objects = elgg_get_entities_from_relationship($options);
 		$this->assertTrue(is_array($objects));
 		$this->assertIdentical(count($objects), 2);
-
+		
 		$obj1->delete();
 		$obj2->delete();
 		$obj3->delete();

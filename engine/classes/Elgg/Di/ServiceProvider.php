@@ -1,4 +1,5 @@
 <?php
+namespace Elgg\Di;
 
 /**
  * Provides common Elgg services.
@@ -7,96 +8,222 @@
  * IDEs to auto-complete properties and understand the types returned. Extension allows us to keep
  * the container generic.
  *
- * @property-read Elgg_ActionsService                     $actions
- * @property-read Elgg_Amd_Config                         $amdConfig
- * @property-read ElggAutoP                               $autoP
- * @property-read Elgg_AutoloadManager                    $autoloadManager
- * @property-read ElggCrypto                              $crypto
- * @property-read Elgg_Database                           $db
- * @property-read Elgg_EventsService                      $events
- * @property-read Elgg_PluginHooksService                 $hooks
- * @property-read Elgg_Logger                             $logger
- * @property-read ElggVolatileMetadataCache               $metadataCache
- * @property-read Elgg_Notifications_NotificationsService $notifications
- * @property-read Elgg_PersistentLoginService             $persistentLogin
- * @property-read Elgg_Database_QueryCounter              $queryCounter
- * @property-read Elgg_Http_Request                       $request
- * @property-read Elgg_Router                             $router
- * @property-read ElggSession                             $session
- * @property-read Elgg_ViewsService                       $views
- * @property-read Elgg_WidgetsService                     $widgets
- *
+ * @property-read \Elgg\Access                             $access
+ * @property-read \Elgg\Database\AccessCollections         $accessCollections
+ * @property-read \ElggStaticVariableCache                 $accessCache
+ * @property-read \Elgg\ActionsService                     $actions
+ * @property-read \Elgg\Database\AdminNotices              $adminNotices
+ * @property-read \Elgg\Amd\Config                         $amdConfig
+ * @property-read \Elgg\Database\Annotations               $annotations
+ * @property-read \ElggAutoP                               $autoP
+ * @property-read \Elgg\AutoloadManager                    $autoloadManager
+ * @property-read \ElggCrypto                              $crypto
+ * @property-read \Elgg\Config                             $config
+ * @property-read \Elgg\Database\ConfigTable               $configTable
+ * @property-read \Elgg\Database\Datalist                  $datalist
+ * @property-read \Elgg\Database                           $db
+ * @property-read \Elgg\Database\EntityTable               $entityTable
+ * @property-read \Elgg\EventsService                      $events
+ * @property-read \Elgg\Assets\ExternalFiles               $externalFiles
+ * @property-read \Elgg\PluginHooksService                 $hooks
+ * @property-read \Elgg\Http\Input                         $input
+ * @property-read \Elgg\Logger                             $logger
+ * @property-read \ElggVolatileMetadataCache               $metadataCache
+ * @property-read \Elgg\Database\MetadataTable             $metadataTable
+ * @property-read \Elgg\Database\MetastringsTable          $metastringsTable
+ * @property-read \Elgg\Notifications\NotificationsService $notifications
+ * @property-read \Elgg\EntityPreloader                    $ownerPreloader
+ * @property-read \Elgg\PasswordService                    $passwords
+ * @property-read \Elgg\PersistentLoginService             $persistentLogin
+ * @property-read \Elgg\Database\Plugins                   $plugins
+ * @property-read \Elgg\Database\QueryCounter              $queryCounter
+ * @property-read \Elgg\Http\Request                       $request
+ * @property-read \Elgg\Database\RelationshipsTable        $relationshipsTable
+ * @property-read \Elgg\Router                             $router
+ * @property-read \ElggSession                             $session
+ * @property-read \Elgg\Cache\SimpleCache                  $simpleCache
+ * @property-read \Elgg\Database\SiteSecret                $siteSecret
+ * @property-read \Elgg\Forms\StickyForms                  $stickyForms
+ * @property-read \Elgg\Database\SubtypeTable              $subtypeTable
+ * @property-read \Elgg\Cache\SystemCache                  $systemCache
+ * @property-read \Elgg\I18n\Translator                    $translator
+ * @property-read \Elgg\Database\UsersTable                $usersTable
+ * @property-read \Elgg\ViewsService                       $views
+ * @property-read \Elgg\WidgetsService                     $widgets
+ * 
  * @package Elgg.Core
  * @access private
  */
-class Elgg_Di_ServiceProvider extends Elgg_Di_DiContainer {
+class ServiceProvider extends \Elgg\Di\DiContainer {
 
 	/**
 	 * Constructor
-	 *
-	 * @param Elgg_AutoloadManager $autoload_manager Class autoloader
+	 * 
+	 * @param \Elgg\AutoloadManager $autoload_manager Class autoloader
 	 */
-	public function __construct(Elgg_AutoloadManager $autoload_manager) {
+	public function __construct(\Elgg\AutoloadManager $autoload_manager) {
 		$this->setValue('autoloadManager', $autoload_manager);
 
-		$this->setClassName('actions', 'Elgg_ActionsService');
-		$this->setFactory('amdConfig', array($this, 'getAmdConfig'));
-		$this->setClassName('autoP', 'ElggAutoP');
-		$this->setClassName('crypto', 'ElggCrypto');
-		$this->setFactory('db', array($this, 'getDatabase'));
-		$this->setFactory('events', array($this, 'getEvents'));
-		$this->setFactory('hooks', array($this, 'getHooks'));
-		$this->setFactory('logger', array($this, 'getLogger'));
-		$this->setClassName('metadataCache', 'ElggVolatileMetadataCache');
-		$this->setFactory('persistentLogin', array($this, 'getPersistentLogin'));
-		$this->setFactory('queryCounter', array($this, 'getQueryCounter'), false);
-		$this->setFactory('request', array($this, 'getRequest'));
-		$this->setFactory('router', array($this, 'getRouter'));
-		$this->setFactory('session', array($this, 'getSession'));
-		$this->setFactory('views', array($this, 'getViews'));
-		$this->setClassName('widgets', 'Elgg_WidgetsService');
-		$this->setFactory('notifications', array($this, 'getNotifications'));
-	}
+		$this->setClassName('access', '\Elgg\Access');
 
-	/**
-	 * Database factory
-	 *
-	 * @param Elgg_Di_ServiceProvider $c Dependency injection container
-	 * @return Elgg_Database
-	 */
-	protected function getDatabase(Elgg_Di_ServiceProvider $c) {
-		global $CONFIG;
-		return new Elgg_Database(new Elgg_Database_Config($CONFIG), $c->logger);
-	}
+		$this->setFactory('accessCache', function(ServiceProvider $c) {
+			return new \ElggStaticVariableCache('access');
+		});
 
-	/**
-	 * Events service factory
-	 *
-	 * @param Elgg_Di_ServiceProvider $c Dependency injection container
-	 * @return Elgg_EventsService
-	 */
-	protected function getEvents(Elgg_Di_ServiceProvider $c) {
-		return $this->resolveLoggerDependencies('events');
-	}
+		$this->setFactory('accessCollections', function(ServiceProvider $c) {
+			return new \Elgg\Database\AccessCollections($c->config->get('site_guid'));
+		});
 
-	/**
-	 * Logger factory
-	 *
-	 * @param Elgg_Di_ServiceProvider $c Dependency injection container
-	 * @return Elgg_Logger
-	 */
-	protected function getLogger(Elgg_Di_ServiceProvider $c) {
-		return $this->resolveLoggerDependencies('logger');
-	}
+		$this->setClassName('actions', '\Elgg\ActionsService');
 
-	/**
-	 * Plugin hooks service factory
-	 *
-	 * @param Elgg_Di_ServiceProvider $c Dependency injection container
-	 * @return Elgg_PluginHooksService
-	 */
-	protected function getHooks(Elgg_Di_ServiceProvider $c) {
-		return $this->resolveLoggerDependencies('hooks');
+		$this->setClassName('adminNotices', '\Elgg\Database\AdminNotices');
+
+		$this->setFactory('amdConfig', function(ServiceProvider $c) {
+			$obj = new \Elgg\Amd\Config();
+			$obj->setBaseUrl($c->simpleCache->getRoot() . "js/");
+			return $obj;
+		});
+
+		$this->setClassName('annotations', '\Elgg\Database\Annotations');
+
+		$this->setClassName('autoP', '\ElggAutoP');
+
+		$this->setClassName('config', '\Elgg\Config');
+
+		$this->setClassName('configTable', '\Elgg\Database\ConfigTable');
+
+		$this->setClassName('context', '\Elgg\Context');
+
+		$this->setClassName('crypto', '\ElggCrypto');
+
+		$this->setFactory('datalist', function(ServiceProvider $c) {
+			// TODO(ewinslow): Add back memcached support
+			$db = $c->db;
+			$dbprefix = $db->getTablePrefix();
+			$pool = new \Elgg\Cache\MemoryPool();
+			return new \Elgg\Database\Datalist($pool, $db, $c->logger, "{$dbprefix}datalists");
+		});
+
+		$this->setFactory('db', function(ServiceProvider $c) {
+			global $CONFIG;
+			$db_config = new \Elgg\Database\Config($CONFIG);
+			return new \Elgg\Database($db_config, $c->logger);
+		});
+
+		$this->setClassName('entityTable', '\Elgg\Database\EntityTable');
+
+		$this->setFactory('events', function(ServiceProvider $c) {
+			return $this->resolveLoggerDependencies('events');
+		});
+
+		$this->setFactory('externalFiles', function(ServiceProvider $c) {
+			global $CONFIG;
+			return new \Elgg\Assets\ExternalFiles($CONFIG);
+		});
+
+		$this->setFactory('hooks', function(ServiceProvider $c) {
+			return $this->resolveLoggerDependencies('hooks');
+		});
+
+		$this->setClassName('input', 'Elgg\Http\Input');
+
+		$this->setFactory('logger', function(ServiceProvider $c) {
+			return $this->resolveLoggerDependencies('logger');
+		});
+
+		$this->setClassName('metadataCache', '\ElggVolatileMetadataCache');
+
+		$this->setFactory('metadataTable', function(ServiceProvider $c) {
+			// TODO(ewinslow): Use Elgg\Cache\Pool instead of MetadataCache
+			return new \Elgg\Database\MetadataTable(
+				$c->metadataCache, $c->db, $c->entityTable, $c->events, $c->metastringsTable, $c->session);
+		});
+
+		$this->setFactory('metastringsTable', function(ServiceProvider $c) {
+			// TODO(ewinslow): Use memcache-based Pool if available...
+			$pool = new \Elgg\Cache\MemoryPool();
+			return new \Elgg\Database\MetastringsTable($pool, $c->db);
+		});
+
+		$this->setFactory('notifications', function(ServiceProvider $c) {
+			// @todo move queue in service provider
+			$queue_name = \Elgg\Notifications\NotificationsService::QUEUE_NAME;
+			$queue = new \Elgg\Queue\DatabaseQueue($queue_name, $c->db);
+			$sub = new \Elgg\Notifications\SubscriptionsService($c->db);
+			return new \Elgg\Notifications\NotificationsService($sub, $queue, $c->hooks, $c->access);
+		});
+
+		$this->setFactory('ownerPreloader', function(ServiceProvider $c) {
+			return new \Elgg\EntityPreloader(array('owner_guid'));
+		});
+
+		$this->setFactory('persistentLogin', function(ServiceProvider $c) {
+			$global_cookies_config = _elgg_services()->config->get('cookies');
+			$cookie_config = $global_cookies_config['remember_me'];
+			$cookie_name = $cookie_config['name'];
+			$cookie_token = $c->request->cookies->get($cookie_name, '');
+			return new \Elgg\PersistentLoginService(
+				$c->db, $c->session, $c->crypto, $cookie_config, $cookie_token);
+		});
+
+		$this->setFactory('passwords', function (ServiceProvider $c) {
+			if (!function_exists('password_hash')) {
+				$root = $c->config->getRootPath();
+				require "{$root}vendor/ircmaxell/password-compat/lib/password.php";
+			}
+			return new \Elgg\PasswordService();
+		});
+
+		$this->setClassName('plugins', '\Elgg\Database\Plugins');
+
+		$this->setFactory('queryCounter', function(ServiceProvider $c) {
+			return new \Elgg\Database\QueryCounter($c->db);
+		}, false);
+
+		$this->setClassName('relationshipsTable', '\Elgg\Database\RelationshipsTable');
+
+		$this->setFactory('request', '\Elgg\Http\Request::createFromGlobals');
+
+		$this->setFactory('router', function(ServiceProvider $c) {
+			// TODO(evan): Init routes from plugins or cache
+			return new \Elgg\Router($c->hooks);
+		});
+
+		$this->setFactory('session', function(ServiceProvider $c) {
+			// account for difference of session_get_cookie_params() and ini key names
+			$params = $c->config->get('cookies')['session'];
+			foreach ($params as $key => $value) {
+				if (in_array($key, array('path', 'domain', 'secure', 'httponly'))) {
+					$params["cookie_$key"] = $value;
+					unset($params[$key]);
+				}
+			}
+
+			$handler = new \Elgg\Http\DatabaseSessionHandler($c->db);
+			$storage = new \Elgg\Http\NativeSessionStorage($params, $handler);
+			return new \ElggSession($storage);
+		});
+
+		$this->setClassName('simpleCache', '\Elgg\Cache\SimpleCache');
+
+		$this->setClassName('siteSecret', '\Elgg\Database\SiteSecret');
+
+		$this->setClassName('stickyForms', 'Elgg\Forms\StickyForms');
+
+		$this->setClassName('subtypeTable', '\Elgg\Database\SubtypeTable');
+
+		$this->setClassName('systemCache', '\Elgg\Cache\SystemCache');
+
+		$this->setClassName('translator', '\Elgg\I18n\Translator');
+
+		$this->setClassName('usersTable', '\Elgg\Database\UsersTable');
+
+		$this->setFactory('views', function(ServiceProvider $c) {
+			return new \Elgg\ViewsService($c->hooks, $c->logger);
+		});
+
+		$this->setClassName('widgets', '\Elgg\WidgetsService');
+
 	}
 
 	/**
@@ -107,121 +234,15 @@ class Elgg_Di_ServiceProvider extends Elgg_Di_DiContainer {
 	 * @return mixed
 	 */
 	protected function resolveLoggerDependencies($service_needed) {
-		$svcs['hooks'] = new Elgg_PluginHooksService();
-		$svcs['logger'] = new Elgg_Logger($svcs['hooks']);
+		$svcs['hooks'] = new \Elgg\PluginHooksService();
+		$svcs['logger'] = new \Elgg\Logger($svcs['hooks']);
 		$svcs['hooks']->setLogger($svcs['logger']);
-		$svcs['events'] = new Elgg_EventsService();
+		$svcs['events'] = new \Elgg\EventsService();
 		$svcs['events']->setLogger($svcs['logger']);
 
 		foreach ($svcs as $key => $service) {
 			$this->setValue($key, $service);
 		}
 		return $svcs[$service_needed];
-	}
-
-	/**
-	 * Views service factory
-	 *
-	 * @param Elgg_Di_ServiceProvider $c Dependency injection container
-	 * @return Elgg_ViewsService
-	 */
-	protected function getViews(Elgg_Di_ServiceProvider $c) {
-		return new Elgg_ViewsService($c->hooks, $c->logger);
-	}
-
-	/**
-	 * AMD Config factory
-	 *
-	 * @param Elgg_Di_ServiceProvider $c Dependency injection container
-	 * @return Elgg_Amd_Config
-	 */
-	protected function getAmdConfig(Elgg_Di_ServiceProvider $c) {
-		$obj = new Elgg_Amd_Config();
-		$obj->setBaseUrl(_elgg_get_simplecache_root() . "js/");
-		return $obj;
-	}
-
-	/**
-	 * Session factory
-	 *
-	 * @param Elgg_Di_ServiceProvider $c Dependency injection container
-	 * @return ElggSession
-	 */
-	protected function getSession(Elgg_Di_ServiceProvider $c) {
-		global $CONFIG;
-
-		// account for difference of session_get_cookie_params() and ini key names
-		$params = $CONFIG->cookies['session'];
-		foreach ($params as $key => $value) {
-			if (in_array($key, array('path', 'domain', 'secure', 'httponly'))) {
-				$params["cookie_$key"] = $value;
-				unset($params[$key]);
-			}
-		}
-
-		$handler = new Elgg_Http_DatabaseSessionHandler($c->db);
-		$storage = new Elgg_Http_NativeSessionStorage($params, $handler);
-		$session = new ElggSession($storage);
-
-		return $session;
-	}
-
-	/**
-	 * Request factory
-	 *
-	 * @param Elgg_Di_ServiceProvider $c Dependency injection container
-	 * @return Elgg_Http_Request
-	 */
-	protected function getRequest(Elgg_Di_ServiceProvider $c) {
-		return Elgg_Http_Request::createFromGlobals();
-	}
-
-	/**
-	 * Router factory
-	 *
-	 * @param Elgg_Di_ServiceProvider $c Dependency injection container
-	 * @return Elgg_Router
-	 */
-	protected function getRouter(Elgg_Di_ServiceProvider $c) {
-		// TODO(evan): Init routes from plugins or cache
-		return new Elgg_Router($c->hooks);
-	}
-
-	/**
-	 * Notification service factory
-	 *
-	 * @param Elgg_Di_ServiceProvider $c Dependency injection container
-	 * @return Elgg_Notifications_NotificationsService
-	 */
-	protected function getNotifications(Elgg_Di_ServiceProvider $c) {
-		// @todo move queue in service provider
-		$queue = new Elgg_Queue_DatabaseQueue(Elgg_Notifications_NotificationsService::QUEUE_NAME, $c->db);
-		$sub = new Elgg_Notifications_SubscriptionsService($c->db);
-		$access = elgg_get_access_object();
-		return new Elgg_Notifications_NotificationsService($sub, $queue, $c->hooks, $access);
-	}
-
-	/**
-	 * Persistent login service factory
-	 *
-	 * @param Elgg_Di_ServiceProvider $c Dependency injection container
-	 * @return Elgg_PersistentLoginService
-	 */
-	protected function getPersistentLogin(Elgg_Di_ServiceProvider $c) {
-		$cookies_config = elgg_get_config('cookies');
-		$remember_me_cookies_config = $cookies_config['remember_me'];
-		$cookie_name = $remember_me_cookies_config['name'];
-		$cookie_token = $c->request->cookies->get($cookie_name, '');
-		return new Elgg_PersistentLoginService($c->db, $c->session, $c->crypto, $remember_me_cookies_config, $cookie_token);
-	}
-
-	/**
-	 * Query counter factory
-	 *
-	 * @param Elgg_Di_ServiceProvider $c Dependency injection container
-	 * @return Elgg_Database_QueryCounter
-	 */
-	protected function getQueryCounter(Elgg_Di_ServiceProvider $c) {
-		return new Elgg_Database_QueryCounter($c->db);
 	}
 }

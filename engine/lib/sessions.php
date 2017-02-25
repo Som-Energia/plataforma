@@ -17,7 +17,7 @@ global $SESSION;
 /**
  * Gets Elgg's session object
  *
- * @return ElggSession
+ * @return \ElggSession
  * @since 1.9
  */
 function elgg_get_session() {
@@ -27,7 +27,7 @@ function elgg_get_session() {
 /**
  * Return the current logged in user, or null if no user is logged in.
  *
- * @return ElggUser
+ * @return \ElggUser
  */
 function elgg_get_logged_in_user_entity() {
 	return _elgg_services()->session->getLoggedInUser();
@@ -40,12 +40,7 @@ function elgg_get_logged_in_user_entity() {
  * @return int
  */
 function elgg_get_logged_in_user_guid() {
-	$user = _elgg_services()->session->getLoggedInUser();
-	if ($user) {
-		return $user->guid;
-	}
-
-	return 0;
+	return _elgg_services()->session->getLoggedInUserGuid();
 }
 
 /**
@@ -54,7 +49,7 @@ function elgg_get_logged_in_user_guid() {
  * @return bool
  */
 function elgg_is_logged_in() {
-	return (bool)_elgg_services()->session->getLoggedInUser();
+	return _elgg_services()->session->isLoggedIn();
 }
 
 /**
@@ -63,13 +58,7 @@ function elgg_is_logged_in() {
  * @return bool
  */
 function elgg_is_admin_logged_in() {
-	$user = elgg_get_logged_in_user_entity();
-
-	if ($user && $user->isAdmin()) {
-		return true;
-	}
-
-	return false;
+	return _elgg_services()->session->isAdminLoggedIn();
 }
 
 /**
@@ -87,6 +76,11 @@ function elgg_is_admin_user($user_guid) {
 
 	$user_guid = (int)$user_guid;
 
+	$current_user = elgg_get_logged_in_user_entity();
+	if ($current_user && $current_user->guid == $user_guid) {
+		return $current_user->isAdmin();
+	}
+
 	// cannot use magic metadata here because of recursion
 
 	// must support the old way of getting admin from metadata
@@ -98,7 +92,7 @@ function elgg_is_admin_user($user_guid) {
 		$yes = elgg_get_metastring_id('yes');
 		$one = elgg_get_metastring_id('1');
 
-		$query = "SELECT * FROM {$CONFIG->dbprefix}users_entity as e,
+		$query = "SELECT 1 FROM {$CONFIG->dbprefix}users_entity as e,
 			{$CONFIG->dbprefix}metadata as md
 			WHERE (
 				md.name_id = '$admin'
@@ -108,7 +102,7 @@ function elgg_is_admin_user($user_guid) {
 				AND e.banned = 'no'
 			)";
 	} else {
-		$query = "SELECT * FROM {$CONFIG->dbprefix}users_entity as e
+		$query = "SELECT 1 FROM {$CONFIG->dbprefix}users_entity as e
 			WHERE (
 				e.guid = {$user_guid}
 				AND e.admin = 'yes'
@@ -140,7 +134,7 @@ function elgg_is_admin_user($user_guid) {
  * @access private
  */
 function elgg_authenticate($username, $password) {
-	$pam = new ElggPAM('user');
+	$pam = new \ElggPAM('user');
 	$credentials = array('username' => $username, 'password' => $password);
 	$result = $pam->authenticate($credentials);
 	if (!$result) {
@@ -169,16 +163,37 @@ function pam_auth_userpass(array $credentials = array()) {
 
 	$user = get_user_by_username($credentials['username']);
 	if (!$user) {
-		throw new LoginException(elgg_echo('LoginException:UsernameFailure'));
+		throw new \LoginException(_elgg_services()->translator->translate('LoginException:UsernameFailure'));
 	}
 
 	if (check_rate_limit_exceeded($user->guid)) {
-		throw new LoginException(elgg_echo('LoginException:AccountLocked'));
+		throw new \LoginException(_elgg_services()->translator->translate('LoginException:AccountLocked'));
 	}
 
-	if ($user->password !== generate_user_password($user, $credentials['password'])) {
+	$password_svc = _elgg_services()->passwords;
+	$password = $credentials['password'];
+	$hash = $user->password_hash;
+
+	if (!$hash) {
+		// try legacy hash
+		$legacy_hash = $password_svc->generateLegacyHash($user, $password);
+		if ($user->password !== $legacy_hash) {
+			log_login_failure($user->guid);
+			throw new \LoginException(_elgg_services()->translator->translate('LoginException:PasswordFailure'));
+		}
+
+		// migrate password
+		$password_svc->forcePasswordReset($user, $password);
+		return true;
+	}
+
+	if (!$password_svc->verify($password, $hash)) {
 		log_login_failure($user->guid);
-		throw new LoginException(elgg_echo('LoginException:PasswordFailure'));
+		throw new \LoginException(_elgg_services()->translator->translate('LoginException:PasswordFailure'));
+	}
+
+	if ($password_svc->needsRehash($hash)) {
+		$password_svc->forcePasswordReset($user, $password);
 	}
 
 	return true;
@@ -195,7 +210,7 @@ function log_login_failure($user_guid) {
 	$user_guid = (int)$user_guid;
 	$user = get_entity($user_guid);
 
-	if (($user_guid) && ($user) && ($user instanceof ElggUser)) {
+	if (($user_guid) && ($user) && ($user instanceof \ElggUser)) {
 		$fails = (int)$user->getPrivateSetting("login_failures");
 		$fails++;
 
@@ -218,7 +233,7 @@ function reset_login_failure_count($user_guid) {
 	$user_guid = (int)$user_guid;
 	$user = get_entity($user_guid);
 
-	if (($user_guid) && ($user) && ($user instanceof ElggUser)) {
+	if (($user_guid) && ($user) && ($user instanceof \ElggUser)) {
 		$fails = (int)$user->getPrivateSetting("login_failures");
 
 		if ($fails) {
@@ -251,7 +266,7 @@ function check_rate_limit_exceeded($user_guid) {
 	$user_guid = (int)$user_guid;
 	$user = get_entity($user_guid);
 
-	if (($user_guid) && ($user) && ($user instanceof ElggUser)) {
+	if (($user_guid) && ($user) && ($user instanceof \ElggUser)) {
 		$fails = (int)$user->getPrivateSetting("login_failures");
 		if ($fails >= $limit) {
 			$cnt = 0;
@@ -278,11 +293,11 @@ function check_rate_limit_exceeded($user_guid) {
  *
  * To customize all cookies, register for the 'init:cookie', 'all' event.
  *
- * @param ElggCookie $cookie The cookie that is being set
+ * @param \ElggCookie $cookie The cookie that is being set
  * @return bool
  * @since 1.9
  */
-function elgg_set_cookie(ElggCookie $cookie) {
+function elgg_set_cookie(\ElggCookie $cookie) {
 	if (elgg_trigger_event('init:cookie', $cookie->name, $cookie)) {
 		return setcookie($cookie->name, $cookie->value, $cookie->expire, $cookie->path,
 						$cookie->domain, $cookie->secure, $cookie->httpOnly);
@@ -291,27 +306,27 @@ function elgg_set_cookie(ElggCookie $cookie) {
 }
 
 /**
- * Logs in a specified ElggUser. For standard registration, use in conjunction
+ * Logs in a specified \ElggUser. For standard registration, use in conjunction
  * with elgg_authenticate.
  *
  * @see elgg_authenticate
  *
- * @param ElggUser $user       A valid Elgg user object
- * @param boolean  $persistent Should this be a persistent login?
+ * @param \ElggUser $user       A valid Elgg user object
+ * @param boolean   $persistent Should this be a persistent login?
  *
  * @return true or throws exception
  * @throws LoginException
  */
-function login(ElggUser $user, $persistent = false) {
+function login(\ElggUser $user, $persistent = false) {
 	if ($user->isBanned()) {
-		throw new LoginException(elgg_echo('LoginException:BannedUser'));
+		throw new \LoginException(elgg_echo('LoginException:BannedUser'));
 	}
 
 	$session = _elgg_services()->session;
 
 	// give plugins a chance to reject the login of this user (no user in session!)
 	if (!elgg_trigger_before_event('login', 'user', $user)) {
-		throw new LoginException(elgg_echo('LoginException:Unknown'));
+		throw new \LoginException(elgg_echo('LoginException:Unknown'));
 	}
 
 	// #5933: set logged in user early so code in login event will be able to
@@ -323,7 +338,7 @@ function login(ElggUser $user, $persistent = false) {
 	$version = "1.9";
 	if (!elgg_trigger_deprecated_event('login', 'user', $user, $message, $version)) {
 		$session->removeLoggedInUser();
-		throw new LoginException(elgg_echo('LoginException:Unknown'));
+		throw new \LoginException(elgg_echo('LoginException:Unknown'));
 	}
 
 	// if remember me checked, set cookie with token and store hash(token) for user
@@ -424,7 +439,7 @@ function _elgg_session_boot() {
 
 	// initialize the deprecated global session wrapper
 	global $SESSION;
-	$SESSION = new Elgg_DeprecationWrapper($session, "\$SESSION is deprecated", 1.9);
+	$SESSION = new \Elgg\DeprecationWrapper($session, "\$SESSION is deprecated", 1.9);
 
 	// logout a user with open session who has been banned
 	$user = $session->getLoggedInUser();

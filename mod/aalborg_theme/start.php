@@ -14,10 +14,10 @@ function aalborg_theme_init() {
 	// theme specific CSS
 	elgg_extend_view('css/elgg', 'aalborg_theme/css');
 
+	elgg_unextend_view('page/elements/header', 'search/header');
+	elgg_extend_view('page/elements/sidebar', 'search/header', 0);
+	
 	elgg_register_plugin_hook_handler('head', 'page', 'aalborg_theme_setup_head');
-
-	elgg_register_js('respond', 'mod/aalborg_theme/vendors/js/respond.min.js');
-	elgg_load_js('respond');
 
 	// non-members do not get visible links to RSS feeds
 	if (!elgg_is_logged_in()) {
@@ -30,9 +30,6 @@ function aalborg_theme_init() {
  * Rearrange menu items
  */
 function aalborg_theme_pagesetup() {
-
-	elgg_unextend_view('page/elements/header', 'search/header');
-	elgg_extend_view('page/elements/sidebar', 'search/header', 0);
 
 	if (elgg_is_logged_in()) {
 
@@ -53,7 +50,7 @@ function aalborg_theme_pagesetup() {
 				elgg_register_menu_item('site', $item);
 			}
 		}
-
+		
 		$item = elgg_get_menu_item('topbar', 'usersettings');
 		if ($item) {
 			$item->setParentName('account');
@@ -105,23 +102,12 @@ function aalborg_theme_pagesetup() {
  * @return array
  */
 function aalborg_theme_setup_head($hook, $type, $data) {
-	$data['metas'][] = array(
+	$data['metas']['viewport'] = array(
 		'name' => 'viewport',
 		'content' => 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0',
 	);
 
-    // https://developer.chrome.com/multidevice/android/installtohomescreen
-    $data['metas'][] = array(
-        'name' => 'mobile-web-app-capable',
-        'content' => 'yes',
-    );
-
-    $data['metas'][] = array(
-        'name' => 'apple-mobile-web-app-capable',
-        'content' => 'yes',
-    );
-
-	$data['links'][] = array(
+	$data['links']['apple-touch-icon'] = array(
 		'rel' => 'apple-touch-icon',
 		'href' => elgg_normalize_url('mod/aalborg_theme/graphics/homescreen.png'),
 	);

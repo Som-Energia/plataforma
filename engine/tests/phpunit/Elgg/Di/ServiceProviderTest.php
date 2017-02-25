@@ -1,33 +1,57 @@
 <?php
+namespace Elgg\Di;
 
-class Elgg_Di_ServiceProviderTest extends PHPUnit_Framework_TestCase {
+
+class ServiceProviderTest extends \PHPUnit_Framework_TestCase {
 
 	public function testPropertiesReturnCorrectClassNames() {
-		$mgr = $this->getMock('Elgg_AutoloadManager', array(), array(), '', false);
+		$mgr = $this->getMock('\Elgg\AutoloadManager', array(), array(), '', false);
 
-		$sp = new Elgg_Di_ServiceProvider($mgr);
+		$sp = new \Elgg\Di\ServiceProvider($mgr);
 
+		$sp->setValue('session', new \ElggSession(new \Elgg\Http\MockSessionStorage()));
+		
 		$svcClasses = array(
-			'actions' => 'Elgg_ActionsService',
+			'access' => '\Elgg\Access',
+			'accessCache' => '\ElggStaticVariableCache',
+			'accessCollections' => '\Elgg\Database\AccessCollections',
+			'actions' => '\Elgg\ActionsService',
+			'adminNotices' => '\Elgg\Database\AdminNotices',
 
 			// requires _elgg_get_simplecache_root() to be defined
-			//'amdConfig' => 'Elgg_Amd_Config',
-
-			'autoP' => 'ElggAutoP',
-			'autoloadManager' => 'Elgg_AutoloadManager',
-			'db' => 'Elgg_Database',
-			'events' => 'Elgg_EventsService',
-			'hooks' => 'Elgg_PluginHooksService',
-			'logger' => 'Elgg_Logger',
-			'metadataCache' => 'ElggVolatileMetadataCache',
-			'request' => 'Elgg_Http_Request',
-			'router' => 'Elgg_Router',
-
-			// Will this start session?
-			//'session' => 'ElggSession'
-
-			'views' => 'Elgg_ViewsService',
-			'widgets' => 'Elgg_WidgetsService',
+			//'amdConfig' => '\Elgg\Amd\Config',
+			
+			'annotations' => '\Elgg\Database\Annotations',
+			'autoP' => '\ElggAutoP',
+			'autoloadManager' => '\Elgg\AutoloadManager',
+			'config' => '\Elgg\Config',
+			'configTable' => '\Elgg\Database\ConfigTable',
+			'datalist' => '\Elgg\Database\Datalist',
+			'db' => '\Elgg\Database',
+			'entityTable' => '\Elgg\Database\EntityTable',
+			'events' => '\Elgg\EventsService',
+			'externalFiles' => '\Elgg\Assets\ExternalFiles',
+			'hooks' => '\Elgg\PluginHooksService',
+			'input' => '\Elgg\Http\Input',
+			'logger' => '\Elgg\Logger',
+			'metadataCache' => '\ElggVolatileMetadataCache',
+			'metadataTable' => '\Elgg\Database\MetadataTable',
+			'metastringsTable' => '\Elgg\Database\MetastringsTable',
+			'passwords' => '\Elgg\PasswordService',
+			'plugins' => '\Elgg\Database\Plugins',
+			'request' => '\Elgg\Http\Request',
+			'relationshipsTable' => '\Elgg\Database\RelationshipsTable',
+			'router' => '\Elgg\Router',
+			'session' => '\ElggSession',
+			'simpleCache' => '\Elgg\Cache\SimpleCache',
+			'siteSecret' => '\Elgg\Database\SiteSecret',
+			'stickyForms' => '\Elgg\Forms\StickyForms',
+			'subtypeTable' => '\Elgg\Database\SubtypeTable',
+			'systemCache' => '\Elgg\Cache\SystemCache',
+			'translator' => '\Elgg\I18n\Translator',
+			'usersTable' => '\Elgg\Database\UsersTable',
+			'views' => '\Elgg\ViewsService',
+			'widgets' => '\Elgg\WidgetsService',
 		);
 
 		foreach ($svcClasses as $key => $class) {
@@ -38,3 +62,4 @@ class Elgg_Di_ServiceProviderTest extends PHPUnit_Framework_TestCase {
 		}
 	}
 }
+

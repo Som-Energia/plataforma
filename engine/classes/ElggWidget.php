@@ -1,9 +1,9 @@
 <?php
 
 /**
- * ElggWidget
+ * \ElggWidget
  *
- * Stores metadata in private settings rather than as ElggMetadata
+ * Stores metadata in private settings rather than as \ElggMetadata
  *
  * @package    Elgg.Core
  * @subpackage Widgets
@@ -13,7 +13,7 @@
  * @property-read string $order   internal, do not use
  * @property-read string $context internal, do not use
  */
-class ElggWidget extends ElggObject {
+class ElggWidget extends \ElggObject {
 
 	/**
 	 * Set subtype to widget.
@@ -28,7 +28,7 @@ class ElggWidget extends ElggObject {
 
 	/**
 	 * Get a value from attributes or private settings
-	 *
+	 * 
 	 * @param string $name The name of the value
 	 * @return mixed
 	 */
@@ -63,7 +63,7 @@ class ElggWidget extends ElggObject {
 
 	/**
 	 * Set an attribute or private setting value
-	 *
+	 * 
 	 * @param string $name  The name of the value to set
 	 * @param mixed  $value The value to set
 	 * @return void
@@ -173,7 +173,7 @@ class ElggWidget extends ElggObject {
 		if ($column == $this->column) {
 			$bottom_rank--;
 		}
-
+		
 		if ($rank == 0) {
 			// top of the column
 			$this->order = reset($widgets)->order - 10;
@@ -247,7 +247,7 @@ class ElggWidget extends ElggObject {
 			'widget' => $this,
 			'params' => $params
 		);
-		if (elgg_trigger_plugin_hook('widget_settings', $this->handler, $hook_params, false) == true) {
+		if (_elgg_services()->hooks->trigger('widget_settings', $this->handler, $hook_params, false) == true) {
 			return true;
 		}
 

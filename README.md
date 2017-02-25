@@ -1,23 +1,26 @@
-# Plataforma Som Energia
-## Branch Status:  
-- Master:
-  + [![Build Status](https://travis-ci.org/Som-Energia/plataforma.svg?branch=master)](https://travis-ci.org/Som-Energia/plataforma)
-- Devel: 
-  + [![Build Status](https://travis-ci.org/Som-Energia/plataforma.svg?branch=devel)](https://travis-ci.org/Som-Energia/plataforma)
-- Stagging:
-  + [![Build Status](https://travis-ci.org/Som-Energia/plataforma.svg?branch=stagging)](https://travis-ci.org/Som-Energia/plataforma)
-  
-# Docker Desarrollo Plataforma
-## Construir imagen: 
-- Ejecutar script: docker/build
+Elgg [![Build Status](https://secure.travis-ci.org/Elgg/Elgg.svg?branch=1.10)](https://travis-ci.org/Elgg/Elgg) [![Scrutinizer Quality Score](https://scrutinizer-ci.com/g/Elgg/Elgg/badges/quality-score.png?s=1.10)](https://scrutinizer-ci.com/g/Elgg/Elgg/?branch=1.10) [![Scrutinizer Code Coverage](https://scrutinizer-ci.com/g/Elgg/Elgg/badges/coverage.png?b=1.10)](https://scrutinizer-ci.com/g/Elgg/Elgg/?branch=1.10) [![Read the docs build status](https://readthedocs.org/projects/elgg/badge/?version=1.10)](http://learn.elgg.org/en/1.10/)
+====
 
-## Iniciar Contenedor:
-- Ejecutar script: docker/run
+Copyright (c) 2008-2014, see COPYRIGHT.txt
 
-## Cuentas acceso en el docker
-- Admin Plataforma: admin Passwd: adminadmin
-- Admin Base datos: admin Passwd: plataforma
+For development credits, see CONTRIBUTORS.txt.
 
-# Copiar instalación de Elgg
-- ![Duplicar instalación](http://learn.elgg.org/es/1.9/admin/duplicate-installation.html)
+Elgg is managed by the Elgg Foundation, a nonprofit organization that was
+founded to govern, protect, and promote the Elgg open source social network
+engine.  The Foundation aims to provide a stable, commercially and
+individually independent organization that operates in the best interest of Elgg
+as an open source project.
 
+The project site can be found at http://elgg.org/.
+
+The Elgg project was started in 2004 by
+ - Ben Werdmuller (<ben@benwerd.com>, <http://benwerd.com>)
+ - Dave Tosh (<https://twitter.com/davetosh>).
+
+Elgg is released under the GNU General Public License (GPL) Version 2 and the
+Massachusetts Institute of Technology (MIT-X11) License. See LICENSE.txt 
+in the root of the package you downloaded.
+
+For installation instructions, see INSTALL.txt.
+
+For upgrade instructions, see UPGRADE.txt.

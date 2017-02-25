@@ -18,7 +18,7 @@
  * @param string    $class      The class of object it effects.
  * @param string    $type       The type
  * @param string    $subtype    The subtype.
- * @param int       $limit      Maximum number of responses to return.
+ * @param int       $limit      Maximum number of responses to return. (default from settings)
  * @param int       $offset     Offset of where to start.
  * @param bool      $count      Return count or not
  * @param int       $timebefore Lower time limit
@@ -27,7 +27,7 @@
  * @param string    $ip_address The IP address.
  * @return mixed
  */
-function get_system_log($by_user = "", $event = "", $class = "", $type = "", $subtype = "", $limit = 10,
+function get_system_log($by_user = "", $event = "", $class = "", $type = "", $subtype = "", $limit = null,
 						$offset = 0, $count = false, $timebefore = 0, $timeafter = 0, $object_id = 0,
 						$ip_address = "") {
 
@@ -41,12 +41,15 @@ function get_system_log($by_user = "", $event = "", $class = "", $type = "", $su
 	} else {
 		$by_user = (int)$by_user;
 	}
-
+	
 	$event = sanitise_string($event);
 	$class = sanitise_string($class);
 	$type = sanitise_string($type);
 	$subtype = sanitise_string($subtype);
 	$ip_address = sanitise_string($ip_address);
+	if ($limit === null) {
+		$limit = elgg_get_config('default_limit');
+	}
 	$limit = (int)$limit;
 	$offset = (int)$offset;
 
@@ -129,7 +132,7 @@ function get_log_entry($entry_id) {
 /**
  * Return the object referred to by a given log entry
  *
- * @param stdClass|int $entry The log entry row or its ID
+ * @param \stdClass|int $entry The log entry row or its ID
  *
  * @return mixed
  */
@@ -165,7 +168,7 @@ function get_object_from_log_entry($entry) {
 			$object = new $class($entry->object_id);
 			return $object;
 		} catch (Exception $e) {
-
+			
 		}
 	}
 
@@ -192,7 +195,7 @@ function system_log($object, $event) {
 
 	if ($object instanceof Loggable) {
 
-		/* @var ElggEntity|ElggExtender $object */
+		/* @var \ElggEntity|\ElggExtender $object */
 		if (datalist_get('version') < 2012012000) {
 			// this is a site that doesn't have the ip_address column yet
 			return;

@@ -1,16 +1,17 @@
 <?php
+namespace Elgg\Http;
 
 /**
  * Session handler interface
  *
  * Use SessionHandlerInterface when minimum PHP version becomes 5.4
- *
+ * 
  * @access private
- *
+ * 
  * @package    Elgg.Core
  * @subpackage Http
  */
-interface Elgg_Http_SessionHandler {
+interface SessionHandler {
 
 	/**
 	 * Re-initialize existing session, or creates a new one.

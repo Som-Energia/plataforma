@@ -39,6 +39,8 @@ return array(
 	'actionnotfound' => "Het actiebestand voor %s kon niet worden gevonden.",
 	'actionloggedout' => "Sorry, je kunt deze actie niet uitvoeren als je bent afgemeld.",
 	'actionunauthorized' => 'Je bent niet geautoriseerd om deze actie uit te voeren',
+	
+	'ajax:error' => 'Onverwacht probleem opgetreden tijdens de uitvoer van een AJAX call. Mogelijk is de verbinding met de server verloren.',
 
 	'PluginException:MisconfiguredPlugin' => "%s (guid: %s) is een verkeerd geconfigureerde plugin. Hij is uitgeschakeld. In de Elgg documentatie kun je mogelijke oorzaken vinden (http://learn.elgg.org/).",
 	'PluginException:CannotStart' => '%s (guid: %s) kan niet starten. Reden: %s',
@@ -85,6 +87,9 @@ Ongeldig %s afhankelijkheid "%s" in plugin %s. Let op: plugins kunnen niet confl
 	
 	'ElggPlugin:Dependencies:ActiveDependent' => 'Er zijn plugins die afhankelijk zijn van %s. Je moet eerst de volgende plugins uitschakelen voordat je deze kunt uitschakelen: %s',
 
+	'ElggMenuBuilder:Trees:NoParents' => 'Menu items gevonden zonder bovenliggende menu items om ze aan te linken',
+	'ElggMenuBuilder:Trees:OrphanedChild' => 'Menu item [%s] gevonden met een ontbrekend bovenliggend menu item [%s]',
+	'ElggMenuBuilder:Trees:DuplicateChild' => 'Dubbele registratie gevonden voor menu item [%s]',
 
 	'RegistrationException:EmptyPassword' => 'De wachtwoordvelden mogen niet leeg zijn!',
 	'RegistrationException:PasswordMismatch' => 'Wachtwoorden moeten gelijk zijn',
@@ -149,6 +154,8 @@ Ongeldig %s afhankelijkheid "%s" in plugin %s. Let op: plugins kunnen niet confl
 	'access:read' => "Toegang",
 	'access:write' => "Schrijftoegang",
 	'access:admin_only' => "Alleen voor beheerders",
+	'access:missing_name' => "Ontbrekend naam voor toegangsniveau",
+	'access:comments:change' => "Deze reacties zijn op dit moment zichtbaar voor een beperkte groep gebruikers. Bedenk goed met wie je dit wilt delen.",
 
 /**
  * Dashboard and widgets
@@ -521,6 +528,8 @@ De volgende karakters zijn niet toegestaan: %s',
 	'admin:widget:banned_users:help' => 'Toon de gebande gebruikers',
 	'admin:widget:content_stats' => 'Inhoud statistieken',
 	'admin:widget:content_stats:help' => 'Blijf op de hoogte van de inhoud die door de gebruikers is gemaakt',
+	'admin:widget:cron_status' => 'Cron status',
+	'admin:widget:cron_status:help' => 'Toont de status van de laatste afronding van de cron jobs',
 	'widget:content_stats:type' => 'Type inhoud',
 	'widget:content_stats:number' => 'Aantal',
 
@@ -754,6 +763,7 @@ Wanneer de site in onderhoudsmodus is kunnen alleen sitebeheerders inloggen en d
 	'river:friends' => 'Activiteit van vrienden',
 	'river:select' => 'Toon %s',
 	'river:comments:more' => '+%u meer',
+	'river:comments:all' => 'Bekijk alle %u reacties',
 	'river:generic_comment' => 'reageerde op %s %s',
 
 	'friends:widget:description' => "Toont een aantal van je vrienden.",
@@ -1069,12 +1079,13 @@ Als je bent aangemeld raden we je aan om je wachtwoord direct te wijzigen.',
 	'installation:minify_js:label' => "JavaScript comprimeren (aangeraden)",
 	'installation:minify_css:label' => "CSS comprimeren (aangeraden)",
 
-	'installation:htaccess:needs_upgrade' => "Je moet het bestand .htaccess zodanig wijzigen dat het pad geïnjecteerd wordt in de GET-parameter __elgg_uri. Je kunt htaccess_dist als voorbeeld gebruiken.",
+	'installation:htaccess:needs_upgrade' => "Je moet het bestand .htaccess zodanig wijzigen dat het pad geïnjecteerd wordt in de GET-parameter __elgg_uri (je kunt install/config/htaccess.dist als voorbeeld gebruiken).",
 	'installation:htaccess:localhost:connectionfailed' => "Elgg kan niet zelf de rewrite-rules testen. Controleer dat curl werkt en dat er geen IP-restricties zijn die localhost connecties blokkeren.",
 	
 	'installation:systemcache:description' => "De systeemcache verlaagt de laadtijd van de Elgg-engine door data te cachen naar bestanden.",
 	'installation:systemcache:label' => "Gebruik systeemcache (aanbevolen)",
 
+	'admin:legend:system' => 'Systeem',
 	'admin:legend:caching' => 'Caching',
 	'admin:legend:content_access' => 'Toegang tot content',
 	'admin:legend:site_access' => 'Toegang tot de site',
@@ -1118,6 +1129,7 @@ Als je meer gedetailleerde instructie wilt, ga je naar de <a href="http://learn.
 	// Strings specific for the comments upgrade
 	'admin:upgrades:comments' => 'Reacties-upgrade',
 	'upgrade:comment:create_failed' => 'Het is helaas niet gelukt om de reactie met ID %s om te zetten naar een entiteit.',
+	'admin:upgrades:commentaccess' => 'Reactie toegankelijkheid upgrade',
 
 	// Strings specific for the datadir upgrade
 	'admin:upgrades:datadirs' => 'Upgrade van de datamap.',
@@ -1208,7 +1220,8 @@ Indien jij deze persoon bent, klik dan op onderstaande link. In het andere geval
 	'generic_comment:updated' => "De reactie is gewijzigd",
 	'generic_comment:deleted' => "Je reactie is succesvol verwijderd.",
 	'generic_comment:blank' => "Sorry, je moet wel wat invullen voordat we je reactie kunnen opslaan!",
-	'generic_comment:notfound' => "Sorry, we konden het opgegeven item niet vinden.",
+	'generic_comment:notfound' => "Sorry, we konden de opgegeven reactie niet vinden.",
+	'generic_comment:notfound_fallback' => "Sorry, we konden de opgegeven reactie niet vinden, maar we hebben je doorgestuurd naar de pagina waar de reactie is achtergelaten.",
 	'generic_comment:notdeleted' => "Sorry, we konden deze reactie niet verwijderen.",
 	'generic_comment:failure' => "Er is een fout opgetreden tijdens het opslaan van je reactie. Probeer het nogmaals.",
 	'generic_comment:none' => 'Geen reacties',
@@ -1251,7 +1264,7 @@ Dit is een automatisch aangemaakt bericht. Je kunt hier niet op reageren.",
 	'actiongatekeeper:missingfields' => 'Het formulier mist __token en/of __ts veld(en)',
 	'actiongatekeeper:tokeninvalid' => "Er was een probleem (token mismatch). Dit betekent waarschijnlijk dat de gebruikte pagina verlopen was. Probeer het nogmaals.",
 	'actiongatekeeper:timeerror' => 'De gebruikte pagina is verlopen. Ververs en probeer het nogmaals.',
-	'actiongatekeeper:pluginprevents' => 'Een extension heeft voorkomen dat het formulier wordt verzonden.',
+	'actiongatekeeper:pluginprevents' => 'Sorry. Het formulier kon niet worden verwerkt om onbekende reden.',
 	'actiongatekeeper:uploadexceeded' => 'De totale grootte van de ge-uploade bestanden is meer dan is toegestaan door de site beheerder',
 	'actiongatekeeper:crosssitelogin' => "Je mag niet inloggen vanaf een ander domein. Ga naar het juiste adres (url) en probeer het nogmaals.",
 

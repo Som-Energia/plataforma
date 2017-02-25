@@ -37,7 +37,7 @@ if (strpos($forward_url, '/') !== 0) {
 
 if (get_input('upgrade') == 'upgrade') {
 
-	$upgrader = new Elgg_UpgradeService();
+	$upgrader = new \Elgg\UpgradeService();
 	$result = $upgrader->run();
 	if ($result['failure'] == true) {
 		register_error($result['reason']);
@@ -48,7 +48,7 @@ if (get_input('upgrade') == 'upgrade') {
 	if (!class_exists('ElggRewriteTester')) {
 		require dirname(__FILE__) . '/install/ElggRewriteTester.php';
 	}
-	$rewriteTester = new ElggRewriteTester();
+	$rewriteTester = new \ElggRewriteTester();
 	$url = elgg_get_site_url() . "__testing_rewrite?__testing_rewrite=1";
 	if (!$rewriteTester->runRewriteTest($url)) {
 		// see if there is a problem accessing the site at all
@@ -64,12 +64,12 @@ if (get_input('upgrade') == 'upgrade') {
 			echo $msg;
 			exit;
 		}
-
+		
 		// note: translation may not be available until after upgrade
 		$msg = elgg_echo("installation:htaccess:needs_upgrade");
 		if ($msg === "installation:htaccess:needs_upgrade") {
 			$msg = "You must update your .htaccess file so that the path is injected "
-				. "into the GET parameter __elgg_uri (you can use htaccess_dist as a guide).";
+				. "into the GET parameter __elgg_uri (you can use install/config/htaccess.dist as a guide).";
 		}
 		echo $msg;
 		exit;
@@ -85,7 +85,7 @@ if (get_input('upgrade') == 'upgrade') {
 		// can't have pretty messages because we don't know the state of the views.
 		$content = elgg_echo('upgrade:unable_to_upgrade_info');
 		$title = elgg_echo('upgrade:unable_to_upgrade');
-
+		
 		echo elgg_view_page($title, $content);
 		exit;
 	}
@@ -94,6 +94,9 @@ if (get_input('upgrade') == 'upgrade') {
 		'forward' => $forward_url
 	);
 
+	// reset cache to have latest translations available during upgrade
+	elgg_reset_system_cache();
+	
 	echo elgg_view_page(elgg_echo('upgrading'), '', 'upgrade', $vars);
 	exit;
 }

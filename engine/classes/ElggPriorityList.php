@@ -2,7 +2,7 @@
 /**
  * Iterate over elements in a specific priority.
  *
- * $pl = new ElggPriorityList();
+ * $pl = new \ElggPriorityList();
  * $pl->add('Element 0');
  * $pl->add('Element 10', 10);
  * $pl->add('Element -10', -10);
@@ -19,7 +19,7 @@
  * Collisions on priority are handled by inserting the element at or as close to the
  * requested priority as possible:
  *
- * $pl = new ElggPriorityList();
+ * $pl = new \ElggPriorityList();
  * $pl->add('Element 5', 5);
  * $pl->add('Colliding element 5', 5);
  * $pl->add('Another colliding element 5', 5);
@@ -35,14 +35,14 @@
  *
  * You can do priority lookups by element:
  *
- * $pl = new ElggPriorityList();
+ * $pl = new \ElggPriorityList();
  * $pl->add('Element 0');
  * $pl->add('Element -5', -5);
  * $pl->add('Element 10', 10);
  * $pl->add('Element -10', -10);
  *
  * $priority = $pl->getPriority('Element -5');
- *
+ * 
  * Or element lookups by priority.
  * $element = $pl->getElement(-5);
  *
@@ -55,7 +55,7 @@
  * To move an element:
  * $pl->move('Element -5', -3);
  *
- * ElggPriorityList only tracks priority. No checking is done in ElggPriorityList for duplicates or
+ * \ElggPriorityList only tracks priority. No checking is done in \ElggPriorityList for duplicates or
  * updating. If you need to track this use objects and an external map:
  *
  * function elgg_register_something($id, $display_name, $location, $priority = 500) {
@@ -64,7 +64,7 @@
  *	static $list;
  *
  *	if (!$list) {
- *		$list = new ElggPriorityList();
+ *		$list = new \ElggPriorityList();
  *	}
  *
  *	// update if already registered.
@@ -77,7 +77,7 @@
  *		$element->display_name = $display_name;
  *		$element->location = $location;
  *	} else {
- *		$element = new stdClass();
+ *		$element = new \stdClass();
  *		$element->display_name = $display_name;
  *		$element->location = $location;
  *		if (!$list->add($element, $priority)) {
@@ -93,7 +93,7 @@
  * @subpackage Helpers
  */
 class ElggPriorityList
-	implements Iterator, Countable {
+	implements \Iterator, \Countable {
 
 	/**
 	 * The list of elements
@@ -172,7 +172,7 @@ class ElggPriorityList
 	 */
 	public function move($element, $new_priority, $strict = false) {
 		$new_priority = (int) $new_priority;
-
+		
 		$current_priority = $this->getPriority($element, $strict);
 		if ($current_priority === false) {
 			return false;
@@ -203,7 +203,7 @@ class ElggPriorityList
 	 *
 	 * If no user function is provided the elements are sorted by priority registered.
 	 *
-	 * The callback function should accept the array of elements as the first
+	 * The callback function should accept the array of elements as the first 
 	 * argument and should return a sorted array.
 	 *
 	 * This function can be called multiple times.
@@ -223,7 +223,7 @@ class ElggPriorityList
 
 			$this->elements = $sorted;
 		}
-
+		
 		$this->sorted = true;
 		return true;
 	}
@@ -247,7 +247,7 @@ class ElggPriorityList
 	 */
 	public function getNextPriority($near = 0) {
 		$near = (int) $near;
-
+		
 		while (array_key_exists($near, $this->elements)) {
 			$near++;
 		}
@@ -257,7 +257,7 @@ class ElggPriorityList
 
 	/**
 	 * Returns the priority of an element if it exists in the list.
-	 *
+	 * 
 	 * @warning This can return 0 if the element's priority is 0.
 	 *
 	 * @param mixed $element The element to check for.
@@ -289,7 +289,7 @@ class ElggPriorityList
 		return $this->getPriority($element, $strict) !== false;
 	}
 
-
+	
 	/**********************
 	 * Interface methods *
 	 **********************/

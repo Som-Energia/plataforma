@@ -8,7 +8,7 @@ Views
 Introduction
 ============
 
-Elgg follows a MVC pattern and Views are the V in MVC. Views are responsible for creating the output. Generally, this will be HTML sent to a web browser, but it could also be RSS, JSON or any number of other data formats.
+Elgg follows a MVC pattern and Views are the V in MVC. Views are responsible for creating the output. Generally, this will be HTML sent to a web browser, but it could also be RSS, JSON or any number of other data formats. 
 
 The Views system handles everything from the layout of pages and chunks of presentation output (like a footer or a toolbar) down to individual links and form inputs. It also allows for advanced features like automatic RSS generation, a swift-to-develop mobile interface, and the alternative interfaces suggested below.
 
@@ -233,7 +233,21 @@ This is then used in the provided listing functions. To automatically display a 
 
 This function checks to see if there are any entities; if there are, it first displays the ``navigation/pagination`` view in order to display a way to move from page to page. It then repeatedly calls ``elgg_view_entity`` on each entity, before returning the result.
 
+Note that ``elgg_list_entities`` allows the URL to set its ``limit`` and ``offset`` options, so set those explicitly if you need particular values (e.g. if you're not using it for pagination).
+
 Because it does this, Elgg knows that it can automatically supply an RSS feed - it extends the ``metatags`` view (which is called by the header) in order to provide RSS autodiscovery, which is why you can see the orange RSS icon on those pages.
+
+If your entity list will display the entity owners, you can improve performance a bit by preloading all owner entities:
+
+.. code-block:: php
+
+	echo elgg_list_entities(array(
+	    'type' => 'object',
+	    'subtype' => 'blog',
+
+	    // enable owner preloading
+	    'preload_owners' => true,
+	));
 
 See also :doc:`check this page out first </design/database>`.
 
@@ -256,4 +270,5 @@ Related
    
    views/page-structure
    views/simplecache
+   views/foot-vs-footer
 	

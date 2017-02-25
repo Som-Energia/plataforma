@@ -10,7 +10,7 @@
 /**
  * Return the object specific details of a object by a row.
  *
- * @param int $guid The guid to retreive
+ * @param int $guid The guid to retrieve
  *
  * @return bool
  * @access private
@@ -23,7 +23,7 @@ function get_object_entity_as_row($guid) {
 }
 
 /**
- * Runs unit tests for ElggObject
+ * Runs unit tests for \ElggObject
  *
  * @param string $hook   unit_test
  * @param string $type   system

@@ -6,32 +6,32 @@ class ElggUpgradeTest extends PHPUnit_Framework_TestCase {
 	 */
 	protected $obj;
 
-	protected function setUp() {
-		// required by ElggEntity when setting the owner/container
-		_elgg_services()->setValue('session', new ElggSession(new Elgg_Http_MockSessionStorage()));
+	public function setUp() {
+		// required by \ElggEntity when setting the owner/container
+		_elgg_services()->setValue('session', new \ElggSession(new \Elgg\Http\MockSessionStorage()));
 
-		$this->obj = $this->getMockBuilder('ElggUpgrade')
+		$this->obj = $this->getMockBuilder('\ElggUpgrade')
 				->setMethods(null)
 				->getMock();
 
 		$this->obj->_callable_egefps = array($this, 'mock_egefps');
 	}
-
+	
 	public function mock_egefps($options) {
 		return array();
 	}
 
 	public function mock_egefps_with_entities() {
-		return array(new stdClass());
+		return array(new \stdClass());
 	}
 
 	public function mock_egefps_for_full_url($options) {
-		return array(new stdClass());
+		return array(new \stdClass());
 	}
 
 	public function mock_egefps_for_path($options) {
 		if ($options['private_setting_value'] === 'test') {
-			return array(new stdClass());
+			return array(new \stdClass());
 		} else {
 			return array();
 		}

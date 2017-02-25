@@ -1,22 +1,23 @@
 <?php
 /**
- * ElggUser
+ * \ElggUser
  *
  * Representation of a "user" in the system.
  *
  * @package    Elgg.Core
  * @subpackage DataModel.User
- *
- * @property string $name     The display name that the user will be known by in the network
- * @property string $username The short, reference name for the user in the network
- * @property string $email    The email address to which Elgg will send email notifications
- * @property string $language The language preference of the user (ISO 639-1 formatted)
- * @property string $banned   'yes' if the user is banned from the network, 'no' otherwise
- * @property string $admin    'yes' if the user is an administrator of the network, 'no' otherwise
- * @property string $password The hashed password of the user
- * @property string $salt     The salt used to secure the password before hashing
+ * 
+ * @property      string $name          The display name that the user will be known by in the network
+ * @property      string $username      The short, reference name for the user in the network
+ * @property      string $email         The email address to which Elgg will send email notifications
+ * @property      string $language      The language preference of the user (ISO 639-1 formatted)
+ * @property      string $banned        'yes' if the user is banned from the network, 'no' otherwise
+ * @property      string $admin         'yes' if the user is an administrator of the network, 'no' otherwise
+ * @property-read string $password      The legacy (salted MD5) password hash of the user
+ * @property-read string $salt          The salt used to create the legacy password hash
+ * @property-read string $password_hash The hashed password of the user
  */
-class ElggUser extends ElggEntity
+class ElggUser extends \ElggEntity
 	implements Friendable {
 
 	/**
@@ -33,6 +34,7 @@ class ElggUser extends ElggEntity
 		$this->attributes['username'] = null;
 		$this->attributes['password'] = null;
 		$this->attributes['salt'] = null;
+		$this->attributes['password_hash'] = null;
 		$this->attributes['email'] = null;
 		$this->attributes['language'] = null;
 		$this->attributes['banned'] = "no";
@@ -49,7 +51,7 @@ class ElggUser extends ElggEntity
 	 * Plugin developers should only use the constructor to create a new entity.
 	 * To retrieve entities, use get_entity() and the elgg_get_entities* functions.
 	 *
-	 * @param stdClass $row Database row result. Default is null to create a new user.
+	 * @param \stdClass $row Database row result. Default is null to create a new user.
 	 *
 	 * @throws IOException|InvalidParameterException if there was a problem creating the user.
 	 */
@@ -61,11 +63,11 @@ class ElggUser extends ElggEntity
 
 		if (!empty($row)) {
 			// Is $row is a DB entity row
-			if ($row instanceof stdClass) {
+			if ($row instanceof \stdClass) {
 				// Load the rest
 				if (!$this->load($row)) {
 					$msg = "Failed to load new " . get_class() . " for GUID:" . $row->guid;
-					throw new IOException($msg);
+					throw new \IOException($msg);
 				}
 			} else if (is_string($row)) {
 				// $row is a username
@@ -76,9 +78,9 @@ class ElggUser extends ElggEntity
 						$this->attributes[$key] = $value;
 					}
 				}
-			} else if ($row instanceof ElggUser) {
-				// $row is an ElggUser so this is a copy constructor
-				elgg_deprecated_notice('This type of usage of the ElggUser constructor was deprecated. Please use the clone method.', 1.7);
+			} else if ($row instanceof \ElggUser) {
+				// $row is an \ElggUser so this is a copy constructor
+				elgg_deprecated_notice('This type of usage of the \ElggUser constructor was deprecated. Please use the clone method.', 1.7);
 				foreach ($row->attributes as $key => $value) {
 					$this->attributes[$key] = $value;
 				}
@@ -86,23 +88,23 @@ class ElggUser extends ElggEntity
 				// $row is a GUID so load entity
 				elgg_deprecated_notice('Passing a GUID to constructor is deprecated. Use get_entity()', 1.9);
 				if (!$this->load($row)) {
-					throw new IOException("Failed to load new " . get_class() . " from GUID:" . $row);
+					throw new \IOException("Failed to load new " . get_class() . " from GUID:" . $row);
 				}
 			} else {
-				throw new InvalidParameterException("Unrecognized value passed to constuctor.");
+				throw new \InvalidParameterException("Unrecognized value passed to constuctor.");
 			}
 		}
 	}
 
 	/**
-	 * Load the ElggUser data from the database
+	 * Load the \ElggUser data from the database
 	 *
-	 * @param mixed $guid ElggUser GUID or stdClass database row from entity table
+	 * @param mixed $guid \ElggUser GUID or \stdClass database row from entity table
 	 *
 	 * @return bool
 	 */
 	protected function load($guid) {
-		$attr_loader = new Elgg_AttributeLoader(get_class(), 'user', $this->attributes);
+		$attr_loader = new \Elgg\AttributeLoader(get_class(), 'user', $this->attributes);
 		$attr_loader->secondary_loader = 'get_user_entity_as_row';
 
 		$attrs = $attr_loader->getRequiredAttributes($guid);
@@ -124,49 +126,51 @@ class ElggUser extends ElggEntity
 	 */
 	protected function create() {
 		global $CONFIG;
-
+	
 		$guid = parent::create();
 		$name = sanitize_string($this->name);
 		$username = sanitize_string($this->username);
 		$password = sanitize_string($this->password);
 		$salt = sanitize_string($this->salt);
+		$password_hash = sanitize_string($this->password_hash);
 		$email = sanitize_string($this->email);
 		$language = sanitize_string($this->language);
 
 		$query = "INSERT into {$CONFIG->dbprefix}users_entity
-			(guid, name, username, password, salt, email, language)
-			values ($guid, '$name', '$username', '$password', '$salt', '$email', '$language')";
+			(guid, name, username, password, salt, password_hash, email, language)
+			values ($guid, '$name', '$username', '$password', '$salt', '$password_hash', '$email', '$language')";
 
 		$result = $this->getDatabase()->insertData($query);
 		if ($result === false) {
 			// TODO(evan): Throw an exception here?
 			return false;
 		}
-
+		
 		return $guid;
 	}
-
+	
 	/**
 	 * {@inheritdoc}
 	 */
 	protected function update() {
 		global $CONFIG;
-
+		
 		if (!parent::update()) {
 			return false;
 		}
-
+		
 		$guid = (int)$this->guid;
 		$name = sanitize_string($this->name);
 		$username = sanitize_string($this->username);
 		$password = sanitize_string($this->password);
 		$salt = sanitize_string($this->salt);
+		$password_hash = sanitize_string($this->password_hash);
 		$email = sanitize_string($this->email);
 		$language = sanitize_string($this->language);
 
 		$query = "UPDATE {$CONFIG->dbprefix}users_entity
 			SET name='$name', username='$username', password='$password', salt='$salt',
-			email='$email', language='$language'
+			password_hash='$password_hash', email='$email', language='$language'
 			WHERE guid = $guid";
 
 		return $this->getDatabase()->updateData($query) !== false;
@@ -184,8 +188,6 @@ class ElggUser extends ElggEntity
 		if (isset($USERNAME_TO_GUID_MAP_CACHE[$this->username])) {
 			unset($USERNAME_TO_GUID_MAP_CACHE[$this->username]);
 		}
-
-		clear_user_files($this);
 
 		// Delete entity
 		return parent::delete();
@@ -209,23 +211,41 @@ class ElggUser extends ElggEntity
 	 * {@inheritdoc}
 	 */
 	public function __set($name, $value) {
-		if (array_key_exists($name, $this->attributes)) {
-			switch ($name) {
-				case 'prev_last_action':
-				case 'last_login':
-				case 'prev_last_login':
-					if ($value !== null) {
-						$this->attributes[$name] = (int)$value;
-					} else {
-						$this->attributes[$name] = null;
-					}
-					break;
-				default:
-					parent::__set($name, $value);
-					break;
-			}
-		} else {
+		if (!array_key_exists($name, $this->attributes)) {
 			parent::__set($name, $value);
+			return;
+		}
+
+		switch ($name) {
+			case 'prev_last_action':
+			case 'last_login':
+			case 'prev_last_login':
+				if ($value !== null) {
+					$this->attributes[$name] = (int)$value;
+				} else {
+					$this->attributes[$name] = null;
+				}
+				break;
+
+			case 'salt':
+			case 'password':
+				elgg_deprecated_notice("Setting salt/password directly is deprecated. Use ElggUser::setPassword().", "1.10");
+				$this->attributes[$name] = $value;
+
+				// this is emptied so that the user is not left with two usable hashes
+				$this->attributes['password_hash'] = '';
+
+				break;
+
+			// setting this not supported
+			case 'password_hash':
+				_elgg_services()->logger->error("password_hash is now an attribute of ElggUser and cannot be set.");
+				return;
+				break;
+
+			default:
+				parent::__set($name, $value);
+				break;
 		}
 	}
 
@@ -327,7 +347,7 @@ class ElggUser extends ElggEntity
 	 */
 	public function getSites($options = "", $limit = 10, $offset = 0) {
 		if (is_string($options)) {
-			elgg_deprecated_notice('ElggUser::getSites() takes an options array', 1.9);
+			elgg_deprecated_notice('\ElggUser::getSites() takes an options array', 1.9);
 			return get_user_sites($this->getGUID(), $limit, $offset);
 		}
 
@@ -337,13 +357,13 @@ class ElggUser extends ElggEntity
 	/**
 	 * Add this user to a particular site
 	 *
-	 * @param ElggSite $site The site to add this user to. This used to be the
+	 * @param \ElggSite $site The site to add this user to. This used to be the
 	 *                       the site guid (still supported by deprecated)
 	 * @return bool
 	 */
 	public function addToSite($site) {
 		if (is_numeric($site)) {
-			elgg_deprecated_notice('ElggUser::addToSite() takes a site entity', 1.9);
+			elgg_deprecated_notice('\ElggUser::addToSite() takes a site entity', 1.9);
 			return add_site_user($site, $this->getGUID());
 		}
 
@@ -353,13 +373,13 @@ class ElggUser extends ElggEntity
 	/**
 	 * Remove this user from a particular site
 	 *
-	 * @param ElggSite $site The site to remove the user from. Used to be site GUID
+	 * @param \ElggSite $site The site to remove the user from. Used to be site GUID
 	 *
 	 * @return bool
 	 */
 	public function removeFromSite($site) {
 		if (is_numeric($site)) {
-			elgg_deprecated_notice('ElggUser::removeFromSite() takes a site entity', 1.9);
+			elgg_deprecated_notice('\ElggUser::removeFromSite() takes a site entity', 1.9);
 			return remove_site_user($site, $this->guid);
 		}
 
@@ -369,17 +389,30 @@ class ElggUser extends ElggEntity
 	/**
 	 * Adds a user as a friend
 	 *
-	 * @param int $friend_guid The GUID of the user to add
+	 * @param int  $friend_guid       The GUID of the user to add
+	 * @param bool $create_river_item Create the river item announcing this friendship
 	 *
 	 * @return bool
-	 * @todo change to accept ElggUser
 	 */
-	public function addFriend($friend_guid) {
+	public function addFriend($friend_guid, $create_river_item = false) {
 		if (!get_user($friend_guid)) {
 			return false;
 		}
 
-		return add_entity_relationship($this->guid, "friend", $friend_guid);
+		if (!add_entity_relationship($this->guid, "friend", $friend_guid)) {
+			return false;
+		}
+
+		if ($create_river_item) {
+			elgg_create_river_item(array(
+				'view' => 'river/relationship/friend/create',
+				'action_type' => 'friend',
+				'subject_guid' => $this->guid,
+				'object_guid' => $friend_guid,
+			));
+		}
+
+		return true;
 	}
 
 	/**
@@ -388,7 +421,6 @@ class ElggUser extends ElggEntity
 	 * @param int $friend_guid The GUID of the user to remove
 	 *
 	 * @return bool
-	 * @todo change to accept ElggUser
 	 */
 	public function removeFriend($friend_guid) {
 		if (!get_user($friend_guid)) {
@@ -413,7 +445,7 @@ class ElggUser extends ElggEntity
 	 * @return bool
 	 */
 	public function isFriend() {
-		return $this->isFriendOf(elgg_get_logged_in_user_guid());
+		return $this->isFriendOf(_elgg_services()->session->getLoggedInUserGuid());
 	}
 
 	/**
@@ -447,7 +479,7 @@ class ElggUser extends ElggEntity
 	 * @param int   $limit   The number of users to retrieve (deprecated)
 	 * @param int   $offset  Indexing offset, if any (deprecated)
 	 *
-	 * @return array|false Array of ElggUser, or false, depending on success
+	 * @return array|false Array of \ElggUser, or false, depending on success
 	 */
 	public function getFriends($options = array(), $limit = 10, $offset = 0) {
 		if (is_array($options)) {
@@ -456,7 +488,7 @@ class ElggUser extends ElggEntity
 			$options['type'] = 'user';
 			return elgg_get_entities_from_relationship($options);
 		} else {
-			elgg_deprecated_notice("ElggUser::getFriends takes an options array", 1.9);
+			elgg_deprecated_notice("\ElggUser::getFriends takes an options array", 1.9);
 			return elgg_get_entities_from_relationship(array(
 				'relationship' => 'friend',
 				'relationship_guid' => $this->guid,
@@ -478,7 +510,7 @@ class ElggUser extends ElggEntity
 	 * @param int   $limit   The number of users to retrieve (deprecated)
 	 * @param int   $offset  Indexing offset, if any (deprecated)
 	 *
-	 * @return array|false Array of ElggUser, or false, depending on success
+	 * @return array|false Array of \ElggUser, or false, depending on success
 	 */
 	public function getFriendsOf($options = array(), $limit = 10, $offset = 0) {
 		if (is_array($options)) {
@@ -488,7 +520,7 @@ class ElggUser extends ElggEntity
 			$options['type'] = 'user';
 			return elgg_get_entities_from_relationship($options);
 		} else {
-			elgg_deprecated_notice("ElggUser::getFriendsOf takes an options array", 1.9);
+			elgg_deprecated_notice("\ElggUser::getFriendsOf takes an options array", 1.9);
 			return elgg_get_entities_from_relationship(array(
 				'relationship' => 'friend',
 				'relationship_guid' => $this->guid,
@@ -512,7 +544,7 @@ class ElggUser extends ElggEntity
 	 * @deprecated 1.9 Use elgg_list_entities_from_relationship()
 	 */
 	public function listFriends($subtype = "", $limit = 10, array $vars = array()) {
-		elgg_deprecated_notice('ElggUser::listFriends() is deprecated. Use elgg_list_entities_from_relationship()', 1.9);
+		elgg_deprecated_notice('\ElggUser::listFriends() is deprecated. Use elgg_list_entities_from_relationship()', 1.9);
 		$defaults = array(
 			'type' => 'user',
 			'relationship' => 'friend',
@@ -537,11 +569,11 @@ class ElggUser extends ElggEntity
 	 * @param int   $limit   The number of groups to retrieve (deprecated)
 	 * @param int   $offset  Indexing offset, if any (deprecated)
 	 *
-	 * @return array|false Array of ElggGroup, or false, depending on success
+	 * @return array|false Array of \ElggGroup, or false, depending on success
 	 */
 	public function getGroups($options = "", $limit = 10, $offset = 0) {
 		if (is_string($options)) {
-			elgg_deprecated_notice('ElggUser::getGroups() takes an options array', 1.9);
+			elgg_deprecated_notice('\ElggUser::getGroups() takes an options array', 1.9);
 			$subtype = $options;
 			$options = array(
 				'type' => 'group',
@@ -592,7 +624,7 @@ class ElggUser extends ElggEntity
 	}
 
 	/**
-	 * Get an array of ElggObject owned by this user.
+	 * Get an array of \ElggObject owned by this user.
 	 *
 	 * @param array $options Options array. See elgg_get_entities() for a list of options.
 	 *                       'type' is set to object and owner_guid to this entity.
@@ -607,7 +639,7 @@ class ElggUser extends ElggEntity
 			$options['owner_guid'] = $this->getGUID();
 			return elgg_get_entities($options);
 		} else {
-			elgg_deprecated_notice("ElggUser::getObjects takes an options array", 1.9);
+			elgg_deprecated_notice("\ElggUser::getObjects takes an options array", 1.9);
 			return elgg_get_entities(array(
 				'type' => 'object',
 				'subtype' => $options,
@@ -619,7 +651,7 @@ class ElggUser extends ElggEntity
 	}
 
 	/**
-	 * Get an array of ElggObjects owned by this user's friends.
+	 * Get an array of \ElggObjects owned by this user's friends.
 	 *
 	 * @param array $options Options array. See elgg_get_entities_from_relationship()
 	 *                       for a list of options. 'relationship_guid' is set to
@@ -638,7 +670,7 @@ class ElggUser extends ElggEntity
 			$options['relationship_join_on'] = 'container_guid';
 			return elgg_get_entities_from_relationship($options);
 		} else {
-			elgg_deprecated_notice("ElggUser::getFriendsObjects takes an options array", 1.9);
+			elgg_deprecated_notice("\ElggUser::getFriendsObjects takes an options array", 1.9);
 			return elgg_get_entities_from_relationship(array(
 				'type' => 'object',
 				'subtype' => $options,
@@ -652,15 +684,15 @@ class ElggUser extends ElggEntity
 	}
 
 	/**
-	 * Counts the number of ElggObjects owned by this user
+	 * Counts the number of \ElggObjects owned by this user
 	 *
 	 * @param string $subtype The subtypes of the objects, if any
 	 *
-	 * @return int The number of ElggObjects
+	 * @return int The number of \ElggObjects
 	 * @deprecated 1.9 Use elgg_get_entities()
 	 */
 	public function countObjects($subtype = "") {
-		elgg_deprecated_notice("ElggUser::countObjects() is deprecated. Use elgg_get_entities()", 1.9);
+		elgg_deprecated_notice("\ElggUser::countObjects() is deprecated. Use elgg_get_entities()", 1.9);
 		return count_user_objects($this->getGUID(), $subtype);
 	}
 
@@ -674,7 +706,7 @@ class ElggUser extends ElggEntity
 	 * @return array|false
 	 */
 	public function getCollections($subtype = "", $limit = 10, $offset = 0) {
-		elgg_deprecated_notice("ElggUser::getCollections() has been deprecated", 1.8);
+		elgg_deprecated_notice("\ElggUser::getCollections() has been deprecated", 1.8);
 		return false;
 	}
 
@@ -700,7 +732,7 @@ class ElggUser extends ElggEntity
 	 * @deprecated 1.8 Use getOwnerGUID()
 	 */
 	public function getOwner() {
-		elgg_deprecated_notice("ElggUser::getOwner deprecated for ElggUser::getOwnerGUID", 1.8);
+		elgg_deprecated_notice("\ElggUser::getOwner deprecated for \ElggUser::getOwnerGUID", 1.8);
 		$this->getOwnerGUID();
 	}
 
@@ -735,8 +767,8 @@ class ElggUser extends ElggEntity
 	/**
 	 * Can a user comment on this user?
 	 *
-	 * @see ElggEntity::canComment()
-	 *
+	 * @see \ElggEntity::canComment()
+	 * 
 	 * @param int $user_guid User guid (default is logged in user)
 	 * @return bool
 	 * @since 1.8.0
@@ -747,5 +779,21 @@ class ElggUser extends ElggEntity
 			return $result;
 		}
 		return false;
+	}
+
+	/**
+	 * Set the necessary attributes to store a hash of the user's password. Also removes
+	 * the legacy hash/salt values.
+	 *
+	 * @tip You must save() to persist the attributes
+	 *
+	 * @param string $password The password to be hashed
+	 * @return void
+	 * @since 1.10.0
+	 */
+	public function setPassword($password) {
+		$this->attributes['salt'] = "";
+		$this->attributes['password'] = "";
+		$this->attributes['password_hash'] = _elgg_services()->passwords->generateHash($password);
 	}
 }

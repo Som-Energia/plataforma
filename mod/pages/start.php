@@ -109,7 +109,7 @@ function pages_init() {
 function pages_page_handler($page) {
 
 	elgg_load_library('elgg:pages');
-
+	
 	if (!isset($page[0])) {
 		$page[0] = 'all';
 	}
@@ -160,7 +160,7 @@ function pages_page_handler($page) {
 
 /**
  * Override the page url
- *
+ * 
  * @param string $hook
  * @param string $type
  * @param string $url
@@ -239,6 +239,7 @@ function pages_entity_menu_setup($hook, $type, $return, $params) {
 		return $return;
 	}
 
+	elgg_load_library('elgg:pages');
 	$entity = $params['entity'];
 	$handler = elgg_extract('handler', $params, false);
 	if ($handler != 'pages') {
@@ -246,7 +247,9 @@ function pages_entity_menu_setup($hook, $type, $return, $params) {
 	}
 
 	// remove delete if not owner or admin
-	if (!elgg_is_admin_logged_in() && elgg_get_logged_in_user_guid() != $entity->getOwnerGuid()) {
+	if (!elgg_is_admin_logged_in() 
+		&& elgg_get_logged_in_user_guid() != $entity->getOwnerGuid() 
+		&& ! pages_can_delete_page($entity)) {
 		foreach ($return as $index => $item) {
 			if ($item->getName() == 'delete') {
 				unset($return[$index]);
@@ -267,12 +270,12 @@ function pages_entity_menu_setup($hook, $type, $return, $params) {
 
 /**
  * Prepare a notification message about a new page
- *
+ * 
  * @param string                          $hook         Hook name
  * @param string                          $type         Hook type
- * @param Elgg_Notifications_Notification $notification The notification to prepare
+ * @param Elgg\Notifications\Notification $notification The notification to prepare
  * @param array                           $params       Hook parameters
- * @return Elgg_Notifications_Notification
+ * @return Elgg\Notifications\Notification
  */
 function pages_prepare_notification($hook, $type, $notification, $params) {
 	$entity = $params['event']->getObject();
@@ -284,7 +287,7 @@ function pages_prepare_notification($hook, $type, $notification, $params) {
 	$descr = $entity->description;
 	$title = $entity->title;
 
-	$notification->subject = elgg_echo('pages:notify:subject', array($title), $language);
+	$notification->subject = elgg_echo('pages:notify:subject', array($title), $language); 
 	$notification->body = elgg_echo('pages:notify:body', array(
 		$owner->name,
 		$title,

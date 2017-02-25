@@ -4,8 +4,10 @@
  *
  * @package Elgg
  * @subpackage Test
+ * 
+ * TODO(ewinslow): Move this to Elgg\Database\AccessCollectionsTest
  */
-class ElggCoreAccessCollectionsTest extends ElggCoreUnitTest {
+class ElggCoreAccessCollectionsTest extends \ElggCoreUnitTest {
 
 	/**
 	 * Called before each test object.
@@ -15,13 +17,12 @@ class ElggCoreAccessCollectionsTest extends ElggCoreUnitTest {
 
 		$this->dbPrefix = get_config("dbprefix");
 
-		$user = new ElggUser();
+		$user = new \ElggUser();
 		$user->username = 'test_user_' . rand();
 		$user->email = 'fake_email@fake.com' . rand();
 		$user->name = 'fake user';
 		$user->access_id = ACCESS_PUBLIC;
-		$user->salt = _elgg_generate_password_salt();
-		$user->password = generate_user_password($user, rand());
+		$user->setPassword(rand());
 		$user->owner_guid = 0;
 		$user->container_guid = 0;
 		$user->save();
@@ -39,7 +40,7 @@ class ElggCoreAccessCollectionsTest extends ElggCoreUnitTest {
 	}
 
 	public function testCreateGetDeleteACL() {
-
+		
 		$acl_name = 'test access collection';
 		$acl_id = create_access_collection($acl_name);
 
@@ -78,13 +79,12 @@ class ElggCoreAccessCollectionsTest extends ElggCoreUnitTest {
 
 	public function testUpdateACL() {
 		// another fake user to test with
-		$user = new ElggUser();
+		$user = new \ElggUser();
 		$user->username = 'test_user_' . rand();
 		$user->email = 'fake_email@fake.com' . rand();
 		$user->name = 'fake user';
 		$user->access_id = ACCESS_PUBLIC;
-		$user->salt = _elgg_generate_password_salt();
-		$user->password = generate_user_password($user, rand());
+		$user->setPassword(rand());
 		$user->owner_guid = 0;
 		$user->container_guid = 0;
 		$user->save();
@@ -165,7 +165,7 @@ class ElggCoreAccessCollectionsTest extends ElggCoreUnitTest {
 			'acl_id' => $acl_id,
 			'user' => $this->user
 		);
-
+		
 		function test_acl_access_hook($hook, $type, $value, $params) {
 			global $acl_test_info;
 			if ($params['user_id'] == $acl_test_info['user']->guid) {
@@ -196,8 +196,8 @@ class ElggCoreAccessCollectionsTest extends ElggCoreUnitTest {
 		if (!elgg_is_active_plugin('groups')) {
 			return;
 		}
-
-		$group = new ElggGroup();
+		
+		$group = new \ElggGroup();
 		$group->name = 'Test group';
 		$group->save();
 		$acl = get_access_collection($group->group_acl);
@@ -207,7 +207,7 @@ class ElggCoreAccessCollectionsTest extends ElggCoreUnitTest {
 
 		// removing group and acl
 		$this->assertTrue($group->delete());
-
+		
 		$acl = get_access_collection($group->group_acl);
 		$this->assertFalse($acl);
 
@@ -219,7 +219,7 @@ class ElggCoreAccessCollectionsTest extends ElggCoreUnitTest {
 			return;
 		}
 
-		$group = new ElggGroup();
+		$group = new \ElggGroup();
 		$group->name = 'Test group';
 		$group->save();
 
@@ -253,13 +253,12 @@ class ElggCoreAccessCollectionsTest extends ElggCoreUnitTest {
 
 	public function testAccessCaching() {
 		// create a new user to check against
-		$user = new ElggUser();
+		$user = new \ElggUser();
 		$user->username = 'access_test_user';
 		$user->save();
 
 		foreach (array('get_access_list', 'get_access_array') as $func) {
-			$cache = _elgg_get_access_cache();
-			$cache->clear();
+			_elgg_services()->accessCache->clear();
 
 			// admin users run tests, so disable access
 			elgg_set_ignore_access(true);

@@ -122,6 +122,30 @@ By metadata
 The function ``elgg_get_entities_from_metadata`` allows fetching entities
 with metadata in a variety of ways.
 
+By annotation
+~~~~~~~~~~~~~
+
+The function ``elgg_get_entities_from_annotations`` allows fetching entities
+with metadata in a variety of ways.
+
+.. note::
+
+   As of Elgg 1.10 the default behaviour of `elgg_get_entities_from_annotations` was brought inline with the rest of the `elgg_get_entities*` functions.
+   
+   Pre Elgg 1.10 the sorting of the entities was based on the latest addition of an annotation (in $options your could add `$options['order_by'] = 'maxtime ASC'` or `$options['order_by'] = 'maxtime DESC'`. As of Elgg 1.10 this was changed to the creation time of the entity, just like the rest of the `elgg_get_entities*` functions.
+   To get the old behaviour back add the following to your `$options`:
+   
+   .. code:: php
+   
+      $options['selects'] = array('MAX(n_table.time_created) AS maxtime');
+      $options['group_by'] = 'n_table.entity_guid';
+      $options['order_by'] = 'maxtime ASC'
+      
+      or
+      
+      $options['order_by'] = 'maxtime DESC'
+      
+
 Displaying entities
 -------------------
 
@@ -251,6 +275,17 @@ the given type - this itself can be an address set up by a page handler.
 .. _elgg\_register\_entity\_url\_handler(): http://reference.elgg.org/entities_8php.html#f28d3b403f90c91a715b81334eb59893
 
 The default handler is to use the default export interface.
+
+Entity loading performance
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+``elgg_get_entities`` has a couple options that can sometimes be useful to improve performance.
+
+* **preload_owners**: If the entities fetched will be displayed in a list with the owner information, you can set this option to ``true`` to efficiently load the owner users of the fetched entities.
+
+* **distinct**: When Elgg fetches entities using an SQL query, Elgg must be sure that each entity row appears only once in the result set. By default it includes a ``DISTINCT`` modifier on the GUID column to enforce this, but some queries naturally return unique entities. Setting the ``distinct`` option to false will remove this modifier, and rely on the query to enforce its own uniqueness.
+
+The internals of Elgg entity queries is a complex subject and it's recommended to seek help on the Elgg Community site before using the ``distinct`` option.
 
 Pre-1.8 Notes
 -------------
