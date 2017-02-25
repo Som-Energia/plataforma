@@ -13,7 +13,7 @@
  * @return void
  */
 function group_tools_join_group_event($event, $type, $params) {
-	global $NOTIFICATION_HANDLERS;
+	$NOTIFICATION_HANDLERS = _elgg_services()->notifications->getMethods();
 	
 	static $auto_notification;
 	
@@ -219,7 +219,7 @@ function group_tools_membership_request($event, $type, $relationship) {
 	}
 	
 	// only send a message if group admins are allowed
-	if (elgg_get_plugin_setting("multiple_admin", "group_tools") != "yes") {
+	if (!group_tools_multiple_admin_enabled()) {
 		return;
 	}
 	
@@ -231,7 +231,6 @@ function group_tools_membership_request($event, $type, $relationship) {
 		"type" => "user",
 		"limit" => false,
 		"wheres" => array("e.guid <> " . $group->owner_guid),
-		"callback" => false
 	);
 	
 	$admins = elgg_get_entities_from_relationship($options);

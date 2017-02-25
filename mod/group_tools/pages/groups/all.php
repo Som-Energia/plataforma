@@ -25,7 +25,7 @@ $dbprefix = elgg_get_config("dbprefix");
 switch ($selected_tab) {
 	case "ordered":
 		
-		$order_id = add_metastring("order");
+		$order_id = elgg_get_metastring_id("order");
 		
 		$group_options["limit"] = false;
 		$group_options["pagination"] = false;
@@ -41,6 +41,8 @@ switch ($selected_tab) {
 		
 		break;
 	case "yours":
+		elgg_gatekeeper();
+		
 		$group_options["relationship"] = "member";
 		$group_options["relationship_guid"] = elgg_get_logged_in_user_guid();
 		$group_options["inverse_relationship"] = false;

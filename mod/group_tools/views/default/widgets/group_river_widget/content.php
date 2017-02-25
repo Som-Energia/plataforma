@@ -58,11 +58,11 @@ if (!empty($group_guid)) {
 		}
 	}
 	
-	$sql .= " AND " . get_access_sql_suffix("entities1");
+	$sql .= " AND " . _elgg_get_access_where_sql(array("table_alias" => "entities1"));
 	$sql .= " ORDER BY {$dbprefix}river.posted DESC";
 	$sql .= " LIMIT {$offset},{$limit}";
 	
-	$items = get_data($sql, "elgg_row_to_elgg_river_item");
+	$items = get_data($sql, "_elgg_row_to_elgg_river_item");
 	
 	if (!empty($items)) {
 		$options = array(

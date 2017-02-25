@@ -16,41 +16,48 @@
 function group_tools_check_group_email_invitation($invite_code, $group_guid = 0) {
 	$result = false;
 	
-	if (!empty($invite_code)) {
-		$options = array(
-			"type" => "group",
-			"limit" => 1,
-			"site_guids" => false,
-			"annotation_name_value_pairs" => array(
-				array(
-					"name" => "email_invitation",
-					"value" => $invite_code
-				),
-				array(
-					"name" => "email_invitation",
-					"value" => $invite_code . "|%",
-					"operand" => "LIKE"
-				)
-			),
-			"annotation_name_value_pairs_operator" => "OR"
-		);
-		
-		if (!empty($group_guid)) {
-			$options["annotation_owner_guids"] = array($group_guid);
-		}
-		
-		// find hidden groups
-		$ia = elgg_set_ignore_access(true);
-		
-		$groups = elgg_get_entities_from_annotations($options);
-		
-		if (!empty($groups)) {
-			$result = $groups[0];
-		}
-		
+	if (empty($invite_code)) {
+		return false;
+	}
+	
+	// note not using elgg_get_entities_from_annotations
+	// due to performance issues with LIKE wildcard search
+	// prefetch metastring ids for use in lighter joins instead
+	$name_id = elgg_get_metastring_id("email_invitation");
+	$code_id = elgg_get_metastring_id($invite_code);
+	$sanitized_invite_code = sanitize_string($invite_code);
+	
+	$options = array(
+		"limit" => 1,
+		"wheres" => array(
+			"n_table.name_id = {$name_id} AND (n_table.value_id = {$code_id} OR v.string LIKE '{$sanitized_invite_code}|%')"
+		)
+	);
+	
+	if (!empty($group_guid)) {
+		$options["annotation_owner_guids"] = array($group_guid);
+	}
+	
+	// find hidden groups
+	$ia = elgg_set_ignore_access(true);
+	
+	$annotations = elgg_get_annotations($options);
+			
+	if (!$annotations) {
 		// restore access
 		elgg_set_ignore_access($ia);
+		
+		return false;
 	}
+	
+	$group = $annotations[0]->getEntity();
+	
+	if ($group) {
+		$result = $group;
+	}
+	
+	// restore access
+	elgg_set_ignore_access($ia);
 	
 	return $result;
 }
@@ -90,7 +97,7 @@ function group_tools_invite_user(ElggGroup $group, ElggUser $user, $text = "", $
 				$url
 			));
 			
-			if (notify_user($user->getGUID(), $group->getOwnerGUID(), $subject, $msg, null, "email")) {
+			if (notify_user($user->getGUID(), $group->getOwnerGUID(), $subject, $msg, array(), "email")) {
 				$result = true;
 			}
 		}
@@ -139,7 +146,7 @@ function group_tools_add_user(ElggGroup $group, ElggUser $user, $text = "") {
 			);
 			$msg = elgg_trigger_plugin_hook("invite_notification", "group_tools", $params, $msg);
 				
-			if (notify_user($user->getGUID(), $group->getOwnerGUID(), $subject, $msg, null, "email")) {
+			if (notify_user($user->getGUID(), $group->getOwnerGUID(), $subject, $msg, array(), "email")) {
 				$result = true;
 			}
 		}
@@ -183,9 +190,9 @@ function group_tools_invite_email(ElggGroup $group, $email, $text = "", $resend 
 				} else {
 					// no site email, so make one up
 					if (!empty($site->name)) {
-						$site_from = $site->name . " <noreply@" . get_site_domain($site->getGUID()) . ">";
+						$site_from = $site->name . " <noreply@" . $site->getDomain() . ">";
 					} else {
-						$site_from = "noreply@" . get_site_domain($site->getGUID());
+						$site_from = "noreply@" . $site->getDomain();
 					}
 				}
 				
@@ -219,49 +226,6 @@ function group_tools_invite_email(ElggGroup $group, $email, $text = "", $resend 
 				$result = elgg_send_email($site_from, $email, $subject, $body);
 			} else {
 				$result = null;
-			}
-		}
-	}
-	
-	return $result;
-}
-
-/**
- * Verify that all supplied user_guids are a member of the group
- *
- * @param int   $group_guid the GUID of the group
- * @param array $user_guids an array of user GUIDs to check
- *
- * @return boolean|int[] returns all user_guids that are a member
- */
-function group_tools_verify_group_members($group_guid, $user_guids) {
-	$result = false;
-	
-	if (!empty($group_guid) && !empty($user_guids)) {
-		if (!is_array($user_guids)) {
-			$user_guids = array($user_guids);
-		}
-		
-		$group = get_entity($group_guid);
-		if (!empty($group) && ($group instanceof ElggGroup)) {
-			$options = array(
-				"type" => "user",
-				"limit" => false,
-				"relationship" => "member",
-				"relationship_guid" => $group->getGUID(),
-				"inverse_relationship" => true,
-				"callback" => "group_tools_guid_only_callback"
-			);
-			
-			$member_guids = elgg_get_entities_from_relationship($options);
-			if (!empty($member_guids)) {
-				$result = array();
-				
-				foreach ($user_guids as $user_guid) {
-					if (in_array($user_guid, $member_guids)) {
-						$result[] = $user_guid;
-					}
-				}
 			}
 		}
 	}
@@ -314,9 +278,9 @@ function group_tools_get_invited_groups_by_email($email, $site_guid = 0) {
 	if (!empty($email)) {
 		$dbprefix = elgg_get_config("dbprefix");
 		$site_secret = get_site_secret();
-		$email = sanitise_string($email);
+		$email = sanitise_string(strtolower($email));
 		
-		$email_invitation_id = add_metastring("email_invitation");
+		$email_invitation_id = elgg_get_metastring_id("email_invitation");
 		
 		if ($site_guid === 0) {
 			$site_guid = elgg_get_site_entity()->getGUID();
@@ -370,7 +334,7 @@ function group_tools_generate_email_invite_code($group_guid, $email) {
 		$site_secret = get_site_secret();
 		
 		// generate code
-		$result = md5($site_secret . $email . $group_guid);
+		$result = md5($site_secret . strtolower($email) . $group_guid);
 	}
 	
 	return $result;
@@ -747,9 +711,9 @@ function group_tools_check_domain_based_group(ElggGroup $group, ElggUser $user =
 			$domains = $group->getPrivateSetting("domain_based");
 			
 			if (!empty($domains)) {
-				$domains = explode("|", trim($domains, "|"));
+				$domains = explode("|", strtolower(trim($domains, "|")));
 				
-				list(,$domain) = explode("@", $user->email);
+				list(,$domain) = explode("@", strtolower($user->email));
 				
 				if (in_array($domain, $domains)) {
 					$result = true;
@@ -778,7 +742,7 @@ function group_tools_get_domain_based_groups(ElggUser $user, $site_guid = 0) {
 		}
 		
 		if (!empty($user) && elgg_instanceof($user, "user")) {
-			list(, $domain) = explode("@", $user->email);
+			list(, $domain) = explode("@", strtolower($user->email));
 			
 			$options = array(
 				"type" => "group",
@@ -819,4 +783,292 @@ function group_tools_enable_registration() {
 			}
 		}
 	}
+}
+
+/**
+ * Helper function to transfer the ownership of a group to a new user
+ *
+ * @param ElggGroup $group     the group to transfer
+ * @param ElggUser  $new_owner the new owner
+ *
+ * @return boolean
+ */
+function group_tools_transfer_group_ownership(ElggGroup $group, ElggUser $new_owner) {
+	$result = false;
+	
+	if (empty($group) || !elgg_instanceof($group, "group") || !$group->canEdit()) {
+		return $result;
+	}
+	
+	if (empty($new_owner) || !elgg_instanceof($new_owner, "user")) {
+		return $result;
+	}
+	
+	$loggedin_user = elgg_get_logged_in_user_entity();
+	
+	// register plugin hook to make sure transfer can complete
+	elgg_register_plugin_hook_handler("permissions_check", "group", "group_tools_admin_transfer_permissions_hook");
+	
+	$old_owner = $group->getOwnerEntity();
+	
+	// transfer ownership
+	$group->owner_guid = $new_owner->getGUID();
+	$group->container_guid = $new_owner->getGUID();
+	
+	// make sure user is added to the group
+	$group->join($new_owner);
+	
+	if ($group->save()) {
+		// remove existing group administrator role for new owner
+		remove_entity_relationship($new_owner->getGUID(), "group_admin", $group->getGUID());
+			
+		// check for group icon
+		if (!empty($group->icontime)) {
+			$prefix = "groups/" . $group->getGUID();
+	
+			$sizes = array("", "tiny", "small", "medium", "large");
+	
+			$ofh = new ElggFile();
+			$ofh->owner_guid = $old_owner->getGUID();
+	
+			$nfh = new ElggFile();
+			$nfh->owner_guid = $group->getOwnerGUID();
+	
+			foreach ($sizes as $size) {
+				// set correct file to handle
+				$ofh->setFilename($prefix . $size . ".jpg");
+				$nfh->setFilename($prefix . $size . ".jpg");
+					
+				// open files
+				$ofh->open("read");
+				$nfh->open("write");
+					
+				// copy file
+				$nfh->write($ofh->grabFile());
+					
+				// close file
+				$ofh->close();
+				$nfh->close();
+					
+				// cleanup old file
+				$ofh->delete();
+			}
+	
+			$group->icontime = time();
+		}
+			
+		// move metadata of the group to the new owner
+		$options = array(
+			"guid" => $group->getGUID(),
+			"limit" => false
+		);
+		$metadata = elgg_get_metadata($options);
+		if (!empty($metadata)) {
+			foreach ($metadata as $md) {
+				if ($md->owner_guid == $old_owner->getGUID()) {
+					$md->owner_guid = $new_owner->getGUID();
+					$md->save();
+				}
+			}
+		}
+			
+		// notify new owner
+		if ($new_owner->getGUID() != $loggedin_user->getGUID()) {
+			$subject = elgg_echo("group_tools:notify:transfer:subject", array($group->name));
+			$message = elgg_echo("group_tools:notify:transfer:message", array(
+				$new_owner->name,
+				$loggedin_user->name,
+				$group->name,
+				$group->getURL())
+			);
+	
+			notify_user($new_owner->getGUID(), $group->getGUID(), $subject, $message);
+		}
+			
+		$result = true;
+	}
+	
+	// unregister plugin hook to make sure transfer can complete
+	elgg_unregister_plugin_hook_handler("permissions_check", "group", "group_tools_admin_transfer_permissions_hook");
+	
+	return $result;
+}
+
+/**
+ * Get the tool presets from the plugin settings
+ *
+ * @return bool|array
+ */
+function group_tools_get_tool_presets() {
+	$result = false;
+	
+	$presets = elgg_get_plugin_setting("group_tool_presets", "group_tools");
+	if (!empty($presets)) {
+		$result = json_decode($presets, true);
+	}
+	
+	return $result;
+}
+
+/**
+ * Get the time_created from the group membership relation
+ *
+ * @param ElggUser  $user  the user to check
+ * @param ElggGroup $group the group to check
+ *
+ * @return int
+ */
+function group_tools_get_membership_information(ElggUser $user, ElggGroup $group) {
+	$result = 0;
+
+	if (!empty($user) && !empty($group)) {
+		$query = "SELECT *";
+		$query .= " FROM " . elgg_get_config("dbprefix") . "entity_relationships";
+		$query .= " WHERE guid_one = " . $user->getGUID();
+		$query .= " AND guid_two = " . $group->getGUID();
+		$query .= " AND relationship = 'member'";
+
+		$row = get_data_row($query);
+		if (!empty($row)) {
+			$result = $row->time_created;
+		}
+	}
+
+	return $result;
+}
+
+/**
+ * Check the plugin setting to allow multiple group admins
+ *
+ * @return bool
+ */
+function group_tools_multiple_admin_enabled() {
+	static $result;
+	
+	if (!isset($result)) {
+		$result = false;
+		
+		if (elgg_get_plugin_setting("multiple_admin", "group_tools") == "yes") {
+			$result = true;
+		}
+	}
+	
+	return $result;
+}
+
+/**
+ * Check if the group allows multiple admins
+ *
+ * @param ElggGroup $group     the group to check
+ * @param int       $user_guid the user to check with
+ *
+ * @return bool
+ */
+function group_tools_group_multiple_admin_enabled(ElggGroup $group, $user_guid = 0) {
+	$result = false;
+	
+	if (empty($group) || !elgg_instanceof($group, "group")) {
+		return $result;
+	}
+	
+	$user_guid = sanitise_int($user_guid, false);
+	if (empty($user_guid)) {
+		$user_guid = elgg_get_logged_in_user_guid();
+	}
+	
+	if (empty($user_guid)) {
+		return $result;
+	}
+	
+	if (!group_tools_multiple_admin_enabled()) {
+		return $result;
+	}
+	
+	if (($group->getOwnerGUID() == $user_guid) || elgg_is_admin_logged_in()) {
+		$result = true;
+	} elseif (($group->group_multiple_admin_allow_enable == "yes") && $group->canEdit($user_guid)) {
+		$result = true;
+	}
+	
+	return $result;
+}
+
+/**
+ * Check if group mail is allowed
+ *
+ * @param ElggGroup $group the group to check
+ *
+ * @return bool
+ */
+function group_tools_group_mail_enabled(ElggGroup $group = null) {
+	static $mail_enabled;
+	
+	if (!isset($mail_enabled)) {
+		$mail_enabled = false;
+		
+		$setting = elgg_get_plugin_setting('mail', 'group_tools');
+		if ($setting === 'yes') {
+			$mail_enabled = true;
+		}
+	}
+	
+	// quick return if plugin setting says no
+	if (!$mail_enabled) {
+		return false;
+	}
+	
+	if (empty($group) || !($group instanceof ElggGroup)) {
+		return true;
+	}
+	
+	if ($group->canEdit()) {
+		// group owners and admin can mail
+		return true;
+	}
+	
+	return false;
+}
+
+/**
+ * Check if group mail is enabled for members
+ *
+ * @param ElggGroup $group The group to check (can be empty to check plugin setting)
+ *
+ * @return bool
+ */
+function group_tools_group_mail_members_enabled(ElggGroup $group = null) {
+	static $mail_members_enabled;
+	
+	if (!isset($mail_members_enabled)) {
+		$mail_members_enabled = false;
+	
+		$setting = elgg_get_plugin_setting('mail_members', 'group_tools');
+		if ($setting === 'yes') {
+			$mail_members_enabled = true;
+		}
+	}
+	
+	// quick return if mail members is not allowed
+	if (!group_tools_group_mail_enabled()) {
+		return false;
+	}
+	
+	if (!$mail_members_enabled) {
+		return false;
+	}
+	
+	if (empty($group) || !($group instanceof ElggGroup)) {
+		return true;
+	}
+	
+	if ($group->canEdit()) {
+		// group owners and admin can mail
+		return true;
+	}
+	
+	if ($group->isMember() && ($group->mail_members_enable === 'yes')) {
+		return true;
+	}
+	
+	return false;
 }
