@@ -52,6 +52,7 @@ function threads_init() {
         if (elgg_is_active_plugin('likes')) {
             elgg_register_plugin_hook_handler('register', 'menu:reply', 'likes_entity_menu_setup');
         }
+        
 	// add link to reply topics
 	elgg_register_plugin_hook_handler('register', 'menu:river', 'threads_add_to_river_menu');
 	
