@@ -5,11 +5,6 @@
     "license": "GPL-2.0",
     "type": "project",
     "require": {
-        "php": ">=5.6",
-	"ext-mysql": "*",
-        "ext-gd": "*",
-        "ext-json": "*",
-        "ext-xml": "*",
         "mrclay/minify": "~2.0",
         "knplabs/gaufrette": "~0.1.0",
         "tedivm/stash": "~0.12",
@@ -21,7 +16,7 @@
 	"beck24/spam_login_filter": "2.1.1",
 	"blackleg/threads": "1.8.3",
         "elgg/mentions": "dev-master",
-        "coldtrick/group_tools": "v3.2"
+        "coldtrick/group_tools": "v4.0"
     },
     "scripts": {
         "test": "phpunit",
