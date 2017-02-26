@@ -1,0 +1,15 @@
+{
+	"name": "blackleg/rm_group_reports",
+	"description": "Elgg Groups Reports",
+	"type": "elgg-plugin",
+	"keywords": ["elgg", "plugin"],
+	"license": "GPL-2.0",
+	"homepage": "http://www.blackleg.es",
+	"support": {
+		"source": "https://github.com/blackleg/rm_group_reports",
+		"issues": "https://github.com/blackleg/rm_group_reports/issues"
+	},
+	"require": {
+		"composer/installers": "^1.0.8"
+	}
+}

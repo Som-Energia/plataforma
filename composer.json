@@ -12,6 +12,7 @@
 	"beck24/spam_login_filter": "2.1.1",
 	"blackleg/threads": "1.8.3",
         "elgg/mentions": "dev-master",
-        "coldtrick/group_tools": "v3.2"
+        "coldtrick/group_tools": "v3.2",
+        "blackleg/rm_group_reports": "1.9.0"
     }
 }
