@@ -25,7 +25,7 @@ function somenergia_drive_init() {
     elgg_register_menu_item('groups', $item);
 
     // Add generic new file widget
-    elgg_register_widget_type('list', elgg_echo('somenergia_drive:widget'), elgg_echo("somenergia_drive:widget"),"profile,dashboard,groups");
+    elgg_register_widget_type('list', elgg_echo('somenergia_drive:widget'), elgg_echo("somenergia_drive:widget"), array("profile, dashboard, groups"));
 
         // add a file link to owner blocks
     elgg_register_plugin_hook_handler('register', 'menu:owner_block', 'somenergia_drive_owner_block_menu');

@@ -42,7 +42,7 @@ function assemblies_init() {
 	elgg_extend_view('css/elgg', 'assemblies/css');
 
 	// notifications
-	register_notification_object('object', 'assembly', elgg_echo('assemblies:newpost'));
+	register_notification_object('object', 'assembly', elgg_echo('assemblies:newpost'));  
 	elgg_register_plugin_hook_handler('notify:entity:message', 'object', 'assemblies_notify_message');
 
 	// handler for link to assembly menu item

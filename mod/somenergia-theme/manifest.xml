@@ -3,13 +3,13 @@
     <id>somenergia-theme</id>
     <name>SomEnergia Theme</name>
     <author>Rubén Martín</author>
-    <version>1.1</version>
+    <version>1.9</version>
     <category>theme</category>
     <description>Som Energia Platform Theme</description>
     <website>https://www.somenergia.coop</website>
     <requires>
-        <type>elgg_version</type>
-        <version>1.8</version>
+        <type>elgg_release</type>
+        <version>1.9</version>
     </requires>
     <requires>
         <type>priority</type>
@@ -49,6 +49,6 @@
     <suggests>
         <type>plugin</type>
         <name>profile</name>
-        <version>1.8</version>
+        <version>1.9</version>
     </suggests>
 </plugin_manifest>

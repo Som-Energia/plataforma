@@ -4,11 +4,11 @@
     <name>[RM] Groups Reports</name>
     <author>Rubén Martín</author>
     <website>http://rubenmartin.me</website>
-    <version>1.1</version>
+    <version>1.9</version>
     <description>Recibir informe sobre grupos.</description>
     <requires>
 	<type>elgg_release</type>
-	<version>1.8</version>
+	<version>1.9</version>
     </requires>
     <requires>
 	<type>plugin</type>

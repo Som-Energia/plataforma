@@ -3,7 +3,7 @@
     <id>somenergia_calendar</id>
     <name>Som Energia Calendar</name>
     <author>Hector Espert</author>
-    <version>1.2</version>
+    <version>1.9</version>
     <category>third-party</category>
     <category>content</category>
     <category>widget</category>
@@ -12,8 +12,8 @@
     <website>https://www.somenergia.coop</website>
     <license>GNU Public License version 2</license>
     <requires>
-        <type>elgg_version</type>
-        <version>1.8</version>
+        <type>elgg_release</type>
+        <version>1.9</version>
     </requires>
     <requires>
         <type>priority</type>

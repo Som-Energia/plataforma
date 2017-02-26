@@ -1,4 +1,5 @@
 <?php
+
 /**
  * CRUD -- Create, Read, Update, Delete: a RESTful plugin for Elgg.
  *
@@ -24,7 +25,6 @@
  * License along with this program. If not, see
  * <http://www.gnu.org/licenses/>.
  */
-
 elgg_register_event_handler('init', 'system', 'crud_init');
 
 /**
@@ -33,19 +33,19 @@ elgg_register_event_handler('init', 'system', 'crud_init');
  * @param ElggObject $entity Assembly object
  * @return string URL of crud object.
  */
-function crud_url_handler($entity) {
-	if (!$entity->getOwnerEntity()) {
-		// default to a standard view if no owner.
-		return FALSE;
-	}
-	/*if (!$entity->testAssembly()) {
-		return FALSE;
-	}*/
-	//$friendly_title = elgg_get_friendly_title($entity->title);
+function crud_url_handler($hook, $type, $url, $params) {
+    $entity = $params['entity'];
+    if (!$entity->getOwnerEntity()) {
+        // default to a standard view if no owner.
+        return FALSE;
+    }
+    /* if (!$entity->testAssembly()) {
+      return FALSE;
+      } */
+    //$friendly_title = elgg_get_friendly_title($entity->title);
 
-	return $entity->getSubtype()."/view/{$entity->guid}";
+    return $entity->getSubtype() . "/view/{$entity->guid}";
 }
-
 
 /**
  * CRUD page handler
@@ -61,77 +61,75 @@ function crud_url_handler($entity) {
  */
 function crud_page_handler($page) {
 
-	elgg_load_library('elgg:crud');
+    elgg_load_library('elgg:crud');
 
-	if (!isset($page[0])) {
-		$page[0] = 'all';
-	}
+    if (!isset($page[0])) {
+        $page[0] = 'all';
+    }
 
-	$page_url = current_page_url();
-	$site_url = elgg_get_site_url();
-	$current_url = str_replace($site_url, "", $page_url);
-	$crud_type = current(explode('/', $current_url));
-	$crud_handler = crud_get_handler($crud_type);
-	$crud_module = $crud_handler->module;
+    $page_url = current_page_url();
+    $site_url = elgg_get_site_url();
+    $current_url = str_replace($site_url, "", $page_url);
+    $crud_type = current(explode('/', $current_url));
+    $crud_handler = crud_get_handler($crud_type);
+    $crud_module = $crud_handler->module;
 
-	elgg_push_breadcrumb(elgg_echo($crud_module), '');
+    elgg_push_breadcrumb(elgg_echo($crud_module), '');
 
-	switch ($page[0]) {
-		case 'owner':
-		case 'group':
-			crud_handle_list_page($crud_handler, $page[1]);
-			break;
-		case 'add':
-			crud_handle_edit_page($crud_handler, 'add', $page[1]);
-			break;
-		case 'edit':
-			crud_handle_edit_page($crud_handler, 'edit', $page[1]);
-			break;
-		case 'view':
-			crud_handle_view_page($crud_handler, $page[1]);
-			break;
-		case 'edit_general':
-			crud_handle_edit_page($crud_handler, 'edit_general', $page[1]);
-			break;
-		default:
-			return false;
-	}
-	return true;
+    switch ($page[0]) {
+        case 'owner':
+        case 'group':
+            crud_handle_list_page($crud_handler, $page[1]);
+            break;
+        case 'add':
+            crud_handle_edit_page($crud_handler, 'add', $page[1]);
+            break;
+        case 'edit':
+            crud_handle_edit_page($crud_handler, 'edit', $page[1]);
+            break;
+        case 'view':
+            crud_handle_view_page($crud_handler, $page[1]);
+            break;
+        case 'edit_general':
+            crud_handle_edit_page($crud_handler, 'edit_general', $page[1]);
+            break;
+        default:
+            return false;
+    }
+    return true;
 }
 
 /**
  * Register a crud class
  */
-function crud_register_type($name, $variables, $class=NULL) {
-	crud_register_subtype($name, $class);
+function crud_register_type($name, $variables, $class = NULL) {
+    crud_register_subtype($name, $class);
 
-	$object = crud_get_handler($name);
+    $object = crud_get_handler($name);
 
-	$prev_variables = elgg_get_config($name);
-	if (!empty($prev_variables)) {
-		$variables = array_merge($prev_variables, $variables);
-	}
-	elgg_set_config($name, $variables);
-	$object->variables = $variables;
+    $prev_variables = elgg_get_config($name);
+    if (!empty($prev_variables)) {
+        $variables = array_merge($prev_variables, $variables);
+    }
+    elgg_set_config($name, $variables);
+    $object->variables = $variables;
 
-	if (empty($prev_variables)) {
-		// Register for search.
-		elgg_register_entity_type('object', $name);
+    if (empty($prev_variables)) {
+        // Register for search.
+        elgg_register_entity_type('object', $name);
 
-		// routing of urls
-		elgg_register_page_handler($name, 'crud_page_handler');
+        // routing of urls
+        elgg_register_page_handler($name, 'crud_page_handler');
+        elgg_register_plugin_hook_handler('entity:url', 'object', 'crud_url_handler');
 
-		// override the default url to view a crud object
-		elgg_register_entity_url_handler('object', $name, 'crud_url_handler');
+        $action_path = elgg_get_plugins_path() . 'crud/actions/crud';
+        elgg_register_action("$name/save", "$action_path/save.php");
+        elgg_register_action("$name/delete", "$action_path/delete.php");
 
-		$action_path = elgg_get_plugins_path() . 'crud/actions/crud';
-		elgg_register_action("$name/save", "$action_path/save.php");
-		elgg_register_action("$name/delete", "$action_path/delete.php");
-
-		// icon url override
- 	        elgg_register_plugin_hook_handler('entity:icon:url', 'object', 'crud_icon_url_override');
-	}
-	return $object;
+        // icon url override
+        elgg_register_plugin_hook_handler('entity:icon:url', 'object', 'crud_icon_url_override');
+    }
+    return $object;
 }
 
 /**
@@ -140,92 +138,90 @@ function crud_register_type($name, $variables, $class=NULL) {
  * @return string Relative URL
  */
 function crud_icon_url_override($hook, $type, $returnvalue, $params) {
-        $entity = $params['entity'];
-        if ($entity instanceof CrudObject) {
-		$size = $params['size'];
-		if (!$size)
-			$icon = 'tiny';
-		$icon = $entity->getCrudIcon($size);
-        }
-	return $icon;
+    $entity = $params['entity'];
+    if ($entity instanceof CrudObject) {
+        $size = $params['size'];
+        if (!$size)
+            $icon = 'tiny';
+        $icon = $entity->getCrudIcon($size);
+    }
+    return $icon;
 }
 
 /**
  * Get the crud handler for a given type
  */
 function crud_get_handler($name) {
-	global $CONFIG;
-	if (isset($CONFIG->crud->handlers[$name])) {
-		return $CONFIG->crud->handlers[$name];
-	}
-	return $CONFIG->crud->handlers[$name] = new CrudTemplate($name);
+    global $CONFIG;
+    if (isset($CONFIG->crud->handlers[$name])) {
+        return $CONFIG->crud->handlers[$name];
+    }
+    return $CONFIG->crud->handlers[$name] = new CrudTemplate($name);
 }
 
 /**
  * Owner block handler
  */
 function crud_owner_block_menu($hook, $type, $return, $params) {
-	global $CONFIG;
-	
-	foreach($CONFIG->crud->handlers as $handler_name => $handler) {
-		if (!$handler->owner_menu) {
-			continue;
-		}
-		
-		if ($handler->owner_menu != 'group' && elgg_instanceof($params['entity'], 'user')) {
-			$url = "$handler_name/owner/{$params['entity']->username}";
-			$item = new ElggMenuItem($handler_name, elgg_echo($handler_name), $url);
-			$return[] = $item;
-		} elseif ($handler->owner_menu != 'user') {
-			if ($handler->module_check)
-				$enable = "{$handler->module_check}_enable";
-			else
-				$enable = "{$handler->module}_enable";
-			if ($params['entity']->$enable == "yes") {
-				$owner_label = ($handler->owner_menu == 'group') ? 'owner' : 'group';
-				$url = "$handler_name/$owner_label/{$params['entity']->guid}/all";
-				$item = new ElggMenuItem($handler_name, elgg_echo("$handler_name:group"), $url);
-				$return[] = $item;
-			}
-		}
-	}
+    global $CONFIG;
 
-	return $return;
+    foreach ($CONFIG->crud->handlers as $handler_name => $handler) {
+        if (!$handler->owner_menu) {
+            continue;
+        }
+
+        if ($handler->owner_menu != 'group' && elgg_instanceof($params['entity'], 'user')) {
+            $url = "$handler_name/owner/{$params['entity']->username}";
+            $item = new ElggMenuItem($handler_name, elgg_echo($handler_name), $url);
+            $return[] = $item;
+        } elseif ($handler->owner_menu != 'user') {
+            if ($handler->module_check)
+                $enable = "{$handler->module_check}_enable";
+            else
+                $enable = "{$handler->module}_enable";
+            if ($params['entity']->$enable == "yes") {
+                $owner_label = ($handler->owner_menu == 'group') ? 'owner' : 'group';
+                $url = "$handler_name/$owner_label/{$params['entity']->guid}/all";
+                $item = new ElggMenuItem($handler_name, elgg_echo("$handler_name:group"), $url);
+                $return[] = $item;
+            }
+        }
+    }
+
+    return $return;
 }
 
 /**
  * Init crud plugin.
  */
 function crud_init() {
-	global $CONFIG;
-	$CONFIG->crud = new stdClass();
-	$CONFIG->crud->handlers = array();
-	
-	elgg_register_library('elgg:crud', elgg_get_plugins_path() . 'crud/lib/crud.php');
-	// add to the main css
-	elgg_extend_view('css/elgg', 'crud/css');
+    global $CONFIG;
+    $CONFIG->crud = new stdClass();
+    $CONFIG->crud->handlers = array();
 
-	// register actions
-	$action_path = elgg_get_plugins_path() . 'crud/actions/crud';
-	elgg_register_action('crud/save', "$action_path/save.php");
-	elgg_register_action('crud/delete', "$action_path/delete.php");
+    elgg_register_library('elgg:crud', elgg_get_plugins_path() . 'crud/lib/crud.php');
+    // add to the main css
+    elgg_extend_view('css/elgg', 'crud/css');
 
-	elgg_register_plugin_hook_handler('register', 'menu:owner_block', 'crud_owner_block_menu');
+    // register actions
+    $action_path = elgg_get_plugins_path() . 'crud/actions/crud';
+    elgg_register_action('crud/save', "$action_path/save.php");
+    elgg_register_action('crud/delete', "$action_path/delete.php");
 
+    elgg_register_plugin_hook_handler('register', 'menu:owner_block', 'crud_owner_block_menu');
 }
 
 /**
  * Register a crud subtype class into elgg engine
  */
-function crud_register_subtype($name, $class_name=NULL) {
-	if (empty($class_name))
-		$class_name = "CrudObject";
-	if (get_subtype_id('object', $name)) {
-		if (get_subtype_class('object', $name) != $class_name) {
-			update_subtype('object', $name, $class_name);
-		}
-	} else {
-		add_subtype('object', $name, $class_name);
-	}
+function crud_register_subtype($name, $class_name = NULL) {
+    if (empty($class_name))
+        $class_name = "CrudObject";
+    if (get_subtype_id('object', $name)) {
+        if (get_subtype_class('object', $name) != $class_name) {
+            update_subtype('object', $name, $class_name);
+        }
+    } else {
+        add_subtype('object', $name, $class_name);
+    }
 }
-
