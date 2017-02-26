@@ -33,35 +33,55 @@ function developers_init() {
 }
 
 function developers_process_settings() {
-	if (elgg_get_plugin_setting('display_errors', 'developers') == 1) {
-		ini_set('display_errors', 1);
-	} else {
-		ini_set('display_errors', 0);
+	$settings = elgg_get_plugin_from_id('developers')->getAllSettings();
+
+	ini_set('display_errors', (int)!empty($settings['display_errors']));
+
+	if (!empty($settings['screen_log'])) {
+		// don't show in action/simplecache
+		$path = substr(current_page_url(), strlen(elgg_get_site_url()));
+		if (!preg_match('~^(cache|action)/~', $path)) {
+			$cache = new ElggLogCache();
+			elgg_set_config('log_cache', $cache);
+			elgg_register_plugin_hook_handler('debug', 'log', array($cache, 'insertDump'));
+			elgg_register_plugin_hook_handler('view_vars', 'page/elements/html', function($hook, $type, $vars, $params) {
+				$vars['body'] .= elgg_view('developers/log');
+				return $vars;
+			});
+		}
 	}
 
-	if (elgg_get_plugin_setting('screen_log', 'developers') == 1) {
-		$cache = new ElggLogCache();
-		elgg_set_config('log_cache', $cache);
-		elgg_register_plugin_hook_handler('debug', 'log', array($cache, 'insertDump'));
-		elgg_register_plugin_hook_handler('view_vars', 'page/elements/html', function($hook, $type, $vars, $params) {
-			$vars['body'] .= elgg_view('developers/log');
-			return $vars;
-		});
-	}
-
-	if (elgg_get_plugin_setting('show_strings', 'developers') == 1) {
+	if (!empty($settings['show_strings'])) {
 		// first and last in case a plugin registers a translation in an init method
 		elgg_register_event_handler('init', 'system', 'developers_clear_strings', 1000);
 		elgg_register_event_handler('init', 'system', 'developers_clear_strings', 1);
 	}
 
-	if (elgg_get_plugin_setting('wrap_views', 'developers') == 1) {
+	if (!empty($settings['show_modules'])) {
+		elgg_require_js('elgg/dev/amd_monitor');
+	}
+
+	if (!empty($settings['wrap_views'])) {
 		elgg_register_plugin_hook_handler('view', 'all', 'developers_wrap_views');
 	}
 
-	if (elgg_get_plugin_setting('log_events', 'developers') == 1) {
+	if (!empty($settings['log_events'])) {
 		elgg_register_event_handler('all', 'all', 'developers_log_events', 1);
 		elgg_register_plugin_hook_handler('all', 'all', 'developers_log_events', 1);
+	}
+
+	if (!empty($settings['show_gear']) && elgg_is_admin_logged_in() && !elgg_in_context('admin')) {
+		elgg_require_js('elgg/dev/gear');
+		elgg_load_js('lightbox');
+		elgg_load_css('lightbox');
+		elgg_register_ajax_view('developers/gear_popup');
+
+		// TODO use ::class in 2.0
+		$handler = ['Elgg\DevelopersPlugin\Hooks', 'alterMenuSectionVars'];
+		elgg_register_plugin_hook_handler('view_vars', 'navigation/menu/elements/section', $handler);
+
+		$handler = ['Elgg\DevelopersPlugin\Hooks', 'alterMenuSections'];
+		elgg_register_plugin_hook_handler('view', 'navigation/menu/elements/section', $handler);
 	}
 }
 

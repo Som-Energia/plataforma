@@ -57,6 +57,8 @@ return array(
 
 	'file:delete:confirm' => "Er du sikker på, at du vil slette denne fil?",
 
+	'file:upload_limit' => 'Maximum allowed file size is %s',
+
 	'file:tagcloud' => "Tag cloud",
 
 	'file:display:number' => "Antal viste filer",
@@ -93,5 +95,6 @@ See og kommenter på filen:
 	'file:downloadfailed' => "Beklager, denne fil er ikke til rådighed lige nu.",
 	'file:deletefailed' => "Din fil kunne ikke slettes.",
 	'file:noaccess' => "Du har ikke tilladelse ti at ændre denne fil",
+	'file:cannotload' => "There was an error uploading the file",
 	'file:nofile' => "Du skal vælge en fil",
 );

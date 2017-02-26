@@ -1,8 +1,8 @@
 <?php
 
 if (!isset($argv[1]) || $argv[1] == '--help') {
-    echo "Usage: php .scripts/release.php <semver>\n";
-    exit;
+	echo "Usage: php .scripts/release.php <semver>\n";
+	exit;
 }
 
 $version = $argv[1];
@@ -16,6 +16,8 @@ if (!preg_match($regexp, $version, $matches)) {
 		. " or -rc.N (where N is a number).\n";
 	exit(1);
 }
+
+require_once dirname(__DIR__) . '/vendor/autoload.php';
 
 function run_commands($commands) {
 	foreach ($commands as $command) {
@@ -32,10 +34,8 @@ $elgg_path = dirname(__DIR__);
 
 $branch = "release-$version";
 
-
 // Setup. Version checks are here so we fail early if any deps are missing
-run_commands(array(
-	"tx --version",
+run_commands([
 	"git --version",
 	"npm --version",
 	"node --version",
@@ -43,20 +43,9 @@ run_commands(array(
 
 	"cd $elgg_path",
 	"git checkout -B $branch",
-));
-
-
-// Update translations
-run_commands(array(
-	"tx pull -a --minimum-perc=100",
-	"sphinx-build -b gettext docs docs/locale/pot",
-	"sphinx-intl build --locale-dir=docs/locale/",
-	"git add .",
-	"git commit -am \"chore(i18n): update translations\"",
-));
+]);
 
 // Update version in composer.json
-require_once __DIR__ . '/../engine/classes/Elgg/Json/EmptyKeyEncoding.php';
 $encoding = new \Elgg\Json\EmptyKeyEncoding();
 
 $composer_path = "$elgg_path/composer.json";
@@ -67,6 +56,8 @@ file_put_contents($composer_path, $json);
 
 // Generate changelog
 run_commands(array(
+	"sphinx-build -b gettext docs docs/locale/pot",
+	"sphinx-intl build --locale-dir=docs/locale/",
 	"npm install && npm update",
 	"node .scripts/write-changelog.js",
 	"git add .",

@@ -41,6 +41,7 @@ return array(
 	'actionunauthorized' => 'あなたの権限では、このアクションを実行することはできません。',
 	
 	'ajax:error' => 'AJAXコールを実行中に予期せぬエラーが起こりました。おそらく、サーバへの接続が切断されたからかもしれません。',
+	'ajax:not_is_xhr' => 'AJAX views には直接アクセスはできません。',
 
 	'PluginException:MisconfiguredPlugin' => "%s (guid: %s) は、設定に間違いのあるプラグインですので、起動不可となっています。 原因に当たっては、Elgg wiki (http://learn.elgg.org/) を参考にしてください。 ",
 	'PluginException:CannotStart' => '%s (guid: %s) は起動できず停止状態のままです。理由: %s',
@@ -56,7 +57,7 @@ return array(
 	'ElggPluginPackage:InvalidPlugin:InvalidId' => 'マニフェストのIDに一致させるには、このプラグインのディレクトリの名前を "%s" に変えなければいけません。',
 	'ElggPluginPackage:InvalidPlugin:InvalidDependency' => 'マニフェストに記述されている依存関係のタイプ "%s" が正しくありません。',
 	'ElggPluginPackage:InvalidPlugin:InvalidProvides' => 'マニフェストに記述されているプロバイドのタイプ "%s" が正しくありません。',
-	'ElggPluginPackage:InvalidPlugin:CircularDep' => 'プラグイン %3$s で依存関係のタイプ %2$s の "%1$s" が正しくありません。依存関係が循環しています。',
+	'ElggPluginPackage:InvalidPlugin:CircularDep' => 'プラグイン %3$s で依存関係のタイプ %2$s の 「%1$s」 が正しくありません。依存関係が循環しています。',
 	'ElggPlugin:Exception:CannotIncludeFile' => '%s (プラグイン %s (guid: %s))が %s に含まれていません。パーミッションを調べてください！',
 	'ElggPlugin:Exception:CannotRegisterViews' => 'プラグイン %s (guid: %s)のViewディレクトリを %s で開くことができません。パーミッションを調べてください！',
 	'ElggPlugin:Exception:CannotRegisterLanguages' => 'プラグイン %s (guid: %s)の言語ファイルを%sに登録できません。パーミッションを調べてください！',
@@ -103,7 +104,7 @@ return array(
 
 	'pageownerunavailable' => '警告： ページオーナー %d を許可できません。',
 	'viewfailure' => 'View %s において内部エラーが発生しました。',
-	'view:missing_param' => "View %2$s で必要なパラメータ「 %1$s 」がありません。",
+	'view:missing_param' => "View %2\$s で必要なパラメータ「 %1\$s 」がありません。",
 	'changebookmark' => 'このページに対するあなたのブックマークを変更してください。',
 	'noaccess' => 'あなたが閲覧しようとしているコンテントはすでに削除されてしまっているか、あるいはあなたに閲覧する権限がないかどちらかです。',
 	'error:missing_data' => 'あなたのリクエストにおいていくつかデータの欠損がありました。',
@@ -112,6 +113,10 @@ return array(
 
 	'error:default:title' => 'アレッ？',
 	'error:default:content' => 'アレッ？何かがおかしいです。',
+	'error:400:title' => 'リクエストが変です',
+	'error:400:content' => '申し訳ありません。そのリクエストは正しくないか不完全です。',
+	'error:403:title' => '禁止',
+	'error:403:content' => '申し訳ありません。要求されたページへのアクセスが許可されていません。',
 	'error:404:title' => 'ページが見つかりませんでした',
 	'error:404:content' => '申し訳あrません。ご要望のページを見つけることができませんでした',
 
@@ -709,6 +714,7 @@ return array(
 	'admin:robots.txt:instructions' => "このサイトの robots.txt ファイルを編集します。",
 	'admin:robots.txt:plugins' => "プラグインは編集結果を robots.txt ファイルに追加しています。",
 	'admin:robots.txt:subdir' => "Elggがサブディレクトリにインストールされているため、The robots.txt tool は機能しないでしょう。",
+	'admin:robots.txt:physical' => "robots.txt ファイルが存在しますので、 robots.txt tool は機能しないでしょう。",
 
 	'admin:maintenance_mode:default_message' => '申し訳ありません。このサイトは現在メンテナンス中で接続出来ません。',
 	'admin:maintenance_mode:instructions' => 'サイトのアップグレードやサイトに大きな変更をするときに、メンテナンス・モードをご利用ください。
@@ -1110,7 +1116,6 @@ return array(
 
 	'admin:pending_upgrades' => 'サイトはアップグレードの途中で中断されています。これ以降は直接あなたの操作が必要です。',
 	'admin:view_upgrades' => '中断されているアップグレードを見る。',
- 	'admin:upgrades' => 'アップグレード',
 	'item:object:elgg_upgrade' => 'サイトのアップグレード',
 	'admin:upgrades:none' => 'このインストールは最新の状態です！',
 
@@ -1126,7 +1131,7 @@ return array(
 	// Strings specific for the comments upgrade
 	'admin:upgrades:comments' => 'コメントのアップグレード',
 	'upgrade:comment:create_failed' => 'Comment id %s を entity に変換するのに失敗しました。',
-	'admin:upgrades:commentaccess' => 'コメント・アクセスのアップデート',
+	'admin:upgrades:commentaccess' => 'コメント・アクセスのアップグレード',
 
 	// Strings specific for the datadir upgrade
 	'admin:upgrades:datadirs' => 'データディレクトリのアップグレード',
@@ -1249,6 +1254,8 @@ return array(
 
 	'entity:delete:success' => 'エンティティ「 %s 」を削除しました。',
 	'entity:delete:fail' => 'エンティティ「 %s 」を削除できませんでした。',
+	
+	'entity:can_delete:invaliduser' => 'Can not check canDelete for user_guid [%s] as the user does not exist.',
 
 /**
  * Action gatekeeper
@@ -1320,6 +1327,7 @@ return array(
 	"es" => "Spanish",
 	"et" => "Estonian",
 	"eu" => "Basque",
+	"eu_es" => "Basque (Spain)",
 	"fa" => "Persian",
 	"fi" => "Finnish",
 	"fj" => "Fiji",
@@ -1384,11 +1392,12 @@ return array(
 	"pl" => "Polish",
 	"ps" => "Pashto / Pushto",
 	"pt" => "Portuguese",
-	"pt_br" => 'ブラジルポルトガル語',
+	"pt_br" => "Portuguese (Brazil)",
 	"qu" => "Quechua",
 	"rm" => "Rhaeto-Romance",
 	"rn" => "Kirundi",
 	"ro" => "Romanian",
+	"ro_ro" => "Romanian (Romania)",
 	"ru" => "Russian",
 	"rw" => "Kinyarwanda",
 	"sa" => "Sanskrit",
@@ -1403,6 +1412,7 @@ return array(
 	"so" => "Somali",
 	"sq" => "Albanian",
 	"sr" => "Serbian",
+	"sr_latin" => "Serbian (Latin)",
 	"ss" => "Siswati",
 	"st" => "Sesotho",
 	"su" => "Sundanese",
@@ -1434,5 +1444,6 @@ return array(
 	"yo" => "Yoruba",
 	"za" => "Zuang",
 	"zh" => "Chinese",
+	"zh_hans" => "Chinese Simplified",
 	"zu" => "Zulu",
 );

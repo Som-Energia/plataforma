@@ -238,10 +238,14 @@ function get_missing_language_keys($language) {
 }
 
 /**
- * Check if a give language key exists
+ * Check if a given language key exists.
+ *
+ * @note Translators should, whenever creating a "dynamically" named language key, always create an
+ *       English (fallback) translation as well.
  *
  * @param string $key      The translation key
- * @param string $language The language
+ * @param string $language The language. Provided an English translation exists for all created keys, then
+ *                         devs can generally use the default "en", regardless of the site/user language.
  *
  * @return bool
  * @since 1.11
@@ -256,7 +260,7 @@ function elgg_language_key_exists($key, $language = 'en') {
  * @return void
  */
 function _elgg_translations_init() {
-	$translations = _elgg_services()->translator->getAllLanguageCodes();
+	$translations = \Elgg\I18n\Translator::getAllLanguageCodes();
 	foreach ($translations as $language_code) {
 		// make the js view available for each language
 		elgg_extend_view("js/languages/$language_code.js", "js/languages");

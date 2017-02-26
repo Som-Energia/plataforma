@@ -4,6 +4,14 @@ namespace Elgg\Amd;
 
 class ViewFilterTest extends \PHPUnit_Framework_TestCase {
 
+	public function testHandlesShortViewNames() {
+		$viewFilter = new \Elgg\Amd\ViewFilter();
+
+		$originalContent = "define({})";
+
+		$this->assertEquals('define("foo", {})', $viewFilter->filter('foo.js', $originalContent));
+	}
+
 	public function testInsertsNamesForAnonymousModules() {
 		$viewFilter = new \Elgg\Amd\ViewFilter();
 
@@ -11,6 +19,15 @@ class ViewFilterTest extends \PHPUnit_Framework_TestCase {
 		$filteredContent = $viewFilter->filter('js/my/mod.js', $originalContent);
 
 		$this->assertEquals("// Comment\ndefine(\"my/mod\", {})", $filteredContent);
+	}
+
+	public function testAllowsWhitespacePrecedingDefine() {
+		$viewFilter = new \Elgg\Amd\ViewFilter();
+
+		$originalContent = "// Comment\n\t  define({})";
+		$filteredContent = $viewFilter->filter('js/my/mod.js', $originalContent);
+
+		$this->assertEquals("// Comment\n\t  define(\"my/mod\", {})", $filteredContent);
 	}
 
 	public function testLeavesNamedModulesAlone() {
@@ -21,11 +38,11 @@ class ViewFilterTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals($originalContent, $filteredContent);
 	}
 
-	public function testIgnoresNonJsViews() {
+	public function testExtensionlessViewsMustBeInJs() {
 		$viewFilter = new \Elgg\Amd\ViewFilter();
 
-		$originalContent = "// Comment\ndefine('any/mod', {})";
-		$filteredContent = $viewFilter->filter('nonjs/foobar/my/mod.js', $originalContent);
+		$originalContent = "// Comment\ndefine({})";
+		$filteredContent = $viewFilter->filter('nonjs/foobar/my/mod', $originalContent);
 		$this->assertEquals($originalContent, $filteredContent);
 	}
 
