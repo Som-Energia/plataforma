@@ -563,11 +563,12 @@ function _elgg_get_entity_time_where_sql($table, $time_created_upper = null,
  *
  * @tip Pagination is handled automatically.
  *
- * @internal This also provides the views for elgg_view_annotation().
+ * @note Internal: This also provides the views for elgg_view_annotation().
  *
- * @internal If the initial COUNT query returns 0, the $getter will not be called again.
+ * @note Internal: If the initial COUNT query returns 0, the $getter will not be called again.
  *
  * @param array    $options Any options from $getter options plus:
+ *                   item_view => STR Optional. Alternative view used to render list items
  *                   full_view => BOOL Display full view of entities (default: false)
  *                   list_type => STR 'list' or 'gallery'
  *                   list_type_toggle => BOOL Display gallery / list switch
@@ -973,7 +974,7 @@ function _elgg_entities_test($hook, $type, $value) {
 	$value[] = $CONFIG->path . 'engine/tests/ElggCoreGetEntitiesFromPrivateSettingsTest.php';
 	$value[] = $CONFIG->path . 'engine/tests/ElggCoreGetEntitiesFromRelationshipTest.php';
 	$value[] = $CONFIG->path . 'engine/tests/ElggCoreGetEntitiesFromAttributesTest.php';
-	$value[] = $CONFIG->path . 'engine/tests/ElggOwnerPreloaderIntegrationTest.php';
+	$value[] = $CONFIG->path . 'engine/tests/ElggEntityPreloaderIntegrationTest.php';
 	return $value;
 }
 
@@ -988,4 +989,6 @@ function _elgg_entities_init() {
 	elgg_register_plugin_hook_handler('unit_test', 'system', '_elgg_entities_test');
 }
 
-elgg_register_event_handler('init', 'system', '_elgg_entities_init');
+return function(\Elgg\EventsService $events, \Elgg\HooksRegistrationService $hooks) {
+	$events->registerHandler('init', 'system', '_elgg_entities_init');
+};

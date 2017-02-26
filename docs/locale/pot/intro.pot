@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Elgg 1.10\n"
+"Project-Id-Version: Elgg 1.11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-13 10:16-0500\n"
+"POT-Creation-Date: 2015-12-13 21:40-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -785,40 +785,40 @@ msgstr ""
 msgid "Configure ``engine/settings.php`` to be like so:"
 msgstr ""
 
-#: ../../intro/install/cloud9.rst:46
+#: ../../intro/install/cloud9.rst:47
 msgid "3. Complete the install process from Elgg's UI"
 msgstr ""
 
-#: ../../intro/install/cloud9.rst:48
+#: ../../intro/install/cloud9.rst:49
 msgid "Hit \"Run\" at the top of the page to start Apache."
 msgstr ""
 
-#: ../../intro/install/cloud9.rst:49
-msgid "Go to ``http://your-workspace.your-username.c9.io/install.php?step=database``"
-msgstr ""
-
 #: ../../intro/install/cloud9.rst:50
-msgid "Change Site URL to ``http://your-workspace.your-username.c9.io/``"
+msgid "Go to ``https://{workspace}-{username}.c9.io/install.php?step=database``"
 msgstr ""
 
 #: ../../intro/install/cloud9.rst:51
+msgid "Change Site URL to ``http://your-workspace.your-username.c9.io/``"
+msgstr ""
+
+#: ../../intro/install/cloud9.rst:52
 msgid "Put in the data directory path. Should be something like ``/var/..../app-root/data/elgg-data/``."
 msgstr ""
 
-#: ../../intro/install/cloud9.rst:53
+#: ../../intro/install/cloud9.rst:54
 msgid "Click \"Next\""
 msgstr ""
 
-#: ../../intro/install/cloud9.rst:54
+#: ../../intro/install/cloud9.rst:55
 msgid "Create the admin account"
 msgstr ""
 
-#: ../../intro/install/cloud9.rst:55
+#: ../../intro/install/cloud9.rst:56
 msgid "Click \"Go to site\""
 msgstr ""
 
-#: ../../intro/install/cloud9.rst:56
-msgid "You may have to manually visit http://your-workspace.your-username.c9.io/ and login with the admin credentials you just configured."
+#: ../../intro/install/cloud9.rst:57
+msgid "You may have to manually visit ``https://{workspace}-{username}.c9.io/`` and login with the admin credentials you just configured."
 msgstr ""
 
 #: ../../intro/install/easyphp.rst:4

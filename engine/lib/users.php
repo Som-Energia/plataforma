@@ -85,7 +85,7 @@ function remove_user_admin($user_guid) {
  * @return \ElggUser|false
  */
 function get_user($guid) {
-	return _elgg_services()->usersTable->get($guid);
+	return _elgg_services()->entityTable->get($guid, 'user');
 }
 
 /**
@@ -564,8 +564,9 @@ function elgg_users_setup_entity_menu($hook, $type, $return, $params) {
 		$return = array(\ElggMenuItem::factory($options));
 	} else {
 		$return = array();
-		if (isset($entity->location)) {
-			$location = htmlspecialchars($entity->location, ENT_QUOTES, 'UTF-8', false);
+		$location = $entity->location;
+		if (is_string($location) && $location !== '') {
+			$location = htmlspecialchars($location, ENT_QUOTES, 'UTF-8', false);
 			$options = array(
 				'name' => 'location',
 				'text' => "<span>$location</span>",
@@ -714,19 +715,6 @@ function users_pagesetup() {
 	// topbar
 	if ($viewer) {
 		elgg_register_menu_item('topbar', array(
-			'name' => 'profile',
-			'href' => $viewer->getURL(),
-			'text' => elgg_view('output/img', array(
-				'src' => $viewer->getIconURL('topbar'),
-				'alt' => $viewer->name,
-				'title' => elgg_echo('profile'),
-				'class' => 'elgg-border-plain elgg-transition',
-			)),
-			'priority' => 100,
-			'link_class' => 'elgg-topbar-avatar',
-		));
-
-		elgg_register_menu_item('topbar', array(
 			'name' => 'usersettings',
 			'href' => "settings/user/{$viewer->username}",
 			'text' => elgg_view_icon('settings') . elgg_echo('settings'),
@@ -799,7 +787,9 @@ function users_test($hook, $type, $value, $params) {
 	return $value;
 }
 
-elgg_register_event_handler('init', 'system', 'users_init', 0);
-elgg_register_event_handler('init', 'system', 'elgg_profile_fields_setup', 10000); // Ensure this runs after other plugins
-elgg_register_event_handler('pagesetup', 'system', 'users_pagesetup', 0);
-elgg_register_plugin_hook_handler('unit_test', 'system', 'users_test');
+return function(\Elgg\EventsService $events, \Elgg\HooksRegistrationService $hooks) {
+	$events->registerHandler('init', 'system', 'users_init', 0);
+	$events->registerHandler('init', 'system', 'elgg_profile_fields_setup', 10000); // Ensure this runs after other plugins
+	$events->registerHandler('pagesetup', 'system', 'users_pagesetup', 0);
+	$hooks->registerHandler('unit_test', 'system', 'users_test');
+};

@@ -222,7 +222,7 @@ function elgg_get_context() {
  * @since 1.8.0
  */
 function elgg_push_context($context) {
-	return _elgg_services()->context->push($context);
+	_elgg_services()->context->push($context);
 }
 
 /**
@@ -249,6 +249,27 @@ function elgg_pop_context() {
  */
 function elgg_in_context($context) {
 	return _elgg_services()->context->contains($context);
+}
+
+/**
+ * Get the entire context stack (e.g. for backing it up)
+ *
+ * @return string[]
+ * @since 1.11
+ */
+function elgg_get_context_stack() {
+	return _elgg_services()->context->toArray();
+}
+
+/**
+ * Set the entire context stack
+ *
+ * @param string[] $stack All contexts to be placed on the stack
+ * @return void
+ * @since 1.11
+ */
+function elgg_set_context_stack(array $stack) {
+	_elgg_services()->context->fromArray($stack);
 }
 
 /**
@@ -280,4 +301,6 @@ function page_owner_boot() {
 	}
 }
 
-elgg_register_event_handler('boot', 'system', 'page_owner_boot');
+return function(\Elgg\EventsService $events, \Elgg\HooksRegistrationService $hooks) {
+	$events->registerHandler('boot', 'system', 'page_owner_boot');
+};

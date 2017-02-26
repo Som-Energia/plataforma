@@ -66,7 +66,7 @@ function action($action, $forwarder = "") {
  *
  * @tip You don't need to include engine/start.php in your action files.
  *
- * @internal Actions are saved in $CONFIG->actions as an array in the form:
+ * @note Internal: Actions are saved in $CONFIG->actions as an array in the form:
  * <code>
  * array(
  * 	'file' => '/location/to/file.php',
@@ -95,6 +95,17 @@ function elgg_register_action($action, $filename = "", $access = 'logged_in') {
  */
 function elgg_unregister_action($action) {
 	return _elgg_services()->actions->unregister($action);
+}
+
+/**
+ * Get an HMAC token builder/validator object
+ *
+ * @param mixed $data HMAC data string or serializable data
+ * @return \Elgg\Security\Hmac
+ * @since 1.11
+ */
+function elgg_build_hmac($data) {
+	return _elgg_services()->crypto->getHmac($data);
 }
 
 /**
@@ -257,22 +268,40 @@ function ajax_action_hook() {
 }
 
 /**
- * Send an updated CSRF token
+ * Send an updated CSRF token, provided the page's current tokens were not fake.
  *
  * @access private
  */
 function _elgg_csrf_token_refresh() {
-
 	if (!elgg_is_xhr()) {
 		return false;
+	}
+
+	$actions = _elgg_services()->actions;
+
+	// the page's session_token might have expired (not matching __elgg_session in the session), but
+	// we still allow it to be given to validate the tokens in the page.
+	$session_token = get_input('session_token', null, false);
+	$pairs = (array)get_input('pairs', array(), false);
+	$valid_tokens = (object)array();
+	foreach ($pairs as $pair) {
+		list($ts, $token) = explode(',', $pair, 2);
+		if ($actions->validateTokenOwnership($token, $ts, $session_token)) {
+			$valid_tokens->{$token} = true;
+		}
 	}
 
 	$ts = time();
 	$token = generate_action_token($ts);
 	$data = array(
-		'__elgg_ts' => $ts,
-		'__elgg_token' => $token,
-		'logged_in' => elgg_is_logged_in(),
+		'token' => array(
+			'__elgg_ts' => $ts,
+			'__elgg_token' => $token,
+			'logged_in' => elgg_is_logged_in(),
+		),
+		'valid_tokens' => $valid_tokens,
+		'session_token' => elgg_get_session()->get('__elgg_session'),
+		'user_guid' => elgg_get_logged_in_user_guid(),
 	);
 
 	header("Content-Type: application/json");
@@ -295,4 +324,6 @@ function actions_init() {
 	elgg_register_plugin_hook_handler('forward', 'all', 'ajax_forward_hook');
 }
 
-elgg_register_event_handler('init', 'system', 'actions_init');
+return function(\Elgg\EventsService $events, \Elgg\HooksRegistrationService $hooks) {
+	$events->registerHandler('init', 'system', 'actions_init');
+};

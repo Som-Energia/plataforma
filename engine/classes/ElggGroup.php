@@ -24,9 +24,23 @@ class ElggGroup extends \ElggEntity
 		parent::initializeAttributes();
 
 		$this->attributes['type'] = "group";
-		$this->attributes['name'] = null;
-		$this->attributes['description'] = null;
+		$this->attributes += self::getExternalAttributes();
 		$this->tables_split = 2;
+	}
+
+	/**
+	 * Get default values for attributes stored in a separate table
+	 *
+	 * @return array
+	 * @access private
+	 *
+	 * @see \Elgg\Database\EntityTable::getEntities
+	 */
+	final public static function getExternalAttributes() {
+		return [
+			'name' => null,
+			'description' => null,
+		];
 	}
 
 	/**
@@ -509,6 +523,12 @@ class ElggGroup extends \ElggEntity
 		global $CONFIG;
 		
 		$guid = parent::create();
+		if (!$guid) {
+			// @todo this probably means permission to create entity was denied
+			// Is returning false the correct thing to do
+			return false;
+		}
+		
 		$name = sanitize_string($this->name);
 		$description = sanitize_string($this->description);
 

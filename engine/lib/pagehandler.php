@@ -293,7 +293,11 @@ function elgg_error_page_handler($hook, $type, $result, $params) {
 function _elgg_page_handler_init() {
 	elgg_register_page_handler('', 'elgg_front_page_handler');
 	// Registered at 600 so that plugins can register at the default 500 and get to run first
+	elgg_register_plugin_hook_handler('forward', '400', 'elgg_error_page_handler', 600);
+	elgg_register_plugin_hook_handler('forward', '403', 'elgg_error_page_handler', 600);
 	elgg_register_plugin_hook_handler('forward', '404', 'elgg_error_page_handler', 600);
 }
 
-elgg_register_event_handler('init', 'system', '_elgg_page_handler_init');
+return function(\Elgg\EventsService $events, \Elgg\HooksRegistrationService $hooks) {
+	$events->registerHandler('init', 'system', '_elgg_page_handler_init');
+};

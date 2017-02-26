@@ -47,7 +47,7 @@ class ActionsService {
 	
 		if (!in_array($action, $exceptions)) {
 			// All actions require a token.
-			action_gatekeeper($action);
+			$this->gatekeeper($action);
 		}
 	
 		$forwarder = str_replace(_elgg_services()->config->getSiteUrl(), "", $forwarder);
@@ -64,10 +64,11 @@ class ActionsService {
 		} elseif (!_elgg_services()->session->isLoggedIn() && ($this->actions[$action]['access'] !== 'public')) {
 			register_error(_elgg_services()->translator->translate('actionloggedout'));
 		} else {
-			// Returning falsy doesn't produce an error
-			// We assume this will be handled in the hook itself.
+			// To quietly cancel the action file, return a falsey value in the "action" hook.
 			if (_elgg_services()->hooks->trigger('action', $action, null, true)) {
-				if (!include($this->actions[$action]['file'])) {
+				if (is_file($this->actions[$action]['file']) && is_readable($this->actions[$action]['file'])) {
+					self::includeFile($this->actions[$action]['file']);
+				} else {
 					register_error(_elgg_services()->translator->translate('actionnotfound', array($action)));
 				}
 			}
@@ -75,6 +76,16 @@ class ActionsService {
 	
 		$forwarder = empty($forwarder) ? REFERER : $forwarder;
 		forward($forwarder);
+	}
+
+	/**
+	 * Include an action file with isolated scope
+	 *
+	 * @param string $file File to be interpreted by PHP
+	 * @return void
+	 */
+	protected static function includeFile($file) {
+		include $file;
 	}
 	
 	/**
@@ -132,12 +143,7 @@ class ActionsService {
 		$session_id = _elgg_services()->session->getId();
 	
 		if (($token) && ($ts) && ($session_id)) {
-			// generate token, check with input and forward if invalid
-			$required_token = generate_action_token($ts);
-	
-			// Validate token
-			$token_matches = _elgg_services()->crypto->areEqual($token, $required_token);
-			if ($token_matches) {
+			if ($this->validateTokenOwnership($token, $ts)) {
 				if ($this->validateTokenTimestamp($ts)) {
 					// We have already got this far, so unless anything
 					// else says something to the contrary we assume we're ok
@@ -237,29 +243,52 @@ class ActionsService {
 			}
 
 			// let the validator send an appropriate msg
-			validate_action_token();
+			$this->validateActionToken();
+
 		} else if ($this->validateActionToken()) {
 			return true;
 		}
 
 		forward(REFERER, 'csrf');
 	}
-	
+
 	/**
-	 * @see generate_action_token
+	 * Was the given token generated for the session defined by session_token?
+	 *
+	 * @param string $token         CSRF token
+	 * @param int    $timestamp     Unix time
+	 * @param string $session_token Session-specific token
+	 *
+	 * @return bool
 	 * @access private
 	 */
-	public function generateActionToken($timestamp) {
-		$site_secret = _elgg_services()->siteSecret->get();
-		$session_id = _elgg_services()->session->getId();
-		// Session token
-		$st = _elgg_services()->session->get('__elgg_session');
+	public function validateTokenOwnership($token, $timestamp, $session_token = '') {
+		$required_token = $this->generateActionToken($timestamp, $session_token);
 
-		if ($session_id && $site_secret) {
-			return _elgg_services()->crypto->getHmac($timestamp . $session_id . $st, $site_secret, 'md5');
-		}
+		return _elgg_services()->crypto->areEqual($token, $required_token);
+	}
 	
-		return false;
+	/**
+	 * Generate a token from a session token (specifying the user), the timestamp, and the site key.
+	 *
+	 * @see generate_action_token
+	 *
+	 * @param int    $timestamp     Unix timestamp
+	 * @param string $session_token Session-specific token
+	 *
+	 * @return string
+	 * @access private
+	 */
+	public function generateActionToken($timestamp, $session_token = '') {
+		if (!$session_token) {
+			$session_token = elgg_get_session()->get('__elgg_session');
+			if (!$session_token) {
+				return false;
+			}
+		}
+
+		return _elgg_services()->crypto->getHmac([(int)$timestamp, $session_token], 'md5')
+			->getToken();
 	}
 	
 	/**
@@ -298,7 +327,7 @@ class ActionsService {
 			}
 	
 			//Grab any system messages so we can inject them via ajax too
-			$system_messages = system_messages(null, "");
+			$system_messages = _elgg_services()->systemMessages->dumpRegister();
 	
 			if (isset($system_messages['success'])) {
 				$params['system_messages']['success'] = $system_messages['success'];

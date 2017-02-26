@@ -314,13 +314,13 @@ abstract class ElggEntity extends \ElggData implements
 		// upon first cache miss, just load/cache all the metadata and retry.
 		// if this works, the rest of this function may not be needed!
 		$cache = _elgg_services()->metadataCache;
-		if ($cache->isKnown($guid, $name)) {
-			return $cache->load($guid, $name);
+		if ($cache->isLoaded($guid)) {
+			return $cache->getSingle($guid, $name);
 		} else {
 			$cache->populateFromEntities(array($guid));
 			// in case ignore_access was on, we have to check again...
-			if ($cache->isKnown($guid, $name)) {
-				return $cache->load($guid, $name);
+			if ($cache->isLoaded($guid)) {
+				return $cache->getSingle($guid, $name);
 			}
 		}
 
@@ -340,8 +340,6 @@ abstract class ElggEntity extends \ElggData implements
 		} else if ($md && is_array($md)) {
 			$value = metadata_array_to_values($md);
 		}
-
-		$cache->save($guid, $name, $value);
 
 		return $value;
 	}
@@ -1070,6 +1068,47 @@ abstract class ElggEntity extends \ElggData implements
 	}
 
 	/**
+	 * Can a user delete this entity?
+	 *
+	 * @tip Can be overridden by registering for the permissions_check:delete plugin hook.
+	 *
+	 * @param int $user_guid The user GUID, optionally (default: logged in user)
+	 *
+	 * @return bool Whether this entity is deletable by the given user.
+	 * @since 1.11
+	 * @see elgg_set_ignore_access()
+	 */
+	public function canDelete($user_guid = 0) {
+		$user_guid = (int) $user_guid;
+
+		if (!$user_guid) {
+			$user_guid = _elgg_services()->session->getLoggedInUserGuid();
+		}
+
+		// need to ignore access and show hidden entities for potential hidden/disabled users
+		$ia = elgg_set_ignore_access(true);
+		$show_hidden = access_show_hidden_entities(true);
+		
+		$user = _elgg_services()->entityTable->get($user_guid, 'user');
+		
+		elgg_set_ignore_access($ia);
+		access_show_hidden_entities($show_hidden);
+		
+		if ($user_guid & !$user) {
+			// requested to check access for a specific user_guid, but there is no user entity, so return false
+			$message = _elgg_services()->translator->translate('entity:can_delete:invaliduser', array($user_guid));
+			_elgg_services()->logger->warning($message);
+			
+			return false;
+		}		
+		
+		$return = $this->canEdit($user_guid);
+
+		$params = array('entity' => $this, 'user' => $user);
+		return _elgg_services()->hooks->trigger('permissions_check:delete', $this->type, $params, $return);
+	}
+
+	/**
 	 * Can a user edit metadata on this entity?
 	 *
 	 * If no specific metadata is passed, it returns whether the user can
@@ -1388,12 +1427,18 @@ abstract class ElggEntity extends \ElggData implements
 	 * Plugins can register for the 'entity:icon:url', <type> plugin hook
 	 * to customize the icon for an entity.
 	 *
-	 * @param string $size Size of the icon: tiny, small, medium, large
-	 *
+	 * @param mixed $params A string defining the size of the icon (e.g. tiny, small, medium, large)
+	 *                      or an array of parameters including 'size'
 	 * @return string The URL
 	 * @since 1.8.0
 	 */
-	public function getIconURL($size = 'medium') {
+	public function getIconURL($params = array()) {
+		if (is_array($params)) {
+			$size = elgg_extract('size', $params, 'medium');
+		} else {	
+			$size = is_string($params) ? $params : 'medium';
+			$params = array();
+		}
 		$size = elgg_strtolower($size);
 
 		if (isset($this->icon_override[$size])) {
@@ -1401,11 +1446,10 @@ abstract class ElggEntity extends \ElggData implements
 			return $this->icon_override[$size];
 		}
 
+		$params['entity'] = $this;
+		$params['size'] = $size;
+
 		$type = $this->getType();
-		$params = array(
-			'entity' => $this,
-			'size' => $size,
-		);
 
 		$url = _elgg_services()->hooks->trigger('entity:icon:url', $type, $params, null);
 		if ($url == null) {
@@ -1683,6 +1727,7 @@ abstract class ElggEntity extends \ElggData implements
 		unset($persisted_entity);
 
 		if ($allow_edit) {
+			// give old update event a chance to stop the update
 			$allow_edit = _elgg_services()->events->trigger('update', $this->type, $this);
 		}
 
@@ -1708,6 +1753,8 @@ abstract class ElggEntity extends \ElggData implements
 			set owner_guid='$owner_guid', access_id='$access_id',
 			container_guid='$container_guid', time_created='$time_created',
 			time_updated='$time' WHERE guid=$guid");
+		
+		elgg_trigger_after_event('update', $this->type, $this);
 
 		// TODO(evan): Move this to \ElggObject?
 		if ($this instanceof \ElggObject) {
@@ -1823,7 +1870,7 @@ abstract class ElggEntity extends \ElggData implements
 	 *
 	 * You can ignore the disabled field by using {@link access_show_hidden_entities()}.
 	 *
-	 * @internal Disabling an entity sets the 'enabled' column to 'no'.
+	 * @note Internal: Disabling an entity sets the 'enabled' column to 'no'.
 	 *
 	 * @param string $reason    Optional reason
 	 * @param bool   $recursive Recursively disable all contained entities?
@@ -1987,10 +2034,10 @@ abstract class ElggEntity extends \ElggData implements
 			return false;
 		}
 		
-		// first check if we have edit access to this entity
+		// first check if we can delete this entity
 		// NOTE: in Elgg <= 1.10.3 this was after the delete event, 
 		// which could potentially remove some content if the user didn't have access
-		if (!$this->canEdit()) {
+		if (!$this->canDelete()) {
 			return false;
 		}
 
@@ -2050,6 +2097,8 @@ abstract class ElggEntity extends \ElggData implements
 		$this->deleteAnnotations();
 		$this->deleteOwnedAnnotations();
 		$this->deleteRelationships();
+		$this->deleteAccessCollectionMemberships();
+		$this->deleteOwnedAccessCollections();
 
 		access_show_hidden_entities($entity_disable_override);
 		elgg_set_ignore_access($ia);
@@ -2436,5 +2485,63 @@ abstract class ElggEntity extends \ElggData implements
 		}
 
 		return $entity_tags;
+	}
+	
+	/**
+	 * Remove the membership of all access collections for this entity (if the entity is a user)
+	 *
+	 * @return bool
+	 * @since 1.11
+	 */
+	public function deleteAccessCollectionMemberships() {
+	
+		if (!$this->guid) {
+			return false;
+		}
+		
+		if ($this->type !== 'user') {
+			return true;
+		}
+		
+		$ac = _elgg_services()->accessCollections;
+		
+		$collections = $ac->getCollectionsByMember($this->guid);
+		if (empty($collections)) {
+			return true;
+		}
+		
+		$result = true;
+		foreach ($collections as $collection) {
+			$result = $result & $ac->removeUser($this->guid, $collection->id);
+		}
+		
+		return $result;
+	}
+	
+	/**
+	 * Remove all access collections owned by this entity
+	 * 
+	 * @return bool
+	 * @since 1.11
+	 */
+	public function deleteOwnedAccessCollections() {
+		
+		if (!$this->guid) {
+			return false;
+		}
+		
+		$ac = _elgg_services()->accessCollections;
+		
+		$collections = $ac->getEntityCollections($this->guid);
+		if (empty($collections)) {
+			return true;
+		}
+		
+		$result = true;
+		foreach ($collections as $collection) {
+			$result = $result & $ac->delete($collection->id);
+		}
+		
+		return $result;
 	}
 }

@@ -12,7 +12,7 @@
  *
  * Every \ElggEntity belongs to a site.
  *
- * @internal \ElggSite represents a single row from the sites_entity
+ * @note Internal: \ElggSite represents a single row from the sites_entity
  * table, as well as the corresponding \ElggEntity row from the entities table.
  *
  * @warning Multiple site support isn't fully developed.
@@ -37,10 +37,24 @@ class ElggSite extends \ElggEntity {
 		parent::initializeAttributes();
 
 		$this->attributes['type'] = "site";
-		$this->attributes['name'] = null;
-		$this->attributes['description'] = null;
-		$this->attributes['url'] = null;
+		$this->attributes += self::getExternalAttributes();
 		$this->tables_split = 2;
+	}
+
+	/**
+	 * Get default values for attributes stored in a separate table
+	 *
+	 * @return array
+	 * @access private
+	 *
+	 * @see \Elgg\Database\EntityTable::getEntities
+	 */
+	final public static function getExternalAttributes() {
+		return [
+			'name' => null,
+			'description' => null,
+			'url' => null,
+		];
 	}
 
 	/**

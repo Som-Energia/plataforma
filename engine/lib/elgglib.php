@@ -395,15 +395,12 @@ function sanitise_filepath($path, $append_slash = true) {
  * {@link views/default/page/shells/default.php} and displays messages as
  * javascript popups.
  *
- * @internal Messages are stored as strings in the Elgg session as ['msg'][$register] array.
+ * @note Internal: Messages are stored as strings in the Elgg session as ['msg'][$register] array.
  *
  * @warning This function is used to both add to and clear the message
  * stack.  If $messages is null, $register will be returned and cleared.
  * If $messages is null and $register is empty, all messages will be
  * returned and removed.
- *
- * @important This function handles the standard {@link system_message()} ($register =
- * 'messages') as well as {@link register_error()} messages ($register = 'errors').
  *
  * @param mixed  $message  Optionally, a single message or array of messages to add, (default: null)
  * @param string $register Types of message: "error", "success" (default: success)
@@ -411,46 +408,15 @@ function sanitise_filepath($path, $append_slash = true) {
  *
  * @return bool|array Either the array of messages, or a response regarding
  *                          whether the message addition was successful.
- * @todo Clean up. Separate registering messages and retrieving them.
  */
 function system_messages($message = null, $register = "success", $count = false) {
-	$session = _elgg_services()->session;
-	$messages = $session->get('msg', array());
-	if (!isset($messages[$register]) && !empty($register)) {
-		$messages[$register] = array();
+	if ($count) {
+		return _elgg_services()->systemMessages->count($register);
 	}
-	if (!$count) {
-		if (!empty($message) && is_array($message)) {
-			$messages[$register] = array_merge($messages[$register], $message);
-			return true;
-		} else if (!empty($message) && is_string($message)) {
-			$messages[$register][] = $message;
-			$session->set('msg', $messages);
-			return true;
-		} else if (is_null($message)) {
-			if ($register != "") {
-				$returnarray = array();
-				$returnarray[$register] = $messages[$register];
-				$messages[$register] = array();
-			} else {
-				$returnarray = $messages;
-				$messages = array();
-			}
-			$session->set('msg', $messages);
-			return $returnarray;
-		}
-	} else {
-		if (!empty($register)) {
-			return sizeof($messages[$register]);
-		} else {
-			$count = 0;
-			foreach ($messages as $submessages) {
-				$count += sizeof($submessages);
-			}
-			return $count;
-		}
+	if ($message === null) {
+		return _elgg_services()->systemMessages->dumpRegister($register);
 	}
-	return false;
+	return _elgg_services()->systemMessages->addMessageToRegister($message, $register);
 }
 
 /**
@@ -461,7 +427,7 @@ function system_messages($message = null, $register = "success", $count = false)
  * @return integer The number of messages
  */
 function count_messages($register = "") {
-	return system_messages(null, $register, true);
+	return _elgg_services()->systemMessages->count($register);
 }
 
 /**
@@ -474,7 +440,7 @@ function count_messages($register = "") {
  * @return bool
  */
 function system_message($message) {
-	return system_messages($message, "success");
+	return _elgg_services()->systemMessages->addSuccessMessage($message);
 }
 
 /**
@@ -487,7 +453,7 @@ function system_message($message) {
  * @return bool
  */
 function register_error($error) {
-	return system_messages($error, "error");
+	return _elgg_services()->systemMessages->addErrorMessage($error);
 }
 
 /**
@@ -535,7 +501,7 @@ function register_error($error) {
  *
  * @tip When referring to events, the preferred syntax is "event, type".
  *
- * @internal Events are stored in $CONFIG->events as:
+ * Internal note: Events are stored in $CONFIG->events as:
  * <code>
  * $CONFIG->events[$event][$type][$priority] = $callback;
  * </code>
@@ -588,10 +554,10 @@ function elgg_unregister_event_handler($event, $object_type, $callback) {
  *
  * @tip When referring to events, the preferred syntax is "event, type".
  *
- * @internal Only rarely should events be changed, added, or removed in core.
+ * @note Internal: Only rarely should events be changed, added, or removed in core.
  * When making changes to events, be sure to first create a ticket on Github.
  *
- * @internal @tip Think of $object_type as the primary namespace element, and
+ * @note Internal: @tip Think of $object_type as the primary namespace element, and
  * $event as the secondary namespace.
  *
  * @param string $event       The event type
@@ -695,7 +661,7 @@ function elgg_trigger_deprecated_event($event, $object_type, $object = null, $me
  *  - mixed $params An optional array of parameters.  Used to provide additional
  *  information to plugins.
  *
- * @internal Plugin hooks are stored in $CONFIG->hooks as:
+ * @note Internal: Plugin hooks are stored in $CONFIG->hooks as:
  * <code>
  * $CONFIG->hooks[$hook][$type][$priority] = $callback;
  * </code>
@@ -781,7 +747,7 @@ function elgg_unregister_plugin_hook_handler($hook, $entity_type, $callback) {
  * @tip It's not possible for a plugin hook to change a non-null $returnvalue
  * to null.
  *
- * @internal The checks for $hook and/or $type not being equal to 'all' is to
+ * @note Internal: The checks for $hook and/or $type not being equal to 'all' is to
  * prevent a plugin hook being registered with an 'all' being called more than
  * once if the trigger occurs with an 'all'. An example in core of this is in
  * actions.php:
@@ -1025,24 +991,9 @@ function elgg_get_version($human_readable = false) {
 }
 
 /**
- * Sends a notice about deprecated use of a function, view, etc.
+ * Log a notice about deprecated use of a function, view, etc.
  *
- * This function either displays or logs the deprecation message,
- * depending upon the deprecation policies in {@link CODING.txt}.
- * Logged messages are sent with the level of 'WARNING'. Only admins
- * get visual deprecation notices. When non-admins are logged in, the
- * notices are sent to PHP's log through elgg_dump().
- *
- * A user-visual message will be displayed if $dep_version is greater
- * than 1 minor releases lower than the current Elgg version, or at all
- * lower than the current Elgg major version.
- *
- * @note This will always at least log a warning.  Don't use to pre-deprecate things.
- * This assumes we are releasing in order and deprecating according to policy.
- *
- * @see CODING.txt
- *
- * @param string $msg             Message to log / display.
+ * @param string $msg             Message to log
  * @param string $dep_version     Human-readable *release* version: 1.7, 1.8, ...
  * @param int    $backtrace_level How many levels back to display the backtrace.
  *                                Useful if calling from functions that are called
@@ -1053,64 +1004,8 @@ function elgg_get_version($human_readable = false) {
  * @since 1.7.0
  */
 function elgg_deprecated_notice($msg, $dep_version, $backtrace_level = 1) {
-	// if it's a major release behind, visual and logged
-	// if it's a 1 minor release behind, visual and logged
-	// if it's for current minor release, logged.
-	// bugfixes don't matter because we are not deprecating between them
-
-	if (!$dep_version) {
-		return false;
-	}
-
-	$elgg_version = elgg_get_version(true);
-	$elgg_version_arr = explode('.', $elgg_version);
-	$elgg_major_version = (int)$elgg_version_arr[0];
-	$elgg_minor_version = (int)$elgg_version_arr[1];
-
-	$dep_version_arr = explode('.', (string)$dep_version);
-	$dep_major_version = (int)$dep_version_arr[0];
-	$dep_minor_version = (int)$dep_version_arr[1];
-
-	$visual = false;
-
-	if (($dep_major_version < $elgg_major_version) ||
-		($dep_minor_version < $elgg_minor_version)) {
-		$visual = true;
-	}
-
-	$msg = "Deprecated in $dep_major_version.$dep_minor_version: $msg";
-
-	if ($visual && elgg_is_admin_logged_in()) {
-		register_error($msg);
-	}
-
-	// Get a file and line number for the log. Never show this in the UI.
-	// Skip over the function that sent this notice and see who called the deprecated
-	// function itself.
-	$msg .= " Called from ";
-	$stack = array();
-	$backtrace = debug_backtrace();
-	// never show this call.
-	array_shift($backtrace);
-	$i = count($backtrace);
-
-	foreach ($backtrace as $trace) {
-		$stack[] = "[#$i] {$trace['file']}:{$trace['line']}";
-		$i--;
-
-		if ($backtrace_level > 0) {
-			if ($backtrace_level <= 1) {
-				break;
-			}
-			$backtrace_level--;
-		}
-	}
-
-	$msg .= implode("<br /> -> ", $stack);
-
-	elgg_log($msg, 'WARNING');
-
-	return true;
+	$backtrace_level += 1;
+	return _elgg_services()->deprecation->sendNotice($msg, $dep_version, $backtrace_level);
 }
 
 /**
@@ -1119,8 +1014,10 @@ function elgg_deprecated_notice($msg, $dep_version, $backtrace_level = 1) {
  * @note If only partial information is passed, a partial URL will be returned.
  *
  * @param array $parts       Associative array of URL components like parse_url() returns
+ *                           'user' and 'pass' parts are ignored because of security reasons
  * @param bool  $html_encode HTML Encode the url?
  *
+ * @see https://github.com/Elgg/Elgg/pull/8146#issuecomment-91544585
  * @return string Full URL
  * @since 1.7.0
  */
@@ -1564,6 +1461,12 @@ function _elgg_js_page_handler($page) {
  * @access private
  */
 function _elgg_ajax_page_handler($page) {
+	// the ajax page handler should only be called from an xhr
+	if (!elgg_is_xhr()) {
+		register_error(_elgg_services()->translator->translate('ajax:not_is_xhr'));
+		forward(null, '400');
+	}
+	
 	if (is_array($page) && sizeof($page)) {
 		// throw away 'view' and form the view name
 		unset($page[0]);
@@ -1989,6 +1892,11 @@ function _elgg_init() {
 	elgg_register_js('elgg.autocomplete', 'js/lib/ui.autocomplete.js');
 	elgg_register_js('jquery.ui.autocomplete.html', 'vendors/jquery/jquery.ui.autocomplete.html.js');
 
+	elgg_define_js('jquery.ui.autocomplete.html', array(
+		'src' => '/vendors/jquery/jquery.ui.autocomplete.html.js',
+		'deps' => array('jquery.ui')
+	));
+	
 	elgg_register_external_view('js/elgg/UserPicker.js', true);
 
 	elgg_register_js('elgg.friendspicker', 'js/lib/ui.friends_picker.js');
@@ -2086,8 +1994,10 @@ define('REFERRER', -1);
  */
 define('REFERER', -1);
 
-elgg_register_event_handler('init', 'system', '_elgg_init');
-elgg_register_event_handler('boot', 'system', '_elgg_engine_boot', 1);
-elgg_register_plugin_hook_handler('unit_test', 'system', '_elgg_api_test');
+return function(\Elgg\EventsService $events, \Elgg\HooksRegistrationService $hooks) {
+	$events->registerHandler('init', 'system', '_elgg_init');
+	$events->registerHandler('boot', 'system', '_elgg_engine_boot', 1);
+	$hooks->registerHandler('unit_test', 'system', '_elgg_api_test');
 
-elgg_register_event_handler('init', 'system', '_elgg_walled_garden_init', 1000);
+	$events->registerHandler('init', 'system', '_elgg_walled_garden_init', 1000);
+};

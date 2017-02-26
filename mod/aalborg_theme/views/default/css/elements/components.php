@@ -171,9 +171,6 @@
 /* ***************************************
 	River
 *************************************** */
-.elgg-list-river {
-	margin-top: -10px;
-}
 .elgg-river-layout .elgg-list-river {
 	border-top: 1px solid #DCDCDC;
 }
@@ -210,9 +207,6 @@
 }
 
 <?php //@todo components.php ?>
-.elgg-river-responses {
-	margin-top: 15px;
-}
 .elgg-river-comments {
 	position: relative;
 	margin: 20px 0 0 0;
@@ -271,6 +265,22 @@
 }
 .elgg-comments > form {
 	margin-top: 15px;
+}
+
+/* Comment highlighting that automatically fades away */
+.elgg-comments .elgg-state-highlight {
+	-webkit-animation: comment-highlight 5s; /* Chrome, Safari, Opera */
+	animation: comment-highlight 5s;
+}
+/* Chrome, Safari, Opera */
+@-webkit-keyframes comment-highlight {
+	from {background: #dff2ff;}
+	to {background: white;}
+}
+/* Standard syntax */
+@keyframes comment-highlight {
+	from {background: #dff2ff;}
+	to {background: white;}
 }
 
 /* **************************************

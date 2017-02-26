@@ -73,7 +73,7 @@ class ElggInstaller {
 
 		$this->bootstrapEngine();
 
-		_elgg_services()->setValue('session', new ElggSession(new Elgg\Http\MockSessionStorage()));
+		_elgg_services()->setValue('session', \ElggSession::getMock());
 
 		elgg_set_viewtype('installation');
 
@@ -852,9 +852,13 @@ class ElggInstaller {
 		$this->CONFIG->pluginspath = $this->CONFIG->path . 'mod/';
 		$this->CONFIG->context = array();
 		$this->CONFIG->entity_types = array('group', 'object', 'site', 'user');
+
 		// required by elgg_view_page()
 		$this->CONFIG->sitename = '';
 		$this->CONFIG->sitedescription = '';
+
+		// required by Elgg\Config::get
+		$this->CONFIG->site_guid = 1;
 	}
 	
 	/**
@@ -1212,30 +1216,36 @@ class ElggInstaller {
 	 * @return bool
 	 */
 	protected function checkDatabaseSettings($user, $password, $dbname, $host) {
-		$mysql_dblink = mysql_connect($host, $user, $password, true);
-		if ($mysql_dblink == FALSE) {
-			register_error(_elgg_services()->translator->translate('install:error:databasesettings'));
+		$config = new \Elgg\Database\Config((object)[
+			'dbhost' => $host,
+			'dbuser' => $user,
+			'dbpass' => $password,
+			'dbname' => $dbname,
+		]);
+		$logger = new \Elgg\Logger(new \Elgg\PluginHooksService());
+		$db = new \Elgg\Database($config, $logger);
+
+		try {
+			$db->getDataRow("SELECT 1");
+		} catch (DatabaseException $e) {
+			if (0 === strpos($e->getMessage(), "Elgg couldn't connect")) {
+				register_error(_elgg_services()->translator->translate('install:error:databasesettings'));
+			} else {
+				register_error(_elgg_services()->translator->translate('install:error:nodatabase', array($dbname)));
+			}
 			return FALSE;
 		}
 
-		$result = mysql_select_db($dbname, $mysql_dblink);
-
 		// check MySQL version - must be 5.0 or >
+		$version = $db->getServerVersion(\Elgg\Database\Config::READ_WRITE);
 		$required_version = 5.0;
-		$version = mysql_get_server_info();
 		$points = explode('.', $version);
 		if ($points[0] < $required_version) {
 			register_error(_elgg_services()->translator->translate('install:error:oldmysql', array($version)));
 			return FALSE;
 		}
 
-		mysql_close($mysql_dblink);
-
-		if (!$result) {
-			register_error(_elgg_services()->translator->translate('install:error:nodatabase', array($dbname)));
-		}
-
-		return $result;
+		return TRUE;
 	}
 
 	/**
@@ -1439,7 +1449,6 @@ class ElggInstaller {
 		
 
 		// ensure that file path, data path, and www root end in /
-		$submissionVars['path'] = sanitise_filepath($submissionVars['path']);
 		$submissionVars['dataroot'] = sanitise_filepath($submissionVars['dataroot']);
 		$submissionVars['wwwroot'] = sanitise_filepath($submissionVars['wwwroot']);
 
@@ -1461,7 +1470,6 @@ class ElggInstaller {
 		$this->CONFIG->site = $site;
 
 		_elgg_services()->datalist->set('installed', time());
-		_elgg_services()->datalist->set('path', $submissionVars['path']);
 		_elgg_services()->datalist->set('dataroot', $submissionVars['dataroot']);
 		_elgg_services()->datalist->set('default_site', $site->getGUID());
 		_elgg_services()->datalist->set('version', elgg_get_version());
@@ -1469,8 +1477,11 @@ class ElggInstaller {
 		_elgg_services()->datalist->set('system_cache_enabled', 1);
 		_elgg_services()->datalist->set('simplecache_lastupdate', time());
 
+		// @todo plugins might use this, but core doesn't. remove in 2.0
+		_elgg_services()->datalist->set('path', $this->CONFIG->path);
+
 		// new installations have run all the upgrades
-		$upgrades = elgg_get_upgrade_files($submissionVars['path'] . 'engine/lib/upgrades/');
+		$upgrades = elgg_get_upgrade_files("{$this->CONFIG->path}engine/lib/upgrades/");
 		_elgg_services()->datalist->set('processed_upgrades', serialize($upgrades));
 
 		_elgg_services()->configTable->set('view', 'default', $site->getGUID());
@@ -1615,8 +1626,15 @@ class ElggInstaller {
 
 		if ($login) {
 			$handler = new Elgg\Http\DatabaseSessionHandler(_elgg_services()->db);
-			$storage = new Elgg\Http\NativeSessionStorage(array(), $handler);
-			$session = new ElggSession($storage);
+
+			// session.cache_limiter is unfortunately set to "" by the NativeSessionStorage constructor,
+			// so we must capture and inject it directly.
+			$options = [
+				'cache_limiter' => session_cache_limiter(),
+			];
+			$storage = new Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage($options, $handler);
+
+			$session = new ElggSession(new Symfony\Component\HttpFoundation\Session\Session($storage));
 			$session->setName('Elgg');
 			_elgg_services()->setValue('session', $session);
 			if (login($user) == FALSE) {

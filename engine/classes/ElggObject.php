@@ -10,7 +10,7 @@
  * as the related row in the entities table as represented by the parent
  * \ElggEntity object.
  *
- * @internal Title and description are stored in the objects_entity table.
+ * @note Internal: Title and description are stored in the objects_entity table.
  *
  * @package    Elgg.Core
  * @subpackage DataModel.Object
@@ -31,9 +31,23 @@ class ElggObject extends \ElggEntity {
 		parent::initializeAttributes();
 
 		$this->attributes['type'] = "object";
-		$this->attributes['title'] = null;
-		$this->attributes['description'] = null;
+		$this->attributes += self::getExternalAttributes();
 		$this->tables_split = 2;
+	}
+
+	/**
+	 * Get default values for attributes stored in a separate table
+	 *
+	 * @return array
+	 * @access private
+	 *
+	 * @see \Elgg\Database\EntityTable::getEntities
+	 */
+	final public static function getExternalAttributes() {
+		return [
+			'title' => null,
+			'description' => null,
+		];
 	}
 
 	/**

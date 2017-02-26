@@ -58,6 +58,7 @@ return array(
 	'groups:cantcreate' => 'You can not create a group. Only admins can.',
 	'groups:cantedit' => 'You can not edit this group',
 	'groups:saved' => 'Group saved',
+	'groups:save_error' => 'Group could not be saved',
 	'groups:featured' => 'Featured groups',
 	'groups:makeunfeatured' => 'Unfeature',
 	'groups:makefeatured' => 'Make featured',
@@ -173,6 +174,7 @@ View and reply to the discussion:
 	'discussion:reply:edit' => 'Edit reply',
 	'discussion:reply:deleted' => 'Discussion reply has been deleted.',
 	'discussion:reply:error:notfound' => 'The discussion reply was not found',
+	'discussion:reply:error:notfound_fallback' => "Sorry, we could not find the specified reply, but we've forwarded you to the original discussion topic.",
 	'discussion:reply:error:notdeleted' => 'Could not delete the discussion reply',
 
 	'discussion:search:title' => 'Reply on topic: %s',

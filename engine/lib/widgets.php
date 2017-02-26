@@ -197,10 +197,18 @@ function _elgg_default_widgets_init() {
 		// only register the callback once per event
 		$events = array();
 		foreach ($default_widgets as $info) {
-			$events[$info['event'] . ',' . $info['entity_type']] = $info;
-		}
-		foreach ($events as $info) {
-			elgg_register_event_handler($info['event'], $info['entity_type'], '_elgg_create_default_widgets');
+			if (!is_array($info)) {
+				continue;
+			}
+			$event = elgg_extract('event', $info);
+			$entity_type = elgg_extract('entity_type', $info);
+			if (!$event || !$entity_type) {
+				continue;
+			}
+			if (!isset($events[$event][$entity_type])) {
+				elgg_register_event_handler($event, $entity_type, '_elgg_create_default_widgets');
+				$events[$event][$entity_type] = true;
+			}
 		}
 	}
 }
@@ -293,5 +301,7 @@ function _elgg_default_widgets_permissions_override($hook, $type, $return, $para
 	return null;
 }
 
-elgg_register_event_handler('init', 'system', '_elgg_widgets_init');
-elgg_register_event_handler('ready', 'system', '_elgg_default_widgets_init');
+return function(\Elgg\EventsService $events, \Elgg\HooksRegistrationService $hooks) {
+	$events->registerHandler('init', 'system', '_elgg_widgets_init');
+	$events->registerHandler('ready', 'system', '_elgg_default_widgets_init');
+};

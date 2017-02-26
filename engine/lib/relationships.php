@@ -123,13 +123,13 @@ function remove_entity_relationships($guid, $relationship = "", $inverse_relatio
  * Get all the relationships for a given GUID.
  *
  * @param int  $guid                 GUID of the subject or target entity (see $inverse)
- * @param bool $inverse_relationship Is $guid the target of the deleted relationships? By default $guid is
+ * @param bool $inverse_relationship Is $guid the target of the relationships? By default $guid is
  *                                   the subject of the relationships.
  *
  * @return \ElggRelationship[]
  */
 function get_entity_relationships($guid, $inverse_relationship = false) {
-	return _elgg_services()->relationshipsTable->getAll($guid, $inverse_relationships);
+	return _elgg_services()->relationshipsTable->getAll($guid, $inverse_relationship);
 }
 
 /**
