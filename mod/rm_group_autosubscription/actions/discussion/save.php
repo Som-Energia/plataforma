@@ -1,8 +1,13 @@
 <?php
+
+/**
+ * @author  Rubén Martín <soy@rubenmartin.me>
+ * @dated   10/05/2013
+ */
+
 /**
  * Topic save action
  */
-
 // Get variables
 $title = htmlspecialchars(get_input('title', '', false), ENT_QUOTES, 'UTF-8');
 $desc = get_input("description");
@@ -16,32 +21,32 @@ elgg_make_sticky_form('topic');
 
 // validation of inputs
 if (!$title || !$desc) {
-	register_error(elgg_echo('discussion:error:missing'));
-	forward(REFERER);
+    register_error(elgg_echo('discussion:error:missing'));
+    forward(REFERER);
 }
 
 $container = get_entity($container_guid);
 if (!$container || !$container->canWriteToContainer(0, 'object', 'groupforumtopic')) {
-	register_error(elgg_echo('discussion:error:permissions'));
-	forward(REFERER);
+    register_error(elgg_echo('discussion:error:permissions'));
+    forward(REFERER);
 }
 
 // check whether this is a new topic or an edit
 $new_topic = true;
 if ($guid > 0) {
-	$new_topic = false;
+    $new_topic = false;
 }
 
 if ($new_topic) {
-	$topic = new ElggObject();
-	$topic->subtype = 'groupforumtopic';
+    $topic = new ElggObject();
+    $topic->subtype = 'groupforumtopic';
 } else {
-	// load original file object
-	$topic = new ElggObject($guid);
-	if (!$topic || !$topic->canEdit()) {
-		register_error(elgg_echo('discussion:topic:notfound'));
-		forward(REFERER);
-	}
+    // load original file object
+    $topic = new ElggObject($guid);
+    if (!$topic || !$topic->canEdit()) {
+        register_error(elgg_echo('discussion:topic:notfound'));
+        forward(REFERER);
+    }
 }
 
 $topic->title = $title;
@@ -56,40 +61,31 @@ $topic->tags = $tags;
 $result = $topic->save();
 
 if (!$result) {
-	register_error(elgg_echo('discussion:error:notsaved'));
-	forward(REFERER);
+    register_error(elgg_echo('discussion:error:notsaved'));
+    forward(REFERER);
 }
 
-/**
- * @author  Rubén Martín <soy@rubenmartin.me>
- * @dated   10/05/2013
- */
+if ($new_topic) {
 
-//{{{
+    $group = new ElggGroup($container_guid);
+    $members = $group->getMembers(0);
 
-if ( $new_topic ) {
-
-    $group = new ElggGroup( $container_guid );
-    $members = $group->getMembers( 0 );
-
-    foreach ( $members as $user )
-	if ( ! comment_tracker_is_subscribed( $user, $topic ) )
-	    comment_tracker_subscribe( $user->guid, $topic->guid );
-
+    foreach ($members as $user) {
+        if (!comment_tracker_is_subscribed($user, $topic)) {
+            comment_tracker_subscribe($user->guid, $topic->guid);
+        }
+    }
 }
-
-//}}}
 
 // topic saved so clear sticky form
 elgg_clear_sticky_form('topic');
 
-
 // handle results differently for new topics and topic edits
 if ($new_topic) {
-	system_message(elgg_echo('discussion:topic:created'));
-	add_to_river('river/object/groupforumtopic/create', 'create', elgg_get_logged_in_user_guid(), $topic->guid);
+    system_message(elgg_echo('discussion:topic:created'));
+    add_to_river('river/object/groupforumtopic/create', 'create', elgg_get_logged_in_user_guid(), $topic->guid);
 } else {
-	system_message(elgg_echo('discussion:topic:updated'));
+    system_message(elgg_echo('discussion:topic:updated'));
 }
 
 forward($topic->getURL());

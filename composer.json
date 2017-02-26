@@ -13,6 +13,7 @@
         "elgg/mentions": "dev-master",
         "coldtrick/group_tools": "v3.2",
         "blackleg/rm_group_reports": "1.9.0",
-        "blackleg/rm_group_default_fields": "1.1.0"
+        "blackleg/rm_group_default_fields": "1.1.0",
+        "blackleg/rm_group_autosubscription": "1.9"
     }
 }

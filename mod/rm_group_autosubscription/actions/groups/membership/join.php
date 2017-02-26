@@ -39,13 +39,7 @@ if (($user instanceof ElggUser) && ($group instanceof ElggGroup)) {
 
             system_message(elgg_echo("groups:joined"));
 
-            /**
-             * @author  Rubén Martín <soy@rubenmartin.me>
-             * @dated   09/24/2013
-             */
-            //{{{
-
-            add_entity_relationship($user->get('guid'), 'notifyemail', $group->get('guid'));
+            add_entity_relationship($user->guid, 'notifyemail', $group->guid);
 
             $rm_topics = elgg_get_entities(array(
                 'container_guids' => $group_guid,
@@ -58,8 +52,6 @@ if (($user instanceof ElggUser) && ($group instanceof ElggGroup)) {
                     comment_tracker_subscribe($user_guid, $topic->guid);
                 }
             }
-
-            //}}}
 
             forward($group->getURL());
         } else {
