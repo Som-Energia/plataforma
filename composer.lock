@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "53d8e77f83692e106b562166709fa4b6",
-    "content-hash": "3accf0b2e2e08ea94e09672d3b3632b0",
+    "hash": "70eca1595787ab5b4aebb0845cfc9722",
+    "content-hash": "d616e5ab5c79debff7c177a5f7b4e0eb",
     "packages": [
         {
             "name": "au/au_subgroups",
@@ -119,6 +119,36 @@
                 "spam"
             ],
             "time": "2015-12-18 09:45:11"
+        },
+        {
+            "name": "blackleg/rm_group_default_fields",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/blackleg/rm_group_default_fields.git",
+                "reference": "5c834a4f37ca2cb29a813586808a57074d506662"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/blackleg/rm_group_default_fields/zipball/5c834a4f37ca2cb29a813586808a57074d506662",
+                "reference": "5c834a4f37ca2cb29a813586808a57074d506662",
+                "shasum": ""
+            },
+            "require": {
+                "composer/installers": "^1.0.8"
+            },
+            "type": "elgg-plugin",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0"
+            ],
+            "description": "Elgg Groups Reports",
+            "homepage": "http://www.blackleg.es",
+            "keywords": [
+                "elgg",
+                "plugin"
+            ],
+            "time": "2017-02-26 21:37:10"
         },
         {
             "name": "blackleg/rm_group_reports",
@@ -429,8 +459,6 @@
     },
     "prefer-stable": false,
     "prefer-lowest": false,
-    "platform": {
-        "php": ">=5.2"
-    },
+    "platform": [],
     "platform-dev": []
 }
