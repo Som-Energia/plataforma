@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "4430465144ce50ace036ade5923ad3f0",
-    "content-hash": "2c8e2abbe081bdb6d3e9a1c50dcabbd4",
+    "hash": "597090ea7690254ef9da1166042dd49a",
+    "content-hash": "4d0339dce87557019be56e10828c5544",
     "packages": [
         {
             "name": "au/au_subgroups",
@@ -212,16 +212,16 @@
         },
         {
             "name": "blackleg/threads",
-            "version": "1.9.0",
+            "version": "1.9.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/blackleg/threads.git",
-                "reference": "d5e824c0f8c99b02a073fe9bd766ebc6a2b62450"
+                "reference": "e6c722ef865c73183ef93a483f331c62cfffd4a4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/blackleg/threads/zipball/d5e824c0f8c99b02a073fe9bd766ebc6a2b62450",
-                "reference": "d5e824c0f8c99b02a073fe9bd766ebc6a2b62450",
+                "url": "https://api.github.com/repos/blackleg/threads/zipball/e6c722ef865c73183ef93a483f331c62cfffd4a4",
+                "reference": "e6c722ef865c73183ef93a483f331c62cfffd4a4",
                 "shasum": ""
             },
             "require": {
@@ -238,7 +238,7 @@
                 "elgg",
                 "plugin"
             ],
-            "time": "2017-02-26 23:15:24"
+            "time": "2017-02-27 23:16:33"
         },
         {
             "name": "coldtrick/file_tools",

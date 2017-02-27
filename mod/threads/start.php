@@ -17,9 +17,11 @@ function threads_init() {
 
 	elgg_register_page_handler('discussion', 'threads_page_handler');
 	elgg_register_page_handler('threaded_forums', 'threads_page_handler');
-
-        elgg_register_plugin_hook_handler('entity:url', 'object', 'threads_override_topic_url');
-
+        
+        if (elgg_is_active_plugin('crud')) {
+            elgg_register_plugin_hook_handler('entity:url', 'object', 'threads_override_topic_url');
+        }
+        
 	// commenting not allowed on discussion topics (use a different annotation)
 	//elgg_register_plugin_hook_handler('permissions_check:comment', 'object', 'threads_comment_override');
 	
@@ -158,7 +160,7 @@ function threads_override_topic_url($hook, $type, $url, $params) {
     if ($entity->getSubtype() !== 'groupforumtopic') {
         return;
     }
-    return 'discussion/view/' . $entity->guid;
+    return 'discussion/view/' . $entity->guid . '/' . elgg_get_friendly_title($entity->title);
 }
 
 /**
