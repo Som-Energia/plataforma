@@ -6,7 +6,7 @@
  * @package Elgg.Core
  * @subpackage Languages.Spanish
  */
-$spanish = array(
+return array(
 	'mentions:notification:subject' => '%s te ha nombrado en %s',
 	'mentions:notification:body' => '%s te ha nombrado en %s.
 To see the full post, click on the link below:
@@ -1709,5 +1709,3 @@ Por favor no responda a este correo",
     "zh" => "Chinese",
     "zu" => "Zulu",
 );
-
-add_translation("es", $spanish);
