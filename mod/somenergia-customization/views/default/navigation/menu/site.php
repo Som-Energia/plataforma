@@ -9,6 +9,8 @@
 $default_items = elgg_extract('default', $vars['menu'], array());
 $more_items = elgg_extract('more', $vars['menu'], array());
 
+$site_url = elgg_get_site_url();
+
 echo '<ul class="elgg-menu elgg-menu-site elgg-menu-site-default clearfix">';
 
 echo '<li class="elgg-more">';
@@ -49,17 +51,17 @@ echo '<ul class="elgg-menu elgg-menu-site elgg-menu-site-more">';
 
 
 $link = elgg_echo('menu:topics:commercialization');
-echo "<li class='elgg-menu-item'><a href='https://plataforma.somenergia.coop/groups/search?tag=comercializaci%C3%B3n&limit=40'>$link</a></li>";
+echo "<li class='elgg-menu-item'><a href='${site_url}groups/search?tag=comercializaci%C3%B3n&limit=40'>$link</a></li>";
 
 $link = elgg_echo('menu:topics:projects');
-echo "<li class='elgg-menu-item'><a href='https://plataforma.somenergia.coop/groups/search?tag=proyectos+de+producci%C3%B3n&limit=40'>$link</a></li>";
+echo "<li class='elgg-menu-item'><a href='${site_url}groups/search?tag=proyectos+de+producci%C3%B3n&limit=40'>$link</a></li>";
 
 $link = elgg_echo('menu:topics:autoproduction');
-echo "<li class='elgg-menu-item'><a href='https://plataforma.somenergia.coop/groups/search?tag=autoproducci%C3%B3n&limit=40'>$link</a></li>";
+echo "<li class='elgg-menu-item'><a href='${site_url}groups/search?tag=autoproducci%C3%B3n&limit=40'>$link</a></li>";
 
 
 $link = elgg_echo('menu:topics:proposals');
-echo "<li class='elgg-menu-item'><a href='https://plataforma.somenergia.coop/groups/search?tag=propuesta+de+servicios&limit=40'>$link</a></li>";
+echo "<li class='elgg-menu-item'><a href='${site_url}groups/search?tag=propuesta+de+servicios&limit=40'>$link</a></li>";
 
 
 echo '</ul>';
@@ -78,25 +80,25 @@ echo "<a href=\"#\">$more</a>";
 echo '<ul class="elgg-menu elgg-menu-site elgg-menu-site-more">';
 
 $link = elgg_echo('menu:diffusion:school');
-echo "<li class='elgg-menu-item'><a href='https://plataforma.somenergia.coop/groups/search?tag=escuela+de+septiembre&limit=40'>$link</a></li>";
+echo "<li class='elgg-menu-item'><a href='${site_url}groups/search?tag=escuela+de+septiembre&limit=40'>$link</a></li>";
 
 $link = elgg_echo('menu:diffusion:training');
-echo "<li class='elgg-menu-item'><a href='https://plataforma.somenergia.coop/groups/search?tag=formaci%C3%B3n&limit=40'>$link</a></li>";
+echo "<li class='elgg-menu-item'><a href='${site_url}groups/search?tag=formaci%C3%B3n&limit=40'>$link</a></li>";
 
 $link = elgg_echo('menu:diffusion:communication');
-echo "<li class='elgg-menu-item'><a href='https://plataforma.somenergia.coop/groups/search?tag=comunicaci%C3%B3n&limit=40'>$link</a></li>";
+echo "<li class='elgg-menu-item'><a href='${site_url}groups/search?tag=comunicaci%C3%B3n&limit=40'>$link</a></li>";
 
 $link = elgg_echo('menu:diffusion:legal');
-echo "<li class='elgg-menu-item'><a href='https://plataforma.somenergia.coop/groups/search?tag=grupo+jur%C3%ADdico&limit=40'>$link</a></li>";
+echo "<li class='elgg-menu-item'><a href='${site_url}groups/search?tag=grupo+jur%C3%ADdico&limit=40'>$link</a></li>";
 
 $link = elgg_echo('menu:diffusion:compute');
-echo "<li class='elgg-menu-item'><a href='https://plataforma.somenergia.coop/groups/search?tag=inform%C3%A1tica&limit=40'>$link</a></li>";
+echo "<li class='elgg-menu-item'><a href='${site_url}groups/search?tag=inform%C3%A1tica&limit=40'>$link</a></li>";
 
 $link = elgg_echo('menu:diffusion:translate');
-echo "<li class='elgg-menu-item'><a href='https://plataforma.somenergia.coop/groups/search?tag=traducci%C3%B3n&limit=40'>$link</a></li>";
+echo "<li class='elgg-menu-item'><a href='${site_url}groups/search?tag=traducci%C3%B3n&limit=40'>$link</a></li>";
 
 $link = elgg_echo('menu:diffusion:various');
-echo "<li class='elgg-menu-item'><a href='https://plataforma.somenergia.coop/groups/search?tag=otros&limit=40'>$link</a></li>";
+echo "<li class='elgg-menu-item'><a href='${site_url}groups/search?tag=otros&limit=40'>$link</a></li>";
 
 
 echo '</ul>';
@@ -114,13 +116,13 @@ echo "<a href=\"#\">$more</a>";
 echo '<ul class="elgg-menu elgg-menu-site elgg-menu-site-more">';
 
 $link = elgg_echo('menu:cooperative:council');
-echo "<li class='elgg-menu-item'><a href='https://plataforma.somenergia.coop/groups/search?tag=consejo+rector&limit=40'>$link</a></li>";
+echo "<li class='elgg-menu-item'><a href='${site_url}groups/search?tag=consejo+rector&limit=40'>$link</a></li>";
 
 $link = elgg_echo('menu:cooperative:organization');
-echo "<li class='elgg-menu-item'><a href='https://plataforma.somenergia.coop/groups/search?tag=organizaci%C3%B3n&limit=40'>$link</a></li>";
+echo "<li class='elgg-menu-item'><a href='${site_url}groups/search?tag=organizaci%C3%B3n&limit=40'>$link</a></li>";
 
 $link = elgg_echo('menu:cooperative:commissions');
-echo "<li class='elgg-menu-item'><a href='https://plataforma.somenergia.coop/groups/search?tag=comisiones&limit=40'>$link</a></li>";
+echo "<li class='elgg-menu-item'><a href='${site_url}groups/search?tag=comisiones&limit=40'>$link</a></li>";
 
 
 echo '</ul>';
@@ -139,56 +141,56 @@ echo "<a href=\"#\">$more</a>";
 echo '<ul class="elgg-menu elgg-menu-site elgg-menu-site-more">';
 
 $link = elgg_echo('menu:local:andalucia');
-echo "<li class='elgg-menu-item'><a href='https://plataforma.somenergia.coop/groups/search?tag=andalucia&limit=40'>$link</a></li>";
+echo "<li class='elgg-menu-item'><a href='${site_url}groups/search?tag=andalucia&limit=40'>$link</a></li>";
 
 $link = elgg_echo('menu:local:aragon');
-echo "<li class='elgg-menu-item'><a href='https://plataforma.somenergia.coop/groups/search?tag=Arag%C3%B3n&limit=40'>$link</a></li>";
+echo "<li class='elgg-menu-item'><a href='${site_url}groups/search?tag=Arag%C3%B3n&limit=40'>$link</a></li>";
 
 $link = elgg_echo('menu:local:asturias');
-echo "<li class='elgg-menu-item'><a href='https://plataforma.somenergia.coop/groups/search?tag=asturias&limit=40'>$link</a></li>";
+echo "<li class='elgg-menu-item'><a href='${site_url}groups/search?tag=asturias&limit=40'>$link</a></li>";
 
 $link = elgg_echo('menu:local:cantabria');
-echo "<li class='elgg-menu-item'><a href='https://plataforma.somenergia.coop/groups/search?tag=cantabria&limit=40'>$link</a></li>";
+echo "<li class='elgg-menu-item'><a href='${site_url}groups/search?tag=cantabria&limit=40'>$link</a></li>";
 
 $link = elgg_echo('menu:local:mancha');
-echo "<li class='elgg-menu-item'><a href='https://plataforma.somenergia.coop/groups/search?tag=castilla+la+mancha&limit=40'>$link</a></li>";
+echo "<li class='elgg-menu-item'><a href=${site_url}groups/search?tag=castilla+la+mancha&limit=40'>$link</a></li>";
 
 $link = elgg_echo('menu:local:leon');
-echo "<li class='elgg-menu-item'><a href='https://plataforma.somenergia.coop/groups/search?tag=castilla+y+leon&limit=40'>$link</a></li>";
+echo "<li class='elgg-menu-item'><a href='${site_url}groups/search?tag=castilla+y+leon&limit=40'>$link</a></li>";
 
 $link = elgg_echo('menu:local:catalunya');
-echo "<li class='elgg-menu-item'><a href='https://plataforma.somenergia.coop/groups/search?tag=catalu%C3%B1a&limit=40'>$link</a></li>";
+echo "<li class='elgg-menu-item'><a href='${site_url}groups/search?tag=catalu%C3%B1a&limit=40'>$link</a></li>";
 
 $link = elgg_echo('menu:local:euskadi');
-echo "<li class='elgg-menu-item'><a href='https://plataforma.somenergia.coop/groups/search?tag=euskadi&limit=40'>$link</a></li>";
+echo "<li class='elgg-menu-item'><a href='${site_url}groups/search?tag=euskadi&limit=40'>$link</a></li>";
 
 $link = elgg_echo('menu:local:extremadura');
-echo "<li class='elgg-menu-item'><a href='https://plataforma.somenergia.coop/groups/search?tag=extremadura&limit=40'>$link</a></li>";
+echo "<li class='elgg-menu-item'><a href='${site_url}groups/search?tag=extremadura&limit=40'>$link</a></li>";
 
 $link = elgg_echo('menu:local:galicia');
-echo "<li class='elgg-menu-item'><a href='https://plataforma.somenergia.coop/groups/search?tag=galicia&limit=40'>$link</a></li>";
+echo "<li class='elgg-menu-item'><a href='${site_url}groups/search?tag=galicia&limit=40'>$link</a></li>";
 
 $link = elgg_echo('menu:local:balears');
-echo "<li class='elgg-menu-item'><a href='https://plataforma.somenergia.coop/groups/search?tag=illes+balears&limit=40'>$link</a></li>";
+echo "<li class='elgg-menu-item'><a href='${site_url}groups/search?tag=illes+balears&limit=40'>$link</a></li>";
 
 
 $link = elgg_echo('menu:local:canarias');
-echo "<li class='elgg-menu-item'><a href='https://plataforma.somenergia.coop/groups/search?tag=islas+canarias&limit=40'>$link</a></li>";
+echo "<li class='elgg-menu-item'><a href='${site_url}groups/search?tag=islas+canarias&limit=40'>$link</a></li>";
 
 $link = elgg_echo('menu:local:rioja');
-echo "<li class='elgg-menu-item'><a href='https://plataforma.somenergia.coop/groups/search?tag=la+rioja&limit=40'>$link</a></li>";
+echo "<li class='elgg-menu-item'><a href='${site_url}groups/search?tag=la+rioja&limit=40'>$link</a></li>";
 
 
 $link = elgg_echo('menu:local:madrid');
-echo "<li class='elgg-menu-item'><a href='https://plataforma.somenergia.coop/groups/search?tag=madrid&limit=40'>$link</a></li>";
+echo "<li class='elgg-menu-item'><a href='${site_url}groups/search?tag=madrid&limit=40'>$link</a></li>";
 
 
 $link = elgg_echo('menu:local:murcia');
-echo "<li class='elgg-menu-item'><a href='https://plataforma.somenergia.coop/groups/search?tag=murcia&limit=40'>$link</a></li>";
+echo "<li class='elgg-menu-item'><a href='${site_url}groups/search?tag=murcia&limit=40'>$link</a></li>";
 
 
 $link = elgg_echo('menu:local:navarra');
-echo "<li class='elgg-menu-item'><a href='https://plataforma.somenergia.coop/groups/search?tag=navarra&limit=40'>$link</a></li>";
+echo "<li class='elgg-menu-item'><a href='${site_url}groups/search?tag=navarra&limit=40'>$link</a></li>";
 
 
 $valencia = elgg_echo('menu:local:valencia');
