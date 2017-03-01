@@ -18,19 +18,19 @@ echo "<a href=\"#\">$how_work</a>";
 echo '<ul class="elgg-menu elgg-menu-site elgg-menu-site-more">';
 
 $welcome = elgg_echo('menu:howwork:welcome');
-echo '<li class="elgg-menu-item"><a href="'.elgg_get_site_url().'groups/profile/1117/bienvenida">'.$welcome.'</a></li>';
+echo '<li class="elgg-menu-item"><a href="' . elgg_get_site_url() . 'groups/profile/1117/bienvenida">' . $welcome . '</a></li>';
 
 $guide = elgg_echo('menu:howwork:guide');
-echo '<li class="elgg-menu-item"><a href="'.elgg_get_site_url().'dokuwiki/64/doku.php?id=guia_de_introduccion">'.$guide.'</a></li>';
+echo '<li class="elgg-menu-item"><a href="' . elgg_get_site_url() . 'dokuwiki/64/doku.php?id=guia_de_introduccion">' . $guide . '</a></li>';
 
 $general = elgg_echo('menu:howwork:general');
-echo '<li class="elgg-menu-item"><a href="'.elgg_get_site_url().'groups/profile/14318/som-energia-grupo-general">'.$general.'</a></li>';
+echo '<li class="elgg-menu-item"><a href="' . elgg_get_site_url() . 'groups/profile/14318/som-energia-grupo-general">' . $general . '</a></li>';
 
 $about = elgg_echo('menu:howwork:about');
-echo '<li class="elgg-menu-item"><a href="'.elgg_get_site_url().'groups/profile/64/grupo-sobre-la-plataforma">'.$about.'</a></li>';
+echo '<li class="elgg-menu-item"><a href="' . elgg_get_site_url() . 'groups/profile/64/grupo-sobre-la-plataforma">' . $about . '</a></li>';
 
 $local = elgg_echo('menu:howwork:local');
-echo '<li class="elgg-menu-item"><a href="'.elgg_get_site_url().'groups/profile/7496/apoyo-grupos-locales">'.$local.'</a></li>';
+echo '<li class="elgg-menu-item"><a href="' . elgg_get_site_url() . 'groups/profile/7496/apoyo-grupos-locales">' . $local . '</a></li>';
 
 echo '</ul>';
 echo '</li>';
@@ -192,7 +192,7 @@ echo "<li class='elgg-menu-item'><a href='https://plataforma.somenergia.coop/gro
 
 
 $valencia = elgg_echo('menu:local:valencia');
-echo '<li class="elgg-menu-item"><a href="'.elgg_get_site_url().'groups/search?tag=valencia&limit=40">'.$valencia.'</a></li>';
+echo '<li class="elgg-menu-item"><a href="' . elgg_get_site_url() . 'groups/search?tag=valencia&limit=40">' . $valencia . '</a></li>';
 
 echo '</li>';
 echo '</ul>';
@@ -203,7 +203,7 @@ echo '</ul>';
  */
 echo '<li class="elgg-more">';
 $community = elgg_echo('menu:community');
-echo '<a href="#">'.$community.'</a>';
+echo '<a href="#">' . $community . '</a>';
 
 /**
  * Merge elgg menu items to show in the community menu
