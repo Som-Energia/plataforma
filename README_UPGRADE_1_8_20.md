@@ -23,9 +23,5 @@
   2. Activar mod somenergia translations
   3. Activar mod somenergia customization
   3. Ejecutar upgrade.php desde el navegador
-<<<<<<< HEAD
-  4. Ejecutar actualizaciones base datos del mod tydipics
-=======
   4. Ejecutar actualizaciones mod tydipics desde la configuracion del mod
->>>>>>> devel
   5. Reconfigurar mod custom_index_widgets
