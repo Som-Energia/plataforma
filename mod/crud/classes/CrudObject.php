@@ -156,10 +156,10 @@ class CrudObject extends ElggObject  {
 						'value' => $this->guid))
 				);
 
-		 $name_metastring_id = get_metastring_id($category_property);
+		 $name_metastring_id = elgg_get_metastring_id($category_property);
 		 $value_metastring_ids = array();
 		 foreach($categories as $category) {
-			$value_metastring_ids[] = get_metastring_id($category);
+			$value_metastring_ids[] = elgg_get_metastring_id($category);
 		 }
 		 if (empty($value_metastring_ids)) {
 			return "";
