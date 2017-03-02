@@ -60,7 +60,6 @@ if ($images) {
 	if(!$preview_size) {
 		$preview_size = 'tiny';
 	}
-
 	$attachments = elgg_view_entity_icon($images[0], $preview_size, array(
 		'href' => $images[0]->getIconURL('master'),
 		'img_class' => 'tidypics-photo',

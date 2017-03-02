@@ -9,7 +9,6 @@
 elgg_load_library('tidypics:resize');
 
 global $START_MICROTIME;
-global $DB_QUERY_CACHE, $ENTITY_CACHE;
 $batch_run_time_in_secs = 5;
 
 // Offset is the total amount of images processed so far.
@@ -24,13 +23,13 @@ if (!$image_lib) {
 $access_status = access_get_show_hidden_status();
 access_show_hidden_entities(true);
 
+_elgg_services()->db->disableQueryCache();
+
 $success_count = 0;
 $error_count_invalid_image = 0;
 $error_count_recreate_failed = 0;
 
 while ((microtime(true) - $START_MICROTIME) < $batch_run_time_in_secs) {
-
-	$DB_QUERY_CACHE = $ENTITY_CACHE = array();
 
 	$batch = elgg_get_entities(array(
 		'type' => 'object',
@@ -78,6 +77,8 @@ while ((microtime(true) - $START_MICROTIME) < $batch_run_time_in_secs) {
 }
 
 access_show_hidden_entities($access_status);
+
+_elgg_services()->db->enableQueryCache();
 
 // Give some feedback for the UI
 echo json_encode(array(

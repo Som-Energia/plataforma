@@ -34,7 +34,7 @@ if ($albums) {
 	}
 }
 
-$body = "<div style=\"width:400px; padding:17px;\">".elgg_echo('tidypics:album_select')."<br><br>";
+$body = "<div style=\"width:400px;\">".elgg_echo('tidypics:album_select')."<br><br>";
 $body .= elgg_view('input/hidden', array('name' => 'owner_guid','value' => $owner->guid));
 $body .= elgg_view('input/dropdown', array(
 	'name' => 'album_guid',

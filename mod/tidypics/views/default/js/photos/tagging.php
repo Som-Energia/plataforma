@@ -169,7 +169,7 @@ elgg.tidypics.tagging.makeUnClickable = function() {
 		$(this).data('href', $(this).attr('href'));
  		$(this).removeAttr('href');
 	});
-	$(".tidypics-lightbox").unbind("click.fb");
+	$(".tidypics-lightbox").colorbox.remove();
 }
 
 elgg.tidypics.tagging.makeClickable = function() {
@@ -177,7 +177,7 @@ elgg.tidypics.tagging.makeClickable = function() {
 		$(this).attr('href', $(this).data('href'));
 	});
 	if ($(".tidypics-lightbox").length) {
-		$(".tidypics-lightbox").fancybox({'type': 'image'});
+		$(".tidypics-lightbox").colorbox({photo:true, maxWidth:'95%', maxHeight:'95%'});
 	}
 }
 

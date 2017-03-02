@@ -10,7 +10,7 @@ elgg.provide('elgg.tidypics');
 elgg.tidypics.init = function() {
 
 	if ($(".tidypics-lightbox").length) {
-                $(".tidypics-lightbox").fancybox({'type': 'image'});
+		$(".tidypics-lightbox").colorbox({photo:true, maxWidth:'95%', maxHeight:'95%'});
 	}
 
 	$("#tidypics-sort").sortable({

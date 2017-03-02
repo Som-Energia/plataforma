@@ -1,6 +1,6 @@
 <?php
 
-$spanish = array(
+return array(
 		// hack for core bug
 		'untitled' => "Sin título",
 
@@ -264,7 +264,7 @@ La foto se puede ver aquí: %s",
 		'tidypics:widget:no_albums' => "Aún no hay álbumes disponibles.",
 
 		// River
-		'image:river:created' => "%s añadió esta foto %s al álbum %s",
+		'image:river:created' => "%s añadió esta foto %s al állbum %s",
 		'image:river:created_single_entry' => "%s añadió esta foto %s y %s más al álbum %s",
 		'image:river:created:multiple' => "%s añadió %s fotos al álbum %s",
 		'image:river:item' => "una foto",
@@ -350,4 +350,3 @@ Ver y hacer comentarios sobre el álbum:
 
 		'tidypics:upgrade:failed' => "La actualización de Tidypics fracasó"
 );
-add_translation("es", $spanish);

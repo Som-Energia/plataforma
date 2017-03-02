@@ -7,7 +7,7 @@
 
 $container_guid = (int)get_input('guid');
 elgg_set_page_owner_guid($container_guid);
-group_gatekeeper();
+elgg_group_gatekeeper();
 $container = get_entity($container_guid);
 if(!$container || !(elgg_instanceof($container, 'group'))) {
 	forward(REFERER);

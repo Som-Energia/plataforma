@@ -27,7 +27,7 @@ if ($album) {
 	elgg_set_page_owner_guid($album->getContainerGUID());
 }
 $owner = elgg_get_page_owner_entity();
-group_gatekeeper();
+elgg_group_gatekeeper();
 
 $photo->addView();
 

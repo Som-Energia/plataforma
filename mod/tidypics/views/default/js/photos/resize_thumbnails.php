@@ -25,7 +25,7 @@ elgg.tidypics.resizethumbnails.run = function(e) {
 	var total = $('#tidypics-resizethumbnails-total').text();
 
 	// Initialize progressbar
-	$('.tidypics-progressbar').progressbar({
+	$('.elgg-progressbar').progressbar({
 		value: 0,
 		max: total
 	});
@@ -92,7 +92,7 @@ elgg.tidypics.resizethumbnails.upgradeBatch = function(offset) {
 		upgradeCount.text(numProcessed);
 
 		// Increase the progress bar
-		$('.tidypics-progressbar').progressbar({ value: numProcessed });
+		$('.elgg-progressbar').progressbar({ value: numProcessed });
 		var total = $('#tidypics-resizethumbnails-total').text();
 
 		if (numProcessed < total) {

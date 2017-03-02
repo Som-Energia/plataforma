@@ -131,17 +131,3 @@
 #uploader {
 	text-shadow: none;
 }
-
-.tidypics-progressbar {
-	height: 20px;
-	border: 1px solid #CCC;
-}
-.ui-progressbar-value {
-	height: 20px;
-	background: green;
-}
-.tidypics-progressbar-counter {
-	float: left;
-	color: white;
-	margin: 1px;
-}

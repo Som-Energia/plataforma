@@ -66,7 +66,7 @@ $body2 .=<<<HTML
 	<span id="tidypics-resizethumbnails-total" class="hidden">$count</span>
 	<span id="tidypics-resizethumbnails-count" class="hidden">0</span>
 	<span id="tidypics-resizethumbnails-action" class="hidden">$action</span>
-	<div class="tidypics-progressbar mvl"><span class="tidypics-progressbar-counter" id="tidypics-resizethumbnails-counter">0%</span></div>
+	<div class="elgg-progressbar mvl"><span class="elgg-progressbar-counter" id="tidypics-resizethumbnails-counter">0%</span></div>
 	<ul class="mvl">
 		<li>$success_count_string <span id="tidypics-resizethumbnails-success-count">0</span></li>
 		<li>$error_count_invalid_image_string <span id="tidypics-resizethumbnails-error-invalid-image-count">0</span></li>

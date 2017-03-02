@@ -37,7 +37,7 @@ try {
 
 } catch (Exception $e) {
 	// remove the bits that were saved
-	delete_entity($image->getGUID());
+	$image->delete();
 	$result = false;
 	echo $e->getMessage();
 }
@@ -46,7 +46,13 @@ if ($result) {
 	$album->prependImageList(array($image->guid));
 
 	if (elgg_get_plugin_setting('img_river_view', 'tidypics') === "all") {
-		add_to_river('river/object/image/create', 'create', $image->getOwnerGUID(), $image->getGUID());
+		elgg_create_river_item(array(
+			'view' => 'river/object/image/create',
+			'action_type' => 'create',
+			'subject_guid' => $image->getOwnerGUID(),
+			'object_guid' => $image->getGUID(),
+			'target_guid' => $album->getGUID(),
+		));
 	}
 }
 

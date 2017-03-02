@@ -5,8 +5,8 @@
  * This displays a listing of all the photos so that they can be sorted
  */
 
-gatekeeper();
-group_gatekeeper();
+elgg_gatekeeper();
+elgg_group_gatekeeper();
 
 // get the album entity
 $album_guid = (int) get_input('guid');

@@ -5,7 +5,7 @@
  *
  */
 
-gatekeeper();
+elgg_gatekeeper();
 
 $owner = elgg_get_logged_in_user_entity();
 
@@ -17,7 +17,7 @@ elgg_push_breadcrumb(elgg_echo('friends'));
 $offset = (int)get_input('offset', 0);
 $limit = (int)get_input('limit', 16);
 
-if ($friends = get_user_friends($owner->guid, "", false, 0)) {
+if ($friends = $owner->getFriends(array('limit' => false))) {
 	$friendguids = array();
 	foreach ($friends as $friend) {
 		$friendguids[] = $friend->getGUID();

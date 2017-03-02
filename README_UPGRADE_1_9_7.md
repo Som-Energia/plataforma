@@ -18,6 +18,8 @@
 ## 4. Post Actualización
   1. Activar modo mantenimento
   2. Ejecutar actualizaciones desde el panel de admin
-  3. Activar mod elgg recaptcha y configurar al gusto
-  4. Activar mod CKEditor
-  5. Desactivar modo manteniminento  
+  3. Activar mod tidypics
+  4. Ejecutar actualizaciones del mod tydipics
+  5. Activar mod elgg recaptcha y configurar al gusto
+  6. Activar mod CKEditor
+  7. Desactivar modo manteniminento  

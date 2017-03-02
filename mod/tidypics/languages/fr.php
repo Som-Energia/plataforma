@@ -1,6 +1,6 @@
 <?php
 
-$french = array(
+return array(
 	'tidypics:disabled' => 'Désactivé',
 	'tidypics:enabled' => 'Activé',
 	'admin:settings:photos' => 'Tidypics',
@@ -227,4 +227,3 @@ La photo peut être consultée ici: %s',
 	'album:blank' => 'Donnez un titre et une description à cet album',
 	'tidypics:upgrade:failed' => 'Mise à jour de Tydipics infructueuse',
 );
-add_translation("fr", $french);

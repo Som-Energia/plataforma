@@ -36,7 +36,7 @@ if ($album_river_view == "set") {
 } else {
 	$image = $album->getCoverImage();
 	if ($image) {
-		$attachments .= elgg_view_entity_icon($image, $preview_size, array(
+		$attachments = elgg_view_entity_icon($image, $preview_size, array(
 			'href' => $image->getIconURL('master'),
 			'img_class' => 'tidypics-photo',
 			'link_class' => 'tidypics-lightbox',

@@ -51,12 +51,13 @@ function tidypics_init() {
 	elgg_register_simplecache_view('js/photos/resize_thumbnails');
 	elgg_register_js('tidypics:resize_thumbnails', $js, 'footer');
 
-	elgg_register_js('tidypics:slideshow', 'mod/tidypics/vendors/PicLensLite/piclens_optimized.js', 'footer');
+	elgg_register_js('tidypics:slideshow', 'mod/tidypics/vendors/PicLensLite/piclens_optimized.js');
 	elgg_register_js('jquery.plupload-tp', 'mod/tidypics/vendors/plupload/js/plupload.full.min.js', 'footer');
-	elgg_register_js('jquery.plupload.ui-tp', 'mod/tidypics/vendors/plupload/js/jquery.plupload.queue/jquery.plupload.queue.min.js', 'footer');
+	elgg_register_js('jquery.plupload.ui-tp', 'mod/tidypics/vendors/plupload/js/jquery.ui.plupload/jquery.ui.plupload.min.js', 'footer');
 	$plupload_language = get_plugload_language();
 	elgg_register_js('jquery.plupload.ui.lang-tp', 'mod/tidypics/vendors/plupload/js/i18n/' . $plupload_language . '.js', 'footer');
-	elgg_register_css('jquery.plupload.ui', 'mod/tidypics/vendors/plupload/js/jquery.plupload.queue/css/jquery.plupload.queue.css');
+	elgg_register_css('jquery.plupload.jqueryui-theme', 'mod/tidypics/vendors/jqueryui/css/smoothness/jquery-ui-1.10.4.custom.min.css');
+	elgg_register_css('jquery.plupload.ui', 'mod/tidypics/vendors/plupload/js/jquery.ui.plupload/css/jquery.ui.plupload.css');
 
 	// Add photos link to owner block/hover menus
 	elgg_register_plugin_hook_handler('register', 'menu:owner_block', 'tidypics_owner_block_menu');
@@ -78,20 +79,20 @@ function tidypics_init() {
 	elgg_extend_view('groups/tool_latest', 'photos/group_tp_images_module');
 
 	// Register widgets
-	elgg_register_widget_type('album_view', elgg_echo("tidypics:widget:albums"), elgg_echo("tidypics:widget:album_descr"), 'profile');
-	elgg_register_widget_type('latest_photos', elgg_echo("tidypics:widget:latest"), elgg_echo("tidypics:widget:latest_descr"), 'profile');
+	elgg_register_widget_type('album_view', elgg_echo("tidypics:widget:albums"), elgg_echo("tidypics:widget:album_descr"), array('profile'));
+	elgg_register_widget_type('latest_photos', elgg_echo("tidypics:widget:latest"), elgg_echo("tidypics:widget:latest_descr"), array('profile'));
 	
 	if (elgg_is_active_plugin('widget_manager')) {
 		//add index widgets for Widget Manager plugin
-		elgg_register_widget_type('index_latest_photos', elgg_echo("tidypics:mostrecent"), elgg_echo('tidypics:mostrecent:description'), "index");
-		elgg_register_widget_type('index_latest_albums', elgg_echo("tidypics:albums_mostrecent"), elgg_echo('tidypics:albums_mostrecent:description'), "index");
+		elgg_register_widget_type('index_latest_photos', elgg_echo("tidypics:mostrecent"), elgg_echo('tidypics:mostrecent:description'), array('index'));
+		elgg_register_widget_type('index_latest_albums', elgg_echo("tidypics:albums_mostrecent"), elgg_echo('tidypics:albums_mostrecent:description'), array('index'));
 
 		//add groups widgets for Widget Manager plugin
-		elgg_register_widget_type('groups_latest_photos', elgg_echo("tidypics:mostrecent"), elgg_echo('tidypics:mostrecent:description'), "groups");
-		elgg_register_widget_type('groups_latest_albums', elgg_echo("tidypics:albums_mostrecent"), elgg_echo('tidypics:albums_mostrecent:description'), "groups");
+		elgg_register_widget_type('groups_latest_photos', elgg_echo("tidypics:mostrecent"), elgg_echo('tidypics:mostrecent:description'), array('groups'));
+		elgg_register_widget_type('groups_latest_albums', elgg_echo("tidypics:albums_mostrecent"), elgg_echo('tidypics:albums_mostrecent:description'), array('groups'));
 
 		//register title urls for widgets
-		elgg_register_plugin_hook_handler('widget_url', 'widget_manager', "tidypics_widget_urls", 499);
+		elgg_register_plugin_hook_handler("entity:url", "object", "tidypics_widget_urls");
 	}
 
 	// RSS extensions for embedded media
@@ -102,14 +103,15 @@ function tidypics_init() {
 	elgg_register_plugin_hook_handler('permissions_check:metadata', 'object', 'tidypics_group_permission_override');
 
 	// notifications
-	elgg_register_event_handler('notify', 'album', 'object_notifications'); 
-	elgg_register_plugin_hook_handler('notify:entity:message', 'object', 'tidypics_notify_message');
+	elgg_register_notification_event('object', 'album', array('album_first', 'album_more'));
+	elgg_register_plugin_hook_handler('prepare', 'notification:album_first:object:album', 'tidypics_notify_message');
+	elgg_register_plugin_hook_handler('prepare', 'notification:album_more:object:album', 'tidypics_notify_message');
 
 	// allow people in a walled garden to use flash uploader
 	elgg_register_plugin_hook_handler('public_pages', 'walled_garden', 'tidypics_walled_garden_override');
 
 	// override the default url to view a tidypics_batch object
-	elgg_register_entity_url_handler('object', 'tidypics_batch', 'tidypics_batch_url_handler');
+	elgg_register_plugin_hook_handler('entity:url', 'object', 'tidypics_batch_url_handler');
 
 	// custom layout for comments on tidypics river entries
 	elgg_register_plugin_hook_handler('creating', 'river', 'tidypics_comments_handler');
@@ -563,34 +565,32 @@ function tidypics_group_permission_override($hook, $type, $result, $params) {
  */
 function tidypics_notify_message($hook, $type, $notification, $params) {
 
-	$entity = $params['entity'];
-	$to_entity = $params['to_entity'];
-	$method = $params['method'];
+	$entity = $params['event']->getObject();
 
 	if (elgg_instanceof($entity, 'object', 'album')) {
-		if ($entity->new_album) {
-			// stops notification from being sent
-			return false;
-		}
 
-		if ($entity->first_upload) {
-			$descr = $entity->description;
-			$title = $entity->getTitle();
-			$owner = $entity->getOwnerEntity();
-			return elgg_echo('tidypics:newalbum', array($owner->name)) . ': ' . $title . "\n\n" . $descr . "\n\n" . $entity->getURL();
+		$owner = $params['event']->getActor();
+		$recipient = $params['recipient'];
+		$language = $params['language'];
+		$method = $params['method'];
+
+		$descr = $entity->description;
+		$title = $entity->getTitle();
+
+		if ($type == 'notification:album_first:object:album') {
+			$notification->subject = elgg_echo('tidypics:notify:subject_newalbum', array($entity->title), $language);
+			$notification->body = elgg_echo('tidypics:notify:body_newalbum', array($owner->name, $title, $entity->getURL()), $language);
+			$notification->summary = elgg_echo('tidypics:notify:summary_newalbum', array($entity->title), $language);
+
+			return $notification;
 		} else {
-			if ($entity->shouldNotify()) {
-				$descr = $entity->description;
-				$title = $entity->getTitle();
-				$user = elgg_get_logged_in_user_entity();
-				if (!$user) {
-					$user = $entity->getOwnerEntity();
-				}
-				return elgg_echo('tidypics:updatealbum', array($user->name, $title)) . ': ' . $entity->getURL();
-			}
+			$notification->subject = elgg_echo('tidypics:notify:subject_updatealbum', array($entity->title), $language);
+			$notification->body = elgg_echo('tidypics:notify:body_updatealbum', array($owner->name, $title, $entity->getURL()), $language);
+			$notification->summary = elgg_echo('tidypics:notify:summary_updatealbum', array($entity->title), $language);
+
+			return $notification;
 		}
 	}
-	return null;
 }
 
 /**
@@ -606,15 +606,18 @@ function tidypics_walled_garden_override($hook, $type, $pages) {
 /**
  * return the album url of the album the tidypics_batch entitities belongs to
  */
-function tidypics_batch_url_handler($batch) {
-	if (!$batch->getOwnerEntity()) {
-		// default to a standard view if no owner.
-		return false;
+function tidypics_batch_url_handler($hook, $type, $url, $params) {
+	$batch = $params['entity'];
+	if (elgg_instanceof($batch, 'object', 'tidypics_batch')) {
+		if (!$batch->getOwnerEntity()) {
+			// default to a standard view if no owner.
+			return false;
+		}
+
+		$album = get_entity($batch->container_guid);
+
+		return $album->getURL();
 	}
-
-	$album = get_entity($batch->container_guid);
-
-	return $album->getURL();
 }
 
 /**
@@ -626,18 +629,24 @@ function tidypics_comments_handler($hook, $type, $value, $params) {
 
 	$result = $value;
 
-	$subtype = $value['subtype'];
 	$action_type = $value['action_type'];
 	if ($action_type != 'comment') {
 		return;
 	}
 
+	$target_guid =  $value['target_guid'];
+	if (!$target_guid) {
+		return;
+	}
+	$target_entity = get_entity($target_guid);
+	$subtype = $target_entity->getSubtype();
+
 	if ($subtype == 'image') {
 		// update river entry attributes
-		$result['view'] = 'river/annotation/comment/image';
+		$result['view'] = 'river/object/comment/image';
 	} else if ($subtype == 'album') {
 		// update river entry attributes
-		$result['view'] = 'river/annotation/comment/album';
+		$result['view'] = 'river/object/comment/album';
 	} else {
 		return;
 	}

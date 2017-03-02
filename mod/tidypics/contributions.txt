@@ -1,6 +1,19 @@
 Changelog and contributors list
 
 ------------------------------------------------------------------------
+Version 1.9.6 Change List
+Release Date: 31/01/2015
+------------------------------------------------------------------------
+BEGIN VERSION 1.9.6 CHANGES
+------------------------------------------------------------------------
+* Same code base as 1.8.6 with necessary modifications to work on Elgg 1.9.
+Contributors:
+  * iionly
+------------------------------------------------------------------------
+END VERSION 1.9.6 CHANGES
+------------------------------------------------------------------------
+
+------------------------------------------------------------------------
 Version 1.8.6 Change List
 Release Date: 31/01/2015
 ------------------------------------------------------------------------
@@ -12,6 +25,23 @@ Contributors:
   * iionly
 ------------------------------------------------------------------------
 END VERSION 1.8.6 CHANGES
+------------------------------------------------------------------------
+
+------------------------------------------------------------------------
+Version 1.9.5 Change List
+Release Date: 10/01/2015
+------------------------------------------------------------------------
+BEGIN VERSION 1.9.5 CHANGES
+------------------------------------------------------------------------
+* Same code base as 1.8.5 with necessary modifications to work on Elgg 1.9.
+Additionally:
+* Fixed an error in 2014111701.php upgrade script on handling of ElggBatches that could have resulted in the upgrade getting stuck (script in new version is now 2014111801.php),
+* River entries modified (target_guid of corresponding album added) for river entries connected to group albums to show up in lists of group activities,
+* Upgrade script added for existing river entries to also show up in lists of group activities.
+Contributors:
+  * iionly
+------------------------------------------------------------------------
+END VERSION 1.9.5 CHANGES
 ------------------------------------------------------------------------
 
 ------------------------------------------------------------------------
@@ -43,6 +73,34 @@ END VERSION 1.8.5 CHANGES
 ------------------------------------------------------------------------
 
 ------------------------------------------------------------------------
+Version 1.9.4.1 Change List
+Release Date: 17/11/2014
+------------------------------------------------------------------------
+BEGIN VERSION 1.9.4.1 CHANGES
+------------------------------------------------------------------------
+* Added Tidypics upgrade script to be executed after upgrading a site to Elgg 1.9.5 to catch any comments made on images and albums possibly not yet upgraded by Tidypics previously due to a bug in Elgg core resulting in the comments migration when upgrading from Elgg 1.8 left incomplete (fixed in Elgg 1.9.5).
+BEFORE running the Tidypics upgrade (from Tidypics' settings page) check for any pending Elgg core upgrades and if there are any (especially comments migration!) FIRST run the core upgrades. Depending on the number of comments on your site the Tidypics upgrade might take a while to finish. In any case, make a database backup before running the Tidypics upgrade!
+Contributors:
+  * iionly
+------------------------------------------------------------------------
+END VERSION 1.9.4.1 CHANGES
+------------------------------------------------------------------------
+
+------------------------------------------------------------------------
+Version 1.9.4 Change List
+Release Date: 07/10/2014
+------------------------------------------------------------------------
+BEGIN VERSION 1.9.4 CHANGES
+------------------------------------------------------------------------
+* Same code base as 1.8.4 with necessary modifications to work on Elgg 1.9,
+* Getting slideshow to work again (thanks to chenkai for providing some info in a discussion post on the community site that put me on the right track to fix it). As on Elgg 1.8 the slideshow also has a "No-Flash required" fallback now.
+Contributors:
+  * iionly
+------------------------------------------------------------------------
+END VERSION 1.9.4 CHANGES
+------------------------------------------------------------------------
+
+------------------------------------------------------------------------
 Version 1.8.4 Change List
 Release Date: 07/10/2014
 ------------------------------------------------------------------------
@@ -53,6 +111,20 @@ Contributors:
   * iionly
 ------------------------------------------------------------------------
 END VERSION 1.8.4 CHANGES
+------------------------------------------------------------------------
+
+------------------------------------------------------------------------
+Version 1.9.3 Change List
+Release Date: 05/10/2014
+------------------------------------------------------------------------
+BEGIN VERSION 1.9.3 CHANGES
+------------------------------------------------------------------------
+* Same code base as 1.8.3 with necessary modifications to work on Elgg 1.9,
+* Fix of group album handling. Group members (who are no admin) can upload images again to any group album (not only their own).
+Contributors:
+  * iionly
+------------------------------------------------------------------------
+END VERSION 1.9.3 CHANGES
 ------------------------------------------------------------------------
 
 ------------------------------------------------------------------------
@@ -72,6 +144,20 @@ END VERSION 1.8.3 CHANGES
 ------------------------------------------------------------------------
 
 ------------------------------------------------------------------------
+Version 1.9.2 Change List
+Release Date: 06/09/2014
+------------------------------------------------------------------------
+BEGIN VERSION 1.9.2 CHANGES
+------------------------------------------------------------------------
+* Same code base as 1.8.2 with necessary modifications to work on Elgg 1.9,
+* Fix of group album handling. Group members (who are no admin) can upload images again to any group album (not only their own).
+Contributors:
+  * iionly
+------------------------------------------------------------------------
+END VERSION 1.9.2 CHANGES
+------------------------------------------------------------------------
+
+------------------------------------------------------------------------
 Version 1.8.2 Change List
 Release Date: 06/09/2014
 ------------------------------------------------------------------------
@@ -85,6 +171,20 @@ Contributors:
   * iionly
 ------------------------------------------------------------------------
 END VERSION 1.8.2 CHANGES
+------------------------------------------------------------------------
+
+------------------------------------------------------------------------
+Version 1.9.1beta16 Change List
+Release Date: 10/08/2014
+------------------------------------------------------------------------
+BEGIN VERSION 1.9.1beta16 CHANGES
+------------------------------------------------------------------------
+ * Same code base as 1.8.1beta16 with necessary modifications to work on Elgg 1.9,
+ * Allow sorting of images in queue before starting uploading using HTML5 uploader.
+Contributors:
+  * iionly
+------------------------------------------------------------------------
+END VERSION 1.9.1beta16 CHANGES
 ------------------------------------------------------------------------
 
 ------------------------------------------------------------------------
@@ -103,6 +203,20 @@ END VERSION 1.8.1beta16 CHANGES
 ------------------------------------------------------------------------
 
 ------------------------------------------------------------------------
+Version 1.9.1beta15 Change List
+Release Date: 20/07/2014
+------------------------------------------------------------------------
+BEGIN VERSION 1.9.1beta15 CHANGES
+------------------------------------------------------------------------
+ * Same code base as 1.8.1beta15 with necessary modifications to work on Elgg 1.9 (fix of limitation to 10 images to be uploaded in one batch when using Plupload HTML5/HTML4 uploader),
+ * Fix of deprecated usage of getFriends() function on Elgg 1.9.
+Contributors:
+  * iionly
+------------------------------------------------------------------------
+END VERSION 1.9.1beta15 CHANGES
+------------------------------------------------------------------------
+
+------------------------------------------------------------------------
 Version 1.8.1beta15 Change List
 Release Date: 20/07/2014
 ------------------------------------------------------------------------
@@ -113,6 +227,23 @@ Contributors:
   * iionly
 ------------------------------------------------------------------------
 END VERSION 1.8.1beta15 CHANGES
+------------------------------------------------------------------------
+
+------------------------------------------------------------------------
+Version 1.9.1beta14 Change List
+Release Date: 09/06/2014
+------------------------------------------------------------------------
+BEGIN VERSION 1.9.1beta14 CHANGES
+------------------------------------------------------------------------
+ * Same code base as 1.8.1beta14 with necessary modifications to work on Elgg 1.9,
+ * Nicer UI theme for the HTML5/HTML4 uploader with list view or thumbnails preview (default) of image files in upload queue,
+ * Limit size of lightbox view to a maximum of 95% of width/height of window.
+Contributors:
+  * iionly
+  * YaNoo
+  * Joaquín
+------------------------------------------------------------------------
+END VERSION 1.9.1beta14 CHANGES
 ------------------------------------------------------------------------
 
 ------------------------------------------------------------------------
@@ -129,6 +260,23 @@ Contributors:
   * Joaquín
 ------------------------------------------------------------------------
 END VERSION 1.8.1beta14 CHANGES
+------------------------------------------------------------------------
+
+------------------------------------------------------------------------
+Version 1.9.1beta13 Change List
+Release Date: 02/04/2014
+------------------------------------------------------------------------
+BEGIN VERSION 1.9.1beta13 CHANGES
+------------------------------------------------------------------------
+ATTENTION: before executing the upgrade script that comes with this version you should have finished the upgrade process of Elgg core from 1.8 to 1.9 if you are not starting on a fresh Elgg 1.9 installation. It's important that all existing comment annotations have already been converted to comment entities. And PLEASE BACKUP YOUR DATABASE before executing the Tidypics upgrade. The backup is important because the script might possibly take some time to finish depending on how many database entries are in need to be updated.
+
+ * Same code base as 1.8.1beta13 with necessary modifications to work on Elgg 1.9,
+ * The upgrade script that comes with this version does basically the same as the upgrade script included in 1.8.1beta13: comments formerly made on the activity page are assigned to the uploaded image (on single image uploads) or albums. This is necessary for all existing comments to show up in the same way as future comments. The comments will still be displayed on the activity page but in addition also automatically on image pages or album pages respectively. In addition to the changes done by the Elgg 1.8 version of Tidypics 1.8.1beta13 the version for Elgg 1.9 also restores the specific Tidypics comment views (with thumbnails) on the activity page that were changed to a default comments view by Elgg core when upgrading to 1.9.
+Contributors:
+  * iionly
+  * Juho Jaakkola
+------------------------------------------------------------------------
+END VERSION 1.9.1beta13 CHANGES
 ------------------------------------------------------------------------
 
 ------------------------------------------------------------------------
@@ -154,6 +302,23 @@ Contributors:
   * Juho Jaakkola
 ------------------------------------------------------------------------
 END VERSION 1.8.1beta13 CHANGES
+------------------------------------------------------------------------
+
+------------------------------------------------------------------------
+Version 1.9.1beta12 Change List
+Release Date: 03/01/2014
+------------------------------------------------------------------------
+BEGIN VERSION 1.9.1beta12 CHANGES
+------------------------------------------------------------------------
+ * Same code base as 1.8.1beta12 with necessary modifications to work on Elgg 1.9,
+ * addtional Elgg 1.9 specific changes:
+   - Fix of some deprecation issues that turned up on Elgg 1.9,
+   - Fix of "Recently commented  photos" and "Most commented..." pages to work again on Elgg 1.9 (necessary due to the change in Elgg 1.9 of handling comments as ElggComment entities instead of annotations),
+   - Fix of river comment entries to optionally include a thumbnail of the image / the album cover to work again on Elgg 1.9 (ATTENTION: only new river entries will show the thumbnail images automatically. For getting existing river entries - especially entries created on Elgg 1.8 previously - to also show the thumbnail images again you will have to execute an upgrade script. You can execute this script by clicking on the "Upgrade" button on the Tidypics settings page. BEFORE executing the Tidypics-specific upgrade FIRST execute any outstanding upgrades of Elgg 1.9 core - especially the migration of all comment annotations to the new Elgg comment objects!!!).
+Contributors:
+  * iionly
+------------------------------------------------------------------------
+END VERSION 1.9.1beta12 CHANGES
 ------------------------------------------------------------------------
 
 ------------------------------------------------------------------------
@@ -204,12 +369,25 @@ END VERSION 1.8.1beta11 CHANGES
 ------------------------------------------------------------------------
 
 ------------------------------------------------------------------------
+Version 1.9.1beta10 Change List
+Release Date: 17/08/2013
+------------------------------------------------------------------------
+BEGIN VERSION 1.9.1beta10 CHANGES
+------------------------------------------------------------------------
+ * Same code base as 1.8.1beta10 with necessary modifications to work on Elgg 1.9.
+Contributors:
+  * iionly
+------------------------------------------------------------------------
+END VERSION 1.9.1beta10 CHANGES
+------------------------------------------------------------------------
+
+------------------------------------------------------------------------
 Version 1.8.1beta10 Change List
 Release Date: 17/08/2013
 ------------------------------------------------------------------------
 BEGIN VERSION 1.8.1beta10 CHANGES
 ------------------------------------------------------------------------
- * Some preparations for compatibility with Elgg 1.9 (though I will release a separate version of Tidypics for Elgg 1.9!),
+ * Some preparations for compatibility with Elgg 1.9 (currently it looks like I will have to release a version for Elgg 1.9 separately though),
  * Replacement of a deprecated function,
  * Small improvement in Flash uploader error handling,
  * New plugin option: use of slideshow optional,

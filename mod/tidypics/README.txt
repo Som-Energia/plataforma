@@ -1,12 +1,19 @@
-Tidypics plugin for Elgg 1.8
-Latest Version: 1.8.6
+Tidypics plugin for Elgg 1.9
+Latest Version: 1.9.6
 Released: 2015-01-31
 Contact: iionly@gmx.de
 License: GNU General Public License version 2
 Copyright: (c) iionly 2013-2015, (C) Cash Costello 2011-2015
 
 
-The photo gallery plugin for Elgg 1.8 (requires Elgg 1.8.16 at minimum! Please upgrade your Elgg installation first before installing/upgrading the Tidypics plugin).
+The photo gallery plugin for Elgg 1.9.
+
+
+Requirements:
+
+As of version 1.9.4.1 of Tidypics the minimum Elgg version required is Elgg 1.9.5 (if you haven't upgraded your site from Elgg 1.8 to 1.9 it's not of much relevance but otherwise the comments migration done by Elgg core might have not been correctly completed and Tidypics has to touch the comments entries also again AFTER upgrading to Elgg 1.9.5 and finishing of any pending core upgrades).
+
+
 
 Features:
 
@@ -48,9 +55,21 @@ IMPORTANT: If you have a previous version of the tidypics plugin installed, firs
 
 Changelog:
 
+Changes for release 1.9.6 (by iionly):
+- Same code base as 1.8.6 with necessary modifications to work on Elgg 1.9.
+
+
 Changes for release 1.8.6 (by iionly):
 - UI-improvements on thumbnails re-creation page (progress bar),
 - Fine-tuning of sidebar entries with addition of "Latest comments" and "Tagcloud" blocks where appropriate.
+
+
+Changes for release 1.9.5 (by iionly):
+- Same code base as 1.8.5 with necessary modifications to work on Elgg 1.9.
+Additionally:
+- Fixed an error in 2014111701.php upgrade script on handling of ElggBatches that could have resulted in the upgrade getting stuck (script in new version is now 2014111801.php),
+- River entries modified (target_guid of corresponding album added) for river entries connected to group albums to show up in lists of group activities,
+- Upgrade script added for existing river entries to also show up in lists of group activities.
 
 
 Changes for release 1.8.5 (by iionly):
@@ -71,8 +90,24 @@ Changes for release 1.8.5 (by iionly):
 - French translations added (thanks to Facyla).
 
 
+Changes for release 1.9.4.1 (by iionly):
+- Added Tidypics upgrade script to be executed after upgrading a site to Elgg 1.9.5 to catch any comments made on images and albums possibly not yet upgraded by Tidypics previously due to a bug in Elgg core resulting in the comments migration when upgrading from Elgg 1.8 left incomplete (fixed in Elgg 1.9.5).
+
+BEFORE running the Tidypics upgrade (from Tidypics' settings page) check for any pending Elgg core upgrades and if there are any (especially comments migration!) FIRST run the core upgrades. Depending on the number of comments on your site the Tidypics upgrade might take a while to finish. In any case, make a database backup before running the Tidypics upgrade!
+
+
+Changes for release 1.9.4 (by iionly):
+- Same code base as 1.8.4 with necessary modifications to work on Elgg 1.9,
+- Getting slideshow to work again (thanks to chenkai for providing some info in a discussion post on the community site that put me on the right track to fix it). As on Elgg 1.8 the slideshow also has a "No-Flash required" fallback now.
+
+
 Changes for release 1.8.4 (by iionly):
 - "No-Flash required" fallback for slideshow.
+
+
+Changes for release 1.9.3 (by iionly):
+- Same code base as 1.8.3 with necessary modifications to work on Elgg 1.9,
+- Fixed a deprecation issue (with the hopefully soon to be released Widget Manager plugin for Elgg 1.9) with widgets urls (clickable title link).
 
 
 Changes for release 1.8.3 (by iionly):
@@ -82,11 +117,22 @@ Changes for release 1.8.3 (by iionly):
 - Disable unintended text shadow within html5 uploader at least in some cases if this text styling has been enabled by other plugins and unwantedly inherited by plupload (can't prevent text shadow in all circumstances as a theme plugin might override Tidypics' CSS).
 
 
+Changes for release 1.9.2 (by iionly):
+- Same code base as 1.8.2 with necessary modifications to work on Elgg 1.9,
+- Fix of group album handling. Group members (who are no admin) can upload images again to any group album (not only their own).
+
+
 Changes for release 1.8.2 (by iionly):
-- No longer beta! Apart from the things mentioned in the ToDo section everything should work. If not, please tell me.
+- No longer beta! Apart from the things mentioned in the ToDo section everything should work. If not, please tell me,
 - Rework of river activity settings (check the settings and make adjustments if necessary):
   * new option to set preview image size for all kind of Tidypics' river entries,
   * click on preview image in river now opens full size version of the image in a lightbox popup.
+
+
+Changes for release 1.9.1beta16 (by iionly):
+
+- Same code base as 1.8.1beta16 with necessary modifications to work on Elgg 1.9,
+- Allow sorting of images in queue before starting uploading using HTML5 uploader.
 
 
 Changes for release 1.8.1beta16 (by iionly):
@@ -96,15 +142,36 @@ Changes for release 1.8.1beta16 (by iionly):
 - Using ElggBatch for image deletion when deleting an album (and its possibly numberous images) to avoid memory issues.
 
 
+Changes for release 1.9.1beta15 (by iionly):
+
+- Same code base as 1.8.1beta15 with necessary modifications to work on Elgg 1.9 (fix of limitation to 10 images to be uploaded in one batch when using Plupload HTML5/HTML4 uploader),
+- Fix of deprecated usage of getFriends() function on Elgg 1.9.
+
+
 Changes for release 1.8.1beta15 (by iionly):
 
 - Fix of limitation to 10 images to be uploaded in one batch when using Plupload HTML5/HTML4 uploader.
+
+
+Changes for release 1.9.1beta14 (by iionly, YaNoo and Joaquín):
+
+- Same code base as 1.8.1beta14 with necessary modifications to work on Elgg 1.9,
+- Nicer UI theme for the HTML5/HTML4 uploader with list view or thumbnails preview (default) of image files in upload queue,
+- Limit size of lightbox view to a maximum of 95% of width/height of window.
 
 
 Changes for release 1.8.1beta14 (by iionly, YaNoo and Joaquín):
 
 - Uploadify flash uploader replaced by Plupload HTML5/HTML4 uploader (thanks to YaNoo for taking the initiative and providing a PR - otherwise you would have had to wait longer for me to implement it),
 - Spanish language file added (provided by Joaquín).
+
+
+Changes for release 1.9.1beta13 (by iionly and Juho Jaakkola):
+
+ATTENTION: before executing the upgrade script that comes with this version you should have finished the upgrade process of Elgg core from 1.8 to 1.9 if you are not starting on a fresh Elgg 1.9 installation. It's important that all existing comment annotations have already been converted to comment entities. And PLEASE BACKUP YOUR DATABASE before executing the Tidypics upgrade. The backup is important because the script might possibly take some time to finish depending on how many database entries are in need to be updated.
+
+- Same code base as 1.8.1beta13 with necessary modifications to work on Elgg 1.9,
+- The upgrade script that comes with this version does basically the same as the upgrade script included in 1.8.1beta13: comments formerly made on the activity page are assigned to the uploaded image (on single image uploads) or albums. This is necessary for all existing comments to show up in the same way as future comments. The comments will still be displayed on the activity page but in addition also automatically on image pages or album pages respectively. In addition to the changes done by the Elgg 1.8 version of Tidypics 1.8.1beta13 the version for Elgg 1.9 also restores the specific Tidypics comment views (with thumbnails) on the activity page that were changed to a default comments view by Elgg core when upgrading to 1.9.
 
 
 Changes for release 1.8.1beta13 (by iionly and Juho Jaakkola):
@@ -123,8 +190,15 @@ ATTENTION: this new release contains an update script that changes database entr
 		3. upgrading of likes on river entries: here's a check included if a user has already liked the album or image the like made to the river entry would get moved to. If there's not already an existing like the like will get moved from the river entry and added to the album/image. If the user has already liked the image or corresponding album the like will not get added to avoid duplicate likings.
 
 
-Changes for release 1.8.1beta12 (by iionly):
+Changes for release 1.9.1beta12 (by iionly):
+- Same code base as 1.8.1beta12 with necessary modifications to work on Elgg 1.9,
+- addtional Elgg 1.9 specific changes:
+  * Fix of some deprecation issues that turned up on Elgg 1.9,
+  * Fix of "Recently commented  photos" and "Most commented..." pages to work again on Elgg 1.9 (necessary due to the change in Elgg 1.9 of handling comments as ElggComment entities instead of annotations),
+  * Fix of river comment entries to optionally include a thumbnail of the image / the album cover to work again on Elgg 1.9 (ATTENTION: only new river entries will show the thumbnail images automatically. For getting existing river entries - especially entries created on Elgg 1.8 previously - to also show the thumbnail images again you will have to execute an upgrade script. You can execute this script by clicking on the "Upgrade" button on the Tidypics settings page. BEFORE executing the Tidypics-specific upgrade FIRST execute any outstanding upgrades of Elgg 1.9 core - especially the migration of all comment annotations to the new Elgg comment objects!!!).
 
+
+Changes for release 1.8.1beta12 (by iionly):
 - Added placeholder images to be displayed in case no images have been uploaded to an album yet in the image sizes previously missing,
 - On deletion of an album the corresponding album folder in data directory gets deleted and no longer the (empty) album folder remains,
 - Flash uploader fixed in the case of group albums when someone else than the album creator wants to upload images to a group album,
@@ -151,6 +225,10 @@ Changes for release 1.8.1beta11 (by iionly):
     - if possible and available on your server use the "ImageMagick executable". Generally, this library has a much smaller memory requirement compared to the GD library both for image resizing (i.e. creation of thumbnail preview images) and orientation correction of images. Additionally, the exif information saved in an image file will be preserved both during resizing and orientation correction processing,
     - next best choice after "ImageMagick executable" is the "imagick PHP extension". It also has a low memory consumption compared to the GD library but you might lose exif information during image processing,
     - the GD library should be available on any server (as Elgg core requires it anyway). The memory requirement of the GD library can be quite high both for creation of thumbnails and image orientation corrections. The memory requirement is depending not on the image file size in the first place but on image resolution, color depth per pixel and color channels per pixel (so even a small sized image file might require more memory than available on the server). If you use the GD library for Tidypics on your server, your users might not be able to upload larger images. Additionaly, exif information saved in the image files might get lost during image orientation correction.
+
+
+Changes for release 1.9.1beta10 (by iionly):
+- Same code base as 1.8.1beta10 with necessary modifications to work on Elgg 1.9.
 
 
 Changes for release 1.8.1beta10 (by iionly):

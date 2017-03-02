@@ -20,19 +20,27 @@ elgg.tidypics.uploading.init = function() {
 		}
 	});
 
-	$("#uploader").pluploadQueue({
+	$("#uploader").plupload({
 		// General settings
 		runtimes : 'html5,html4',
 		url : elgg.config.wwwroot + 'action/photos/image/ajax_upload',
 		file_data_name : 'Image',
 
 		dragdrop: true,
+		sortable: true,
 		multipart_params : data,
 		max_file_size : '<?php echo $maxfilesize; ?>mb',
 
 		filters : [
 			{title : "<?php echo elgg_echo('tidypics:uploader:filetype'); ?>", extensions : "jpg,jpeg,gif,png"}
         ],
+
+		// Views to activate
+		views: {
+			list: true,
+			thumbs: true,
+			active: 'thumbs'
+		},
 
 		init : {
 			UploadComplete: function(up, files) {

@@ -6,7 +6,7 @@
  * @license http://www.gnu.org/licenses/gpl-2.0.html GNU General Public License v2
  */
 
-gatekeeper();
+elgg_gatekeeper();
 
 $album_guid = (int) get_input('guid');
 if (!$album_guid) {
@@ -29,6 +29,7 @@ if (!$album->getContainerEntity()->canWriteToContainer()) {
 // set page owner based on container (user or group)
 elgg_set_page_owner_guid($album->getContainerGUID());
 $owner = elgg_get_page_owner_entity();
+elgg_group_gatekeeper();
 
 $title = elgg_echo('album:addpix');
 
@@ -46,6 +47,7 @@ if ($uploader == 'basic') {
 	elgg_load_js('jquery.plupload-tp');
 	elgg_load_js('jquery.plupload.ui-tp');
 	elgg_load_js('jquery.plupload.ui.lang-tp');
+	elgg_load_css('jquery.plupload.jqueryui-theme');
 	elgg_load_css('jquery.plupload.ui');
 	elgg_load_js('tidypics:uploading');
 	$content = elgg_view('forms/photos/ajax_upload', array('entity' => $album));

@@ -1,6 +1,6 @@
 <?php
 
-$english =  array(
+return array(
 		// Hack for core bug
 		'untitled' => "untitled",
 
@@ -361,4 +361,3 @@ View and comment on the album:
 
 		'tidypics:upgrade:failed' => "The upgrade of Tidypics failed"
 );
-add_translation("en", $english);

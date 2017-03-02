@@ -15,22 +15,25 @@ $limit = (int)get_input('limit', 16);
 $start = mktime(0, 0, 0, 1, 1, date("Y"));
 $end = time();
 
+$db_prefix = elgg_get_config('dbprefix');
 $options = array(
 	'type' => 'object',
 	'subtype' => 'image',
 	'limit' => $limit,
 	'offset' => $offset,
-	'annotation_name' => 'generic_comment',
-	'calculation' => 'count',
-	'annotation_created_time_lower' => $start,
-	'annotation_created_time_upper' => $end,
-	'order_by' => 'annotation_calculation desc',
+	'selects' => array("count( * ) AS views"),
+	'joins' => array(
+		"JOIN {$db_prefix}entities ce ON ce.container_guid = e.guid",
+		"JOIN {$db_prefix}entity_subtypes cs ON ce.subtype = cs.id AND cs.subtype = 'comment'"),
+	'wheres' => array("ce.time_created BETWEEN {$start} AND {$end}"),
+	'group_by' => 'e.guid',
+	'order_by' => "views DESC",
 	'full_view' => false,
 	'list_type' => 'gallery',
 	'gallery_class' => 'tidypics-gallery'
 );
 
-$result = elgg_list_entities_from_annotation_calculation($options);
+$result = elgg_list_entities($options);
 
 $title = elgg_echo('tidypics:mostcommentedthisyear');
 

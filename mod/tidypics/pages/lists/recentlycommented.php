@@ -1,7 +1,7 @@
 <?php
 
 /**
-  * Images recently commented on - world view only
+ * Images recently commented on - world view only
  *
  */
 
@@ -12,19 +12,22 @@ elgg_push_breadcrumb(elgg_echo('tidypics:recentlycommented'));
 $offset = (int)get_input('offset', 0);
 $limit = (int)get_input('limit', 16);
 
+$db_prefix = elgg_get_config('dbprefix');
 $options = array(
 	'type' => 'object',
 	'subtype' => 'image',
 	'limit' => $limit,
 	'offset' => $offset,
-	'annotation_name' => 'generic_comment',
-	'order_by_annotation' => "n_table.time_created desc",
+	'joins' => array(
+		"JOIN {$db_prefix}entities ce ON ce.container_guid = e.guid",
+		"JOIN {$db_prefix}entity_subtypes cs ON ce.subtype = cs.id AND cs.subtype = 'comment'"),
+	'order_by' => "ce.time_created DESC",
 	'full_view' => false,
 	'list_type' => 'gallery',
 	'gallery_class' => 'tidypics-gallery'
 );
 
-$result = elgg_list_entities_from_annotations($options);
+$result = elgg_list_entities($options);
 
 $title = elgg_echo('tidypics:recentlycommented');
 
