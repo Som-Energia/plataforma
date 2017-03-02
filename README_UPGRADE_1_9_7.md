@@ -9,6 +9,7 @@
   1. Desactivar mod TinyMCE  
   2. Desactivar mod recaptcha
   3. Desactivar mod mentions
+  4. Desactivar mod tidypics
 
 ## 3. Actualización
   1. Subir la actualización.
