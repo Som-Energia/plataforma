@@ -8,6 +8,11 @@
 ## 2. Pre Actualización
   1. Desactivar mod tidypics
   2. Desactivar mod oauth_api
+  3. Desactivar mod bright-theme
+  4. Desactivar mod following
+  5. Desactivar mod embed-extender
+  6. Desactivar mod twitter widget
+  7. Desactivar mod simplepie
 
 ## 3. Actualización
   1. Subir la actualización.
