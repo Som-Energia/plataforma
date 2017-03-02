@@ -1,4 +1,4 @@
-<?php 
+<?php
 	
 	// get plugin
 	$settings = $vars["entity"];
@@ -18,7 +18,7 @@
 	// sorting
 	$sort_options =  array(
 		"e.time_created" 	=> elgg_echo("file_tools:list:sort:time_created"),
-		"oe.title" 			=> elgg_echo("title"), 
+		"oe.title" 			=> elgg_echo("title"),
 		"oe.description"	=> elgg_echo("description"),
 		"simpletype" 		=> elgg_echo("file_tools:list:sort:type")
 	);
@@ -27,6 +27,15 @@
 		"asc" 	=> elgg_echo("file_tools:list:sort:asc"),
 		"desc"	=> elgg_echo("file_tools:list:sort:desc")
 	);
+	
+	$list_length = (int) $settings->list_length;
+	if ($list_length == 0) {
+		$list_length = 50;
+	}
+	$list_length_options = array(
+		-1 => elgg_echo("file_tools:settings:list_length:unlimited")
+	);
+	$list_length_options += array_combine(range(10, 200, 10), range(10, 200, 10));
 	
 	// get settings
 	$allowed_extensions = file_tools_allowed_extensions();
@@ -55,5 +64,11 @@
 	echo "&nbsp;" . elgg_view("input/dropdown", array("name" => "params[sort]", "value" =>  $settings->sort, "options_values" => $sort_options));
 	echo "&nbsp;";
 	echo elgg_view("input/dropdown", array("name" => "params[sort_direction]", "value" =>  $settings->sort_direction, "options_values" => $sort_direction));
-	echo "</div>"; 
+	echo "</div>";
+	
+	// limit folder listing
+	echo "<div>";
+	echo "<label>" . elgg_echo("file_tools:settings:list_length") . "</label>";
+	echo "&nbsp;" . elgg_view("input/dropdown", array("name" => "params[list_length]", "value" => $list_length, "options_values" => $list_length_options));
+	echo "</div>";
 	

@@ -47,7 +47,7 @@
 	if($comment_count > 0){
 		$comments_link = elgg_view("output/url", array(
 			"href" => $file->getURL() . "#file-comments",
-			"text" => elgg_echo("comments") . " ($comments_count)",
+			"text" => elgg_echo("comments") . " ($comment_count)",
 			"is_trusted" => true,
 		));
 	}
@@ -72,6 +72,37 @@
 
 	if($full_view && !elgg_in_context("gallery")) {
 		// normal full view
+    
+	    // add folder structure to the breadcrumbs
+		if(file_tools_use_folder_structure()){
+			// @todo this should probably be moved to the file view page, but that is currently not under control of file_tools
+			$endpoint = elgg_pop_breadcrumb();
+			
+			$parent_folder = elgg_get_entities_from_relationship(array(
+		       'relationship' => 'folder_of',
+		        'relationship_guid' => $file->guid,
+		        'inverse_relationship' => TRUE
+			));
+
+			$folders = array();
+			if ($parent_folder) {
+
+				$parent_guid = (int) $parent_folder[0]->guid;
+
+				while(!empty($parent_guid) && ($parent = get_entity($parent_guid))){
+					$folders[] = $parent;
+					$parent_guid = (int) $parent->parent_guid;
+				}
+			}
+
+			
+			while($p = array_pop($folders)){
+				elgg_push_breadcrumb($p->title, $p->getURL());
+			}
+
+			elgg_push_breadcrumb($file->title);
+		}
+  
 		$extra = "";
 		if (elgg_view_exists("file/specialcontent/$mime")) {
 			$extra = elgg_view("file/specialcontent/$mime", $vars);
@@ -79,10 +110,9 @@
 			$extra = elgg_view("file/specialcontent/$base_type/default", $vars);
 		}
 		
-		
 		$params = array(
 			"entity" => $file,
-			"title" => elgg_view("output/url", array("text" => $title, "href" => "file/download/" . $file->getGUID(), "target" => "_blank" )),
+			"title" => elgg_view("output/url", array("text" => $title, "href" => "file/download/" . $file->getGUID(), "target" => "_blank")),
 			"metadata" => $entity_menu,
 			"subtitle" => $subtitle,
 			"tags" => $tags

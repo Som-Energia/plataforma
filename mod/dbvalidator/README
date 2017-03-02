@@ -1,0 +1,11 @@
+Elgg Database Cleaner
+
+It has a validate and a clean mode. It can fix the following problems:
+
+1. user without a username
+2. entity with owner_guid set to 0 (object or group)
+3. entity with a deleted owner
+4. entity that is missing an entry in its <type> table
+
+Currently, it assumes its directory is set to dbvalidate.
+

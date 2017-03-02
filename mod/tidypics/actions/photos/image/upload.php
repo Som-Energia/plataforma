@@ -9,6 +9,8 @@
 elgg_load_library('tidypics:upload');
 $img_river_view = elgg_get_plugin_setting('img_river_view', 'tidypics');
 
+set_input('tidypics_action_name', 'tidypics_photo_upload');
+
 $guid = (int) get_input('guid');
 $album = get_entity($guid);
 if (!$album) {

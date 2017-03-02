@@ -35,7 +35,7 @@ elgg_register_menu_item('title', array(
 	'text' => elgg_echo('file:download'),
 	'href' => "file/download/$file->guid",
 	'link_class' => 'elgg-button elgg-button-action',
-	'target' => '_blank',
+        'target' => '_blank',
 ));
 
 $body = elgg_view_layout('content', array(

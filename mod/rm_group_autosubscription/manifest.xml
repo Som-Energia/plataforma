@@ -1,25 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin_manifest xmlns="http://www.elgg.org/plugin_manifest/1.8">
+    <id>rm_group_autosubscription</id>
     <name>[RM] Groups Autosubscription</name>
     <author>Rubén Martín</author>
     <website>http://rubenmartin.me</website>
-    <version>1.0</version>
+    <version>1.1</version>
     <description>Suscribirse automáticamente a las notificaciones de un grupo al unise.</description>
     <requires>
-	<type>elgg_release</type>
-	<version>1.8</version>
+        <type>elgg_release</type>
+        <version>1.8</version>
     </requires>
     <requires>
-	<type>plugin</type>
-	<name>comment_tracker</name>
+        <type>plugin</type>
+        <name>comment_tracker</name>
     </requires>
     <requires>
-	<type>plugin</type>
-	<name>groups</name>
+        <type>priority</type>
+        <priority>after</priority>
+        <plugin>comment_tracker</plugin>
     </requires>
     <requires>
-	<type>priority</type>
-	<priority>before</priority>
-	<plugin>threads</plugin>
+        <type>plugin</type>
+        <name>groups</name>
+    </requires>
+    <requires>
+        <type>priority</type>
+        <priority>after</priority>
+        <plugin>groups</plugin>
+    </requires>
+    <requires>
+        <type>priority</type>
+        <priority>before</priority>
+        <plugin>threads</plugin>
     </requires>
 </plugin_manifest>

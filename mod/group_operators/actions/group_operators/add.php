@@ -5,13 +5,12 @@
  * @package ElggGroupOperators
  */
 
-action_gatekeeper();
 $mygroup = get_entity(get_input('mygroup'));
 $who = get_entity(get_input('who'));
 
 $success = false;
 if ($mygroup instanceof ElggGroup && $who instanceof ElggUser && $mygroup->canEdit()) {
-	if ($mygroup->isMember($who->guid) && !check_entity_relationship($who->guid, 'operator', $mygroup->guid)) {
+	if ($mygroup->isMember($who) && !check_entity_relationship($who->guid, 'operator', $mygroup->guid)) {
 		add_entity_relationship($who->guid, 'operator', $mygroup->guid);
 		system_message(elgg_echo('group_operators:added', array($who->name, $group->name)));
 	} else {
@@ -22,4 +21,3 @@ if ($mygroup instanceof ElggGroup && $who instanceof ElggUser && $mygroup->canEd
 }
 
 forward(REFERER);
-?>

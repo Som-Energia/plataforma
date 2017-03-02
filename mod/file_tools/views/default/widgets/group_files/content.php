@@ -18,7 +18,6 @@
 		"full_view" => false
 	);
 
-	elgg_push_context("search");
 	//if there are some files, go get them
 	if ($files = elgg_list_entities($options)) {
 		//display in list mode
@@ -27,11 +26,9 @@
 		echo elgg_echo("file:none");
 	}
 	
-	$new_link = elgg_view('output/url', array(
-				'href' => "file/add/$group->guid",
-				'text' => elgg_echo('file:add'),
-				'is_trusted' => true,
+	$new_link = elgg_view("output/url", array(
+				"href" => "file/add/" . $group->getGUID(),
+				"text" => elgg_echo("file:add"),
+				"is_trusted" => true,
 	));
 	echo "<div>" . $new_link . "</div>";
-	
-	elgg_pop_context();

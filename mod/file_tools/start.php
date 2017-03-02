@@ -45,7 +45,7 @@
 		// register widgets
 		// add folder widget
 		// need to keep file_tree for the widget name to be compatible with previous filetree plugin users
-		elgg_register_widget_type ("file_tree", elgg_echo("widgets:file_tree:title"), elgg_echo("widgets:file_tree:description"), "dashboard,profile,groups");
+		elgg_register_widget_type ("file_tree", elgg_echo("widgets:file_tree:title"), elgg_echo("widgets:file_tree:description"), "dashboard,profile,groups", true);
 		
 		// group files
 		elgg_register_widget_type("group_files", elgg_echo("file:group"), elgg_echo("widgets:group_files:description"), "groups");
@@ -58,12 +58,13 @@
 		elgg_register_event_handler("update", "object", "file_tools_object_handler");
 		elgg_register_event_handler("delete", "object", "file_tools_object_handler_delete");
 		
+		elgg_register_event_handler("upgrade", "system", "file_tools_upgrade_handler");
+		
 		// register hooks
 		elgg_register_plugin_hook_handler("register", "menu:entity", "file_tools_entity_menu_hook");
 		elgg_register_plugin_hook_handler("permissions_check:metadata", "object", "file_tools_can_edit_metadata_hook");
 // 		elgg_register_plugin_hook_handler("access:collections:write", "all", "file_tools_write_acl_plugin_hook", 550);
 		elgg_register_plugin_hook_handler("route", "file", "file_tools_file_route_hook");
-		elgg_register_plugin_hook_handler("register", "menu:title", "file_tools_title_menu_register_hook");
 		elgg_register_plugin_hook_handler("widget_url", "widget_manager", "file_tools_widget_url_hook");
 		
 		elgg_register_plugin_hook_handler("register", "menu:file_tools_folder_breadcrumb", "file_tools_folder_breadcrumb_hook");
@@ -74,7 +75,7 @@
 		elgg_register_action("file_tools/folder/edit", dirname(__FILE__) . "/actions/folder/edit.php");
 		elgg_register_action("file_tools/folder/delete", dirname(__FILE__) . "/actions/folder/delete.php");
 		elgg_register_action("file_tools/folder/reorder", dirname(__FILE__) . "/actions/folder/reorder.php");
-		elgg_register_action("file_tools/import/zip", dirname(__FILE__) . "/actions/import/zip.php");
+		elgg_register_action("file_tools/upload/zip", dirname(__FILE__) . "/actions/upload/zip.php");
 		elgg_register_action("file_tools/folder/delete", dirname(__FILE__) . "/actions/folder/delete.php");
 		elgg_register_action("file_tools/file/hide", dirname(__FILE__) . "/actions/file/hide.php");
 		

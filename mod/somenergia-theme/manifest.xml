@@ -4,7 +4,7 @@
 	<author>Rubén Martín</author>
 	<version>1.0</version>
 	<category>theme</category>
-	<description></description>
+	<description>SomEnergia Theme</description>
 	<website>http://rubenmartin.me</website>	
 	<requires>
 		<type>elgg_version</type>
@@ -45,10 +45,19 @@
 		<priority>after</priority>
 		<plugin>custom_index_widgets</plugin>
 	</requires>
+        <requires>
+		<type>priority</type>
+		<priority>after</priority>
+		<plugin>file</plugin>
+	</requires>
+        <requires>
+		<type>priority</type>
+		<priority>after</priority>
+		<plugin>reportedcontent</plugin>
+	</requires>
 	<suggests>
 		<type>plugin</type>
 		<name>profile</name>
 		<version>1.8</version>
 	</suggests>
-
 </plugin_manifest>

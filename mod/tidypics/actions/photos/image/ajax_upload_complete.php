@@ -4,6 +4,8 @@
  *
  */
 
+set_input('tidypics_action_name', 'tidypics_photo_upload');
+
 $batch = get_input('batch');
 $album_guid = (int) get_input('album_guid');
 $img_river_view = elgg_get_plugin_setting('img_river_view', 'tidypics');

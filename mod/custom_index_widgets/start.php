@@ -18,11 +18,11 @@
 		
 		$ciw_layout = elgg_get_plugin_setting("ciw_layout", "custom_index_widgets");
 		if ($ciw_layout == NULL)
-			 set_plugin_setting("ciw_layout", "index_2rmsb", "custom_index_widgets");
+			 elgg_set_plugin_setting("ciw_layout", "index_2rmsb", "custom_index_widgets");
 			 
 		$ciw_showdashboard = elgg_get_plugin_setting("ciw_showdashboard", "custom_index_widgets");
 		if ($ciw_showdashboard == NULL)
-			 set_plugin_setting("ciw_showdashboard", "yes", "custom_index_widgets");
+			 elgg_set_plugin_setting("ciw_showdashboard", "yes", "custom_index_widgets");
     			 
 		elgg_register_widget_type('latest_members_index',elgg_echo ('custom_index_widgets:latest_members_index'),elgg_echo ('custom_index_widgets:latest_members_index'), "custom_index_widgets", true);
 		elgg_register_widget_type('inline_content_index',elgg_echo ('custom_index_widgets:inline_content_index'),elgg_echo ('custom_index_widgets:inline_content_index'), "custom_index_widgets", true);
@@ -100,7 +100,7 @@
 			}
 		} else {
 			register_error ( elgg_echo ( "custom_index_widgets:admin:notfound" ) );
-			forward ( $CONFIG->wwwroot );
+			forward ( elgg_get_site_url() );
 		}
 		return true;
 	}
@@ -161,7 +161,20 @@
 		}
 		return NULL;	
 	}
-  
+	function custom_index_list_all_subtypes(){
+		global $CONFIG;
+	
+		$subtypes = get_data("SELECT subtype from {$CONFIG->dbprefix}entity_subtypes");
+		$subtype_list = array();
+		$subtype_list[]="";
+		if ($subtypes) {
+			foreach ($subtypes as $data) {
+			  $subtype_list[$data->subtype] = $data->subtype;
+			}
+		}
+		return $subtype_list;
+	}
+	  
   elgg_register_event_handler('init','system','custom_index_widgets_init');
   elgg_register_page_handler ( 'custom_index_widgets', 'custom_index_widgets_page_handler'); 
   elgg_register_action('custom_index_widgets/reset',false,$CONFIG->pluginspath . 'custom_index_widgets/actions/reset.php',true);

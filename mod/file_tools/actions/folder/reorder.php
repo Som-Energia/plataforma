@@ -14,7 +14,7 @@
 		}
 		
 		// get folder from folder_guid and check if it is a folder
-		if(($folder = get_entity($folder_guid)) && !is_null($parent_guid)) {
+		if(!is_null($parent_guid) && ($folder_guid != $parent_guid) && ($folder = get_entity($folder_guid))) {
 			if(elgg_instanceof($folder, "object", FILE_TOOLS_SUBTYPE) && $folder->canEditMetadata("parent_guid")) {
 				// set new parent_guid
 				$folder->parent_guid = $parent_guid;

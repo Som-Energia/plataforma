@@ -1,15 +1,12 @@
-$(function(){
-	$('.elgg-menu .elgg-menu-item-reply a').click(function(){
-		guid = $.parseQuery(this.href).guid;
-		$('#edit-topicreply-' + guid).hide();
-		$('#reply-topicreply-' + guid).slideToggle('slow');
-		
-		return false;
-	});
-	$('.elgg-menu .elgg-menu-item-edit a').click(function(){
-		guid = $.parseQuery(this.href).guid;
-		$('#reply-topicreply-' + guid).hide();
-		$('#edit-topicreply-' + guid).slideToggle('slow');
-		return false;
-	});
+$(function() {
+query = $.parseQuery(this.href);
+guid = query.guid;
+box = query.box;
+if (guid !== undefined && box !== undefined && (box === 'reply' || box === 'edit')) {
+    $(window).scrollTop($('#' + box + '-topicreply-' + guid).offset().top - 100);
+}
+$(".elgg-form-discussion-reply-save").submit(function (e) {
+     $(".thread-reply-button").attr("disabled", true).addClass("elgg-state-disabled");
+     return true;
+     });
 });
