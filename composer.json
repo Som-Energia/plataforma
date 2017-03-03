@@ -14,9 +14,13 @@
 	"au/au_subgroups": "2.0.0",
 	"coldtrick/file_tools": "v2.0",
 	"beck24/spam_login_filter": "2.1.1",
-	"blackleg/threads": "1.8.3",
+	"blackleg/threads": "1.9.2",
         "elgg/mentions": "dev-master",
-        "coldtrick/group_tools": "v4.0"
+        "coldtrick/group_tools": "v4.0",
+        "blackleg/rm_group_reports": "1.9.0",
+        "blackleg/rm_group_default_fields": "1.1.0",
+        "blackleg/rm_group_autosubscription": "1.9",
+        "iionly/tidypics": "1.10.11"
     },
     "scripts": {
         "test": "phpunit",
@@ -41,7 +45,7 @@
     "require-dev": {
         "phpunit/phpunit": "~4.1",
         "elgg/sniffs": "dev-master",
-        "squizlabs/php_codesniffer": "~1.5",
-        "simpletest/simpletest": "~1.1"
+        "squizlabs/php_codesniffer": "*",
+        "simpletest/simpletest": "*"
     }
 }

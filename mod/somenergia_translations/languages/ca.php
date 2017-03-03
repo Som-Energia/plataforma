@@ -6,7 +6,7 @@
  * @package Elgg.Core
  * @subpackage Languages.Spanish
  */
-$catalan = array(
+return array(
 	'mentions:notification:subject' => '%s te ha nombrado en %s',
 	'mentions:notification:body' => '%s te ha nombrado en %s.
 To see the full post, click on the link below:
@@ -1572,5 +1572,3 @@ Siusplau, no respongueu a aquest correu",
     'zh' => "Xinès",
     'zu' => "Zulu"
 );
-
-add_translation('ca', $catalan);

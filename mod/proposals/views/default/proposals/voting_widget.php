@@ -5,7 +5,7 @@ elgg_load_library('elgg:proposals');
 $entity = elgg_extract('entity', $vars, FALSE);
 
 $votes = proposals_get_votes($entity);
-$member_count = $entity->getContainerEntity()->getMembers(0, 0, true);	
+$member_count = $entity->getContainerEntity()->getMembers(array('count' => true));	
 
 $status = proposals_get_status_from_votes($votes, $member_count);
 $points = proposals_get_points_from_votes($votes);

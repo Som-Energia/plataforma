@@ -23,7 +23,6 @@
 
 /*** ownerblock ***/
 #profile-owner-block {
-	width: 200px;
 	float: left;
 	background-color: #eee;
 	padding: 15px;

@@ -35,16 +35,10 @@ elgg_register_event_handler('init', 'system', 'crud_init');
  */
 function crud_url_handler($hook, $type, $url, $params) {
     $entity = $params['entity'];
-    if (!$entity->getOwnerEntity()) {
-        // default to a standard view if no owner.
-        return FALSE;
+    if ($entity instanceof CrudObject) {
+        $friendly_title = elgg_get_friendly_title($entity->title);
+        return $entity->getSubtype() . "/view/{$entity->guid}/{$friendly_title}";
     }
-    /* if (!$entity->testAssembly()) {
-      return FALSE;
-      } */
-    //$friendly_title = elgg_get_friendly_title($entity->title);
-
-    return $entity->getSubtype() . "/view/{$entity->guid}";
 }
 
 /**
@@ -60,7 +54,6 @@ function crud_url_handler($hook, $type, $url, $params) {
  * @return bool
  */
 function crud_page_handler($page) {
-
     elgg_load_library('elgg:crud');
 
     if (!isset($page[0])) {
@@ -141,8 +134,9 @@ function crud_icon_url_override($hook, $type, $returnvalue, $params) {
     $entity = $params['entity'];
     if ($entity instanceof CrudObject) {
         $size = $params['size'];
-        if (!$size)
+        if (!$size) {
             $icon = 'tiny';
+        }
         $icon = $entity->getCrudIcon($size);
     }
     return $icon;
@@ -152,33 +146,32 @@ function crud_icon_url_override($hook, $type, $returnvalue, $params) {
  * Get the crud handler for a given type
  */
 function crud_get_handler($name) {
-    global $CONFIG;
-    if (isset($CONFIG->crud->handlers[$name])) {
-        return $CONFIG->crud->handlers[$name];
+    $crud = elgg_get_config('crud');    
+    if (isset($crud->handlers[$name])) {
+        return $crud->handlers[$name];
     }
-    return $CONFIG->crud->handlers[$name] = new CrudTemplate($name);
+    return $crud->handlers[$name] = new CrudTemplate($name);
 }
 
 /**
  * Owner block handler
  */
 function crud_owner_block_menu($hook, $type, $return, $params) {
-    global $CONFIG;
-
-    foreach ($CONFIG->crud->handlers as $handler_name => $handler) {
+    $crud = elgg_get_config('crud');
+    foreach ($crud->handlers as $handler_name => $handler) {
         if (!$handler->owner_menu) {
             continue;
         }
-
         if ($handler->owner_menu != 'group' && elgg_instanceof($params['entity'], 'user')) {
             $url = "$handler_name/owner/{$params['entity']->username}";
             $item = new ElggMenuItem($handler_name, elgg_echo($handler_name), $url);
             $return[] = $item;
         } elseif ($handler->owner_menu != 'user') {
-            if ($handler->module_check)
+            if ($handler->module_check) {
                 $enable = "{$handler->module_check}_enable";
-            else
+            } else {
                 $enable = "{$handler->module}_enable";
+            }
             if ($params['entity']->$enable == "yes") {
                 $owner_label = ($handler->owner_menu == 'group') ? 'owner' : 'group';
                 $url = "$handler_name/$owner_label/{$params['entity']->guid}/all";
@@ -195,9 +188,9 @@ function crud_owner_block_menu($hook, $type, $return, $params) {
  * Init crud plugin.
  */
 function crud_init() {
-    global $CONFIG;
-    $CONFIG->crud = new stdClass();
-    $CONFIG->crud->handlers = array();
+    $crud = new stdClass();
+    $crud->handlers = array();
+    elgg_set_config('crud', $crud);
 
     elgg_register_library('elgg:crud', elgg_get_plugins_path() . 'crud/lib/crud.php');
     // add to the main css
@@ -215,8 +208,9 @@ function crud_init() {
  * Register a crud subtype class into elgg engine
  */
 function crud_register_subtype($name, $class_name = NULL) {
-    if (empty($class_name))
+    if (empty($class_name)) {
         $class_name = "CrudObject";
+    }
     if (get_subtype_id('object', $name)) {
         if (get_subtype_class('object', $name) != $class_name) {
             update_subtype('object', $name, $class_name);
