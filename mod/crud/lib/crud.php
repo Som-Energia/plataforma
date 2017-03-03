@@ -1,4 +1,5 @@
 <?php
+
 /**
  * CRUD -- CRUD library
  *
@@ -30,51 +31,50 @@
  */
 function crud_handle_list_page($crud, $guid) {
 
-	elgg_set_page_owner_guid($guid);
+    elgg_set_page_owner_guid($guid);
 
-	$crud_type = $crud->crud_type;
+    $crud_type = $crud->crud_type;
 
-	$parent = get_entity($guid);
-	if ($parent instanceof ElggGroup) {
-		$group = $parent;
-		$parent = NULL;
-	}
-	else {
-		$group = get_entity($parent->container_guid);
-	}
+    $parent = get_entity($guid);
+    if ($parent instanceof ElggGroup) {
+        $group = $parent;
+        $parent = NULL;
+    } else {
+        $group = get_entity($parent->container_guid);
+    }
 
-	if (!$group) {
-		register_error(elgg_echo('groups:notfound'));
-		forward();
-	}
+    if (!$group) {
+        register_error(elgg_echo('groups:notfound'));
+        forward();
+    }
 
-	group_gatekeeper();
+    group_gatekeeper();
 
-	elgg_push_breadcrumb($group->name);
+    elgg_push_breadcrumb($group->name);
 
-	elgg_register_title_button();
+    elgg_register_title_button();
 
-	if (elgg_view_exists("forms/$crud->module/{$crud_type}_general")) {
-		elgg_register_title_button($crud->crud_type, 'edit_general');
-	}
+    if (elgg_view_exists("forms/$crud->module/{$crud_type}_general")) {
+        elgg_register_title_button($crud->crud_type, 'edit_general');
+    }
 
-	$title = elgg_echo("item:object:$crud_type");
+    $title = elgg_echo("item:object:$crud_type");
 
-	$params = array(
-		'title' => $title,
-		'content' => $crud->getListTabContent(),
-		'footer' => elgg_view("$crud->module/{$crud_type}_general", array('entity' => $group)),
-		'filter' => $crud->getListTabFilter(),
-	);
+    $params = array(
+        'title' => $title,
+        'content' => $crud->getListTabContent(),
+        'footer' => elgg_view("$crud->module/{$crud_type}_general", array('entity' => $group)),
+        'filter' => $crud->getListTabFilter(),
+    );
 
-	$params['sidebar'] .= elgg_view('crud/tagcloud_block', array(
-		'subtypes' => $crud->crud_type,
-		'owner_guid' => elgg_get_page_owner_guid(),
-	));
+    $params['sidebar'] .= elgg_view('crud/tagcloud_block', array(
+        'subtypes' => $crud->crud_type,
+        'owner_guid' => elgg_get_page_owner_guid(),
+    ));
 
-	$body = elgg_view_layout('content', $params);
+    $body = elgg_view_layout('content', $params);
 
-	echo elgg_view_page($title, $body);
+    echo elgg_view_page($title, $body);
 }
 
 /**
@@ -85,89 +85,87 @@ function crud_handle_list_page($crud, $guid) {
  * @param int    $guid GUID of group or crud object
  */
 function crud_handle_edit_page($crud, $type, $guid) {
-	gatekeeper();
+    gatekeeper();
 
-	$crud_type = $crud->crud_type;
+    $crud_type = $crud->crud_type;
 
-	if ($type == 'add') {
-		$parent = get_entity($guid);
-		if ($parent instanceof ElggGroup) {
-			$group = $parent;
-			$parent = NULL;
-		}
-		else {
-			$group = get_entity($parent->container_guid);
-		}
-		if (!$group) {
-			register_error(elgg_echo('groups:notfound'));
-			forward();
-		}
-		elgg_set_page_owner_guid($group->guid);
+    if ($type == 'add') {
+        $parent = get_entity($guid);
+        if ($parent instanceof ElggGroup) {
+            $group = $parent;
+            $parent = NULL;
+        } else {
+            $group = get_entity($parent->container_guid);
+        }
+        if (!$group) {
+            register_error(elgg_echo('groups:notfound'));
+            forward();
+        }
+        elgg_set_page_owner_guid($group->guid);
 
-		// make sure user has permissions to add a crud object to container
-		if (!$group->canWriteToContainer(0, 'object', $crud_type)) {
-			register_error(elgg_echo('crud:permissions:error'));
-			forward($group->getURL());
-		}
+        // make sure user has permissions to add a crud object to container
+        if (!$group->canWriteToContainer(0, 'object', $crud_type)) {
+            register_error(elgg_echo('crud:permissions:error'));
+            forward($group->getURL());
+        }
 
-		$title = elgg_echo($crud_type . ':add');
+        $title = elgg_echo($crud_type . ':add');
 
-		if ($parent) {
-			crud_push_breadcrumb('new', $parent);
-		}
-		else
-			elgg_push_breadcrumb($group->name, $crud_type."/owner/$group->guid");
-		elgg_push_breadcrumb($title);
+        if ($parent) {
+            crud_push_breadcrumb('new', $parent);
+        } else {
+            elgg_push_breadcrumb($group->name, $crud_type . "/owner/$group->guid");
+        }
+        elgg_push_breadcrumb($title);
 
-		$body_vars = crud_prepare_form_vars($crud, NULL, $parent);
-		$content = elgg_view_form('crud/save', array('crud' => $crud), $body_vars);
-	} elseif ($type == 'edit_general') {
-		$entity = get_entity($guid);
-		if (!$entity || !$entity->canEdit()) {
-			register_error(elgg_echo('groups:notfound'));
-			forward();
-		}
-		$group = $entity;
+        $body_vars = crud_prepare_form_vars($crud, NULL, $parent);
+        $content = elgg_view_form('crud/save', array('crud' => $crud), $body_vars);
+    } elseif ($type == 'edit_general') {
+        $entity = get_entity($guid);
+        if (!$entity || !$entity->canEdit()) {
+            register_error(elgg_echo('groups:notfound'));
+            forward();
+        }
+        $group = $entity;
 
-		$title = elgg_echo($crud_type . ':edit_general');
+        $title = elgg_echo($crud_type . ':edit_general');
 
-		elgg_push_breadcrumb($group->name, $crud_type . "/owner/$group->guid");
-		elgg_push_breadcrumb($title);
+        elgg_push_breadcrumb($group->name, $crud_type . "/owner/$group->guid");
+        elgg_push_breadcrumb($title);
 
-		$body_vars = crud_prepare_form_vars($crud, $entity, $parent);
-		$content = elgg_view_form("$crud->module/{$crud_type}_general", array('crud' => $crud), $body_vars);
+        $body_vars = crud_prepare_form_vars($crud, $entity, $parent);
+        $content = elgg_view_form("$crud->module/{$crud_type}_general", array('crud' => $crud), $body_vars);
+    } else {
+        $entity = get_entity($guid);
+        if (!$entity || !$entity->canEdit()) {
+            register_error(elgg_echo('groups:notfound'));
+            forward();
+        }
+        $group = $entity->getContainerEntity();
+        if (!$group) {
+            register_error(elgg_echo('groups:notfound'));
+            forward();
+        }
+        $parent = get_entity($entity->parent_guid);
 
-	} else {
-		$entity = get_entity($guid);
-		if (!$entity || !$entity->canEdit()) {
-			register_error(elgg_echo('groups:notfound'));
-			forward();
-		}
-		$group = $entity->getContainerEntity();
-		if (!$group) {
-			register_error(elgg_echo('groups:notfound'));
-			forward();
-		}
-		$parent = get_entity($entity->parent_guid);
+        $title = elgg_echo($crud_type . ':edit');
 
-		$title = elgg_echo($crud_type . ':edit');
+        elgg_push_breadcrumb($group->name, $crud_type . "/owner/$group->guid");
+        elgg_push_breadcrumb($entity->title, $entity->getURL());
+        elgg_push_breadcrumb($title);
 
-		elgg_push_breadcrumb($group->name, $crud_type . "/owner/$group->guid");
-		elgg_push_breadcrumb($entity->title, $entity->getURL());
-		elgg_push_breadcrumb($title);
+        $body_vars = crud_prepare_form_vars($crud, $entity, $parent);
+        $content = elgg_view_form('crud/save', array('crud' => $crud), $body_vars);
+    }
 
-		$body_vars = crud_prepare_form_vars($crud, $entity, $parent);
-		$content = elgg_view_form('crud/save', array('crud' => $crud), $body_vars);
-	}
+    $params = array(
+        'content' => $content,
+        'title' => $title,
+        'filter' => '',
+    );
+    $body = elgg_view_layout('content', $params);
 
-	$params = array(
-		'content' => $content,
-		'title' => $title,
-		'filter' => '',
-	);
-	$body = elgg_view_layout('content', $params);
-
-	echo elgg_view_page($title, $body);
+    echo elgg_view_page($title, $body);
 }
 
 /**
@@ -178,27 +176,27 @@ function crud_handle_edit_page($crud, $type, $guid) {
  * @param CrudTemplate $crud Crud template object
  */
 function crud_push_breadcrumb($last, $entity, $crud = NULL) {
-	if (empty($crud)) {
-		$crud = crud_get_handler($entity->getSubtype());
-	}
+    if (empty($crud)) {
+        $crud = crud_get_handler($entity->getSubtype());
+    }
 
-	if ($entity->parent_guid) {
-		$parent = get_entity($entity->parent_guid);
-		crud_push_breadcrumb($last, $parent);
-	}
-	else {
-		$group = $entity->getContainerEntity();
-		elgg_push_breadcrumb($group->name, "$crud->crud_type/owner/$entity->container_guid");
-	}
-	
-	$title = $entity->title;
-	if (empty($title)) {
-		$title = elgg_echo("$crud->module:$crud->crud_type");
-	}
-	if ($entity == $last)
-		elgg_push_breadcrumb($title);
-	else
-		elgg_push_breadcrumb($title, "$crud->crud_type/view/$entity->guid");
+    if ($entity->parent_guid) {
+        $parent = get_entity($entity->parent_guid);
+        crud_push_breadcrumb($last, $parent);
+    } else {
+        $group = $entity->getContainerEntity();
+        elgg_push_breadcrumb($group->name, "$crud->crud_type/owner/$entity->container_guid");
+    }
+
+    $title = $entity->title;
+    if (empty($title)) {
+        $title = elgg_echo("$crud->module:$crud->crud_type");
+    }
+    if ($entity == $last) {
+        elgg_push_breadcrumb($title);
+    } else {
+        elgg_push_breadcrumb($title, "$crud->crud_type/view/$entity->guid");
+    }
 }
 
 /**
@@ -208,70 +206,69 @@ function crud_push_breadcrumb($last, $entity, $crud = NULL) {
  * @param int $guid GUID of a crud object
  */
 function crud_handle_view_page($crud, $guid) {
-	// We now have RSS on assemblies
-	global $autofeed;
-	$autofeed = true;
+    // We now have RSS on assemblies
+    global $autofeed;
+    $autofeed = true;
 
-	$crud_type = $crud->crud_type;
+    $crud_type = $crud->crud_type;
 
-	$entity = get_entity($guid);
-	$parent = $entity->getParentEntity();
-	if ($parent instanceof ElggGroup) {
-		$group = $parent;
-		$parent = NULL;
-	}
-	else {
-		$group = get_entity($entity->container_guid);
-	}
+    $entity = get_entity($guid);
+    $parent = $entity->getParentEntity();
+    if ($parent instanceof ElggGroup) {
+        $group = $parent;
+        $parent = NULL;
+    } else {
+        $group = get_entity($entity->container_guid);
+    }
 
-	if (!$group) {
-		register_error(elgg_echo('noaccess'));
-		$_SESSION['last_forward_from'] = current_page_url();
-		forward('');
-	}
+    if (!$group) {
+        register_error(elgg_echo('noaccess'));
+        $_SESSION['last_forward_from'] = current_page_url();
+        forward('');
+    }
 
-	/*$group = $entity->getContainerEntity();
-	if (!$group) {
-		register_error(elgg_echo('groups:notfound'));
-		forward();
-	}*/
+    /* $group = $entity->getContainerEntity();
+      if (!$group) {
+      register_error(elgg_echo('groups:notfound'));
+      forward();
+      } */
 
-	if (!empty($crud->children_type)) {
-		elgg_set_page_owner_guid($guid);
-		elgg_register_title_button($crud->children_type);
-	}
-	elgg_trigger_plugin_hook("crud:$crud_type:view_buttons", 'view_buttons', array('crud'=>$crud, 'type'=>$crud_type, 'entity'=>$entity), $location);
+    if (!empty($crud->children_type)) {
+        elgg_set_page_owner_guid($guid);
+        elgg_register_title_button($crud->children_type);
+    }
+    elgg_trigger_plugin_hook("crud:$crud_type:view_buttons", 'view_buttons', array('crud' => $crud, 'type' => $crud_type, 'entity' => $entity), $location);
 
-	elgg_set_page_owner_guid($entity->container_guid);
+    elgg_set_page_owner_guid($entity->container_guid);
 
-	group_gatekeeper();
+    group_gatekeeper();
 
-	crud_push_breadcrumb($entity, $entity, $crud);
+    crud_push_breadcrumb($entity, $entity, $crud);
 
-	$content = elgg_view_entity($entity, array('full_view' => true));
-	
-	$content .= elgg_view_comments($entity);
+    $content = elgg_view_entity($entity, array('full_view' => true));
 
-	$params = array(
-		'content' => $content,
-		'title' => $entity->getTitle(true),
-		'filter' => '',
-	);
-	
-	$sidebar = elgg_view('crud/tagcloud_block', array(
-                'subtypes' => $crud->crud_type,
-                'owner_guid' => elgg_get_page_owner_guid(),
- 	       ));
-	if (isset($params['sidebar'])) {
-		$params['sidebar'] .= $sidebar;
-	} else {
-		$params['sidebar'] = $sidebar;
-	}
+    $content .= elgg_view_comments($entity);
+
+    $params = array(
+        'content' => $content,
+        'title' => $entity->getTitle(true),
+        'filter' => '',
+    );
+
+    $sidebar = elgg_view('crud/tagcloud_block', array(
+        'subtypes' => $crud->crud_type,
+        'owner_guid' => elgg_get_page_owner_guid(),
+    ));
+    if (isset($params['sidebar'])) {
+        $params['sidebar'] .= $sidebar;
+    } else {
+        $params['sidebar'] = $sidebar;
+    }
 
 
-	$body = elgg_view_layout('content', $params);
+    $body = elgg_view_layout('content', $params);
 
-	echo elgg_view_page($entity->title, $body);
+    echo elgg_view_page($entity->title, $body);
 }
 
 /**
@@ -282,52 +279,49 @@ function crud_handle_view_page($crud, $guid) {
  * @return array
  */
 function crud_prepare_form_vars($crud, $object = NULL, $parent = NULL) {
-	$crud_type = $crud->crud_type;
-	if ($object)
-		$guid = $object->guid;
-	// input names => defaults
-	$values = array(
-		'title' => $object->title,
-		'description' => $object->description,
-		'access_id' => ACCESS_DEFAULT,
-		'tags' => '',
-		'crud' => $crud,
-		'container_guid' => elgg_get_page_owner_guid(),
-		'parent_guid' => $parent->guid,
-		'guid' => $guid,
-		'entity' => $object,
-	);
+    $crud_type = $crud->crud_type;
+    if ($object)
+        $guid = $object->guid;
+    // input names => defaults
+    $values = array(
+        'title' => $object->title,
+        'description' => $object->description,
+        'access_id' => ACCESS_DEFAULT,
+        'tags' => '',
+        'crud' => $crud,
+        'container_guid' => elgg_get_page_owner_guid(),
+        'parent_guid' => $parent->guid,
+        'guid' => $guid,
+        'entity' => $object,
+    );
 
-	$variables = elgg_get_config($crud_type);
-	foreach ($variables as $name => $type) {
-		if (empty($values[$name])) {
-			if ($type == 'date') {
-				$values[$name] = time();
-			}
-			else {
-				$values[$name] = '';
-			}
-		}
-	}
+    $variables = elgg_get_config($crud_type);
+    foreach ($variables as $name => $type) {
+        if (empty($values[$name])) {
+            if ($type == 'date') {
+                $values[$name] = time();
+            } else {
+                $values[$name] = '';
+            }
+        }
+    }
 
-	if ($object) {
-		foreach (array_keys($values) as $field) {
-			if (isset($object->$field)) {
-				$values[$field] = $object->$field;
-			}
-		}
-	}
+    if ($object) {
+        foreach (array_keys($values) as $field) {
+            if (isset($object->$field)) {
+                $values[$field] = $object->$field;
+            }
+        }
+    }
 
-	if (elgg_is_sticky_form($crud_type)) {
-		$sticky_values = elgg_get_sticky_values($crud_type);
-		foreach ($sticky_values as $key => $value) {
-			$values[$key] = $value;
-		}
-	}
+    if (elgg_is_sticky_form($crud_type)) {
+        $sticky_values = elgg_get_sticky_values($crud_type);
+        foreach ($sticky_values as $key => $value) {
+            $values[$key] = $value;
+        }
+    }
 
-	elgg_clear_sticky_form($crud_type);
+    elgg_clear_sticky_form($crud_type);
 
-	return $values;
+    return $values;
 }
-
-

@@ -4,11 +4,11 @@
     <name>[RM] Groups Autosubscription</name>
     <author>Rubén Martín</author>
     <website>http://rubenmartin.me</website>
-    <version>1.1</version>
+    <version>1.9</version>
     <description>Suscribirse automáticamente a las notificaciones de un grupo al unise.</description>
     <requires>
         <type>elgg_release</type>
-        <version>1.8</version>
+        <version>1.9</version>
     </requires>
     <requires>
         <type>plugin</type>

@@ -1,6 +1,6 @@
 <?php
 
-$basque = array(
+return array(
 	'mentions:notification:subject' => '%s te ha nombrado en %s',
 	'mentions:notification:body' => '%s te ha nombrado en %s.
 To see the full post, click on the link below:
@@ -1506,5 +1506,3 @@ Ezin duzu posta elektroniko honi erantzun.',
     'zh' => 'Txinera',
     'zu' => 'Zuluera',
 );
-
-add_translation("eu", $basque);

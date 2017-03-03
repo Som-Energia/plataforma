@@ -12,7 +12,7 @@ $list_params = array(
     'type' => 'object',
     'limit' => 4,
     'full_view' => false,
-    'view_type_toggle' => false,
+    'list_type_toggle' => false,
     'pagination' => false,
 );
 
@@ -29,9 +29,9 @@ $newmembers = elgg_list_entities_from_metadata(array(
     'size' => 'small'));
 
 $river = elgg_list_river(array(
-      'pagination' => false,
-      'limit' => 10,
-    ));
+    'pagination' => false,
+    'limit' => 10,
+        ));
 
 //newest groups
 unset($list_params['subtype']);

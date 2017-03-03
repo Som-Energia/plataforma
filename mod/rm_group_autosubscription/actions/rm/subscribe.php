@@ -10,7 +10,7 @@ $groups = elgg_get_entities( array(
 foreach ( $groups as $group ) {
 
     $topics = elgg_get_entities( array(
-	'container_guids' => $group->get( 'guid' ),
+	'container_guids' => $group->guid,
 	'types' => 'object',
 	'subtypes' => 'groupforumtopic'	    
     ));
@@ -19,11 +19,11 @@ foreach ( $groups as $group ) {
 
     foreach ( $members as $user ) {
 
-	add_entity_relationship( $user->get( 'guid' ), 'notifyemail', $group->get( 'guid' ) );
+	add_entity_relationship( $user->guid, 'notifyemail', $group->guid);
 
 	foreach ( $topics as $topic ) {
 	    if ( ! comment_tracker_is_subscribed( $user, $topic ) ) {
-		comment_tracker_subscribe( $user->get( 'guid' ), $topic->get( 'guid' ) );
+		comment_tracker_subscribe( $user->guid, $topic->guid);
             }
         }
 
