@@ -19,7 +19,6 @@ function dokuwiki_init() {
     elgg_register_plugin_hook_handler('entity:icon:url', 'object', 'dokuwiki_icon_hook');
 
     elgg_register_plugin_hook_handler('entity:url', 'object', 'dokuwiki_url');
-    //elgg_register_entity_url_handler('object', 'dokuwiki', 'dokuwiki_url');
 
     // add block link to
     elgg_register_plugin_hook_handler('register', 'menu:owner_block', 'dokuwiki_owner_block_menu');
@@ -149,8 +148,9 @@ function dokuwiki_owner_block_menu($hook, $type, $return, $params) {
 function dokuwiki_icon_hook($hook, $entity_type, $returnvalue, $params) {
     if ($hook == 'entity:icon:url' && $params['entity']->getSubtype() == 'dokuwiki') {
         $owner = get_entity($params['entity']->container_guid);
-        if ($owner)
+        if ($owner) {
             return $owner->getIcon($params['size']);
+        }
     }
     return $returnvalue;
 }
@@ -166,10 +166,9 @@ function dokuwiki_icon_hook($hook, $entity_type, $returnvalue, $params) {
  */
 function dokuwiki_url($hook, $type, $url, $params) {
     $entity = $params['entity'];
-    if ($entity->getSubtype() !== 'dokuwiki') {
-        return;
+    if (elgg_instanceof($entity, 'object', 'dokuwiki')) {
+        return "dokuwiki/" . $entity->container_guid;
     }
-    return "dokuwiki/" . $entity->container_guid;
 }
 
 ?>
