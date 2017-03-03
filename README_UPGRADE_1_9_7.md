@@ -11,6 +11,7 @@
   3. Desactivar mod mentions
   4. Desactivar mod tidypics
   5. Desactivar mod event calendar
+  6. Desactivar mod honeypot spam catcher
 
 ## 3. Actualización
   1. Subir la actualización.
