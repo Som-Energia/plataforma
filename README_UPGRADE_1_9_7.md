@@ -10,6 +10,7 @@
   2. Desactivar mod recaptcha
   3. Desactivar mod mentions
   4. Desactivar mod tidypics
+  5. Desactivar mod event calendar
 
 ## 3. Actualización
   1. Subir la actualización.

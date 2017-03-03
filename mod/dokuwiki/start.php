@@ -170,5 +170,3 @@ function dokuwiki_url($hook, $type, $url, $params) {
         return "dokuwiki/" . $entity->container_guid;
     }
 }
-
-?>

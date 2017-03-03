@@ -35,14 +35,9 @@ elgg_register_event_handler('init', 'system', 'crud_init');
  */
 function crud_url_handler($hook, $type, $url, $params) {
     $entity = $params['entity'];
-    if (!$entity->getOwnerEntity()) {
-        // default to a standard view if no owner.
-        return FALSE;
-    } else if ($entity instanceof CrudObject) {
+    if ($entity instanceof CrudObject) {
         $friendly_title = elgg_get_friendly_title($entity->title);
         return $entity->getSubtype() . "/view/{$entity->guid}/{$friendly_title}";
-    } else {
-        return FALSE;
     }
 }
 

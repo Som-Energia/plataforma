@@ -3,13 +3,13 @@
     <id>somenergia-customization</id>
     <name>Som Energia Customization</name>
     <author>Hector Espert</author>
-    <version>1.0</version>
+    <version>1.1</version>
     <category>theme</category>
     <description>Som Energia Customization</description>
     <website>https://www.somenergia.coop/es/</website>	
     <requires>
-        <type>elgg_version</type>
-        <version>1.8</version>
+        <type>elgg_release</type>
+        <version>1.9</version>
     </requires>
     <requires>
         <type>priority</type>
