@@ -13,6 +13,7 @@
   5. Desactivar mod embed-extender
   6. Desactivar mod twitter widget
   7. Desactivar mod simplepie
+  8. Desactivar mod custom_index_widgets
 
 ## 3. Actualización
   1. Subir la actualización.
@@ -24,4 +25,4 @@
   3. Activar mod somenergia customization
   3. Ejecutar upgrade.php desde el navegador
   4. Ejecutar actualizaciones mod tydipics desde la configuracion del mod
-  5. Reconfigurar mod custom_index_widgets
+  5. Activar mod somenergia index

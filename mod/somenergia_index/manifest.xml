@@ -17,4 +17,12 @@
         <priority>before</priority>
         <plugin>somenergia-theme</plugin>
     </requires>
+    <conflicts>
+        <type>plugin</type>
+        <name>custom_index</name>
+    </conflicts>
+    <conflicts>
+        <type>plugin</type>
+        <name>custom_index_widgets</name>
+    </conflicts>
 </plugin_manifest>
