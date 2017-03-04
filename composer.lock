@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "66e540d84b0e4df5f0e8e81deff68a74",
-    "content-hash": "30c857f7d0e33d1f9d3e48d729a581c4",
+    "hash": "66d1f3e2874e29c21d80b40a5fc07309",
+    "content-hash": "715380e2e829b91dc38a5eb64b579c75",
     "packages": [
         {
             "name": "au/au_subgroups",
@@ -273,22 +273,23 @@
         },
         {
             "name": "coldtrick/group_tools",
-            "version": "v4.0",
+            "version": "v6.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ColdTrick/group_tools.git",
-                "reference": "a49443335c7b69fd713c98acc2df81cca10c2e28"
+                "reference": "e7257baeb93ad6c2b512e16d9d0c16bd648b14b6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ColdTrick/group_tools/zipball/a49443335c7b69fd713c98acc2df81cca10c2e28",
-                "reference": "a49443335c7b69fd713c98acc2df81cca10c2e28",
+                "url": "https://api.github.com/repos/ColdTrick/group_tools/zipball/e7257baeb93ad6c2b512e16d9d0c16bd648b14b6",
+                "reference": "e7257baeb93ad6c2b512e16d9d0c16bd648b14b6",
                 "shasum": ""
             },
             "require": {
                 "composer/installers": "^1.0.8"
             },
             "require-dev": {
+                "coldtrick/releases": "dev-master",
                 "coldtrick/sniffs": "dev-master"
             },
             "type": "elgg-plugin",
@@ -302,7 +303,7 @@
                 "groups",
                 "plugin"
             ],
-            "time": "2015-07-08 09:19:44"
+            "time": "2016-05-26 09:51:48"
         },
         {
             "name": "composer/installers",

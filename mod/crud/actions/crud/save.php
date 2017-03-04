@@ -132,9 +132,19 @@ if ($entity->save()) {
     system_message(elgg_echo($msg_prefix . ':saved'));
 
     if ($new_entity) {
-        add_to_river('river/object/crud/create', 'create', elgg_get_logged_in_user_guid(), $entity->guid);
+        elgg_create_river_item(array(
+            'view' => 'river/object/crud/create',
+            'action_type' => 'create',
+            'subject_guid' => elgg_get_logged_in_user_guid(),
+            'object_guid' => $entity->guid,
+        ));
     } else {
-        add_to_river('river/object/crud/create', 'edited', elgg_get_logged_in_user_guid(), $entity->guid);
+        elgg_create_river_item(array(
+            'view' => 'river/object/crud/create',
+            'action_type' => 'edited',
+            'subject_guid' => elgg_get_logged_in_user_guid(),
+            'object_guid' => $entity->guid,
+        ));
     }
 
     forward($entity->getURL());

@@ -31,13 +31,13 @@ define(["jquery", "elgg"], function($, elgg) {
 			
 		},
 		resetTools : function() {
-			$("#group-tools-preset-active ul.elgg-input-radios").each(function(index, elm) {
-				var $tool_parent = $(elm).parent();
+			$("#group-tools-preset-active .elgg-input-checkbox").each(function(index, elm) {
+				var $tool_parent = $(elm).parent().parent();
 				
 				$tool_parent.appendTo("#group-tools-preset-more div.elgg-body");
 			});
 			
-			$("#group-tools-preset-more .elgg-input-radio[value='no']").not(":checked").click();
+			$("#group-tools-preset-more .elgg-input-checkbox[value='yes']:checked").click();
 			$("#group-tools-preset-active .elgg-body > a").show();
 		},
 		presetTools : function(preset_id) {
@@ -52,10 +52,10 @@ define(["jquery", "elgg"], function($, elgg) {
 					$(this).prependTo("#group-tools-preset-active div.elgg-body");
 				});
 				
-				$("#group-tools-preset-active .elgg-input-radio[value='yes']").not(":checked").click();
+				$("#group-tools-preset-active .elgg-input-checkbox[value='yes']").not(":checked").click();
 			}
 			
-			if ($("#group-tools-preset-more .elgg-body > div").length == 0) {
+			if ($("#group-tools-preset-more .elgg-body > div").length === 0) {
 				$("#group-tools-preset-active .elgg-body > a").hide();
 			}
 		}
