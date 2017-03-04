@@ -9,6 +9,19 @@
  */
 ?>
 
+.elgg-comments .elgg-state-highlight {
+        -webkit-animation: comment-highlight 5s;
+        animation: comment-highlight 5s;
+}
+@-webkit-keyframes comment-highlight {
+        from {background: #dff2ff;}
+        to {background: white;}
+}
+@keyframes comment-highlight {
+        from {background: #dff2ff;}
+        to {background: white;}
+}
+
 /* ***************************************
 	Image Block
 *************************************** */

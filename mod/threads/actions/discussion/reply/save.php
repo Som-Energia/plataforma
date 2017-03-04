@@ -64,7 +64,19 @@ if (!$reply) {
 		forward(REFERER);
 	}
 
-	add_to_river('river/annotation/group_topic_post/reply', 'reply', $user->guid, $topic->guid, "", 0, $reply_guid);
+	//add_to_river('river/annotation/group_topic_post/reply', 'reply', $user->guid, $topic->guid, "", 0, $reply_guid);
+        elgg_create_river_item(array(
+            'view' => 'river/annotation/group_topic_post/reply',
+            'action_type' => 'reply',
+            'subject_guid' => $user->guid,
+            'object_guid' => $topic->guid,
+            'access_id' => "",
+            'posted' => 0,
+            'annotation_id' => $reply_guid,
+        ));
+        
+        
+        
 	system_message(elgg_echo('groupspost:success'));
 }
 
