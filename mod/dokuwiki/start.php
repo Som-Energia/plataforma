@@ -65,8 +65,9 @@ function dokuwiki_page_handler($page) {
 
     $dokuwiki_path = elgg_get_plugins_path() . 'dokuwiki/vendors/dokuwiki/';
     $doku = current_dokuwiki_entity();
-    if (!$doku) // can fail if there is no user and wiki doesnt exist
+    if (!$doku) { // can fail if there is no user and wiki doesnt exist
         return false;
+    }
     $parsed_url = parse_url(elgg_get_site_url() . 'dokuwiki/');
     $url_base = $parsed_url['path'];
     if (is_numeric($page[0])) {
@@ -126,8 +127,9 @@ function dokuwiki_page_handler($page) {
     } else {
         // avoid inclusion over root
         $dest = realpath($dokuwiki_path . implode("/", $page));
-        if (strpos($dest, $dokuwiki_path) == 0)
+        if (strpos($dest, $dokuwiki_path) == 0) {
             $doku_body = elgg_view('dokuwiki/index', array('page' => implode("/", $page)));
+        }
         echo $doku_body;
     }
     return true;
