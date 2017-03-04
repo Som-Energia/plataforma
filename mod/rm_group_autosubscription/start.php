@@ -12,8 +12,8 @@ function rm_as_event($event, $type, $reply) {
         $members = $group->getMembers(0);
 
         foreach ($members as $member) {
-            if ($user->get('guid') != $member->get('guid')) {
-                $guids[] = $member->get('guid');
+            if ($user->guid != $member->guid) {
+                $guids[] = $member->guid;
             }
         }
 
@@ -23,14 +23,9 @@ function rm_as_event($event, $type, $reply) {
             'summary' => NULL,
         );
 
-        $message = <<<MESSAGE
-{$user->get('name')} added a new reply to "{$topic->get('title')}" in {$group->get('name')}:
-{$reply->description}
-View and reply to the discussion:
-{$topic->getURL()}
-MESSAGE;
+        $message = $user->name . "added a new reply to " . $topic->title . " in  " . $group->name . "; " . $reply->description . " View and reply to the discussion: " . $topic->getURL();
 
-        notify_user($guids, $group->get('guid'), elgg_echo('rm_group_autosubscription:email:reply'), $message, $params);
+        notify_user($guids, $group->guid, elgg_echo('rm_group_autosubscription:email:reply'), $message, $params);
     }
 
     return true;
@@ -50,7 +45,6 @@ function rm_as_init() {
 
     $plugin_path = elgg_get_plugins_path() . 'rm_group_autosubscription/actions';
 
-    //{{{ Actions
 
     elgg_unregister_action('groups/join');
     elgg_register_action('groups/join', $plugin_path . '/groups/membership/join.php');
@@ -61,17 +55,9 @@ function rm_as_init() {
     elgg_register_action('rm/subscribe', $plugin_path . '/rm/subscribe.php');
 
 
-    //}}}
-    //{{{ Events
-
     elgg_register_event_handler('create', 'object', 'rm_as_event');
 
-    //}}}
-    //{{{ Menú
-
     elgg_register_plugin_hook_handler('register', 'menu:page', 'rm_as_adminSubmenu');
-
-    //}}}
 }
 
 elgg_register_event_handler('init', 'system', 'rm_as_init');

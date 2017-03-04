@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "72c9d2b196bdd4d1b445de7ee9657f37",
-    "content-hash": "40fc4b6c5c7b3408ed6bb1ffff4e820b",
+    "hash": "695691daf7ea529db724c1caf8b611fe",
+    "content-hash": "1b2e9e80816c982f3ccdeccd4c421285",
     "packages": [
         {
             "name": "au/au_subgroups",
@@ -121,17 +121,107 @@
             "time": "2015-12-18 09:45:11"
         },
         {
-            "name": "blackleg/threads",
-            "version": "1.8.3",
+            "name": "blackleg/rm_group_autosubscription",
+            "version": "1.9",
             "source": {
                 "type": "git",
-                "url": "https://github.com/blackleg/threads.git",
-                "reference": "0072f49aa4a629a6665ec110b0b0c11b97c99e72"
+                "url": "https://github.com/blackleg/rm_group_autosubscription.git",
+                "reference": "8c57ce28ac4f210c9d0a032e3ba6e17c24a9cbfc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/blackleg/threads/zipball/0072f49aa4a629a6665ec110b0b0c11b97c99e72",
-                "reference": "0072f49aa4a629a6665ec110b0b0c11b97c99e72",
+                "url": "https://api.github.com/repos/blackleg/rm_group_autosubscription/zipball/8c57ce28ac4f210c9d0a032e3ba6e17c24a9cbfc",
+                "reference": "8c57ce28ac4f210c9d0a032e3ba6e17c24a9cbfc",
+                "shasum": ""
+            },
+            "require": {
+                "composer/installers": "^1.0.8"
+            },
+            "type": "elgg-plugin",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0"
+            ],
+            "description": "Elgg Groups Autosubscription",
+            "homepage": "http://www.blackleg.es",
+            "keywords": [
+                "elgg",
+                "plugin"
+            ],
+            "time": "2017-02-26 23:42:14"
+        },
+        {
+            "name": "blackleg/rm_group_default_fields",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/blackleg/rm_group_default_fields.git",
+                "reference": "5c834a4f37ca2cb29a813586808a57074d506662"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/blackleg/rm_group_default_fields/zipball/5c834a4f37ca2cb29a813586808a57074d506662",
+                "reference": "5c834a4f37ca2cb29a813586808a57074d506662",
+                "shasum": ""
+            },
+            "require": {
+                "composer/installers": "^1.0.8"
+            },
+            "type": "elgg-plugin",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0"
+            ],
+            "description": "Elgg Groups Reports",
+            "homepage": "http://www.blackleg.es",
+            "keywords": [
+                "elgg",
+                "plugin"
+            ],
+            "time": "2017-02-26 21:37:10"
+        },
+        {
+            "name": "blackleg/rm_group_reports",
+            "version": "1.9.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/blackleg/rm_group_reports.git",
+                "reference": "e0db626e7a0f5847d8076cea91bee39bc190eb36"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/blackleg/rm_group_reports/zipball/e0db626e7a0f5847d8076cea91bee39bc190eb36",
+                "reference": "e0db626e7a0f5847d8076cea91bee39bc190eb36",
+                "shasum": ""
+            },
+            "require": {
+                "composer/installers": "^1.0.8"
+            },
+            "type": "elgg-plugin",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0"
+            ],
+            "description": "Elgg Groups Reports",
+            "homepage": "http://www.blackleg.es",
+            "keywords": [
+                "elgg",
+                "plugin"
+            ],
+            "time": "2017-02-26 21:45:14"
+        },
+        {
+            "name": "blackleg/threads",
+            "version": "1.9.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/blackleg/threads.git",
+                "reference": "fb95ceca8739d58ccc88c518a7dd800b3695d8e2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/blackleg/threads/zipball/fb95ceca8739d58ccc88c518a7dd800b3695d8e2",
+                "reference": "fb95ceca8739d58ccc88c518a7dd800b3695d8e2",
                 "shasum": ""
             },
             "require": {
@@ -148,7 +238,7 @@
                 "elgg",
                 "plugin"
             ],
-            "time": "2016-12-10 21:07:40"
+            "time": "2017-03-01 22:15:17"
         },
         {
             "name": "coldtrick/file_tools",
@@ -183,22 +273,23 @@
         },
         {
             "name": "coldtrick/group_tools",
-            "version": "v4.0",
+            "version": "v6.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ColdTrick/group_tools.git",
-                "reference": "a49443335c7b69fd713c98acc2df81cca10c2e28"
+                "reference": "e7257baeb93ad6c2b512e16d9d0c16bd648b14b6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ColdTrick/group_tools/zipball/a49443335c7b69fd713c98acc2df81cca10c2e28",
-                "reference": "a49443335c7b69fd713c98acc2df81cca10c2e28",
+                "url": "https://api.github.com/repos/ColdTrick/group_tools/zipball/e7257baeb93ad6c2b512e16d9d0c16bd648b14b6",
+                "reference": "e7257baeb93ad6c2b512e16d9d0c16bd648b14b6",
                 "shasum": ""
             },
             "require": {
                 "composer/installers": "^1.0.8"
             },
             "require-dev": {
+                "coldtrick/releases": "dev-master",
                 "coldtrick/sniffs": "dev-master"
             },
             "type": "elgg-plugin",
@@ -212,7 +303,7 @@
                 "groups",
                 "plugin"
             ],
-            "time": "2015-07-08 09:19:44"
+            "time": "2016-05-26 09:51:48"
         },
         {
             "name": "composer/installers",
@@ -424,6 +515,43 @@
                 "spam"
             ],
             "time": "2015-09-02 17:23:59"
+        },
+        {
+            "name": "iionly/tidypics",
+            "version": "1.10.11",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/iionly/tidypics.git",
+                "reference": "7060d23724fe33fef13270ced111e70e8dea0ce6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/iionly/tidypics/zipball/7060d23724fe33fef13270ced111e70e8dea0ce6",
+                "reference": "7060d23724fe33fef13270ced111e70e8dea0ce6",
+                "shasum": ""
+            },
+            "require": {
+                "composer/installers": ">=1.0.8"
+            },
+            "type": "elgg-plugin",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "iionly",
+                    "homepage": "https://github.com/iionly",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Tidypics plugin provides a photo gallery with albums, tagging, and a slideshow.",
+            "homepage": "https://github.com/iionly/tidypics",
+            "keywords": [
+                "elgg",
+                "plugin"
+            ],
+            "time": "2017-01-08 20:01:33"
         },
         {
             "name": "ircmaxell/password-compat",
@@ -648,12 +776,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "411283676149d8b8e8ee53ec621d84099e548090"
+                "reference": "73603e2e613ddc14e2e11ec6da4e837bf0a2149a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/411283676149d8b8e8ee53ec621d84099e548090",
-                "reference": "411283676149d8b8e8ee53ec621d84099e548090",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/73603e2e613ddc14e2e11ec6da4e837bf0a2149a",
+                "reference": "73603e2e613ddc14e2e11ec6da4e837bf0a2149a",
                 "shasum": ""
             },
             "conflict": {
@@ -709,6 +837,7 @@
                 "simplesamlphp/simplesamlphp": "<1.14.11",
                 "simplesamlphp/simplesamlphp-module-infocard": "<1.0.1",
                 "socalnick/scn-social-auth": "<1.15.2",
+                "squizlabs/php_codesniffer": ">=1,<2.8.1",
                 "swiftmailer/swiftmailer": ">=4,<5.4.5",
                 "symfony/dependency-injection": ">=2,<2.0.17",
                 "symfony/form": ">=2.3,<2.3.35|>=2.4,<2.6.12|>=2.7,<2.7.7",
@@ -728,7 +857,7 @@
                 "thelia/backoffice-default-template": ">=2.1,<2.1.2",
                 "thelia/thelia": ">=2.1.0-beta1,<2.1.3|>=2.1,<2.1.2",
                 "twig/twig": "<1.20",
-                "typo3/cms": ">=6.2,<6.2.30|>=8,<8.4.1|>=7,<7.6.13",
+                "typo3/cms": ">=6.2,<6.2.30|>=8,<8.6.1|>=7,<7.6.16",
                 "typo3/flow": ">=2.3,<2.3.16|>=3,<3.0.10|>=3.1,<3.1.7|>=3.2,<3.2.7|>=3.3,<3.3.5|>=1,<1.0.4|>=1.1,<1.1.1|>=2,<2.0.1",
                 "typo3/neos": ">=1.1,<1.1.3|>=1.2,<1.2.13|>=2,<2.0.4",
                 "willdurand/js-translation-bundle": "<2.1.1",
@@ -774,7 +903,7 @@
                 }
             ],
             "description": "Prevents installation of composer packages with known security vulnerabilities: no API, simply require it",
-            "time": "2017-02-08 16:26:47"
+            "time": "2017-03-02 15:23:30"
         },
         {
             "name": "symfony/http-foundation",
@@ -1295,27 +1424,27 @@
         },
         {
             "name": "phpspec/prophecy",
-            "version": "v1.6.2",
+            "version": "v1.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpspec/prophecy.git",
-                "reference": "6c52c2722f8460122f96f86346600e1077ce22cb"
+                "reference": "93d39f1f7f9326d746203c7c056f300f7f126073"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpspec/prophecy/zipball/6c52c2722f8460122f96f86346600e1077ce22cb",
-                "reference": "6c52c2722f8460122f96f86346600e1077ce22cb",
+                "url": "https://api.github.com/repos/phpspec/prophecy/zipball/93d39f1f7f9326d746203c7c056f300f7f126073",
+                "reference": "93d39f1f7f9326d746203c7c056f300f7f126073",
                 "shasum": ""
             },
             "require": {
                 "doctrine/instantiator": "^1.0.2",
                 "php": "^5.3|^7.0",
                 "phpdocumentor/reflection-docblock": "^2.0|^3.0.2",
-                "sebastian/comparator": "^1.1",
-                "sebastian/recursion-context": "^1.0|^2.0"
+                "sebastian/comparator": "^1.1|^2.0",
+                "sebastian/recursion-context": "^1.0|^2.0|^3.0"
             },
             "require-dev": {
-                "phpspec/phpspec": "^2.0",
+                "phpspec/phpspec": "^2.5|^3.2",
                 "phpunit/phpunit": "^4.8 || ^5.6.5"
             },
             "type": "library",
@@ -1354,7 +1483,7 @@
                 "spy",
                 "stub"
             ],
-            "time": "2016-11-21 14:58:47"
+            "time": "2017-03-02 20:05:34"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -1557,16 +1686,16 @@
         },
         {
             "name": "phpunit/php-token-stream",
-            "version": "1.4.10",
+            "version": "1.4.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-token-stream.git",
-                "reference": "284fb0679dd25fb5ffb56dad92c72860c0a22f1b"
+                "reference": "e03f8f67534427a787e21a385a67ec3ca6978ea7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-token-stream/zipball/284fb0679dd25fb5ffb56dad92c72860c0a22f1b",
-                "reference": "284fb0679dd25fb5ffb56dad92c72860c0a22f1b",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-token-stream/zipball/e03f8f67534427a787e21a385a67ec3ca6978ea7",
+                "reference": "e03f8f67534427a787e21a385a67ec3ca6978ea7",
                 "shasum": ""
             },
             "require": {
@@ -1602,7 +1731,7 @@
             "keywords": [
                 "tokenizer"
             ],
-            "time": "2017-02-23 06:14:45"
+            "time": "2017-02-27 10:12:30"
         },
         {
             "name": "phpunit/phpunit",
@@ -2179,32 +2308,35 @@
         },
         {
             "name": "squizlabs/php_codesniffer",
-            "version": "1.5.6",
+            "version": "2.8.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/squizlabs/PHP_CodeSniffer.git",
-                "reference": "6f3e42d311b882b25b4d409d23a289f4d3b803d5"
+                "reference": "d7cf0d894e8aa4c73712ee4a331cc1eaa37cdc7d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/6f3e42d311b882b25b4d409d23a289f4d3b803d5",
-                "reference": "6f3e42d311b882b25b4d409d23a289f4d3b803d5",
+                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/d7cf0d894e8aa4c73712ee4a331cc1eaa37cdc7d",
+                "reference": "d7cf0d894e8aa4c73712ee4a331cc1eaa37cdc7d",
                 "shasum": ""
             },
             "require": {
+                "ext-simplexml": "*",
                 "ext-tokenizer": "*",
+                "ext-xmlwriter": "*",
                 "php": ">=5.1.2"
             },
-            "suggest": {
-                "phpunit/php-timer": "dev-master"
+            "require-dev": {
+                "phpunit/phpunit": "~4.0"
             },
             "bin": [
-                "scripts/phpcs"
+                "scripts/phpcs",
+                "scripts/phpcbf"
             ],
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-phpcs-fixer": "2.0.x-dev"
+                    "dev-master": "2.x-dev"
                 }
             },
             "autoload": {
@@ -2213,12 +2345,12 @@
                     "CodeSniffer/CLI.php",
                     "CodeSniffer/Exception.php",
                     "CodeSniffer/File.php",
+                    "CodeSniffer/Fixer.php",
                     "CodeSniffer/Report.php",
                     "CodeSniffer/Reporting.php",
                     "CodeSniffer/Sniff.php",
                     "CodeSniffer/Tokens.php",
                     "CodeSniffer/Reports/",
-                    "CodeSniffer/CommentParser/",
                     "CodeSniffer/Tokenizers/",
                     "CodeSniffer/DocGenerators/",
                     "CodeSniffer/Standards/AbstractPatternSniff.php",
@@ -2244,13 +2376,13 @@
                     "role": "lead"
                 }
             ],
-            "description": "PHP_CodeSniffer tokenises PHP, JavaScript and CSS files and detects violations of a defined set of coding standards.",
+            "description": "PHP_CodeSniffer tokenizes PHP, JavaScript and CSS files and detects violations of a defined set of coding standards.",
             "homepage": "http://www.squizlabs.com/php-codesniffer",
             "keywords": [
                 "phpcs",
                 "standards"
             ],
-            "time": "2014-12-04 22:32:15"
+            "time": "2017-03-01 22:17:45"
         },
         {
             "name": "symfony/yaml",

@@ -9,6 +9,9 @@
   1. Desactivar mod TinyMCE  
   2. Desactivar mod recaptcha
   3. Desactivar mod mentions
+  4. Desactivar mod tidypics
+  5. Desactivar mod event calendar
+  6. Desactivar mod honeypot spam catcher
 
 ## 3. Actualización
   1. Subir la actualización.
@@ -18,6 +21,8 @@
 ## 4. Post Actualización
   1. Activar modo mantenimento
   2. Ejecutar actualizaciones desde el panel de admin
-  3. Activar mod elgg recaptcha y configurar al gusto
-  4. Activar mod CKEditor
-  5. Desactivar modo manteniminento  
+  3. Activar mod tidypics
+  4. Ejecutar actualizaciones del mod tydipics
+  5. Activar mod elgg recaptcha y configurar al gusto
+  6. Activar mod CKEditor
+  7. Desactivar modo manteniminento  
