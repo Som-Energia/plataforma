@@ -9,7 +9,6 @@ RUN a2ensite 000-plataforma.conf
 
 ADD .dockers/mysqld/devel.cnf /etc/mysql/conf.d/devel.cnf
 COPY .dockers/supervisord/supervisord-mysqld.conf /etc/supervisor/conf.d/supervisord-mysqld.conf
-ADD .dockers/default.sql /default.sql
 
 RUN gem install mailcatcher --no-ri --no-rdoc
 COPY .dockers/supervisord/supervisord-mailcatcher.conf /etc/supervisor/conf.d/supervisord-mailcatcher.conf
@@ -19,6 +18,11 @@ RUN php5enmod mailcatcher
 
 VOLUME ["/app"]
 EXPOSE 8000 3336 1080
+
+ADD .dockers/default.sql /default.sql
+ADD .dockers/cron/devel /etc/cron.d/elgg
+RUN chmod 0644 /etc/cron.d/elgg
+RUN touch /var/log/cron.log
 
 ADD .dockers/scripts/run.sh run.sh
 RUN chmod 755 /run.sh
