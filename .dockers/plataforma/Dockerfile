@@ -1,10 +1,5 @@
 FROM somenergia/plataforma-core
 MAINTAINER  Som Energia
-ENV DBUSER="plataforma"
-ENV DBPASS="plataforma"
-ENV DBNAME="plataforma"
-ENV DBHOST="localhost"
-ENV DBPREFIX="elgg_"
 ADD engine /app/engine
 RUN rm -rf /app/engine/settings.php
 ADD .dockers/settings.php /app/engine/settings.php

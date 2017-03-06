@@ -14,7 +14,7 @@
 	"au/au_subgroups": "2.0.0",
 	"coldtrick/file_tools": "v2.0",
 	"beck24/spam_login_filter": "2.1.1",
-	"blackleg/threads": "1.9.2",
+	"blackleg/threads": "1.9.3",
         "elgg/mentions": "dev-master",
         "coldtrick/group_tools": "v4.0",
         "blackleg/rm_group_reports": "1.9.0",

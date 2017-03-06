@@ -1,3 +1,2 @@
 #!/bin/bash
 docker stop plataforma-devel
-docker stop plataforma-mysql-devel
