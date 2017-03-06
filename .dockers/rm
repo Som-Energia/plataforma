@@ -1,4 +1,2 @@
 #!/bin/bash
-APPPATH=$(realpath "./")
-docker rm plataforma-mysql-devel
 docker rm plataforma-devel
