@@ -7,6 +7,7 @@ engine/settings.php
 
 mod/login_as
 mod/tidypics
+mod/group_tools
 
 ### Carpeta Netbeans
 nbproject
