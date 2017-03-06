@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "3507559390ab02f077b1d46d446c3efb",
-    "content-hash": "020cf4623d21e92bd2d4b67eccb106c3",
+    "hash": "a823afcf67d52bdf589442f797acf9a0",
+    "content-hash": "7d29fa09ac3cc15f3cf765a10d28e5b0",
     "packages": [
         {
             "name": "au/au_subgroups",
@@ -42,6 +42,46 @@
                 "subgroups"
             ],
             "time": "2015-09-16 04:51:12"
+        },
+        {
+            "name": "au/comment_tracker",
+            "version": "3.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/AU-Landing-Project/comment_tracker.git",
+                "reference": "e0d80760b453740337da18b1c53630208ed0bf39"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/AU-Landing-Project/comment_tracker/zipball/e0d80760b453740337da18b1c53630208ed0bf39",
+                "reference": "e0d80760b453740337da18b1c53630208ed0bf39",
+                "shasum": ""
+            },
+            "require": {
+                "composer/installers": ">=1.0.8",
+                "php": ">=5.4"
+            },
+            "type": "elgg-plugin",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Juho Jaakkola"
+                }
+            ],
+            "description": "Manage notifications/subscriptions for comment threads",
+            "homepage": "https://github.com/AU-Landing-Project/au_widgets",
+            "keywords": [
+                "AU",
+                "comment tracker",
+                "comments",
+                "elgg",
+                "plugin",
+                "subscriptions"
+            ],
+            "time": "2016-12-11 16:30:41"
         },
         {
             "name": "beck24/elgg_recaptcha",
