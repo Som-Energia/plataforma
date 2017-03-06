@@ -3,6 +3,11 @@
 .htaccess.swp
 engine/settings.php
 
+## Mods
+
+mod/login_as
+mod/tidypics
+
 ### Carpeta Netbeans
 nbproject
 
