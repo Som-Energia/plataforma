@@ -15,8 +15,6 @@ mod/comment_tracker
 ### Carpeta Netbeans
 nbproject
 
-mod/login_as
-
 # Created by https://www.gitignore.io
 ### NetBeans ###
 nbproject/private/
