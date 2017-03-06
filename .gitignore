@@ -8,6 +8,7 @@ engine/settings.php
 mod/login_as
 mod/tidypics
 mod/group_tools
+mod/spam_login_filter
 
 ### Carpeta Netbeans
 nbproject
