@@ -22,7 +22,6 @@ EXPOSE 8000 3336 1080
 ADD .dockers/default.sql /default.sql
 ADD .dockers/cron/devel /etc/cron.d/elgg
 RUN chmod 0644 /etc/cron.d/elgg
-RUN touch /var/log/cron.log
 
 ADD .dockers/scripts/run.sh run.sh
 RUN chmod 755 /run.sh

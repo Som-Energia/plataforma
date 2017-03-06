@@ -1,34 +1,15 @@
-# Crontab example.
-#
-# This file is an example of triggering Elgg cron events. It hits a URL to
-# trigger the events. For testing, you can simulate the cronjob by loading the
-# URL in a browser.
-#
-# See http://learn.elgg.org/en/stable/admin/cron.html for more information
-#
-
-# Location of your site (don't forget the trailing slash!)
-ELGG='http://localhost:8000/'
-
-# Location of lwp-request
-LWPR='/usr/bin/lwp-request'
-
-# Make GET request and discard content
-GET="$LWPR -m GET -d"
-
 # The crontab
 # Don't edit below this line unless you know what you are doing
-* * * * * echo "Hola"
-* * * * * $GET ${ELGG}cron/minute/
-*/5 * * * * $GET ${ELGG}cron/fiveminute/
-15,30,45,59 * * * * $GET ${ELGG}cron/fifteenmin/
-30,59 * * * * $GET ${ELGG}cron/halfhour/
-@hourly $GET ${ELGG}cron/hourly/
-@daily $GET ${ELGG}cron/daily/
-@weekly $GET ${ELGG}cron/weekly/
-@monthly $GET ${ELGG}cron/monthly/
-@yearly $GET ${ELGG}cron/yearly/
+* * * * * root /usr/bin/lwp-request -m GET -d http://localhost:8000/cron/minute/
+*/5 * * * * root /usr/bin/lwp-request -m GET -d http://localhost:8000/cron/fiveminute/
+15,30,45,59 * * * * root /usr/bin/lwp-request -m GET -d http://localhost:8000/cron/fifteenmin/
+30,59 * * * * root /usr/bin/lwp-request -m GET -d http://localhost:8000/cron/halfhour/
+@hourly root /usr/bin/lwp-request -m GET -d http://localhost:8000/cron/hourly/
+@daily root /usr/bin/lwp-request -m GET -d http://localhost:8000/cron/daily/
+@weekly root /usr/bin/lwp-request -m GET -d http://localhost:8000/cron/weekly/
+@monthly root /usr/bin/lwp-request -m GET -d http://localhost:8000/cron/monthly/
+@yearly root /usr/bin/lwp-request -m GET -d http://localhost:8000/cron/yearly/
 # reboot is deprecated and probably doesn't work
-@reboot $GET ${ELGG}cron/reboot/
+@reboot root /usr/bin/lwp-request -m GET -d http://localhost:8000/cron/reboot/
 
 # An empty line is required at the end of this file for a valid cron file.
