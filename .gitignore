@@ -6,6 +6,8 @@ engine/settings.php
 ### Carpeta Netbeans
 nbproject
 
+mod/login_as
+
 # Created by https://www.gitignore.io
 ### NetBeans ###
 nbproject/private/

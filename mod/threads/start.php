@@ -15,63 +15,6 @@ function threads_init() {
     elgg_register_library('elgg:discussion', elgg_get_plugins_path() . 'threads/lib/discussion.php');
     elgg_register_library('elgg:threads', elgg_get_plugins_path() . 'threads/lib/threads.php');
 
-<<<<<<< HEAD
-	elgg_register_page_handler('discussion', 'threads_page_handler');
-	elgg_register_page_handler('threaded_forums', 'threads_page_handler');
-        
-        if (elgg_is_active_plugin('crud')) {
-            elgg_register_plugin_hook_handler('entity:url', 'object', 'threads_override_topic_url');
-        }
-        
-	// commenting not allowed on discussion topics (use a different annotation)
-	//elgg_register_plugin_hook_handler('permissions_check:comment', 'object', 'threads_comment_override');
-	
-	$action_base = elgg_get_plugins_path() . 'threads/actions/discussion';
-	elgg_register_action('discussion/save', "$action_base/save.php");
-	elgg_register_action('discussion/reply/save', "$action_base/reply/save.php");
-	elgg_register_action('discussion/reply/delete', "$action_base/reply/delete.php");
-
-	// add links to reply, edit or delete replies.
-	elgg_register_plugin_hook_handler('register', 'menu:reply', 'threads_reply_menu_setup');
-
-	// add link to owner block
-	//elgg_register_plugin_hook_handler('register', 'menu:owner_block', 'threads_owner_block_menu');
-
-	/* Group module registers topics for search.
-	elgg_register_entity_type('object', 'groupforumtopic');*/
-
-	// because replies are not comments, need of our menu item
-	//elgg_register_plugin_hook_handler('register', 'menu:river', 'threads_add_to_river_menu');
-
-	/* Theese sentences are performed into groups module.
-	add_group_tool_option('forum', elgg_echo('groups:enableforum'), true);
-	elgg_extend_view('groups/tool_latest', 'discussion/group_module');*/
-
-	// notifications
-	/*register_notification_object('object', 'groupforumtopic', elgg_echo('groupforumtopic:new'));
-	elgg_register_plugin_hook_handler('object:notifications', 'object', 'group_object_notifications_intercept');
-	elgg_register_plugin_hook_handler('notify:entity:message', 'object', 'groupforumtopic_notify_message');*/
-	
-        if (elgg_is_active_plugin('likes')) {
-            elgg_register_plugin_hook_handler('register', 'menu:reply', 'likes_entity_menu_setup');
-        }
-	// add link to reply topics
-	elgg_register_plugin_hook_handler('register', 'menu:river', 'threads_add_to_river_menu');
-	
-	elgg_extend_view('css/elgg', 'discussion/css');
-	
-	$threads_js = elgg_get_simplecache_url('js', 'threads');
-	elgg_register_js('elgg.threads', $threads_js);
-	
-	$parsequery_js = 'mod/threads/vendors/jquery-plugins/parsequery.js';
-	elgg_register_js('jquery.plugins.parsequery', $parsequery_js);
-
-	// activity streams support
-	elgg_register_plugin_hook_handler('activitystreams:parent', 'entity', 'threads_activitystreams_parent');
-	elgg_register_plugin_hook_handler('activitystreams:object', 'river', 'threads_activitystreams_object');
-
-	elgg_register_event_handler('upgrade', 'system', 'threads_run_upgrades');
-=======
     elgg_register_page_handler('discussion', 'threads_page_handler');
     elgg_register_page_handler('threaded_forums', 'threads_page_handler');
 
@@ -126,7 +69,6 @@ function threads_init() {
     elgg_register_plugin_hook_handler('activitystreams:object', 'river', 'threads_activitystreams_object');
 
     elgg_register_event_handler('upgrade', 'system', 'threads_run_upgrades');
->>>>>>> upgrade/1_10_6
 }
 
 function threads_run_upgrades($event, $type, $details) {
