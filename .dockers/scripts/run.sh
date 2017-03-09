@@ -1,26 +1,29 @@
 #!/bin/bash
 
-echo "=> Installing MySQL ..."
-mysql_install_db > /dev/null 2>&1
-echo "=> Done!"
-/usr/bin/mysqld_safe > /dev/null 2>&1 &
+if [[ ! -d "/var/lib/mysql/${DBNAME}" ]]; then
+    /usr/bin/mysqld_safe > /dev/null 2>&1 &
 
-RET=1
-while [[ RET -ne 0 ]]; do
+    RET=1
+    while [[ RET -ne 0 ]]; do
         echo "=> Waiting for confirmation of MySQL service startup"
         sleep 5
         mysql -uroot -e "status" > /dev/null 2>&1
         RET=$?
-done
+    done
 
-mysql -uroot -e "create database ${DBNAME}"
-mysql -uroot -e "CREATE USER '${DBUSER}'@'%' IDENTIFIED BY '${DBPASS}'"
-mysql -uroot -e "GRANT ALL ON ${DBNAME}.* TO '${DBUSER}'@'%'"
+    mysql -uroot -e "create database ${DBNAME}"
+    mysql -uroot -e "CREATE USER '${DBUSER}'@'%' IDENTIFIED BY '${DBPASS}'"
+    mysql -uroot -e "GRANT ALL ON ${DBNAME}.* TO '${DBUSER}'@'%'"
 
-echo "# Load default database"
-mysql -uroot "${DBNAME}" < /default.sql
+    echo "# Load default database"
+    mysql -uroot "${DBNAME}" < /default.sql
 
-mysqladmin -uroot shutdown
+    mysqladmin -uroot shutdown
+
+else
+    echo "=> Using an existing volume of MySQL"
+fi
+
 
 
 APPPATH='/app'

@@ -1,4 +1,3 @@
 #!/bin/bash
-APPPATH=$(realpath "./")
 rm .htaccess
 cp htaccess_dist .htaccess 
