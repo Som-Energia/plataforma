@@ -16,22 +16,17 @@ $list_params = array(
     'pagination' => false,
 );
 
-
-//get the newest members who have an avatar
-$newmembers = elgg_list_entities_from_metadata(array(
-    'metadata_names' => 'icontime',
+$newest_members  = elgg_list_entities(array(
     'type' => 'user',
     'limit' => 5,
     'full_view' => false,
     'pagination' => false,
-    'list_type' => 'gallery',
-    'gallery_class' => 'elgg-gallery-users',
-    'size' => 'small'));
+));
+
 
 $river = elgg_list_river(array(
-      'pagination' => false,
-      'limit' => 10,
-    ));
+    'pagination' => false,
+    'limit' => 10,));
 
 //newest groups
 unset($list_params['subtype']);
