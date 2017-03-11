@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin_manifest xmlns="http://www.elgg.org/plugin_manifest/1.8">
+    <id>somenergia-upgrade</id>
+    <name>Som Energia Upgrade</name>
+    <author>Hector Espert</author>
+    <version>1.12.15.0</version>
+    <category>theme</category>
+    <description>Som Energia Upgrade plugin</description>
+    <website>https://www.somenergia.coop/es/</website>	
+    <requires>
+        <type>elgg_release</type>
+        <version>1.9</version>
+    </requires>
+    <requires>
+        <type>plugin</type>
+        <name>somenergia-theme</name>
+    </requires>
+    <requires>
+        <type>priority</type>
+        <priority>after</priority>
+        <plugin>somenergia-theme</plugin>
+    </requires>
+    <requires>
+        <type>plugin</type>
+        <name>group_tools</name>
+    </requires>
+    <requires>
+        <type>priority</type>
+        <priority>after</priority>
+        <plugin>group_tools</plugin>
+    </requires>
+    <conflicts>
+        <type>plugin</type>
+        <name>group_operators</name>
+    </conflicts>
+</plugin_manifest>
