@@ -3,13 +3,13 @@
     <id>somenergia-upgrade</id>
     <name>Som Energia Upgrade</name>
     <author>Hector Espert</author>
-    <version>1.12.15.0</version>
+    <version>1.12.15.1</version>
     <category>theme</category>
     <description>Som Energia Upgrade plugin</description>
     <website>https://www.somenergia.coop/es/</website>	
     <requires>
         <type>elgg_release</type>
-        <version>1.9</version>
+        <version>1.12</version>
     </requires>
     <requires>
         <type>plugin</type>
@@ -32,5 +32,9 @@
     <conflicts>
         <type>plugin</type>
         <name>group_operators</name>
+    </conflicts>
+    <conflicts>
+        <type>plugin</type>
+        <name>threads</name>
     </conflicts>
 </plugin_manifest>
