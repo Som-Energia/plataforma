@@ -4,7 +4,7 @@
     <name>[RM] Groups Autosubscription</name>
     <author>Rubén Martín</author>
     <website>http://rubenmartin.me</website>
-    <version>1.9</version>
+    <version>1.9.0</version>
     <description>Suscribirse automáticamente a las notificaciones de un grupo al unise.</description>
     <requires>
         <type>elgg_release</type>
@@ -13,6 +13,11 @@
     <requires>
         <type>plugin</type>
         <name>comment_tracker</name>
+    </requires>
+    <requires>
+        <type>priority</type>
+        <priority>after</priority>
+        <plugin>comment_tracker</plugin>
     </requires>
     <requires>
         <type>priority</type>

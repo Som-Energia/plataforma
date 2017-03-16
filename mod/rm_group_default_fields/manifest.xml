@@ -4,11 +4,11 @@
     <name>[RM] Groups Default Fields</name>
     <author>Rubén Martín</author>
     <website>http://rubenmartin.me</website>
-    <version>1.1</version>
+    <version>1.8</version>
     <description>Especificar los valores por defecto en la creación de un grupo.</description>
     <requires>
-	<type>elgg_release</type>
-	<version>1.8</version>
+        <type>elgg_release</type>
+        <version>1.8</version>
     </requires>
     <requires>
         <type>plugin</type>
@@ -17,6 +17,41 @@
     <requires>
         <type>priority</type>
         <plugin>groups</plugin>
+        <priority>after</priority>
+    </requires>
+    <requires>
+        <type>priority</type>
+        <plugin>group_tools</plugin>
+        <priority>after</priority>
+    </requires>
+    <requires>
+        <type>priority</type>
+        <plugin>tidypics</plugin>
+        <priority>after</priority>
+    </requires>
+    <requires>
+        <type>priority</type>
+        <plugin>blogs</plugin>
+        <priority>after</priority>
+    </requires>
+    <requires>
+        <type>priority</type>
+        <plugin>bookmarks</plugin>
+        <priority>after</priority>
+    </requires>
+    <requires>
+        <type>priority</type>
+        <plugin>pages</plugin>
+        <priority>after</priority>
+    </requires>
+    <requires>
+        <type>priority</type>
+        <plugin>event_calendar</plugin>
+        <priority>after</priority>
+    </requires>
+    <requires>
+        <type>priority</type>
+        <plugin>file_tools</plugin>
         <priority>after</priority>
     </requires>
 </plugin_manifest>

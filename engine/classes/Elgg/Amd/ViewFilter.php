@@ -21,16 +21,24 @@ class ViewFilter {
 	 * @return string The AMD name (e.g., 'elgg/module'), or blank for no AMD name.
 	 */
 	private function getAmdName($name) {
-		$pieces = explode("/", $name); // [js, elgg, module.js]
-		if (count($pieces) <= 1 || $pieces[0] != 'js') {
+		if (preg_match('~^(js/)?(.+)\\.js\\z~', $name, $m)) {
+			// "js/foo/bar.js" or "foo/bar.js"
+			return $m[2];
+		}
+
+		// must be in "js/" dir
+		if (0 !== strpos($name, 'js/')) {
 			return '';
 		}
-	
-		array_shift($pieces); // [elgg, module.js]
-		$basename = basename(array_pop($pieces), ".js"); // module
-		array_push($pieces, $basename); // [elgg, module]
-		
-		return implode("/", $pieces); // elgg/module
+		$name = substr($name, 3);
+
+		// Don't allow extension. We matched ".js" above
+		if (pathinfo($name, PATHINFO_EXTENSION) !== null) {
+			return '';
+		}
+
+		// "foo/bar"
+		return $name;
 	}
 	
 	/**
@@ -45,7 +53,7 @@ class ViewFilter {
 		$amdName = $this->getAmdName($viewName);
 		
 		if (!empty($amdName)) {
-			$content = preg_replace('/^define\(([^\'"])/m', "define(\"$amdName\", \$1", $content, 1);
+			$content = preg_replace('/^(\s*)define\(([^\'"])/m', "\${1}define(\"$amdName\", \$2", $content, 1);
 		}
 		
 		return $content;

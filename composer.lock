@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "fcfce196114c0d3d642a84b6d31f45f9",
-    "content-hash": "834d06fa0c50ec151d226444a934dfa6",
+    "hash": "5da5d8670418426d791c1002ab6deb55",
+    "content-hash": "d409f4d842e1061acd1e3c3f39beee90",
     "packages": [
         {
             "name": "au/au_subgroups",
@@ -42,6 +42,46 @@
                 "subgroups"
             ],
             "time": "2015-09-16 04:51:12"
+        },
+        {
+            "name": "au/comment_tracker",
+            "version": "3.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/AU-Landing-Project/comment_tracker.git",
+                "reference": "e0d80760b453740337da18b1c53630208ed0bf39"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/AU-Landing-Project/comment_tracker/zipball/e0d80760b453740337da18b1c53630208ed0bf39",
+                "reference": "e0d80760b453740337da18b1c53630208ed0bf39",
+                "shasum": ""
+            },
+            "require": {
+                "composer/installers": ">=1.0.8",
+                "php": ">=5.4"
+            },
+            "type": "elgg-plugin",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Juho Jaakkola"
+                }
+            ],
+            "description": "Manage notifications/subscriptions for comment threads",
+            "homepage": "https://github.com/AU-Landing-Project/au_widgets",
+            "keywords": [
+                "AU",
+                "comment tracker",
+                "comments",
+                "elgg",
+                "plugin",
+                "subscriptions"
+            ],
+            "time": "2016-12-11 16:30:41"
         },
         {
             "name": "beck24/elgg_recaptcha",
@@ -119,96 +159,6 @@
                 "spam"
             ],
             "time": "2015-12-18 09:45:11"
-        },
-        {
-            "name": "blackleg/rm_group_autosubscription",
-            "version": "1.9",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/blackleg/rm_group_autosubscription.git",
-                "reference": "8c57ce28ac4f210c9d0a032e3ba6e17c24a9cbfc"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/blackleg/rm_group_autosubscription/zipball/8c57ce28ac4f210c9d0a032e3ba6e17c24a9cbfc",
-                "reference": "8c57ce28ac4f210c9d0a032e3ba6e17c24a9cbfc",
-                "shasum": ""
-            },
-            "require": {
-                "composer/installers": "^1.0.8"
-            },
-            "type": "elgg-plugin",
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "GPL-2.0"
-            ],
-            "description": "Elgg Groups Autosubscription",
-            "homepage": "http://www.blackleg.es",
-            "keywords": [
-                "elgg",
-                "plugin"
-            ],
-            "time": "2017-02-26 23:42:14"
-        },
-        {
-            "name": "blackleg/rm_group_default_fields",
-            "version": "1.1.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/blackleg/rm_group_default_fields.git",
-                "reference": "5c834a4f37ca2cb29a813586808a57074d506662"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/blackleg/rm_group_default_fields/zipball/5c834a4f37ca2cb29a813586808a57074d506662",
-                "reference": "5c834a4f37ca2cb29a813586808a57074d506662",
-                "shasum": ""
-            },
-            "require": {
-                "composer/installers": "^1.0.8"
-            },
-            "type": "elgg-plugin",
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "GPL-2.0"
-            ],
-            "description": "Elgg Groups Reports",
-            "homepage": "http://www.blackleg.es",
-            "keywords": [
-                "elgg",
-                "plugin"
-            ],
-            "time": "2017-02-26 21:37:10"
-        },
-        {
-            "name": "blackleg/rm_group_reports",
-            "version": "1.9.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/blackleg/rm_group_reports.git",
-                "reference": "e0db626e7a0f5847d8076cea91bee39bc190eb36"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/blackleg/rm_group_reports/zipball/e0db626e7a0f5847d8076cea91bee39bc190eb36",
-                "reference": "e0db626e7a0f5847d8076cea91bee39bc190eb36",
-                "shasum": ""
-            },
-            "require": {
-                "composer/installers": "^1.0.8"
-            },
-            "type": "elgg-plugin",
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "GPL-2.0"
-            ],
-            "description": "Elgg Groups Reports",
-            "homepage": "http://www.blackleg.es",
-            "keywords": [
-                "elgg",
-                "plugin"
-            ],
-            "time": "2017-02-26 21:45:14"
         },
         {
             "name": "blackleg/threads",
@@ -2386,16 +2336,16 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v3.2.4",
+            "version": "v3.2.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "9724c684646fcb5387d579b4bfaa63ee0b0c64c8"
+                "reference": "093e416ad096355149e265ea2e4cc1f9ee40ab1a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/9724c684646fcb5387d579b4bfaa63ee0b0c64c8",
-                "reference": "9724c684646fcb5387d579b4bfaa63ee0b0c64c8",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/093e416ad096355149e265ea2e4cc1f9ee40ab1a",
+                "reference": "093e416ad096355149e265ea2e4cc1f9ee40ab1a",
                 "shasum": ""
             },
             "require": {
@@ -2437,7 +2387,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-            "time": "2017-02-16 22:46:52"
+            "time": "2017-03-07 16:47:02"
         },
         {
             "name": "webmozart/assert",

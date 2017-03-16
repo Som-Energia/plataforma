@@ -215,7 +215,7 @@ function _elgg_get_metastring_based_objects($options) {
 		$options['joins'] = array($options['joins']);
 	}
 
-	$joins = $options['joins'];
+	$joins = array();
 	$joins[] = "JOIN {$db_prefix}entities e ON n_table.entity_guid = e.guid";
 
 	// evaluate selects
@@ -232,7 +232,7 @@ function _elgg_get_metastring_based_objects($options) {
 	$custom_callback = ($options['callback'] == 'row_to_elggmetadata'
 						|| $options['callback'] == 'row_to_elggannotation');
 	$is_calculation = $options['metastring_calculation'] ? true : false;
-	
+
 	if ($custom_callback || $is_calculation) {
 		$joins[] = "JOIN {$db_prefix}metastrings n on n_table.name_id = n.id";
 		$joins[] = "JOIN {$db_prefix}metastrings v on n_table.value_id = v.id";
@@ -241,13 +241,8 @@ function _elgg_get_metastring_based_objects($options) {
 		$selects[] = 'v.string as value';
 	}
 
-	foreach ($joins as $i => $join) {
-		if ($join === false) {
-			return false;
-		} elseif (empty($join)) {
-			unset($joins[$i]);
-		}
-	}
+	// add optional joins
+	$joins = array_merge($joins, $options['joins']);
 
 	// metastrings
 	$metastring_clauses = _elgg_get_metastring_sql('n_table', $options['metastring_names'],
@@ -258,7 +253,10 @@ function _elgg_get_metastring_based_objects($options) {
 		$wheres = array_merge($wheres, $metastring_clauses['wheres']);
 		$joins = array_merge($joins, $metastring_clauses['joins']);
 	} else {
-		$wheres[] = _elgg_get_access_where_sql(array('table_alias' => 'n_table'));
+		$wheres[] = _elgg_get_access_where_sql(array(
+			'table_alias' => 'n_table',
+			'guid_column' => 'entity_guid',
+		));
 	}
 
 	$distinct = $options['distinct'] ? "DISTINCT " : "";
@@ -279,6 +277,14 @@ function _elgg_get_metastring_based_objects($options) {
 		$query = "SELECT count($distinct e.guid) as calculation FROM {$db_prefix}$type n_table";
 	} else {
 		$query = "SELECT {$options['metastring_calculation']}(v.string) as calculation FROM {$db_prefix}$type n_table";
+	}
+
+	foreach ($joins as $i => $join) {
+		if ($join === false) {
+			return false;
+		} elseif (empty($join)) {
+			unset($joins[$i]);
+		}
 	}
 
 	// remove identical join clauses
@@ -438,7 +444,10 @@ function _elgg_get_metastring_sql($table, $names = null, $values = null,
 		$wheres[] = $values_where;
 	}
 
-	$wheres[] = _elgg_get_access_where_sql(array('table_alias' => $table));
+	$wheres[] = _elgg_get_access_where_sql(array(
+		'table_alias' => $table,
+		'guid_column' => 'entity_guid',
+	));
 
 	if ($where = implode(' AND ', $wheres)) {
 		$return['wheres'][] = "($where)";

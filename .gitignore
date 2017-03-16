@@ -3,10 +3,17 @@
 .htaccess.swp
 engine/settings.php
 
-### Carpeta Netbeans
-nbproject
+## Mods
 
 mod/login_as
+mod/tidypics
+mod/group_tools
+mod/spam_login_filter
+mod/au_subgroups
+mod/comment_tracker
+
+### Carpeta Netbeans
+nbproject
 
 # Created by https://www.gitignore.io
 ### NetBeans ###

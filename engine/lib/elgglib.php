@@ -525,7 +525,7 @@ function elgg_register_event_handler($event, $object_type, $callback, $priority 
  *
  * @param string $event       The event type
  * @param string $object_type The object type
- * @param string $callback    The callback
+ * @param string $callback    The callback. Since 1.11, static method callbacks will match dynamic methods
  *
  * @return bool true if a handler was found and removed
  * @since 1.7
@@ -709,7 +709,8 @@ function elgg_register_plugin_hook_handler($hook, $type, $callback, $priority = 
  *
  * @param string   $hook        The name of the hook
  * @param string   $entity_type The name of the type of entity (eg "user", "object" etc)
- * @param callable $callback    The PHP callback to be removed
+ * @param callable $callback    The PHP callback to be removed. Since 1.11, static method
+ *                              callbacks will match dynamic methods
  *
  * @return void
  * @since 1.8.0
@@ -795,7 +796,7 @@ function elgg_trigger_plugin_hook($hook, $type, $params = null, $returnvalue = n
  */
 function _elgg_php_exception_handler($exception) {
 	$timestamp = time();
-	error_log("Exception #$timestamp: $exception");
+	error_log("Exception at time $timestamp: $exception");
 
 	// Wipe any existing output buffer
 	ob_end_clean();
@@ -803,7 +804,6 @@ function _elgg_php_exception_handler($exception) {
 	// make sure the error isn't cached
 	header("Cache-Control: no-cache, must-revalidate", true);
 	header('Expires: Fri, 05 Feb 1982 00:00:00 -0500', true);
-	// @note Do not send a 500 header because it is not a server error
 
 	// we don't want the 'pagesetup', 'system' event to fire
 	global $CONFIG;
@@ -826,33 +826,34 @@ function _elgg_php_exception_handler($exception) {
 			}
 		}
 
-		elgg_set_viewtype('failsafe');
+		if (elgg_is_xhr()) {
+			elgg_set_viewtype('json');
+			$response = new \Symfony\Component\HttpFoundation\JsonResponse(null, 500);
+		} else {
+			elgg_set_viewtype('failsafe');
+			$response = new \Symfony\Component\HttpFoundation\Response('', 500);
+		}
 
 		if (elgg_is_admin_logged_in()) {
-			if (!elgg_view_exists("messages/exceptions/admin_exception")) {
-				elgg_set_viewtype('failsafe');
-			}
-
 			$body = elgg_view("messages/exceptions/admin_exception", array(
 				'object' => $exception,
 				'ts' => $timestamp
 			));
 		} else {
-			if (!elgg_view_exists("messages/exceptions/exception")) {
-				elgg_set_viewtype('failsafe');
-			}
-
 			$body = elgg_view("messages/exceptions/exception", array(
 				'object' => $exception,
 				'ts' => $timestamp
 			));
 		}
-		echo elgg_view_page(elgg_echo('exception:title'), $body);
+
+		$response->setContent(elgg_view_page(elgg_echo('exception:title'), $body));
+		$response->send();
 	} catch (Exception $e) {
 		$timestamp = time();
 		$message = $e->getMessage();
-		echo "Fatal error in exception handler. Check log for Exception #$timestamp";
-		error_log("Exception #$timestamp : fatal error in exception handler : $message");
+		http_response_code(500);
+		echo "Fatal error in exception handler. Check log for Exception at time $timestamp";
+		error_log("Exception at time $timestamp : fatal error in exception handler : $message");
 	}
 }
 
@@ -881,6 +882,16 @@ function _elgg_php_exception_handler($exception) {
  * @todo Replace error_log calls with elgg_log calls.
  */
 function _elgg_php_error_handler($errno, $errmsg, $filename, $linenum, $vars) {
+
+	// Elgg 2.0 no longer uses ext/mysql, so these warnings are just a nuisance for 1.x site
+	// owners and plugin devs.
+	if (0 === strpos($errmsg, "mysql_connect(): The mysql extension is deprecated")) {
+		// only suppress core's usage
+		if (preg_match('~/classes/Elgg/Database\.php$~', strtr($filename, '\\', '/'))) {
+			return true;
+		}
+	}
+
 	$error = date("Y-m-d H:i:s (T)") . ": \"$errmsg\" in file $filename (line $linenum)";
 
 	switch ($errno) {
@@ -1243,7 +1254,7 @@ function elgg_http_url_is_identical($url1, $url2, $ignore_params = array('offset
  * @return mixed
  * @since 1.8.0
  */
-function elgg_extract($key, array $array, $default = null, $strict = true) {
+function elgg_extract($key, $array, $default = null, $strict = true) {
 	if (!is_array($array)) {
 		return $default;
 	}
@@ -1407,6 +1418,8 @@ function _elgg_normalize_plural_options_array($options, $singulars) {
  *
  * @see http://www.php.net/register-shutdown-function
  *
+ * @internal This is registered in engine/start.php
+ *
  * @return void
  * @see register_shutdown_hook()
  * @access private
@@ -1415,6 +1428,7 @@ function _elgg_shutdown_hook() {
 	global $START_MICROTIME;
 
 	try {
+		_elgg_services()->logger->setDisplay(false);
 		elgg_trigger_event('shutdown', 'system');
 
 		$time = (float)(microtime(true) - $START_MICROTIME);
@@ -1451,26 +1465,31 @@ function _elgg_js_page_handler($page) {
 /**
  * Serve individual views for Ajax.
  *
- * /ajax/view/<name of view>?<key/value params>
+ * /ajax/view/<view_name>?<key/value params>
+ * /ajax/form/<action_name>?<key/value params>
  *
- * @param array $page Array of URL segements
+ * @param string[] $segments URL segments (not including "ajax")
  * @return bool
  *
  * @see elgg_register_ajax_view()
  * @elgg_pagehandler ajax
  * @access private
  */
-function _elgg_ajax_page_handler($page) {
-	// the ajax page handler should only be called from an xhr
-	if (!elgg_is_xhr()) {
-		register_error(_elgg_services()->translator->translate('ajax:not_is_xhr'));
-		forward(null, '400');
+function _elgg_ajax_page_handler($segments) {
+	elgg_ajax_gatekeeper();
+
+	if (count($segments) < 2) {
+		return false;
 	}
-	
-	if (is_array($page) && sizeof($page)) {
-		// throw away 'view' and form the view name
-		unset($page[0]);
-		$view = implode('/', $page);
+
+	if ($segments[0] === 'view' || $segments[0] === 'form') {
+		if ($segments[0] === 'view') {
+			// ignore 'view/'
+			$view = implode('/', array_slice($segments, 1));
+		} else {
+			// form views start with "forms", not "form"
+			$view = 'forms/' . implode('/', array_slice($segments, 1));
+		}
 
 		$allowed_views = elgg_get_config('allowed_ajax_views');
 		if (!array_key_exists($view, $allowed_views)) {
@@ -1488,19 +1507,25 @@ function _elgg_ajax_page_handler($page) {
 			$vars['entity'] = get_entity($vars['guid']);
 		}
 
-		// Try to guess the mime-type
-		switch ($page[1]) {
-			case "js":
-				header("Content-Type: text/javascript");
-				break;
-			case "css":
-				header("Content-Type: text/css");
-				break;
-		}
+		if ($segments[0] === 'view') {
+			// Try to guess the mime-type
+			switch ($segments[1]) {
+				case "js":
+					header("Content-Type: text/javascript;charset=utf-8");
+					break;
+				case "css":
+					header("Content-Type: text/css;charset=utf-8");
+					break;
+			}
 
-		echo elgg_view($view, $vars);
+			echo elgg_view($view, $vars);
+		} else {
+			$action = implode('/', array_slice($segments, 1));
+			echo elgg_view_form($action, array(), $vars);
+		}
 		return true;
 	}
+
 	return false;
 }
 
@@ -1591,7 +1616,7 @@ function _elgg_cacheable_view_page_handler($page, $type) {
 		}
 		$return = elgg_view($view);
 
-		header("Content-type: $content_type");
+		header("Content-type: $content_type;charset=utf-8");
 
 		// @todo should js be cached when simple cache turned off
 		//header('Expires: ' . gmdate('D, d M Y H:i:s \G\M\T', strtotime("+10 days")), true);
@@ -1765,6 +1790,9 @@ function _elgg_walled_garden_index() {
  */
 function _elgg_walled_garden_ajax_handler($page) {
 	$view = $page[0];
+	if (!elgg_view_exists("core/walled_garden/$view")) {
+		return false;
+	}
 	$params = array(
 		'content' => elgg_view("core/walled_garden/$view"),
 		'class' => 'elgg-walledgarden-single hidden',
@@ -1875,7 +1903,7 @@ function _elgg_init() {
 	elgg_register_page_handler('manifest.json', function() {
 		$site = elgg_get_site_entity();
 		$resource = new \Elgg\Http\WebAppManifestResource($site);
-		header('Content-Type: application/json');
+		header('Content-Type: application/json;charset=utf-8');
 		echo json_encode($resource->get());
 		return true;
 	});
@@ -1905,10 +1933,7 @@ function _elgg_init() {
 	elgg_register_js('elgg.ui.river', 'js/lib/ui.river.js');
 
 	elgg_register_css('jquery.imgareaselect', 'vendors/jquery/jquery.imgareaselect/css/imgareaselect-deprecated.css');
-	
-	// Trigger the shutdown:system event upon PHP shutdown.
-	register_shutdown_function('_elgg_shutdown_hook');
-	
+
 	// Sets a blacklist of words in the current language.
 	// This is a comma separated list in word:blacklist.
 	// @todo possibly deprecate

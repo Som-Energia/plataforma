@@ -236,7 +236,22 @@ You can also run tests continuously during development so they run on each save:
 
    karma start js/tests/karma.conf.js
 
+Debugging JS tests
+^^^^^^^^^^^^^^^^^^
 
+You can run the test suite inside Chrome dev tools:
+
+.. code::
+
+   npm run chrome
+
+This will output a URL like ``http://localhost:9876/``.
+
+#. Open the URL in Chrome, and click "Debug".
+#. Open Chrome dev tools and the Console tab.
+#. Reload the page.
+
+If you alter a test you'll have to quit Karma with ``Ctrl-c`` and restart it.
 
 Coding best practices
 =====================
@@ -281,6 +296,18 @@ Variable names
 Use self-documenting variable names.  ``$group_guids`` is better than ``$array``.
 
 Avoid double-negatives. Prefer ``$enable = true`` to ``$disable = false``.
+
+Interface names
+^^^^^^^^^^^^^^^
+
+Use the pattern `Elgg\{Namespace}\{Name}`.
+
+Do not include an `I` prefix or an `Interface` suffix.
+
+We do not include any prefix or suffix so that we're encouraged to:
+
+ * name implementation classes more descriptively (the "default" name is taken).
+ * type-hint on interfaces, because that is the shortest, easiest thing to do.
 
 Functions
 ^^^^^^^^^

@@ -1,5 +1,11 @@
 <?php
 
+elgg_register_event_handler('create', 'object', 'rm_as_event');
+
+elgg_register_event_handler('join', 'group', 'rm_group_join', 600);
+
+elgg_register_event_handler('leave', 'group', 'rm_group_leave', 600);
+
 function rm_as_event($event, $type, $reply) {
 
     $topic = (int) get_input('entity_guid');
@@ -31,33 +37,51 @@ function rm_as_event($event, $type, $reply) {
     return true;
 }
 
-function rm_as_adminSubmenu($hook, $type, $returnvalue, $params) {
-
-    $item = new ElggMenuItem('subscribeAll', elgg_echo('rm_group_autosubscription:admin:button'), elgg_add_action_tokens_to_url(elgg_get_site_url() . 'action/rm/subscribe'));
-    $item->setSection('notifications');
-    $item->setContext('admin');
-    $returnvalue[] = $item;
-
-    return $returnvalue;
+/**
+ * Suscribe user in all groupforumtopics in the group when join
+ * @param type $event
+ * @param type $type
+ * @param type $params
+ */
+function rm_group_join($event, $type, $params) {
+    $user = elgg_extract('user', $params);
+    $group = elgg_extract('group', $params);
+    
+    $rm_topics = elgg_get_entities(array(
+        'container_guids' => $group->guid,
+        'types' => 'object',
+        'subtypes' => 'groupforumtopic'
+    ));
+       
+    if (!empty($rm_topics)) {
+        foreach ($rm_topics as $topic) {
+            comment_tracker_subscribe($user->guid, $topic->guid);
+        }
+    }
 }
 
-function rm_as_init() {
 
-    $plugin_path = elgg_get_plugins_path() . 'rm_group_autosubscription/actions';
-
-
-    elgg_unregister_action('groups/join');
-    elgg_register_action('groups/join', $plugin_path . '/groups/membership/join.php');
-
-    elgg_unregister_action('discussion/save');
-    elgg_register_action('discussion/save', $plugin_path . '/discussion/save.php');
-
-    elgg_register_action('rm/subscribe', $plugin_path . '/rm/subscribe.php');
-
-
-    elgg_register_event_handler('create', 'object', 'rm_as_event');
-
-    elgg_register_plugin_hook_handler('register', 'menu:page', 'rm_as_adminSubmenu');
+/**
+ * Unsuscribe user in all groupforumtopics in the group when leave
+ * @param type $event
+ * @param type $type
+ * @param type $params
+ */
+function rm_group_leave($event, $type, $params) {
+    $user = elgg_extract('user', $params);
+    $group = elgg_extract('group', $params);
+    
+    $rm_topics = elgg_get_entities(array(
+        'container_guids' => $group->guid,
+        'types' => 'object',
+        'subtypes' => 'groupforumtopic'
+    ));
+       
+    if (!empty($rm_topics)) {
+        foreach ($rm_topics as $topic) {
+            if (comment_tracker_is_subscribed($user->guid, $topic->guid)) {
+                comment_tracker_unsubscribe($user->guid, $topic->guid);
+            }
+        }
+    }
 }
-
-elgg_register_event_handler('init', 'system', 'rm_as_init');

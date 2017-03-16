@@ -304,7 +304,7 @@ function _elgg_csrf_token_refresh() {
 		'user_guid' => elgg_get_logged_in_user_guid(),
 	);
 
-	header("Content-Type: application/json");
+	header("Content-Type: application/json;charset=utf-8");
 	echo json_encode($data);
 
 	return true;

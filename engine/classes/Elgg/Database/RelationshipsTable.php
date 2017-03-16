@@ -88,13 +88,12 @@ class RelationshipsTable {
 	 * @param int    $guid_one     GUID of the subject entity of the relationship
 	 * @param string $relationship Type of the relationship
 	 * @param int    $guid_two     GUID of the target entity of the relationship
+	 * @param bool   $return_id    Return the ID instead of bool?
 	 *
-	 * @return bool
+	 * @return bool|int
 	 * @throws \InvalidArgumentException
 	 */
-	function add($guid_one, $relationship, $guid_two) {
-		
-	
+	function add($guid_one, $relationship, $guid_two, $return_id = false) {
 		if (strlen($relationship) > \ElggRelationship::RELATIONSHIP_LIMIT) {
 			$msg = "relationship name cannot be longer than " . \ElggRelationship::RELATIONSHIP_LIMIT;
 			throw new \InvalidArgumentException($msg);
@@ -122,9 +121,9 @@ class RelationshipsTable {
 	
 			$result = _elgg_services()->events->trigger('create', 'relationship', $obj);
 			if ($result && $result_old) {
-				return true;
+				return $return_id ? $id : true;
 			} else {
-				delete_relationship($result);
+				delete_relationship($obj->id);
 			}
 		}
 	
@@ -289,19 +288,22 @@ class RelationshipsTable {
 	 *
 	 * @param array $options Array in format:
 	 *
-	 *  relationship         => null|STR Type of the relationship
+	 *  relationship => null|STR Type of the relationship. E.g. "member"
 	 *
-	 *  relationship_guid    => null|INT GUID of the subject or target entity
+	 *  relationship_guid => null|INT GUID of the subject of the relationship, unless "inverse_relationship" is set
+	 *                                to true, in which case this will specify the target.
 	 *
-	 *  inverse_relationship => false|BOOL Is relationship_guid is the target entity of the relationship? By default,
-	 * 	                        relationship_guid is the subject.
-	 * 
+	 *  inverse_relationship => false|BOOL Are we searching for relationship subjects? By default, the query finds
+	 *                                     targets of relationships.
+	 *
 	 *  relationship_join_on => null|STR How the entities relate: guid (default), container_guid, or owner_guid
-	 *                          Add in Elgg 1.9.0. Examples using the relationship 'friend':
-	 *                          1. use 'guid' if you want the user's friends
-	 *                          2. use 'owner_guid' if you want the entities the user's friends own (including in groups)
-	 *                          3. use 'container_guid' if you want the entities in the user's personal space (non-group)
-	 *                          
+	 *                                   Examples using the relationship 'friend':
+	 *                                   1. use 'guid' if you want the user's friends
+	 *                                   2. use 'owner_guid' if you want the entities the user's friends own
+	 *                                      (including in groups)
+	 *                                   3. use 'container_guid' if you want the entities in the user's personal
+	 *                                      space (non-group)
+	 *
 	 * 	relationship_created_time_lower => null|INT Relationship created time lower boundary in epoch time
 	 *
 	 * 	relationship_created_time_upper => null|INT Relationship created time upper boundary in epoch time

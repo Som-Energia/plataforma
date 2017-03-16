@@ -2,5 +2,7 @@
 return array(
 	'tagcloud:widget:title' => 'وسم سحابي',
 	'tagcloud:widget:description' => 'وسم سحابي',
-	'tagcloud:widget:numtags' => 'إضهار عدد الوسوم السحابية',
+	'tagcloud:widget:numtags' => 'عدد الوسوم المرئية',
+	'tagcloud:site_cloud' => 'الوسم السحابي للموقع',
+	'tagcloud:allsitetags' => 'كل وسوم الموقع',
 );
