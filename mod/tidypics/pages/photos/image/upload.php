@@ -15,7 +15,7 @@ if (!$album_guid) {
 }
 
 $album = get_entity($album_guid);
-if (!$album) {
+if (!$album || !elgg_instanceof($album, 'object', 'album')) {
 	// @todo
 	// throw warning and forward to previous page
 	forward(REFERER);
@@ -49,7 +49,7 @@ if ($uploader == 'basic') {
 	elgg_load_js('jquery.plupload.ui.lang-tp');
 	elgg_load_css('jquery.plupload.jqueryui-theme');
 	elgg_load_css('jquery.plupload.ui');
-	elgg_load_js('tidypics:uploading');
+	elgg_require_js('tidypics/uploading');
 	$content = elgg_view('forms/photos/ajax_upload', array('entity' => $album));
 }
 

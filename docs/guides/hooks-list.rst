@@ -143,6 +143,11 @@ User hooks
 **status, user**
 	Triggered by The Wire when adding a post.
 
+**username:character_blacklist, user**
+	Filters the string of blacklisted characters used to validate username during registration.
+	The return value should be a string consisting of the disallowed characters. The default
+	string can be found from ``$params['blacklist']``.
+
 Object hooks
 ============
 
@@ -257,6 +262,20 @@ Views
 **head, page**
     In ``elgg_view_page()``, filters ``$vars['head']``
 
+Files
+=====
+
+**mime_type, file**
+	Return the mimetype for the filename ``$params['filename']`` with original filename ``$params['original_filename']``
+	and with the default detected mimetype of ``$params['default']``.
+
+**simple_type, file**
+    In ``elgg_get_file_simple_type()``, filters the return value. The hook uses ``$params['mime_type']``
+    (e.g. ``application/pdf`` or ``image/jpeg``) and determines an overall category like
+    ``document`` or ``image``. The bundled file plugin and other-third party plugins usually store
+    ``simpletype`` metadata on file entities and make use of it when serving icons and constructing
+    ``ege*`` filters and menus.
+
 .. _guides/hooks-list#other:
 
 Other
@@ -325,10 +344,6 @@ Other
 
 **file:icon:url, override**
 	Override a file icon URL.
-
-**mime_type, file**
-	Return the mimetype for the filename ``$params['filename']`` with original filename ``$params['original_filename']``
-	and with the default detected mimetype of ``$params['default']``.
 
 **is_member, group**
 	Return boolean for if the user ``$params['user']`` is a member of the group ``$params['group']``.
@@ -418,11 +433,14 @@ Other
 Plugins
 =======
 
-File
-----
+Embed
+-----
 
-**simple_type, file**
-    In ``file_get_simple_type()``, filters the return value for the file type.
+**embed_get_items, <active_section>**
+
+**embed_get_sections, all**
+
+**embed_get_upload_sections, all**
 
 HTMLawed
 --------

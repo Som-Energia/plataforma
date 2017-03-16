@@ -10,26 +10,15 @@
 /* Filepath Cache */
 
 /**
- * Returns an ElggCache object suitable for caching system information
+ * Returns an \ElggCache object suitable for caching system information
  *
  * @todo Can this be done in a cleaner way?
  * @todo Swap to memcache etc?
  *
- * @return ElggFileCache
+ * @return \ElggFileCache
  */
 function elgg_get_system_cache() {
-	global $CONFIG;
-
-	/**
-	 * A default filestore cache using the dataroot.
-	 */
-	static $FILE_PATH_CACHE;
-
-	if (!$FILE_PATH_CACHE) {
-		$FILE_PATH_CACHE = new ElggFileCache($CONFIG->dataroot . 'system_cache/');
-	}
-
-	return $FILE_PATH_CACHE;
+	return _elgg_services()->systemCache->get();
 }
 
 /**
@@ -38,8 +27,7 @@ function elgg_get_system_cache() {
  * @return void
  */
 function elgg_reset_system_cache() {
-	$cache = elgg_get_system_cache();
-	$cache->clear();
+	_elgg_services()->systemCache->reset();
 }
 
 /**
@@ -50,14 +38,7 @@ function elgg_reset_system_cache() {
  * @return bool
  */
 function elgg_save_system_cache($type, $data) {
-	global $CONFIG;
-
-	if ($CONFIG->system_cache_enabled) {
-		$cache = elgg_get_system_cache();
-		return $cache->save($type, $data);
-	}
-
-	return false;
+	return _elgg_services()->systemCache->save($type, $data);
 }
 
 /**
@@ -67,18 +48,7 @@ function elgg_save_system_cache($type, $data) {
  * @return string
  */
 function elgg_load_system_cache($type) {
-	global $CONFIG;
-
-	if ($CONFIG->system_cache_enabled) {
-		$cache = elgg_get_system_cache();
-		$cached_data = $cache->load($type);
-
-		if ($cached_data) {
-			return $cached_data;
-		}
-	}
-
-	return null;
+	return _elgg_services()->systemCache->load($type);
 }
 
 /**
@@ -90,11 +60,7 @@ function elgg_load_system_cache($type) {
  * @return void
  */
 function elgg_enable_system_cache() {
-	global $CONFIG;
-
-	datalist_set('system_cache_enabled', 1);
-	$CONFIG->system_cache_enabled = 1;
-	elgg_reset_system_cache();
+	_elgg_services()->systemCache->enable();
 }
 
 /**
@@ -106,11 +72,7 @@ function elgg_enable_system_cache() {
  * @return void
  */
 function elgg_disable_system_cache() {
-	global $CONFIG;
-
-	datalist_set('system_cache_enabled', 0);
-	$CONFIG->system_cache_enabled = 0;
-	elgg_reset_system_cache();
+	_elgg_services()->systemCache->disable();
 }
 
 /* Simplecache */
@@ -134,14 +96,14 @@ function elgg_disable_system_cache() {
  * @since 1.8.0
  */
 function elgg_register_simplecache_view($view_name) {
-	elgg_register_external_view($view_name, true);
+	_elgg_services()->simpleCache->registerView($view_name);
 }
 
 /**
  * Get the URL for the cached file
- *
+ * 
  * This automatically registers the view with Elgg's simplecache.
- *
+ * 
  * @example
  * 		$blog_js = elgg_get_simplecache_url('js', 'blog/save_draft');
  *		elgg_register_js('elgg.blog', $blog_js);
@@ -153,44 +115,30 @@ function elgg_register_simplecache_view($view_name) {
  * @since 1.8.0
  */
 function elgg_get_simplecache_url($type, $view) {
-	// handle file type passed with view name
-	if (($type === 'js' || $type === 'css') && 0 === strpos($view, $type . '/')) {
-		$view = substr($view, strlen($type) + 1);
-	}
-
-	elgg_register_simplecache_view("$type/$view");
-	return _elgg_get_simplecache_root() . "$type/$view";
+	return _elgg_services()->simpleCache->getUrl($type, $view);
 }
 
 
 /**
  * Get the base url for simple cache requests
- *
+ * 
  * @return string The simplecache root url for the current viewtype.
  * @access private
  */
 function _elgg_get_simplecache_root() {
-	$viewtype = elgg_get_viewtype();
-	if (elgg_is_simplecache_enabled()) {
-		// stored in datalist as 'simplecache_lastupdate'
-		$lastcache = (int)elgg_get_config('lastcache');
-	} else {
-		$lastcache = 0;
-	}
-
-	return elgg_normalize_url("/cache/$lastcache/$viewtype/");
+	return _elgg_services()->simpleCache->getRoot();
 }
 
 /**
  * Returns the type of output expected from the view.
- *
+ * 
  * css/* views always return "css"
  * js/* views always return "js"
  *
  * @todo why isn't this in the CacheHandler class? It is not used anywhere else.
- *
+ * 
  * @todo view/name.suffix returns "suffix"
- *
+ * 
  * Otherwise, returns "unknown"
  *
  * @param string $view The view name
@@ -212,7 +160,7 @@ function _elgg_get_view_filetype($view) {
  * @since 1.8.0
  */
 function elgg_is_simplecache_enabled() {
-	return (bool) elgg_get_config('simplecache_enabled');
+	return _elgg_services()->simpleCache->isEnabled();
 }
 
 /**
@@ -223,9 +171,7 @@ function elgg_is_simplecache_enabled() {
  * @since 1.8.0
  */
 function elgg_enable_simplecache() {
-	datalist_set('simplecache_enabled', 1);
-	elgg_set_config('simplecache_enabled', 1);
-	elgg_invalidate_simplecache();
+	_elgg_services()->simpleCache->enable();
 }
 
 /**
@@ -238,17 +184,13 @@ function elgg_enable_simplecache() {
  * @since 1.8.0
  */
 function elgg_disable_simplecache() {
-	if (elgg_get_config('simplecache_enabled')) {
-		datalist_set('simplecache_enabled', 0);
-		elgg_set_config('simplecache_enabled', 0);
-
-		// purge simple cache
-		_elgg_rmdir(elgg_get_data_path() . "views_simplecache");
-	}
+	_elgg_services()->simpleCache->disable();
 }
 
 /**
  * Recursively deletes a directory, including all hidden files.
+ * 
+ * TODO(ewinslow): Move to filesystem package
  *
  * @param string $dir
  * @return boolean Whether the dir was successfully deleted.
@@ -256,7 +198,7 @@ function elgg_disable_simplecache() {
  */
 function _elgg_rmdir($dir) {
 	$files = array_diff(scandir($dir), array('.', '..'));
-
+	
 	foreach ($files as $file) {
 		if (is_dir("$dir/$file")) {
 			_elgg_rmdir("$dir/$file");
@@ -264,7 +206,7 @@ function _elgg_rmdir($dir) {
 			unlink("$dir/$file");
 		}
 	}
-
+	
 	return rmdir($dir);
 }
 
@@ -276,74 +218,18 @@ function _elgg_rmdir($dir) {
  * @since 1.7.4
  */
 function elgg_invalidate_simplecache() {
-	global $CONFIG;
-
-	if (!isset($CONFIG->views->simplecache) || !is_array($CONFIG->views->simplecache)) {
-		return false;
-	}
-
-	_elgg_rmdir("{$CONFIG->dataroot}views_simplecache");
-	mkdir("{$CONFIG->dataroot}views_simplecache");
-
-	$time = time();
-	datalist_set("simplecache_lastupdate", $time);
-	$CONFIG->lastcache = $time;
-
-	return true;
-}
-
-/**
- * Loads the system cache during engine boot
- *
- * @see elgg_reset_system_cache()
- * @access private
- */
-function _elgg_load_cache() {
-	global $CONFIG;
-
-	$CONFIG->system_cache_loaded = false;
-
-	$CONFIG->views = new stdClass();
-	$data = elgg_load_system_cache('view_locations');
-	if (!is_string($data)) {
-		return;
-	}
-	$CONFIG->views->locations = unserialize($data);
-
-	$data = elgg_load_system_cache('view_types');
-	if (!is_string($data)) {
-		return;
-	}
-	$CONFIG->view_types = unserialize($data);
-
-	$CONFIG->system_cache_loaded = true;
+	_elgg_services()->simpleCache->invalidate();
 }
 
 /**
  * Initializes the simplecache lastcache variable and creates system cache files
  * when appropriate.
- *
+ * 
  * @access private
  */
 function _elgg_cache_init() {
-	global $CONFIG;
-
-	if (!defined('UPGRADING') && empty($CONFIG->lastcache)) {
-		$CONFIG->lastcache = (int)datalist_get('simplecache_lastupdate');
-	}
-
-	// cache system data if enabled and not loaded
-	if ($CONFIG->system_cache_enabled && !$CONFIG->system_cache_loaded) {
-		elgg_save_system_cache('view_locations', serialize($CONFIG->views->locations));
-		elgg_save_system_cache('view_types', serialize($CONFIG->view_types));
-	}
-
-	if ($CONFIG->system_cache_enabled && !$CONFIG->i18n_loaded_from_cache) {
-		reload_all_translations();
-		foreach ($CONFIG->translations as $lang => $map) {
-			elgg_save_system_cache("$lang.lang", serialize($map));
-		}
-	}
+	_elgg_services()->simpleCache->init();
+	_elgg_services()->systemCache->init();
 }
 
 elgg_register_event_handler('ready', 'system', '_elgg_cache_init');

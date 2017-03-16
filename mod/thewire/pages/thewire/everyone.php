@@ -1,7 +1,7 @@
 <?php
 /**
  * All wire posts
- *
+ * 
  */
 
 elgg_push_breadcrumb(elgg_echo('thewire'));
@@ -19,6 +19,7 @@ $content .= elgg_list_entities(array(
 	'type' => 'object',
 	'subtype' => 'thewire',
 	'limit' => get_input('limit', 15),
+	'preload_owners' => true,
 ));
 
 $body = elgg_view_layout('content', array(

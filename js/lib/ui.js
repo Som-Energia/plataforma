@@ -22,7 +22,10 @@ elgg.ui.init = function () {
 
 	$('.elgg-menu-page .elgg-menu-parent').live('click', elgg.ui.toggleMenu);
 
-	$('.elgg-requires-confirmation').live('click', elgg.ui.requiresConfirmation);
+    $('*[data-confirm], .elgg-requires-confirmation').live('click', elgg.ui.requiresConfirmation);
+    if ($('.elgg-requires-confirmation').length > 0) {
+        elgg.deprecated_notice('Use of .elgg-requires-confirmation is deprecated by data-confirm', '1.10');
+    }
 
 	$('.elgg-autofocus').focus();
 	if ($('.elgg-autofocus').length > 0) {
@@ -37,17 +40,35 @@ elgg.ui.init = function () {
  *
  * Use rel="toggle" on the toggler element
  * Set the href to target the item you want to toggle (<a rel="toggle" href="#id-of-target">)
+ * or use data-toggle-selector="your_jquery_selector" to have an advanced selection method
+ * 
+ * By default elements perform a slideToggle. 
+ * If you want a normal toggle (hide/show) you can add data-toggle-slide="0" on the elements to prevent a slide.
  *
  * @param {Object} event
  * @return void
  */
 elgg.ui.toggles = function(event) {
 	event.preventDefault();
+	var $this = $(this),
+		target = $this.data().toggleSelector;
+	
+	if (!target) {
+		// @todo we can switch to elgg.getSelectorFromUrlFragment() in 1.x if
+		// we also extend it to support href=".some-class"
+		target = $this.attr('href');
+	}
 
-	// @todo might want to switch this to elgg.getSelectorFromUrlFragment().
-	var target = $(this).toggleClass('elgg-state-active').attr('href');
+	$this.toggleClass('elgg-state-active');
 
-	$(target).slideToggle('medium');
+	$(target).each(function(index, elem) {
+		var $elem = $(elem);
+		if ($elem.data().toggleSlide != false) {
+			$elem.slideToggle('medium');
+		} else {
+			$elem.toggle();
+		}
+	});
 };
 
 /**
@@ -267,7 +288,7 @@ elgg.ui.loginHandler = function(hook, type, params, options) {
  * @requires jqueryui.datepicker
  */
 elgg.ui.initDatePicker = function() {
-	var loadDatePicker = function() {
+	function loadDatePicker() {
 		$('.elgg-input-date').datepicker({
 			// ISO-8601
 			dateFormat: 'yy-mm-dd',
@@ -281,13 +302,20 @@ elgg.ui.initDatePicker = function() {
 					var id = $(this).attr('id');
 					$('input[name="' + id + '"]').val(timestamp);
 				}
-			}
+			},
+			nextText: '&#xBB;',
+			prevText: '&#xAB;'
 		});
-	};
+	}
 
-	if ($('.elgg-input-date').length && elgg.get_language() == 'en') {
+	if (!$('.elgg-input-date').length) {
+		return;
+	}
+
+	if (elgg.get_language() == 'en') {
 		loadDatePicker();
-	} else if ($('.elgg-input-date').length) {
+	} else {
+		// load language first
 		elgg.get({
 			url: elgg.config.wwwroot + 'vendors/jquery/i18n/jquery.ui.datepicker-'+ elgg.get_language() +'.js',
 			dataType: "script",

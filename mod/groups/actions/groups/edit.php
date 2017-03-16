@@ -45,8 +45,8 @@ if ($is_new_group
 	forward(REFERER);
 }
 
-$group = new ElggGroup($group_guid); // load if present, if not create a new group
-if ($group_guid && !$group->canEdit()) {
+$group = $group_guid ? get_entity($group_guid) : new ElggGroup();
+if (elgg_instanceof($group, "group") && !$group->canEdit()) {
 	register_error(elgg_echo("groups:cantedit"));
 	forward(REFERER);
 }
@@ -66,6 +66,14 @@ if (sizeof($input) > 0) {
 					WHERE id = $group->group_acl";
 				update_data($query);
 			}
+		}
+
+		if ($value === '') {
+			// The group profile displays all profile fields that have a value.
+			// We don't want to display fields with empty string value, so we
+			// remove the metadata completely.
+			$group->deleteMetadata($shortname);
+			continue;
 		}
 
 		$group->$shortname = $value;
@@ -192,7 +200,7 @@ if ($has_uploaded_icon) {
 	$filehandler->close();
 	$filename = $filehandler->getFilenameOnFilestore();
 
-	$sizes = array('tiny', 'small', 'medium', 'large');
+	$sizes = array('tiny', 'small', 'medium', 'large', 'master');
 
 	$thumbs = array();
 	foreach ($sizes as $size) {

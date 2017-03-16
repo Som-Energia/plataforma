@@ -3,7 +3,7 @@
  * Upgrade object for upgrades that need to be tracked
  * and listed in the admin area.
  *
- * @todo Expand for all upgrades to be ElggUpgrade subclasses.
+ * @todo Expand for all upgrades to be \ElggUpgrade subclasses.
  */
 
 /**
@@ -16,7 +16,7 @@
  * @package Elgg.Admin
  * @access private
  */
-class ElggUpgrade extends ElggObject {
+class ElggUpgrade extends \ElggObject {
 	private $requiredProperties = array(
 		'title',
 		'description',

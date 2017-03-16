@@ -3,7 +3,8 @@
  * Tidypics thumbnail creation tool
  */
 
-elgg_load_js('tidypics:resize_thumbnails');
+elgg_require_js('tidypics/resize_thumbnails');
+elgg_require_js('tidypics/thumbnails');
 
 $title = elgg_echo('tidypics:settings:thumbnail');
 $body = '<p>' . elgg_echo('tidypics:thumbnail_tool_blurb') . '</p>';
@@ -78,30 +79,3 @@ $body2 .=<<<HTML
 HTML;
 
 echo elgg_view_module('inline', $title2, $body2);
-
-?>
-
-<script type="text/javascript">
-	$(function() {
-		$('#elgg-tidypics-im-test').click(function() {
-			var image_id = $('input[name=image_id]').val();
-			$("#elgg-tidypics-im-results").html('<div class="elgg-ajax-loader"></div>');
-			elgg.action('photos/admin/create_thumbnails', {
-				format: 'JSON',
-				data: {guid: image_id},
-				cache: false,
-				success: function(result) {
-					// error
-					if (result.status < 0) {
-						var html = '';
-					} else {
-						var html = '<img class="elgg-photo tidypics-photo" src="'
-							+ result.output.thumbnail_src + '" alt="' + result.output.title
-							+ '" />';
-					}
-					$("#elgg-tidypics-im-results").html(html);
-				}
-			});
-		});
-	});
-</script>

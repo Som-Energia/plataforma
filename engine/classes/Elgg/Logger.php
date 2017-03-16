@@ -1,4 +1,5 @@
 <?php
+namespace Elgg;
 
 /**
  * WARNING: API IN FLUX. DO NOT USE DIRECTLY.
@@ -11,7 +12,7 @@
  * @subpackage Logging
  * @since      1.9.0
  */
-class Elgg_Logger {
+class Logger {
 
 	const OFF = 0;
 	const ERROR = 400;
@@ -33,15 +34,21 @@ class Elgg_Logger {
 	/** @var bool $display Display to user? */
 	protected $display = false;
 
-	/** @var Elgg_PluginHooksService $hooks */
+	/** @var \Elgg\PluginHooksService $hooks */
 	protected $hooks;
+
+	/** @var \stdClass Global Elgg configuration */
+	private $CONFIG;
 
 	/**
 	 * Constructor
 	 *
-	 * @param Elgg_PluginHooksService $hooks Hooks service
+	 * @param \Elgg\PluginHooksService $hooks Hooks service
 	 */
-	public function __construct(Elgg_PluginHooksService $hooks) {
+	public function __construct(\Elgg\PluginHooksService $hooks) {
+		global $CONFIG;
+		
+		$this->CONFIG = $CONFIG;
 		$this->hooks = $hooks;
 	}
 
@@ -62,7 +69,7 @@ class Elgg_Logger {
 
 	/**
 	 * Get the current logging level
-	 *
+	 * 
 	 * @return int
 	 */
 	public function getLevel() {
@@ -169,7 +176,7 @@ class Elgg_Logger {
 	 * @return void
 	 */
 	protected function process($data, $display, $level) {
-		global $CONFIG;
+		
 
 		// plugin can return false to stop the default logging method
 		$params = array(
@@ -186,7 +193,7 @@ class Elgg_Logger {
 		// Do not want to write to screen before page creation has started.
 		// This is not fool-proof but probably fixes 95% of the cases when logging
 		// results in data sent to the browser before the page is begun.
-		if (!isset($CONFIG->pagesetupdone)) {
+		if (!isset($this->CONFIG->pagesetupdone)) {
 			$display = false;
 		}
 
@@ -204,3 +211,4 @@ class Elgg_Logger {
 		}
 	}
 }
+

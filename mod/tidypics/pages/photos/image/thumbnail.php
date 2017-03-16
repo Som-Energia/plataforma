@@ -9,7 +9,7 @@
 $guid = (int) get_input('guid');
 $size = get_input('size');
 $image = get_entity($guid);
-if (!$image) {
+if (!$image || !elgg_instanceof($image, 'object', 'image')) {
 	forward(REFERER);
 }
 

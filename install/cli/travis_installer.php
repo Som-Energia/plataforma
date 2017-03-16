@@ -19,7 +19,9 @@ if (PHP_SAPI !== 'cli') {
 	exit(2);
 }
 
-require_once(dirname(dirname(__FILE__)) . "/ElggInstaller.php");
+$elggRoot = dirname(dirname(__DIR__));
+
+require_once "$elggRoot/vendor/autoload.php";
 
 $installer = new ElggInstaller();
 
@@ -29,11 +31,12 @@ $params = array(
 	'dbuser' => 'root',
 	'dbpassword' => 'password',
 	'dbname' => 'elgg',
+	'dbprefix' => 't_i_elgg_',
 
 	// site settings
 	'sitename' => 'Elgg Travis Site',
 	'siteemail' => 'no_reply@travis.elgg.org',
-	'wwwroot' => 'http://travis.elgg.org/',
+	'wwwroot' => 'http://localhost:8888/',
 	'dataroot' => getenv('HOME') . '/elgg_data/',
 
 	// admin account

@@ -9,7 +9,7 @@
 // get the photo entity
 $photo_guid = (int) get_input('guid');
 $photo = get_entity($photo_guid);
-if (!$photo) {
+if (!$photo || !elgg_instanceof($photo, 'object', 'image')) {
 	register_error(elgg_echo('noaccess'));
 	$_SESSION['last_forward_from'] = current_page_url();
 	forward('');
@@ -32,8 +32,8 @@ elgg_group_gatekeeper();
 $photo->addView();
 
 if (elgg_get_plugin_setting('tagging', 'tidypics')) {
-	elgg_load_js('tidypics:tagging');
 	elgg_load_js('jquery.imgareaselect');
+	elgg_require_js('tidypics/tagging');
 }
 
 // set up breadcrumbs

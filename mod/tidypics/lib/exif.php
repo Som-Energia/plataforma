@@ -23,16 +23,45 @@ function td_get_exif($image) {
 	}
 
 	$filename = $image->getFilenameOnFilestore();
-	$exif = exif_read_data($filename, 'IFD0,EXIF', true);
+	$exif = exif_read_data($filename, "ANY_TAG", true);
 	if (is_array($exif)) {
-		$data = array_merge($exif['IFD0'], $exif['EXIF']);
-		foreach ($data as $key => $value) {
-			if (is_string($value)) {
-				// there are sometimes unicode characters that cause problems with serialize
-				$data[$key] = preg_replace( '/[^[:print:]]/', '', $value);
+		// What data is in the image file?
+		$data = false; // We start with no data
+		if (is_array($exif['IFD0']) && is_array($exif['EXIF'])) {
+			$data = array_merge($exif['IFD0'], $exif['EXIF']);
+		} else if (is_array($exif['IFD0'])) {
+			$data = $exif['IFD0'];
+		} else if (is_array($exif['EXIF'])) {
+			$data = $exif['EXIF'];
+		}
+
+		if ($data && is_array($data) && count($data) > 0) {
+			foreach ($data as $key => $value) {
+				if (is_string($value)) {
+					// there are sometimes unicode characters that cause problems with serialize
+					$data[$key] = preg_replace( '/[^[:print:]]/', '', $value);
+				}
 			}
 		}
-		$image->tp_exif = serialize($data);
+
+		if (is_array($exif['GPS'])) {
+			// GPS data
+			$gps_exif = array_intersect_key($exif['GPS'], array_flip(array('GPSLatitudeRef', 'GPSLatitude', 'GPSLongitudeRef', 'GPSLongitude')));
+
+			if (count($gps_exif) == 4) {
+				if (
+					is_array($gps_exif['GPSLatitude']) && in_array($gps_exif['GPSLatitudeRef'], array('S', 'N')) &&
+					is_array($gps_exif['GPSLongitude']) && in_array($gps_exif['GPSLongitudeRef'], array('W', 'E'))
+				) {
+					$data['latitude'] = parse_exif_gps_data($gps_exif['GPSLatitude'], $gps_exif['GPSLatitudeRef']);
+					$data['longitude'] = parse_exif_gps_data($gps_exif['GPSLongitude'], $gps_exif['GPSLongitudeRef']);
+				}
+			}
+		}
+
+		if ($data && is_array($data) && count($data) > 0) {
+			$image->tp_exif = serialize($data);
+		}
 	}
 }
 
@@ -106,5 +135,38 @@ function tp_exif_formatted($image) {
 	}
 	$exif_data['Captured'] = $captured;
 
+	// uncomment the following lines if you want to get the GPS position displayed - used only for testing now
+// 	if ($exif['latitude'] && $exif['longitude']) {
+// 		$exif_data['latitude'] = $exif['latitude'];
+// 		$exif_data['longitude'] = $exif['longitude'];
+// 	}
+
 	return $exif_data;
+}
+
+/**
+ * Converts EXIF GPS format to a float value.
+ *
+ * @param string[] $raw eg:
+ *    - 41/1
+ *    - 54/1
+ *    - 9843/500
+ * @param string $ref 'S', 'N', 'E', 'W'. eg: 'N'
+ * @return float eg: 41.905468
+ */
+function parse_exif_gps_data($raw, $ref) {
+	foreach ($raw as &$i) {
+		$i = explode('/', $i);
+		$i = $i[1] == 0 ? 0 : $i[0] / $i[1];
+	}
+	unset($i);
+
+	$v = $raw[0] + $raw[1] / 60 + $raw[2] / 3600;
+
+	$ref = strtoupper($ref);
+	if ($ref == 'S' || $ref == 'W') {
+		$v= -$v;
+	}
+
+	return $v;
 }

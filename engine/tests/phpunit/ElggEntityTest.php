@@ -1,21 +1,18 @@
 <?php
 
-$engine = dirname(dirname(dirname(__FILE__)));
-require_once "$engine/lib/output.php";
-
 /**
- * This requires elgg_get_logged_in_user_guid() in session.php, the access
+ * This requires elgg_get_logged_in_user_guid() in session.php, the access 
  * constants defined in entities.php, and elgg_normalize_url() in output.php
  */
-class ElggEntityTest extends PHPUnit_Framework_TestCase {
+class ElggEntityTest extends \PHPUnit_Framework_TestCase {
 
-	/** @var ElggEntity */
+	/** @var \ElggEntity */
 	protected $obj;
 
 	protected function setUp() {
-		_elgg_services()->setValue('session', new ElggSession(new Elgg_Http_MockSessionStorage()));
-		$this->obj = $this->getMockForAbstractClass('ElggEntity');
-		$reflection = new ReflectionClass('ElggEntity');
+		_elgg_services()->setValue('session', new \ElggSession(new \Elgg\Http\MockSessionStorage()));
+		$this->obj = $this->getMockForAbstractClass('\ElggEntity');
+		$reflection = new ReflectionClass('\ElggEntity');
 		$method = $reflection->getMethod('initializeAttributes');
 		if (method_exists($method, 'setAccessible')) {
 			$method->setAccessible(true);
@@ -23,9 +20,6 @@ class ElggEntityTest extends PHPUnit_Framework_TestCase {
 		}
 	}
 
-	/**
-	 * @requires PHP 5.3.2
-	 */
 	public function testDefaultAttributes() {
 		$this->assertEquals(null, $this->obj->guid);
 		$this->assertEquals(null, $this->obj->type);
@@ -40,9 +34,6 @@ class ElggEntityTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals('yes', $this->obj->enabled);
 	}
 
-	/**
-	 * @requires PHP 5.3.2
-	 */
 	public function testSettingAndGettingAttribute() {
 		// Note: before save() subtype returns string, int after
 		// see https://github.com/Elgg/Elgg/issues/5920#issuecomment-25246298
@@ -50,29 +41,20 @@ class ElggEntityTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals('foo', $this->obj->subtype);
 	}
 
-	/**
-	 * @requires PHP 5.3.2
-	 */
 	public function testSettingIntegerAttributes() {
 		foreach (array('access_id', 'owner_guid', 'container_guid') as $name) {
 			$this->obj->$name = '77';
-			$this->assertSame(77, $this->obj->$name);
+			$this->assertSame(77, $this->obj->$name);			
 		}
 	}
 
-	/**
-	 * @requires PHP 5.3.2
-	 */
 	public function testSettingUnsettableAttributes() {
 		foreach (array('guid', 'time_updated', 'last_action') as $name) {
 			$this->obj->$name = 'foo';
-			$this->assertNotEquals('foo', $this->obj->$name);
-		}
+			$this->assertNotEquals('foo', $this->obj->$name);			
+		}		
 	}
 
-	/**
-	 * @requires PHP 5.3.2
-	 */
 	public function testSettingMetadataNoDatabase() {
 		$this->obj->foo = 'test';
 		$this->assertEquals('test', $this->obj->foo);
@@ -80,16 +62,10 @@ class ElggEntityTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals('overwrite', $this->obj->foo);
 	}
 
-	/**
-	 * @requires PHP 5.3.2
-	 */
 	public function testGettingNonexistentMetadataNoDatabase() {
 		$this->assertNull($this->obj->foo);
 	}
 
-	/**
-	 * @requires PHP 5.3.2
-	 */
 	public function testSimpleGetters() {
 		$this->obj->type = 'foo';
 		$this->obj->subtype = 'subtype';
@@ -110,9 +86,6 @@ class ElggEntityTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals($this->obj->getTimeUpdated(), $this->obj->time_updated );
 	}
 
-	/**
-	 * @requires PHP 5.3.2
-	 */
 	public function testUnsetAttribute() {
 		$this->obj->access_id = 2;
 		unset($this->obj->access_id);
@@ -120,11 +93,10 @@ class ElggEntityTest extends PHPUnit_Framework_TestCase {
 	}
 
 	/**
-	 * @requires PHP 5.3.2
 	 * @expectedException InvalidParameterException
 	 */
 	public function testSaveWithoutType() {
-		$db = $this->getMock('Elgg_Database',
+		$db = $this->getMock('\Elgg\Database',
 			array('getData', 'getTablePrefix', 'sanitizeString'),
 			array(),
 			'',
@@ -139,24 +111,15 @@ class ElggEntityTest extends PHPUnit_Framework_TestCase {
 		$this->obj->save();
 	}
 
-	/**
-	 * @requires PHP 5.3.2
-	 */
 	public function testIsEnabled() {
 		$this->assertTrue($this->obj->isEnabled());
 	}
 
-	/**
-	 * @requires PHP 5.3.2
-	 */
 	public function testDisableBeforeSaved() {
 		// false on disable because it's not saved yet.
 		$this->assertFalse($this->obj->disable());
 	}
 
-	/**
-	 * @requires PHP 5.3.2
-	 */
 	public function testToObject() {
 		$keys = array(
 			'guid',
@@ -177,5 +140,17 @@ class ElggEntityTest extends PHPUnit_Framework_TestCase {
 		sort($object_keys);
 
 		$this->assertEquals($keys, $object_keys);
+	}
+
+	public function testLatLong() {
+
+		// Coordinates for Elgg, Switzerland
+		$lat = 47.483333;
+		$long = 8.866667;
+
+		$this->obj->setLatLong($lat, $long);
+
+		$this->assertEquals($this->obj->getLatitude(), $lat);
+		$this->assertEquals($this->obj->getLongitude(), $long);
 	}
 }

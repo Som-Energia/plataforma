@@ -1,9 +1,9 @@
 <?php
 /**
- * Unlocks the upgrade script
+ * Unlocks the upgrade script 
  */
 
-$upgrader = new Elgg_UpgradeService();
+$upgrader = new Elgg\UpgradeService();
 
 if ($upgrader->isUpgradeLocked()) {
 	$upgrader->releaseUpgradeMutex();

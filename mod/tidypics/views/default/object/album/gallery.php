@@ -14,7 +14,7 @@ $album_cover = elgg_view_entity_icon($album, 'small');
 
 $album_title = $album->getTitle();
 if (strlen($album_title) > 20) {
-	$album_title = substr($album_title, 0, 17).'...';
+	$album_title = mb_substr($album_title, 0, 17, "utf-8") . "...";
 }
 
 $header = elgg_view('output/url', array(

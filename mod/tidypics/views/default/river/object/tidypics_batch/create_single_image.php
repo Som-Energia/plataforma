@@ -7,7 +7,7 @@
  *
  */
 
-elgg_load_js('tidypics');
+elgg_require_js('tidypics/tidypics');
 elgg_load_js('lightbox');
 elgg_load_css('lightbox');
 

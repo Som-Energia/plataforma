@@ -34,7 +34,7 @@ function thewire_init() {
 
 	// remove edit and access and add thread, reply, view previous
 	elgg_register_plugin_hook_handler('register', 'menu:entity', 'thewire_setup_entity_menu_items');
-
+	
 	// Extend system CSS with our own styles, which are defined in the thewire/css view
 	elgg_extend_view('css/elgg', 'thewire/css');
 
@@ -165,9 +165,9 @@ function thewire_set_url($hook, $type, $url, $params) {
  *
  * @param string                          $hook         Hook name
  * @param string                          $type         Hook type
- * @param Elgg_Notifications_Notification $notification The notification to prepare
+ * @param Elgg\Notifications\Notification $notification The notification to prepare
  * @param array                           $params       Hook parameters
- * @return Elgg_Notifications_Notification
+ * @return Elgg\Notifications\Notification
  */
 function thewire_prepare_notification($hook, $type, $notification, $params) {
 
@@ -292,7 +292,7 @@ function thewire_save_post($text, $userid, $access_id, $parent_guid = 0, $method
 	// set thread guid
 	if ($parent_guid) {
 		$post->addRelationship($parent_guid, 'parent');
-
+		
 		// name conversation threads by guid of first post (works even if first post deleted)
 		$parent_post = get_entity($parent_guid);
 		$post->wire_thread = $parent_post->wire_thread;
@@ -319,7 +319,7 @@ function thewire_save_post($text, $userid, $access_id, $parent_guid = 0, $method
 		);
 		elgg_trigger_plugin_hook('status', 'user', $params);
 	}
-
+	
 	return $guid;
 }
 
@@ -483,7 +483,7 @@ function thewire_test($hook, $type, $value, $params) {
 function thewire_run_upgrades() {
 	$path = dirname(__FILE__) . '/upgrades/';
 	$files = elgg_get_upgrade_files($path);
-
+	
 	foreach ($files as $file) {
 		include $path . $file;
 	}

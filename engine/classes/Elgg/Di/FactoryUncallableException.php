@@ -1,10 +1,12 @@
 <?php
+namespace Elgg\Di;
 
 /**
  * Factory uncallable exception
- *
+ * 
  * @access private
- *
+ * 
  * @package Elgg.Core
  */
-class Elgg_Di_FactoryUncallableException extends Exception {}
+class FactoryUncallableException extends \Exception {}
+

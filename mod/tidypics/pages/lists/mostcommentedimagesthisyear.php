@@ -49,13 +49,14 @@ if (elgg_is_logged_in()) {
 
 // only show slideshow link if slideshow is enabled in plugin settings and there are images
 if (elgg_get_plugin_setting('slideshow', 'tidypics') && !empty($result)) {
+	elgg_require_js('tidypics/slideshow');
 	$url = elgg_get_site_url() . "photos/mostcommentedthisyear?limit=64&offset=$offset&view=rss";
 	$url = elgg_format_url($url);
-	$lite_url = elgg_get_site_url() . "mod/tidypics/vendors/PicLensLite/";
-	$slideshow_link = "javascript:PicLensLite.setLiteURLs({lite:'$lite_url'});PicLensLite.start({maxScale:0, feedUrl:'$url'});";
 	elgg_register_menu_item('title', array(
 		'name' => 'slideshow',
-		'href' => $slideshow_link,
+		'id' => 'slideshow',
+		'data-slideshowurl' => $url,
+		'href' => '#',
 		'text' => "<img src=\"".elgg_get_site_url() ."mod/tidypics/graphics/slideshow.png\" alt=\"".elgg_echo('album:slideshow')."\">",
 		'title' => elgg_echo('album:slideshow'),
 		'link_class' => 'elgg-button elgg-button-action'

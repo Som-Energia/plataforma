@@ -29,7 +29,7 @@ return array(
 		'photos:group_albums' => "Gruppen-Bilderalben",
 		'item:object:image' => "Bilder",
 		'item:object:album' => "Alben",
-		'item:object:tidypics_batch' => "Tidypics Batches",
+		'item:object:tidypics_batch' => "Bilder-Uploads",
 		'tidypics:uploading:images' => "Die Bilder werden hochgeladen.",
 		'tidypics:enablephotos' => 'Gruppen-Alben-Modul aktivieren',
 		'tidypics:enable_group_images' => 'Gruppen-Bilder-Modul aktivieren',
@@ -105,10 +105,20 @@ return array(
 		'tidypics:settings:slideshow' => 'Slideshow erlauben',
 		'tidypics:settings:uploader' => "Plupload HTML5/HTML4-Uploader verwenden",
 		'tidypics:settings:grp_perm_override' => "Gruppen-Mitgliedern unbeschränkten Zugriff auf die Verwaltung von Gruppen-Alben geben",
+		'tidypics:settings:site_menu_link' => "Eintrag im Seitenmenu leitet auf",
+		'tidypics:settings:site_menu_photos' => "Seite aller Bilder",
+		'tidypics:settings:site_menu_albums' => "Seite aller Bilderalben",
+		'tidypics:settings:max_uploads' => "Maximal erlaubte Anzahl von Bildern, die auf einmal hochgeladen werden dürfen:",
+		'tidypics:settings:max_uploads_explanation' => "(Sei vorsichtig mit dem Vergrößern der Maximalzahl! Erstens wirst Du bei Verwendung des Basis-Uploaders in der Upload-Form für jedes Bild ein separates Eingabefeld zum Auswählen der Bilder bekommen. Zweitens mußt Du möglicherweise die Werte von post_max_size und anderen php-Variablen vergrößern, damit alle gleichzeitig hochgeladene Bilder verarbeitet werden können. Und zuletzt kann es in Abhängigkeit der gewählten Option für die River-Einträge beim Hochladen von Bildern zu einer großen Zahl separater neuer River-Einträge kommen oder Du kannst einen einzelnen River-Eintrag mit Vorschaubildern aller hochgeladener Bilder bekommen)",
 		'tidypics:settings:maxfilesize' => "Maximal erlaubte Bildgröße in Megabytes (MB):",
 		'tidypics:settings:quota' => "Quota für Benutzer in Megabytes (MB) (0 = kein Quota) (Bemerkung: die Dateigröße der Vorschaubilder wird für die Quota nicht berücksichtigt. Daher kann ein Benutzer etwas mehr Plattenplatz also die Quota belegen.)",
 		'tidypics:settings:watermark' => "Gib den Text ein, der als Wasserzeichen eingefügt wird",
 		'tidypics:settings:im_path' => "Der Pfad zu den ImageMagick-Kommandozeilentools auf dem Server",
+		'tidypics:settings:thumbnail_optimization' => "Optimierung der Dateigröße der Vorschaubilder",
+		'tidypics:settings:optimization:none' => "Keine",
+		'tidypics:settings:optimization:simple' => "Einfach",
+		'tidypics:settings:optimization:complex' => "Komplex",
+		'tidypics:settings:thumbnail_optimization_explanation' => "(Momentan wird die Optimierung der Dateigröße nur bei Verwendung von 'ImageMagick executable' als Image Library durchgeführt. Bitte vor Verwendung testen! 'Keine' verwendet die gleichen Parameter für die Erstellung der Vorschaubilder, die bereits bei den vorherigen Versionen von Tidypics zum Einsatz kamen, bei 'Einfach' kommen einige weitere Parameter zum Einsatz, um die Dateigröße zu reduzieren und bei 'Komplex' werden noch weiterreichende Methoden verwendet. Die Optimierungsparameter haben hoffentlich den erhofften Effekt einer Reduzierung der Dateigröße, aber sie können auch die Bildqualität - hoffentlich in vernachlässigbarem Ausmass - reduzieren. Wird die Optimierungsoption 'Komplex' verwendet, ist die Erstellung der Vorschaubilder auch mit einer etwas höheren CPU-Last verbunden. Die Auswirkungen der Optimierung - Reduzierung der Dateigröße und geringfügige Verschlechterung der Bildqualität - hängen sehr stark von den hochgeladenen Bildern ab und daher können unterschiedlich gute Ergebnisse erzielt werden. Daher solltest Du die verschiedenen Optimierungsstufen selbst ausprobieren, um die Ergebnisse besser beurteilen zu können, bevor Du Dich auf eine Option festlegst)",
 		'tidypics:settings:img_river_view' => "Anzahl der Einträge im River beim gleichzeitigen Hochladen mehrerer Bilder auf einmal",
 		'tidypics:settings:album_river_view' => "Anzeige des Albumcovers oder eines Sets von Bildern für neue Alben",
 		'tidypics:settings:river_comments_thumbnails' => "Anzeige eines Vorschaubilder im River bei Kommentaren zu Alben und Bildern",
@@ -120,7 +130,19 @@ return array(
 		'tidypics:settings:largesize' => "Bildgröße in der Hauptansicht",
 		'tidypics:settings:smallsize' => "Bildgröße in der Alben-Ansicht",
 		'tidypics:settings:tinysize' => "Bildgröße von Vorschaubildern",
-		'tidypics:settings:sizes:instructs' => 'Du mußt eventuell die CSS-Einstellungen anpassen, falls Du die vorgegebenen Standard-Bildgrößen änderst.',
+		'tidypics:settings:imagesize_width' => "Breite: ",
+		'tidypics:settings:imagesize_height' => "Höhe: ",
+		'tidypics:settings:imagesize_square' => "Quadratisch",
+		'tidypics:settings:imagesize_defaultsize_tiny' => "(Standard: 60x60px, quadratisch)",
+		'tidypics:settings:imagesize_defaultsize_small' => "(Standard: 153x153px, quadratisch)",
+		'tidypics:settings:imagesize_defaultsize_large' => "(Standard: 600x600px, nicht Quadratisch)",
+		'tidypics:settings:sizes:instructs' => 'Du mußt eventuell die CSS-Einstellungen anpassen, falls Du die vorgegebenen Standard-Bildgrößen änderst. Die hier eingestellten Bildgrößen werden auch verwendet, wenn Du die Vorschaubilder neu erstellst.',
+		'tidypics:settings:client_resizing' => 'Reduzierung der Bildgröße auf Benutzerseite vor dem Hochladen (EXPERIMENTELL!)',
+		'tidypics:settings:client_resizing_help' => '(Funktioniert nur mit dem HTML5-Uploader; BEI GROSSEN BILDDATEIEN KANN ES FEHLSCHLAGEN - das Größenlimit hängt von der Leistungsfähigkeit des vom Benutzer verwendeten Geräts ab; funktioniert nur für die Bildformate JPG/JPEG/PNG; die Größenreduzierung kann zu einer merklichen Verschlechterung der Bildqualität führen!)',
+		'tidypics:settings:resizing_max' => 'Maximal erlaubte Bildgröße',
+		'tidypics:settings:resizing_max_help' => '(Nur Bilder, die größer als die maximal erlaubte Bildgröße sind, werden auf die maximal erlaubte Größe reduziert; kleinere Bilder werden auf Benutzerseite nicht verändert; Bei der Verkleinerung wird die größere Seite des Bildes auf die erlaubte Maximalgröße reduziert und die kleinere Seite proportional verkleinert; Sei vorsichtig mit zu großen Werten für die maximal erlaubte Bildgröße, da dann die Verkleinerung - und damit auch das Hochladen - fehlschlagen kann)',
+		'tidypics:settings:remove_exif' => 'Entferne EXIF-Daten auf Benutzerseite vor dem Hochladen (EXPERIMENTELL)',
+		'tidypics:settings:remove_exif_help' => '(Funktioniert nur mit dem HTML5-Uploader UND bei aktivierter Option zur Reduzierung der Bildgröße auf Anwenderseite; funktioniert nur für das Bildformat JPG/JPEG; falls notwendig, wird die Bildorientierung vor Entfernen der EXIF-Daten auf Benutzerseite korrigiert; DAS ENTFERNEN DER EXIF-DATEN KANN BEI GROSSEN BILDERN FEHLSCHLAGEN - das Größenlimit hängt von der Leistungsfähigkeit des vom Benutzer verwendeten Geräts ab)',
 		'tidypics:settings:im_id' => "Bild-ID",
 		'tidypics:settings:heading:img_lib' => "Image-Library-Einstellungen",
 		'tidypics:settings:heading:main' => "Grundeinstellungen",
@@ -172,7 +194,7 @@ return array(
 
 		// Thumbnail tool
 		'tidypics:thumbnail_tool' => 'Vorschaubild-Erzeugung',
-		'tidypics:thumbnail_tool_blurb' => 'Im Folgenden kannst Du Vorschaubilder von Bildern erzeugen, falls dies beim Hochladen der Bilder fehlgeschlagen ist. Die Erzeugung der Vorschaubilder kann fehlschlagen, wenn die Image-Library nicht richtig eingerichtet ist oder falls für die GD-PHP-Erweiterung nicht genügend Arbeitsspeicher verfügbar ist, um das Bild zu laden und die Größe zu ändern. Falls die Mitglieder Deiner Seite bei der Erzeugung der Vorschaubilder für ihre hochgeladenen Bilder Probleme hatten, kannst Du im folgenden die Erzeugung der Vorschaubilder wiederholen, nachdem Du den Server bzw. Tidypics richtig konfiguriert hast. Bestimme die GUID des Bildes, für das Du Vorschaubilder erzeugen willst (dies ist die Nummer, die fast am Ende der URL enthalten ist, wenn Du dieses Bilder auf Deiner Seite anschaust) und gebe diese Nummer im folgenden Eingabefeld ein.',
+		'tidypics:thumbnail_tool_blurb' => 'Im Folgenden kannst Du Vorschaubilder von Bildern erzeugen, falls dies beim Hochladen der Bilder fehlgeschlagen ist. Die Erzeugung der Vorschaubilder kann fehlschlagen, wenn die Image-Library nicht richtig eingerichtet ist oder falls für die GD-PHP-Erweiterung nicht genügend Arbeitsspeicher verfügbar ist, um das Bild zu laden und die Größe zu ändern. Falls die Mitglieder Deiner Seite bei der Erzeugung der Vorschaubilder für ihre hochgeladenen Bilder Probleme hatten, kannst Du im folgenden die Erzeugung der Vorschaubilder wiederholen, nachdem Du den Server bzw. Tidypics richtig konfiguriert hast. Bestimme die GUID des Bildes, für das Du Vorschaubilder erzeugen willst (dies ist die Nummer, die fast am Ende der URL enthalten ist, wenn Du dieses Bilder auf Deiner Seite anschaust) und gebe diese Nummer im folgenden Eingabefeld ein. Neben der Erzeugung der Vorschaubilder wird auch geprüft, ob das Bild in der Liste der Bildreihenfolge des Albums enthalten ist und falls dies nicht der Fall ist wird das Bild als neuer erster Eintrag hinzugefügt.',
 		'tidypics:thumbnail_tool:unknown_image' => 'Das Originalbild kann nicht gefunden werden.',
 		'tidypics:thumbnail_tool:invalid_image_info' => 'Beim Abrufen Bildinformationen ist ein Fehler aufgetreten.',
 		'tidypics:thumbnail_tool:create_failed' => 'Die Erzeugung der Vorschaubilder ist fehlgeschlagen.',
@@ -209,8 +231,8 @@ return array(
 		'tidypics:uploader:choose' => "Wähle die Bilder aus",
 		'tidypics:uploader:upload' => "Lade die Bilder hoch",
 		'tidypics:uploader:describe' => "Gebe Beschreibungen für die Bilder ein",
-		'tidypics:uploader:instructs' => 'Das Hochladen von Bilder erfolgt in drei einfachen Schritten: auf dieser Seite kannst Du zuerst die Bilder zum Hochladen auswählen und im Anschluss diese Bilder hochladen. Nachdem das Hochladen abgeschlossen ist, wirst Du automatisch zu einer neuen Seite weitergeleitet, wo Du im letzen Schritt dann Titel und Beschreibungen für diese Bilder eingeben kannst.<br><br> Du kannst bis zu 10 Bilder auf einmal hochladen (maximale Dateigröße %s MB pro Bild).',
-		'tidypics:uploader:basic' => 'Du kannst bis zu 10 Bilder auf einmal hochladen (maximale Dateigröße %s MB pro Bild). Nachdem das Hochladen der ausgewählten Bilder abgeschlossen ist, wirst Du automatisch zu einer neuen Seite weitergeleitet, wo Du dann Titel und Beschreibungen für diese Bilder eingeben kannst.',
+		'tidypics:uploader:instructs' => 'Das Hochladen von Bilder erfolgt in drei einfachen Schritten: auf dieser Seite kannst Du zuerst die Bilder zum Hochladen auswählen und im Anschluss diese Bilder hochladen. Nachdem das Hochladen abgeschlossen ist, wirst Du automatisch zu einer neuen Seite weitergeleitet, wo Du im letzen Schritt dann Titel und Beschreibungen für diese Bilder eingeben kannst.<br><br> Du kannst bis zu %s Bilder auf einmal hochladen (maximale Dateigröße %s MB pro Bild).',
+		'tidypics:uploader:basic' => 'Du kannst bis zu %s Bilder auf einmal hochladen (maximale Dateigröße %s MB pro Bild). Nachdem das Hochladen der ausgewählten Bilder abgeschlossen ist, wirst Du automatisch zu einer neuen Seite weitergeleitet, wo Du dann Titel und Beschreibungen für diese Bilder eingeben kannst.',
 		'tidypics:sort:instruct' => 'Sortiere die Bilder im Album durch Drag-and-Drop um. Dann speichere Deine Änderungen.',
 		'tidypics:sort:no_images' => 'Es wurden keine Bilder gefunden, die umsortiert werden könnten. Lade Bilder hoch, indem Du dem obigen Link folgst.',
 		'tidypics:album_select' => 'Bevor Du mit dem Hochladen Deiner Bilder beginnen kannst, mußt Du zuerst ein Bilderalbum auswählen, zu dem Du die Bilder hinzufügen willst, oder Du kannst ein neues Bilderalbum hinzufügen: ',
@@ -359,5 +381,17 @@ Schau Dir das Bilderalbum an und schreibe einen Kommentar:
 		'image:blank' => 'Bitte gib diesem Bild einen Titel.',
 		'image:error' => 'Das Bild konnte nicht gespeichert werden.',
 
-		'tidypics:upgrade:failed' => "Das Upgrade des Tidypics-Plugins ist gescheitert"
+		'tidypics:upgrade:failed' => "Das Upgrade des Tidypics-Plugins ist gescheitert",
+
+		// Broken images removal tool
+		'tidypics:utilities:broken_images' => 'Suche nach Bildern ohne zugehörigen Bilddateien',
+		'tidypics:utilities:broken_images:blurb' => 'Bei dieser Suche wird nach Bildeinträgen gesucht, bei denen im Datenverzeichnis die zugehörigen Bilddateien fehlen (diese Bilder können also nicht mehr angezeigt werden). Die dabei gefunden Bildeinträge können dann gelöscht werden. Falls Du eine große Anzahl von Bildern auf Deiner Community-Seite hast, kann diese Suche eine sehr lange Zeit dauern.
+
+Warnung: Falls Deine Bilder nach einem Update von Elgg, einer Migration der Seite auf einen anderen Server oder nach Änderungen in den Einstellungen der Seite oder des Pfads zum Datenverzeichnis nicht mehr angezeigt werden, wird die Verwendung dieses Tools sehr wahrscheinlich ALLE Bildeinträge aus der Datenbank löschen! Falls Du Dir nicht sicher bist, frag auch der Elgg-Community-Seite nach Hilfe bei Deinem Problem.
+
+Bevor Du dieses Tool anwendest, solltest Du in jedem Fall ein Backup Deiner Datenbank und des Datenverzeichnisses machen!',
+
+		'tidypics:utilities:broken_images:found_images' => 'Fehlerhafte Bildeinträge gefunden: %s',
+		'tidypics:utilities:broken_images:delete' => 'Alle fehlerhaften Bildeinträge löschen.',
+		'tidypics:utilities:broken_images:deleted_images' => 'Fehlerhafte Bildeinträge entfernt: %s',
 );

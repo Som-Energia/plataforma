@@ -28,7 +28,7 @@ if ($albums) {
 	foreach ($albums as $album) {
 		$album_title = $album->getTitle();
 		if (strlen($album_title) > 50) {
-			$album_title = substr($album_title, 0, 47).'...';
+			$album_title = mb_substr($album_title, 0, 47, "utf-8") . "...";
 		}
 		$album_options[$album->guid] = $album_title;
 	}
@@ -36,7 +36,7 @@ if ($albums) {
 
 $body = "<div style=\"width:400px;\">".elgg_echo('tidypics:album_select')."<br><br>";
 $body .= elgg_view('input/hidden', array('name' => 'owner_guid','value' => $owner->guid));
-$body .= elgg_view('input/dropdown', array(
+$body .= elgg_view('input/select', array(
 	'name' => 'album_guid',
 	'value' => '',
 	'options_values' => $album_options

@@ -41,7 +41,7 @@ if ($annotation->canEdit()) {
 	$url = elgg_http_add_url_query_elements('action/photos/image/untag', array(
 		'annotation_id' => $vars['tag']->annotation_id
 	));
-	$delete = elgg_view('output/confirmlink', array(
+	$delete = elgg_view('output/url', array(
 		'href' => $url,
 		'text' => elgg_view_icon('delete', 'float mas'),
 		'confirm' => elgg_echo('tidypics:phototagging:delete:confirm')

@@ -1,4 +1,5 @@
 <?php
+namespace Elgg\Queue;
 
 /**
  * FIFO queue that uses the database for persistence
@@ -6,17 +7,17 @@
  * WARNING: API IN FLUX. DO NOT USE DIRECTLY.
  *
  * @access private
- *
+ * 
  * @package    Elgg.Core
  * @subpackage Queue
  * @since      1.9.0
  */
-class Elgg_Queue_DatabaseQueue implements Elgg_Queue_Queue {
+class DatabaseQueue implements \Elgg\Queue\Queue {
 
 	/** @var string Name of the queue */
 	protected $name;
 
-	/** @var Elgg_Database Database adapter */
+	/** @var \Elgg\Database Database adapter */
 	protected $db;
 
 	/** @var string The identifier of the worker pulling from the queue */
@@ -25,10 +26,10 @@ class Elgg_Queue_DatabaseQueue implements Elgg_Queue_Queue {
 	/**
 	 * Create a queue
 	 *
-	 * @param string        $name Name of the queue. Must be less than 256 characters.
-	 * @param Elgg_Database $db   Database adapter
+	 * @param string         $name Name of the queue. Must be less than 256 characters.
+	 * @param \Elgg\Database $db   Database adapter
 	 */
-	public function __construct($name, Elgg_Database $db) {
+	public function __construct($name, \Elgg\Database $db) {
 		$this->db = $db;
 		$this->name = $this->db->sanitizeString($name);
 		$this->workerId = $this->db->sanitizeString(md5(microtime() . getmypid()));
@@ -51,7 +52,7 @@ class Elgg_Queue_DatabaseQueue implements Elgg_Queue_Queue {
 	 */
 	public function dequeue() {
 		$prefix = $this->db->getTablePrefix();
-		$update = "UPDATE {$prefix}queue
+		$update = "UPDATE {$prefix}queue 
 			SET worker = '$this->workerId'
 			WHERE name = '$this->name' AND worker IS NULL
 			ORDER BY id ASC LIMIT 1";
@@ -89,3 +90,4 @@ class Elgg_Queue_DatabaseQueue implements Elgg_Queue_Queue {
 		return (int)$result->total;
 	}
 }
+

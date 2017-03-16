@@ -1,4 +1,6 @@
 <?php
+namespace Elgg\Http;
+
 /**
  * Based on Symfony2's SessionStorageInterface and AttributeBagInterface.
  *
@@ -27,17 +29,17 @@
  * Interface for session storage
  *
  * @access private
- *
+ * 
  * @package    Elgg.Core
  * @subpackage Http
  */
-interface Elgg_Http_SessionStorage {
+interface SessionStorage {
 
 	/**
 	 * Starts the session.
 	 *
 	 * @return boolean True if started.
-	 * @throws RuntimeException If something goes wrong starting the session.
+	 * @throws \RuntimeException If something goes wrong starting the session.
 	 */
 	public function start();
 
@@ -97,7 +99,7 @@ interface Elgg_Http_SessionStorage {
 	 *
 	 * @return boolean True if session regenerated, false if error
 	 *
-	 * @throws RuntimeException If an error occurs while regenerating this storage
+	 * @throws \RuntimeException If an error occurs while regenerating this storage
 	 */
 	public function regenerate($destroy = false, $lifetime = null);
 
@@ -110,7 +112,7 @@ interface Elgg_Http_SessionStorage {
 	 * it should actually persist the session data if required.
 	 *
 	 * @return void
-	 * @throws RuntimeException If the session is saved without being started,
+	 * @throws \RuntimeException If the session is saved without being started,
 	 *                          or if the session is already closed.
 	 */
 	public function save();
@@ -168,7 +170,7 @@ interface Elgg_Http_SessionStorage {
 
 	/**
 	 * Clears all attributes.
-	 *
+	 * 
 	 * @return void
 	 */
 	public function clear();

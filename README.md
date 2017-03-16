@@ -30,5 +30,4 @@
 - Ejecutar script: .dockers/stop
 
 # Copiar instalación de Elgg
-- ![Duplicar instalación](http://learn.elgg.org/es/1.9/admin/duplicate-installation.html)
-
+- [Duplicar instalación](http://learn.elgg.org/es/1.9/admin/duplicate-installation.html)

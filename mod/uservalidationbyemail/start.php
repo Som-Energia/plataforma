@@ -117,7 +117,11 @@ function uservalidationbyemail_disable_new_user($hook, $type, $value, $params) {
 function uservalidationbyemail_after_registration_url($hook, $type, $value, $params) {
 	$url = elgg_extract('current_url', $params);
 	if ($url == elgg_get_site_url() . 'action/register') {
-		return elgg_get_site_url() . 'uservalidationbyemail/emailsent';
+		$session = elgg_get_session();
+		$email = $session->get('emailsent', '');
+		if ($email) {
+			return elgg_get_site_url() . 'uservalidationbyemail/emailsent';
+		}
 	}
 }
 
@@ -241,10 +245,10 @@ function uservalidationbyemail_check_manual_login($event, $type, $user) {
 	if (($user instanceof ElggUser) && !$user->isEnabled() && !$user->validated) {
 		// send new validation email
 		uservalidationbyemail_request_validation($user->getGUID());
-
+		
 		// restore hidden entities settings
 		access_show_hidden_entities($access_status);
-
+		
 		// throw error so we get a nice error message
 		throw new LoginException(elgg_echo('uservalidationbyemail:login:fail'));
 	}

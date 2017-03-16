@@ -27,7 +27,7 @@ function invitefriends_init() {
 
 /**
  * Page handler function
- *
+ * 
  * @param array $page Page URL segments
  * @return bool
  */
@@ -37,7 +37,7 @@ function invitefriends_page_handler($page) {
 	if (!elgg_get_config('allow_registration')) {
 		return false;
 	}
-
+	
 	elgg_set_context('friends');
 	elgg_set_page_owner_guid(elgg_get_logged_in_user_guid());
 
@@ -66,29 +66,16 @@ function invitefriends_page_handler($page) {
  */
 function invitefriends_add_friends($hook, $type, $result, $params) {
 	$user = $params['user'];
+	/* @var ElggUser $user */
 	$friend_guid = $params['friend_guid'];
 	$invite_code = $params['invitecode'];
 
 	// If $friend_guid has been set, make mutual friends
 	if ($friend_guid) {
 		if ($friend_user = get_user($friend_guid)) {
-			if ($invite_code == generate_invite_code($friend_user->username)) {
-				$user->addFriend($friend_guid);
-				$friend_user->addFriend($user->guid);
-
-				// @todo Should this be in addFriend?
-				elgg_create_river_item(array(
-					'view' => 'river/relationship/friend/create',
-					'action_type' => 'friend',
-					'subject_guid' => $user->getGUID(),
-					'object_guid' => $friend_guid,
-				));
-				elgg_create_river_item(array(
-					'view' => 'river/relationship/friend/create',
-					'action_type' => 'friend',
-					'subject_guid' => $friend_guid,
-					'object_guid' => $user->getGUID(),
-				));
+			if (elgg_validate_invite_code($friend_user->username, $invite_code)) {
+				$user->addFriend($friend_guid, true);
+				$friend_user->addFriend($user->guid, true);
 			}
 		}
 	}

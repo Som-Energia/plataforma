@@ -1,7 +1,7 @@
 <?php
 /**
  * Move user data directories
- *
+ * 
  * Run for 2 seconds per request as set by $batch_run_time_in_secs. This includes
  * the engine loading time.
  */
@@ -10,7 +10,7 @@
 $access_status = access_get_show_hidden_status();
 access_show_hidden_entities(true);
 
-$helper = new Elgg_Upgrades_Helper2013022000(
+$helper = new Elgg\Upgrades\Helper2013022000(
 	elgg_get_site_entity()->guid,
 	elgg_get_config('dbprefix')
 );

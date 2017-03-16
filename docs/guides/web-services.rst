@@ -43,8 +43,8 @@ API framework:
 
 .. code:: php
 
-    elgg_ws_expose_function("test.echo",
-                    "my_echo",
+    elgg_ws_expose_function("test.echo", 
+                    "my_echo", 
                      array("string" => array('type' => 'string')),
                      'A testing method which echos back a string',
                      'GET',
@@ -114,8 +114,8 @@ parameter:
 
 .. code:: php
 
-    elgg_ws_expose_function("users.active",
-                    "count_active_users",
+    elgg_ws_expose_function("users.active", 
+                    "count_active_users", 
                      array("minutes" => array('type' => 'int',
                                               'required' => false)),
                      'Number of users who have used the site in the past x minutes',
@@ -183,7 +183,7 @@ Let's write our wire posting function:
         $access = ACCESS_PUBLIC;
        
         // returns guid of wire post
-        return thewire_save_post($text, $access, "api");
+        return thewire_save_post($text, $access, "api");        
     }
 
 Exposing this function is the same as the previous except we require
@@ -192,8 +192,8 @@ GET HTTP requests.
 
 .. code:: php
 
-    elgg_ws_expose_function("thewire.post",
-                    "my_post_to_wire",
+    elgg_ws_expose_function("thewire.post", 
+                    "my_post_to_wire", 
                      array("text" => array('type' => 'string')),
                      'Post to the wire. 140 characters or less',
                      'POST',
@@ -248,11 +248,11 @@ use:
         // user token can also be used for user authentication
         register_pam_handler('pam_auth_usertoken');
 
-        // simple API key check
+        // simple API key check 
         register_pam_handler('api_auth_key', "sufficient", "api");
             
         // override the default pams
-        return true;
+        return true;    
     }
 
 When testing, you may find it useful to register the

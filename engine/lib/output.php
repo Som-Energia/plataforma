@@ -107,6 +107,27 @@ function elgg_format_url($url) {
 }
 
 /**
+ * Format bytes to a human readable format
+ *
+ * @param int $size      File size in bytes to format
+ *
+ * @param int $precision Precision to round formatting bytes to
+ *
+ * @return string
+ * @since 1.9.0
+ */
+function elgg_format_bytes($size, $precision = 2) {
+	if (!$size || $size < 0) {
+		return false;
+	}
+
+	$base = log($size) / log(1024);
+	$suffixes = array('B', 'kB', 'MB', 'GB', 'TB');   
+
+	return round(pow(1024, $base - floor($base)), $precision) . ' ' . $suffixes[floor($base)];
+}
+
+/**
  * Converts an associative array into a string of well-formed attributes
  *
  * @note usually for HTML, but could be useful for XML too...
@@ -144,7 +165,7 @@ function elgg_format_attributes(array $attrs = array()) {
 		 * Ignore non-array values and allow attribute values to be an array
 		 *  <code>
 		 *  $attrs = array(
-		 *		'entity' => <ElggObject>, // will be ignored
+		 *		'entity' => <\ElggObject>, // will be ignored
 		 * 		'class' => array('elgg-input', 'elgg-input-text'), // will be imploded with spaces
 		 * 		'style' => array('margin-left:10px;', 'color: #666;'), // will be imploded with spaces
 		 *		'alt' => 'Alt text', // will be left as is
@@ -193,7 +214,7 @@ function elgg_format_attributes(array $attrs = array()) {
  */
 function elgg_format_element($tag_name, array $attributes = array(), $text = '', array $options = array()) {
 	if (!is_string($tag_name)) {
-		throw new InvalidArgumentException('$tag_name is required');
+		throw new \InvalidArgumentException('$tag_name is required');
 	}
 
 	if (isset($options['is_void'])) {
@@ -314,7 +335,7 @@ function elgg_normalize_url($url) {
 		// '//example.com' (Shortcut for protocol.)
 		// '?query=test', #target
 		return $url;
-
+	
 	} elseif (stripos($url, 'javascript:') === 0 || stripos($url, 'mailto:') === 0) {
 		// 'javascript:' and 'mailto:'
 		// Not covered in FILTER_VALIDATE_URL
@@ -356,8 +377,8 @@ function elgg_get_friendly_title($title) {
 
 	// titles are often stored HTML encoded
 	$title = html_entity_decode($title, ENT_QUOTES, 'UTF-8');
-
-	$title = Elgg_Translit::urlize($title);
+	
+	$title = \Elgg\Translit::urlize($title);
 
 	return $title;
 }
@@ -374,7 +395,7 @@ function elgg_get_friendly_title($title) {
  * @since 1.7.2
  */
 function elgg_get_friendly_time($time, $current_time = null) {
-
+	
 	if (!$current_time) {
 		$current_time = time();
 	}
@@ -395,7 +416,7 @@ function elgg_get_friendly_time($time, $current_time = null) {
 	if ($diff < $minute) {
 		return elgg_echo("friendlytime:justnow");
 	}
-
+	
 	if ($diff < $hour) {
 		$granularity = ':minutes';
 		$diff = round($diff / $minute);
@@ -410,7 +431,7 @@ function elgg_get_friendly_time($time, $current_time = null) {
 	if ($diff == 0) {
 		$diff = 1;
 	}
-
+	
 	$future = ((int)$current_time - (int)$time < 0) ? ':future' : '';
 	$singular = ($diff == 1) ? ':singular' : '';
 
@@ -427,11 +448,11 @@ function elgg_get_friendly_upload_error($error_code) {
 	switch ($error_code) {
 		case UPLOAD_ERR_OK:
 			return '';
-
+			
 		case UPLOAD_ERR_INI_SIZE:
 			$key = 'ini_size';
 			break;
-
+		
 		case UPLOAD_ERR_FORM_SIZE:
 			$key = 'form_size';
 			break;
@@ -455,7 +476,7 @@ function elgg_get_friendly_upload_error($error_code) {
 		case UPLOAD_ERR_EXTENSION:
 			$key = 'extension';
 			break;
-
+		
 		default:
 			$key = 'unknown';
 			break;
@@ -529,7 +550,7 @@ function _elgg_html_decode($string) {
 
 /**
  * Prepares query string for output to prevent CSRF attacks.
- *
+ * 
  * @param string $string
  * @return string
  *

@@ -5,31 +5,31 @@
  *
  * Reserved keys: last_forward_from, msg, sticky_forms, user, guid, id, code, name, username
  * Deprecated keys: user, id, name, username
- *
- * ArrayAccess was deprecated in Elgg 1.9. This means you should use
+ * 
+ * \ArrayAccess was deprecated in Elgg 1.9. This means you should use 
  * $session->get('foo') rather than $session['foo'].
- * Warning: You can not access multidimensional arrays through ArrayAccess like
+ * Warning: You can not access multidimensional arrays through \ArrayAccess like
  * this $session['foo']['bar']
  *
  * @package    Elgg.Core
  * @subpackage Session
  * @see        elgg_get_session()
  */
-class ElggSession implements ArrayAccess {
+class ElggSession implements \ArrayAccess {
 
-	/** @var Elgg_Http_SessionStorage */
+	/** @var \Elgg\Http\SessionStorage */
 	protected $storage;
 
-	/** @var ElggUser */
+	/** @var \ElggUser */
 	protected $loggedInUser;
 
 	/**
 	 * Constructor
 	 *
-	 * @param Elgg_Http_SessionStorage $storage The storage engine
+	 * @param \Elgg\Http\SessionStorage $storage The storage engine
 	 * @access private Use elgg_get_session()
 	 */
-	public function __construct(Elgg_Http_SessionStorage $storage) {
+	public function __construct(\Elgg\Http\SessionStorage $storage) {
 		$this->storage = $storage;
 		$this->loggedInUser = null;
 	}
@@ -184,20 +184,20 @@ class ElggSession implements ArrayAccess {
 
 	/**
 	 * Sets the logged in user
-	 *
-	 * @param ElggUser $user The user who is logged in
+	 * 
+	 * @param \ElggUser $user The user who is logged in
 	 * @return void
 	 * @since 1.9
 	 */
-	public function setLoggedInUser(ElggUser $user) {
+	public function setLoggedInUser(\ElggUser $user) {
 		$this->set('guid', $user->guid);
 		$this->loggedInUser = $user;
 	}
 
 	/**
 	 * Gets the logged in user
-	 *
-	 * @return ElggUser
+	 * 
+	 * @return \ElggUser
 	 * @since 1.9
 	 */
 	public function getLoggedInUser() {
@@ -205,8 +205,43 @@ class ElggSession implements ArrayAccess {
 	}
 
 	/**
-	 * Remove the logged in user
+	 * Return the current logged in user by guid.
 	 *
+	 * @see elgg_get_logged_in_user_entity()
+	 * @return int
+	 */
+	public function getLoggedInUserGuid() {
+		$user = $this->getLoggedInUser();
+		if ($user) {
+			return $user->guid;
+		}
+	
+		return 0;
+	}
+	
+	/**
+	 * Returns whether or not the viewer is currently logged in and an admin user.
+	 *
+	 * @return bool
+	 */
+	public function isAdminLoggedIn() {
+		$user = $this->getLoggedInUser();
+	
+		return $user && $user->isAdmin();
+	}
+	
+	/**
+	 * Returns whether or not the user is currently logged in
+	 *
+	 * @return bool
+	 */
+	public function isLoggedIn() {
+		return (bool)$this->getLoggedInUser();
+	}
+
+	/**
+	 * Remove the logged in user
+	 * 
 	 * @return void
 	 * @since 1.9
 	 */
@@ -217,9 +252,9 @@ class ElggSession implements ArrayAccess {
 
 	/**
 	 * Adds a token to the session
-	 *
+	 * 
 	 * This is used in creation of CSRF token
-	 *
+	 * 
 	 * @return void
 	 */
 	protected function generateSessionToken() {
@@ -261,7 +296,7 @@ class ElggSession implements ArrayAccess {
 	 * Get a variable from either the session, or if its not in the session
 	 * attempt to get it from an api call.
 	 *
-	 * @see ArrayAccess::offsetGet()
+	 * @see \ArrayAccess::offsetGet()
 	 *
 	 * @param mixed $key Name
 	 *
@@ -296,7 +331,7 @@ class ElggSession implements ArrayAccess {
 		}
 
 		$orig_value = null;
-		$value = elgg_trigger_plugin_hook('session:get', $key, null, $orig_value);
+		$value = _elgg_services()->hooks->trigger('session:get', $key, null, $orig_value);
 		if ($orig_value !== $value) {
 			elgg_deprecated_notice("Plugin hook session:get has been deprecated.", 1.9);
 		}
@@ -308,7 +343,7 @@ class ElggSession implements ArrayAccess {
 	/**
 	 * Unset a value from the cache and the session.
 	 *
-	 * @see ArrayAccess::offsetUnset()
+	 * @see \ArrayAccess::offsetUnset()
 	 *
 	 * @param mixed $key Name
 	 *
@@ -323,7 +358,7 @@ class ElggSession implements ArrayAccess {
 	/**
 	 * Return whether the value is set in either the session or the cache.
 	 *
-	 * @see ArrayAccess::offsetExists()
+	 * @see \ArrayAccess::offsetExists()
 	 *
 	 * @param int $offset Offset
 	 *

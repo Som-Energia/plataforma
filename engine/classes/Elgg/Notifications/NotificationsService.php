@@ -1,28 +1,31 @@
 <?php
+namespace Elgg\Notifications;
+
+use ElggEntity;
 
 /**
  * WARNING: API IN FLUX. DO NOT USE DIRECTLY.
  *
  * @access private
- *
+ * 
  * @package    Elgg.Core
  * @subpackage Notifications
  * @since      1.9.0
  */
-class Elgg_Notifications_NotificationsService {
+class NotificationsService {
 
 	const QUEUE_NAME = 'notifications';
 
-	/** @var Elgg_Notifications_SubscriptionsService */
+	/** @var \Elgg\Notifications\SubscriptionsService */
 	protected $subscriptions;
 
-	/** @var Elgg_Queue_Queue */
+	/** @var \Elgg\Queue\Queue */
 	protected $queue;
 
-	/** @var Elgg_PluginHooksService */
+	/** @var \Elgg\PluginHooksService */
 	protected $hooks;
 
-	/** @var Elgg_Access */
+	/** @var \Elgg\Access */
 	protected $access;
 
 	/** @var array Registered notification events */
@@ -40,13 +43,13 @@ class Elgg_Notifications_NotificationsService {
 	/**
 	 * Constructor
 	 *
-	 * @param Elgg_Notifications_SubscriptionsService $subscriptions Subscription service
-	 * @param Elgg_Queue_Queue                        $queue         Queue
-	 * @param Elgg_PluginHooksService                 $hooks         Plugin hook service
-	 * @param Elgg_Access                             $access        Access control service
+	 * @param \Elgg\Notifications\SubscriptionsService $subscriptions Subscription service
+	 * @param \Elgg\Queue\Queue                        $queue         Queue
+	 * @param \Elgg\PluginHooksService                 $hooks         Plugin hook service
+	 * @param \Elgg\Access                             $access        Access control service
 	 */
-	public function __construct(Elgg_Notifications_SubscriptionsService $subscriptions,
-			Elgg_Queue_Queue $queue, Elgg_PluginHooksService $hooks, Elgg_Access $access) {
+	public function __construct(\Elgg\Notifications\SubscriptionsService $subscriptions,
+			\Elgg\Queue\Queue $queue, \Elgg\PluginHooksService $hooks, \Elgg\Access $access) {
 		$this->subscriptions = $subscriptions;
 		$this->queue = $queue;
 		$this->hooks = $hooks;
@@ -125,15 +128,15 @@ class Elgg_Notifications_NotificationsService {
 
 	/**
 	 * Add a notification event to the queue
-	 *
+	 * 
 	 * @param string   $action Action name
 	 * @param string   $type   Type of the object of the action
-	 * @param ElggData $object The object of the action
+	 * @param \ElggData $object The object of the action 
 	 * @return void
 	 * @access private
 	 */
 	public function enqueueEvent($action, $type, $object) {
-		if ($object instanceof ElggData) {
+		if ($object instanceof \ElggData) {
 			$object_type = $object->getType();
 			$object_subtype = $object->getSubtype();
 
@@ -153,7 +156,7 @@ class Elgg_Notifications_NotificationsService {
 			}
 
 			if ($registered) {
-				$this->queue->enqueue(new Elgg_Notifications_Event($object, $action));
+				$this->queue->enqueue(new \Elgg\Notifications\Event($object, $action));
 			}
 		}
 	}
@@ -172,7 +175,7 @@ class Elgg_Notifications_NotificationsService {
 		$count = 0;
 
 		// @todo grab mutex
-
+		
 		$ia = $this->access->setIgnoreAccess(true);
 
 		while (time() < $stopTime) {
@@ -208,7 +211,7 @@ class Elgg_Notifications_NotificationsService {
 	/**
 	 * Sends the notifications based on subscriptions
 	 *
-	 * @param Elgg_Notifications_Event $event         Notification event
+	 * @param \Elgg\Notifications\Event $event         Notification event
 	 * @param array                    $subscriptions Subscriptions for this event
 	 * @return int The number of notifications handled
 	 * @access private
@@ -235,13 +238,13 @@ class Elgg_Notifications_NotificationsService {
 	/**
 	 * Send a notification to a subscriber
 	 *
-	 * @param Elgg_Notifications_Event $event  The notification event
+	 * @param \Elgg\Notifications\Event $event  The notification event
 	 * @param int                      $guid   The guid of the subscriber
 	 * @param string                   $method The notification method
 	 * @return bool
 	 * @access private
 	 */
-	protected function sendNotification(Elgg_Notifications_Event $event, $guid, $method) {
+	protected function sendNotification(\Elgg\Notifications\Event $event, $guid, $method) {
 
 		$recipient = get_user($guid);
 		if (!$recipient || $recipient->isBanned()) {
@@ -272,9 +275,9 @@ class Elgg_Notifications_NotificationsService {
 			'object' => $object,
 		);
 
-		$subject = elgg_echo('notification:subject', array($actor->name), $language);
-		$body = elgg_echo('notification:body', array($object->getURL()), $language);
-		$notification = new Elgg_Notifications_Notification($event->getActor(), $recipient, $language, $subject, $body, '', $params);
+		$subject = _elgg_services()->translator->translate('notification:subject', array($actor->name), $language);
+		$body = _elgg_services()->translator->translate('notification:body', array($object->getURL()), $language);
+		$notification = new \Elgg\Notifications\Notification($event->getActor(), $recipient, $language, $subject, $body, '', $params);
 
 		$type = 'notification:' . $event->getDescription();
 		if ($this->hooks->hasHandler('prepare', $type)) {
@@ -304,7 +307,7 @@ class Elgg_Notifications_NotificationsService {
 
 	/**
 	 * Register a deprecated notification handler
-	 *
+	 * 
 	 * @param string $method  Method name
 	 * @param string $handler Handler callback
 	 * @return void
@@ -315,7 +318,7 @@ class Elgg_Notifications_NotificationsService {
 
 	/**
 	 * Get a deprecated notification handler callback
-	 *
+	 * 
 	 * @param string $method Method name
 	 * @return callback|null
 	 */
@@ -330,7 +333,7 @@ class Elgg_Notifications_NotificationsService {
 	/**
 	 * Provides a way to incrementally wean Elgg's notifications code from the
 	 * global $NOTIFICATION_HANDLERS
-	 *
+	 * 
 	 * @return array
 	 */
 	public function getMethodsAsDeprecatedGlobal() {
@@ -343,13 +346,13 @@ class Elgg_Notifications_NotificationsService {
 
 	/**
 	 * Get the notification body using a pre-Elgg 1.9 plugin hook
-	 *
-	 * @param Elgg_Notifications_Notification $notification Notification
-	 * @param Elgg_Notifications_Event        $event        Event
-	 * @param string                          $method       Method
-	 * @return Elgg_Notifications_Notification
+	 * 
+	 * @param \Elgg\Notifications\Notification $notification Notification
+	 * @param \Elgg\Notifications\Event        $event        Event
+	 * @param string                           $method       Method
+	 * @return \Elgg\Notifications\Notification
 	 */
-	protected function getDeprecatedNotificationBody(Elgg_Notifications_Notification $notification, Elgg_Notifications_Event $event, $method) {
+	protected function getDeprecatedNotificationBody(\Elgg\Notifications\Notification $notification, \Elgg\Notifications\Event $event, $method) {
 		$entity = $event->getObject();
 		$params = array(
 			'entity' => $entity,
@@ -370,7 +373,7 @@ class Elgg_Notifications_NotificationsService {
 
 	/**
 	 * Set message subject for deprecated notification code
-	 *
+	 * 
 	 * @param string $type    Entity type
 	 * @param string $subtype Entity subtype
 	 * @param string $subject Subject line
@@ -393,7 +396,7 @@ class Elgg_Notifications_NotificationsService {
 
 	/**
 	 * Get the deprecated subject
-	 *
+	 * 
 	 * @param string $type    Entity type
 	 * @param string $subtype Entity subtype
 	 * @return string
@@ -419,11 +422,11 @@ class Elgg_Notifications_NotificationsService {
 
 	/**
 	 * Is someone using the deprecated override
-	 *
-	 * @param Elgg_Notifications_Event $event Event
+	 * 
+	 * @param \Elgg\Notifications\Event $event Event
 	 * @return boolean
 	 */
-	protected function existsDeprecatedNotificationOverride(Elgg_Notifications_Event $event) {
+	protected function existsDeprecatedNotificationOverride(\Elgg\Notifications\Event $event) {
 		$entity = $event->getObject();
 		if (!elgg_instanceof($entity)) {
 			return false;

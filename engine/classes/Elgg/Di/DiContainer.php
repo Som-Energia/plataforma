@@ -1,11 +1,12 @@
 <?php
+namespace Elgg\Di;
 
 /**
  * Container holding values which can be resolved upon reading and optionally stored and shared
  * across reads.
  *
  * <code>
- * $c = new Elgg_Di_DiContainer();
+ * $c = new \Elgg\Di\DiContainer();
  *
  * $c->setFactory('foo', 'Foo_factory'); // $c will be passed to Foo_factory()
  * $c->foo; // new Foo instance
@@ -20,11 +21,11 @@
  * </code>
  *
  * @access private
- *
+ * 
  * @package Elgg.Core
  * @since   1.9
  */
-class Elgg_Di_DiContainer {
+class DiContainer {
 
 	/**
 	 * @var array each element is an array: ['callable' => mixed $factory, 'shared' => bool $isShared]
@@ -36,7 +37,6 @@ class Elgg_Di_DiContainer {
 	 */
 	protected $cache = array();
 
-	const CLASS_NAME_PATTERN_52 = '/^[a-z_\x7f-\xff][a-z0-9_\x7f-\xff]*$/i';
 	const CLASS_NAME_PATTERN_53 = '/^(\\\\?[a-z_\x7f-\xff][a-z0-9_\x7f-\xff]*)+$/i';
 
 	/**
@@ -44,14 +44,14 @@ class Elgg_Di_DiContainer {
 	 *
 	 * @param string $name The name of the value to fetch
 	 * @return mixed
-	 * @throws Elgg_Di_MissingValueException
+	 * @throws \Elgg\Di\MissingValueException
 	 */
 	public function __get($name) {
 		if (array_key_exists($name, $this->cache)) {
 			return $this->cache[$name];
 		}
 		if (!isset($this->factories[$name])) {
-			throw new Elgg_Di_MissingValueException("Value or factory was not set for: $name");
+			throw new \Elgg\Di\MissingValueException("Value or factory was not set for: $name");
 		}
 		$value = $this->build($this->factories[$name]['callable'], $name);
 
@@ -65,11 +65,11 @@ class Elgg_Di_DiContainer {
 
 	/**
 	 * Build a value
-	 *
+	 * 
 	 * @param mixed  $factory The factory for the value
 	 * @param string $name    The name of the value
 	 * @return mixed
-	 * @throws Elgg_Di_FactoryUncallableException
+	 * @throws \Elgg\Di\FactoryUncallableException
 	 */
 	protected function build($factory, $name) {
 		if (is_callable($factory)) {
@@ -85,7 +85,7 @@ class Elgg_Di_DiContainer {
 				$msg .= ": " . get_class($factory[0]) . "->{$factory[1]}";
 			}
 		}
-		throw new Elgg_Di_FactoryUncallableException($msg);
+		throw new \Elgg\Di\FactoryUncallableException($msg);
 	}
 
 	/**
@@ -93,8 +93,8 @@ class Elgg_Di_DiContainer {
 	 *
 	 * @param string $name  The name of the value
 	 * @param mixed  $value The value
-	 * @return Elgg_Di_DiContainer
-	 * @throws InvalidArgumentException
+	 * @return \Elgg\Di\DiContainer
+	 * @throws \InvalidArgumentException
 	 */
 	public function setValue($name, $value) {
 		$this->remove($name);
@@ -108,12 +108,12 @@ class Elgg_Di_DiContainer {
 	 * @param string   $name     The name of the value
 	 * @param callable $callable Factory for the value
 	 * @param bool     $shared   Whether the same value should be returned for every request
-	 * @return Elgg_Di_DiContainer
-	 * @throws InvalidArgumentException
+	 * @return \Elgg\Di\DiContainer
+	 * @throws \InvalidArgumentException
 	 */
 	public function setFactory($name, $callable, $shared = true) {
 		if (!is_callable($callable, true)) {
-			throw new InvalidArgumentException('$factory must appear callable');
+			throw new \InvalidArgumentException('$factory must appear callable');
 		}
 		$this->remove($name);
 		$this->factories[$name] = array(
@@ -129,23 +129,25 @@ class Elgg_Di_DiContainer {
 	 * @param string $name       Name of the value
 	 * @param string $class_name Class name to be instantiated
 	 * @param bool   $shared     Whether the same value should be returned for every request
-	 * @return Elgg_Di_DiContainer
-	 * @throws InvalidArgumentException
+	 * @return \Elgg\Di\DiContainer
+	 * @throws \InvalidArgumentException
 	 */
 	public function setClassName($name, $class_name, $shared = true) {
-		$classname_pattern = version_compare(PHP_VERSION, '5.3', '<') ? self::CLASS_NAME_PATTERN_52 : self::CLASS_NAME_PATTERN_53;
+		$classname_pattern = self::CLASS_NAME_PATTERN_53;
 		if (!is_string($class_name) || !preg_match($classname_pattern, $class_name)) {
-			throw new InvalidArgumentException('Class names must be valid PHP class names');
+			throw new \InvalidArgumentException('Class names must be valid PHP class names');
 		}
-		$func = create_function('', "return new $class_name();");
+		$func = function () use ($class_name) {
+			return new $class_name();
+		};
 		return $this->setFactory($name, $func, $shared);
 	}
 
 	/**
 	 * Remove a value from the container
-	 *
+	 * 
 	 * @param string $name The name of the value
-	 * @return Elgg_Di_DiContainer
+	 * @return \Elgg\Di\DiContainer
 	 */
 	public function remove($name) {
 		unset($this->cache[$name]);
@@ -155,7 +157,7 @@ class Elgg_Di_DiContainer {
 
 	/**
 	 * Does the container have this value
-	 *
+	 * 
 	 * @param string $name The name of the value
 	 * @return bool
 	 */
@@ -163,3 +165,4 @@ class Elgg_Di_DiContainer {
 		return isset($this->factories[$name]) || array_key_exists($name, $this->cache);
 	}
 }
+

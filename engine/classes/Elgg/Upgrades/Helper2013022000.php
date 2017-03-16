@@ -1,11 +1,12 @@
 <?php
+namespace Elgg\Upgrades;
 
 /**
  * Helper for data directory upgrade
  *
  * @access private
  */
-class Elgg_Upgrades_Helper2013022000 {
+class Helper2013022000 {
 	const RELATIONSHIP_SUCCESS = '2013022000';
 	const RELATIONSHIP_FAILURE = '2013022000_fail';
 
@@ -72,7 +73,7 @@ class Elgg_Upgrades_Helper2013022000 {
 	/**
 	 * Get the old directory location
 	 *
-	 * @param stdClass $user_row
+	 * @param \stdClass $user_row
 	 * @return string
 	 */
 	public function makeMatrix($user_row) {
@@ -116,7 +117,7 @@ class Elgg_Upgrades_Helper2013022000 {
 	 * @return int
 	 */
 	public function getLowerBucketBound($guid) {
-		$bucket_size = Elgg_EntityDirLocator::BUCKET_SIZE;
+		$bucket_size = \Elgg\EntityDirLocator::BUCKET_SIZE;
 		if ($guid < 1) {
 			return false;
 		}
@@ -146,7 +147,7 @@ class Elgg_Upgrades_Helper2013022000 {
 	 */
 	public function forgetFailures() {
 		$relationship = sanitise_string(self::RELATIONSHIP_FAILURE);
-		update_data("
+		_elgg_services()->db->updateData("
 			DELETE FROM {$this->dbPrefix}entity_relationships
 			WHERE relationship = '$relationship'
 			  AND guid_two = {$this->siteGuid}
@@ -158,7 +159,7 @@ class Elgg_Upgrades_Helper2013022000 {
 	 */
 	public function forgetSuccesses() {
 		$relationship = sanitise_string(self::RELATIONSHIP_SUCCESS);
-		update_data("
+		_elgg_services()->db->updateData("
 			DELETE FROM {$this->dbPrefix}entity_relationships
 			WHERE relationship = '$relationship'
 			  AND guid_two = {$this->siteGuid}
@@ -177,7 +178,8 @@ class Elgg_Upgrades_Helper2013022000 {
 			WHERE relationship = '$relationship'
 			  AND guid_two = {$this->siteGuid}
 		";
-		$row = get_data_row($sql);
+		$row = _elgg_services()->db->getDataRow($sql);
 		return ($row->cnt > 0);
 	}
 }
+

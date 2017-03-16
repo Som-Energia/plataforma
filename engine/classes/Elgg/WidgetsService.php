@@ -1,4 +1,5 @@
 <?php
+namespace Elgg;
 
 /**
  * WARNING: API IN FLUX. DO NOT USE DIRECTLY.
@@ -11,15 +12,15 @@
  * @subpackage Widgets
  * @since      1.9.0
  */
-class Elgg_WidgetsService {
+class WidgetsService {
 
 	/**
-	 * @var stdClass
+	 * @var \stdClass
 	 */
 	private $widgets;
 
 	/**
-	 * @see Elgg_WidgetsService::getWidgets()
+	 * @see \Elgg\WidgetsService::getWidgets()
 	 * @var array
 	 */
 	private $widgetCache = array();
@@ -81,7 +82,7 @@ class Elgg_WidgetsService {
 			return false;
 		}
 
-		$widget = new ElggWidget;
+		$widget = new \ElggWidget;
 		$widget->owner_guid = $owner_guid;
 		$widget->container_guid = $owner_guid; // @todo - will this work for group widgets?
 		if (isset($access_id)) {
@@ -94,7 +95,7 @@ class Elgg_WidgetsService {
 			return false;
 		}
 
-		// private settings cannot be set until ElggWidget saved
+		// private settings cannot be set until \ElggWidget saved
 		$widget->handler = $handler;
 		$widget->context = $context;
 
@@ -109,11 +110,11 @@ class Elgg_WidgetsService {
 	public function canEditLayout($context, $user_guid = 0) {
 		$user = get_entity((int)$user_guid);
 		if (!$user) {
-			$user = elgg_get_logged_in_user_entity();
+			$user = _elgg_services()->session->getLoggedInUser();
 		}
 
 		$return = false;
-		if (elgg_is_admin_logged_in()) {
+		if (_elgg_services()->session->isAdminLoggedIn()) {
 			$return = true;
 		}
 		if (elgg_get_page_owner_guid() == $user->guid) {
@@ -125,7 +126,7 @@ class Elgg_WidgetsService {
 			'context' => $context,
 			'page_owner' => elgg_get_page_owner_entity(),
 		);
-		return elgg_trigger_plugin_hook('permissions_check', 'widget_layout', $params, $return);
+		return _elgg_services()->hooks->trigger('permissions_check', 'widget_layout', $params, $return);
 	}
 
 	/**
@@ -139,13 +140,13 @@ class Elgg_WidgetsService {
 		}
 
 		if (!isset($this->widgets)) {
-			$this->widgets = new stdClass;
+			$this->widgets = new \stdClass;
 		}
 		if (!isset($this->widgets->handlers)) {
 			$this->widgets->handlers = array();
 		}
 
-		$handlerobj = new stdClass;
+		$handlerobj = new \stdClass;
 		$handlerobj->name = $name;
 		$handlerobj->description = $description;
 		$handlerobj->context = $context;
@@ -260,3 +261,4 @@ class Elgg_WidgetsService {
 		return $widgets;
 	}
 }
+

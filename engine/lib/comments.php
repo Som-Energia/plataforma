@@ -47,13 +47,13 @@ function _elgg_comments_page_handler($page) {
 				forward(REFERER);
 			}
 			$comment = get_entity($page[1]);
-			if (!($comment instanceof ElggComment) || !$comment->canEdit()) {
+			if (!($comment instanceof \ElggComment) || !$comment->canEdit()) {
 				register_error(elgg_echo('generic_comment:notfound'));
 				forward(REFERER);
 			}
 
 			$target = $comment->getContainerEntity();
-			if (!($target instanceof ElggEntity)) {
+			if (!($target instanceof \ElggEntity)) {
 				register_error(elgg_echo('generic_comment:notfound'));
 				forward(REFERER);
 			}
@@ -91,7 +91,7 @@ function _elgg_comments_page_handler($page) {
  *
  * @param string         $hook   'register'
  * @param string         $type   'menu:entity'
- * @param ElggMenuItem[] $return Array of ElggMenuItem objects
+ * @param \ElggMenuItem[] $return Array of \ElggMenuItem objects
  * @param array          $params Array of view vars
  *
  * @return array
@@ -132,7 +132,7 @@ function _elgg_comment_setup_entity_menu($hook, $type, $return, $params) {
  */
 function _elgg_comment_url_handler($hook, $type, $return, $params) {
 	$entity = $params['entity'];
-	/* @var ElggObject $entity */
+	/* @var \ElggObject $entity */
 
 	if (!elgg_instanceof($entity, 'object', 'comment') || !$entity->getOwnerEntity()) {
 		// not a comment or has no owner
@@ -176,7 +176,7 @@ function _elgg_comments_container_permissions_override($hook, $type, $return, $p
 
 /**
  * By default, only authors can edit their comments.
- *
+ * 
  * @param string  $hook   'permissions_check'
  * @param string  $type   'object'
  * @param boolean $return Can the given user edit the given entity?
@@ -187,11 +187,11 @@ function _elgg_comments_container_permissions_override($hook, $type, $return, $p
 function _elgg_comments_permissions_override($hook, $type, $return, $params) {
 	$entity = $params['entity'];
 	$user = $params['user'];
-
+	
 	if (elgg_instanceof($entity, 'object', 'comment') && $user) {
 		return $entity->getOwnerGUID() == $user->getGUID();
 	}
-
+	
 	return $return;
 }
 
@@ -212,10 +212,10 @@ function _elgg_comments_permissions_override($hook, $type, $return, $params) {
  */
 function _elgg_comments_notification_email_subject($hook, $type, $returnvalue, $params) {
 
-	/** @var Elgg_Notifications_Notification */
+	/** @var Elgg\Notifications\Notification */
 	$notification = elgg_extract('notification', $returnvalue['params']);
 
-	if ($notification instanceof Elgg_Notifications_Notification) {
+	if ($notification instanceof Elgg\Notifications\Notification) {
 		$object = elgg_extract('object', $notification->params);
 
 		if ($object instanceof ElggComment) {

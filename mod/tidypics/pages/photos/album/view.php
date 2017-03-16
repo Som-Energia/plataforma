@@ -9,7 +9,7 @@
 // get the album entity
 $album_guid = (int) get_input('guid');
 $album = get_entity($album_guid);
-if (!$album) {
+if (!$album || !elgg_instanceof($album, 'object', 'album')) {
 	register_error(elgg_echo('noaccess'));
 	$_SESSION['last_forward_from'] = current_page_url();
 	forward('');
@@ -81,14 +81,15 @@ if ($album->canEdit() && $album->getSize() > 0) {
 
 // only show slideshow link if slideshow is enabled in plugin settings and there are images
 if (elgg_get_plugin_setting('slideshow', 'tidypics') && $album->getSize() > 0) {
+	elgg_require_js('tidypics/slideshow');
 	$offset = (int)get_input('offset', 0);
 	$url = $album->getURL() . "?limit=64&offset=$offset&view=rss";
 	$url = elgg_format_url($url);
-	$lite_url = elgg_get_site_url() . "mod/tidypics/vendors/PicLensLite/";
-	$slideshow_link = "javascript:PicLensLite.setLiteURLs({lite:'$lite_url'});PicLensLite.start({maxScale:0, feedUrl:'$url'});";
 	elgg_register_menu_item('title', array(
 		'name' => 'slideshow',
-		'href' => $slideshow_link,
+		'id' => 'slideshow',
+		'data-slideshowurl' => $url,
+		'href' => '#',
 		'text' => "<img src=\"".elgg_get_site_url() ."mod/tidypics/graphics/slideshow.png\" alt=\"".elgg_echo('album:slideshow')."\">",
 		'title' => elgg_echo('album:slideshow'),
 		'link_class' => 'elgg-button elgg-button-action',

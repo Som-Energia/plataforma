@@ -26,14 +26,16 @@ Basic instructions
 #. Update the files
     * If doing a patch upgrade (1.9.x), overwrite your existing files with the new version of Elgg
     * If doing a minor upgrade (1.x), replace the existing core files completely
-#. Merge any new changes from ``htaccess_dist`` into ``.htaccess``
+#. Merge any new changes to the rewrite rules
+    * For Apache from ``install/config/htaccess.dist`` into ``.htaccess``
+    * For Nginx from ``install/config/nginx.dist`` into your server configuration (usually inside ``/etc/nginx/sites-enabled``)
 #. Merge any new changes from ``settings.example.php`` into ``settings.php``
 #. Visit http://your-elgg-site.com/upgrade.php
 
 .. note::
 
    Any modifications should have been written within plugins, so that they are not lost on overwriting.
-   If this is not the case, take care to maintain your modifications.
+   If this is not the case, take care to maintain your modifications. 
 
 .. note::
 
