@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Elgg 1.10\n"
+"Project-Id-Version: Elgg 1.11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-13 10:16-0500\n"
+"POT-Creation-Date: 2015-12-13 21:40-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -860,283 +860,287 @@ msgid "Pre-defined access controls"
 msgstr ""
 
 #: ../../design/database.rst:704
-msgid "**0** Private."
+msgid "``ACCESS_PRIVATE`` (value: 0) Private."
 msgstr ""
 
 #: ../../design/database.rst:705
-msgid "**1** Logged in users."
+msgid "``ACCESS_LOGGED_IN`` (value: 1) Logged in users."
 msgstr ""
 
 #: ../../design/database.rst:706
-msgid "**2** Public data."
+msgid "``ACCESS_PUBLIC`` (value: 2) Public data."
 msgstr ""
 
-#: ../../design/database.rst:709
+#: ../../design/database.rst:707
+msgid "``ACCESS_FRIENDS`` (value: -2) Owner and his/her friends."
+msgstr ""
+
+#: ../../design/database.rst:710
 msgid "User defined access controls"
 msgstr ""
 
-#: ../../design/database.rst:711
+#: ../../design/database.rst:712
 msgid "You may define additional access groups and assign them to an entity, annotation or metadata. A number of functions have been defined to assist you; see the `access library reference`_ for more information."
 msgstr ""
 
-#: ../../design/database.rst:716
+#: ../../design/database.rst:717
 msgid "How access affects data retrieval"
 msgstr ""
 
-#: ../../design/database.rst:718
+#: ../../design/database.rst:719
 msgid "All data retrieval functions above the database layer - for example ``get_entities`` and its cousins - will only return items that the current user has access to see. It is not possible to retrieve items that the current user does not have access to. This makes it very hard to create a security hole for retrieval."
 msgstr ""
 
-#: ../../design/database.rst:727
+#: ../../design/database.rst:728
 msgid "Write access"
 msgstr ""
 
-#: ../../design/database.rst:729
+#: ../../design/database.rst:730
 msgid "The following rules govern write access:"
 msgstr ""
 
-#: ../../design/database.rst:731
+#: ../../design/database.rst:732
 msgid "The owner of an entity can always edit it"
 msgstr ""
 
-#: ../../design/database.rst:732
+#: ../../design/database.rst:733
 msgid "The owner of a container can edit anything therein (note that this does not mean that the owner of a group can edit anything therein)"
 msgstr ""
 
-#: ../../design/database.rst:734
+#: ../../design/database.rst:735
 msgid "Admins can edit anything"
 msgstr ""
 
-#: ../../design/database.rst:736
+#: ../../design/database.rst:737
 msgid "You can override this behaviour using a :ref:`plugin hook <design/events#plugin-hooks>` called ``permissions_check``, which passes the entity in question to any function that has announced it wants to be referenced. Returning ``true`` will allow write access; returning ``false`` will deny it. See :ref:`the plugin hook reference for permissions\\_check <guides/hooks-list#permission-hooks>` for more details."
 msgstr ""
 
-#: ../../design/database.rst:744
+#: ../../design/database.rst:745
 msgid "`Access library reference`_"
 msgstr ""
 
-#: ../../design/database.rst:749
+#: ../../design/database.rst:750
 msgid "Schema"
 msgstr ""
 
-#: ../../design/database.rst:751
+#: ../../design/database.rst:752
 msgid "The database contains a number of primary tables and secondary tables. Its schema table is stored in ``/engine/schema/mysql.sql``."
 msgstr ""
 
-#: ../../design/database.rst:754
+#: ../../design/database.rst:755
 msgid "Each table is prefixed by \"prefix\\_\", this is replaced by the Elgg framework during installation."
 msgstr ""
 
-#: ../../design/database.rst:758
+#: ../../design/database.rst:759
 msgid "Main tables"
 msgstr ""
 
-#: ../../design/database.rst:760
+#: ../../design/database.rst:761
 msgid "This is a description of the main tables. Keep in mind that in a given Elgg installation, the tables will have a prefix (typically \"elgg\\_\")."
 msgstr ""
 
-#: ../../design/database.rst:764
+#: ../../design/database.rst:765
 msgid "Table: entities"
 msgstr ""
 
-#: ../../design/database.rst:766
+#: ../../design/database.rst:767
 msgid "This is the main `Entities`_ table containing Elgg users, sites, objects and groups. When you first install Elgg this is automatically populated with your first site."
 msgstr ""
 
-#: ../../design/database.rst:770
+#: ../../design/database.rst:771
 msgid "It contains the following fields:"
 msgstr ""
 
-#: ../../design/database.rst:772
+#: ../../design/database.rst:773
 msgid "**guid** An auto-incrementing counter producing a GUID that uniquely identifies this entity in the system."
 msgstr ""
 
-#: ../../design/database.rst:774
+#: ../../design/database.rst:775
 msgid "**type** The type of entity - object, user, group or site"
 msgstr ""
 
-#: ../../design/database.rst:775
+#: ../../design/database.rst:776
 msgid "**subtype** A link to the `entity_subtypes` table."
 msgstr ""
 
-#: ../../design/database.rst:776
+#: ../../design/database.rst:777
 msgid "**owner\\_guid** The GUID of the owner's entity."
 msgstr ""
 
-#: ../../design/database.rst:777
+#: ../../design/database.rst:778
 msgid "**site\\_guid** The site the entity belongs to."
 msgstr ""
 
-#: ../../design/database.rst:778
+#: ../../design/database.rst:779
 msgid "**container\\_guid** The GUID this entity is contained by - either a user or a group."
 msgstr ""
 
-#: ../../design/database.rst:780
+#: ../../design/database.rst:781
 msgid "**access\\_id** Access controls on this entity."
 msgstr ""
 
-#: ../../design/database.rst:781
+#: ../../design/database.rst:782
 msgid "**time\\_created** Unix timestamp of when the entity is created."
 msgstr ""
 
-#: ../../design/database.rst:782
+#: ../../design/database.rst:783
 msgid "**time\\_updated** Unix timestamp of when the entity was updated."
 msgstr ""
 
-#: ../../design/database.rst:783
+#: ../../design/database.rst:784
 msgid "**enabled** If this is 'yes' an entity is accessible, if 'no' the entity has been disabled (Elgg treats it as if it were deleted without actually removing it from the database)."
 msgstr ""
 
-#: ../../design/database.rst:788
+#: ../../design/database.rst:789
 msgid "Table: entity\\_subtypes"
 msgstr ""
 
-#: ../../design/database.rst:790
+#: ../../design/database.rst:791
 msgid "This table contains entity subtype information:"
 msgstr ""
 
-#: ../../design/database.rst:792
-#: ../../design/database.rst:802
-#: ../../design/database.rst:820
+#: ../../design/database.rst:793
+#: ../../design/database.rst:803
+#: ../../design/database.rst:821
 msgid "**id** A counter."
 msgstr ""
 
-#: ../../design/database.rst:793
+#: ../../design/database.rst:794
 msgid "**type** The type of entity - object, user, group or site."
 msgstr ""
 
-#: ../../design/database.rst:794
+#: ../../design/database.rst:795
 msgid "**subtype** The subtype name as a string."
 msgstr ""
 
-#: ../../design/database.rst:795
+#: ../../design/database.rst:796
 msgid "**class** Optional class name if this subtype is linked with a class"
 msgstr ""
 
-#: ../../design/database.rst:798
+#: ../../design/database.rst:799
 msgid "Table: metadata"
 msgstr ""
 
-#: ../../design/database.rst:800
+#: ../../design/database.rst:801
 msgid "This table contains `Metadata`_, extra information attached to an entity."
 msgstr ""
 
-#: ../../design/database.rst:803
-#: ../../design/database.rst:821
+#: ../../design/database.rst:804
+#: ../../design/database.rst:822
 msgid "**entity\\_guid** The entity this is attached to."
 msgstr ""
 
-#: ../../design/database.rst:804
+#: ../../design/database.rst:805
 msgid "**name\\_id** A link to the metastrings table defining the name table."
-msgstr ""
-
-#: ../../design/database.rst:806
-#: ../../design/database.rst:824
-msgid "**value\\_id** A link to the metastrings table defining the value."
 msgstr ""
 
 #: ../../design/database.rst:807
 #: ../../design/database.rst:825
-msgid "**value\\_type** The value class, either text or an integer."
+msgid "**value\\_id** A link to the metastrings table defining the value."
 msgstr ""
 
 #: ../../design/database.rst:808
 #: ../../design/database.rst:826
-msgid "**owner\\_guid** The owner GUID of the owner who set this item of metadata."
+msgid "**value\\_type** The value class, either text or an integer."
 msgstr ""
 
-#: ../../design/database.rst:810
-#: ../../design/database.rst:828
-msgid "**access\\_id** An Access controls on this item of metadata."
+#: ../../design/database.rst:809
+#: ../../design/database.rst:827
+msgid "**owner\\_guid** The owner GUID of the owner who set this item of metadata."
 msgstr ""
 
 #: ../../design/database.rst:811
 #: ../../design/database.rst:829
-msgid "**time\\_created** Unix timestamp of when the metadata is created."
+msgid "**access\\_id** An Access controls on this item of metadata."
 msgstr ""
 
 #: ../../design/database.rst:812
 #: ../../design/database.rst:830
+msgid "**time\\_created** Unix timestamp of when the metadata is created."
+msgstr ""
+
+#: ../../design/database.rst:813
+#: ../../design/database.rst:831
 msgid "**enabled** If this is 'yes' an item is accessible, if 'no' the item has been deleted."
 msgstr ""
 
-#: ../../design/database.rst:816
+#: ../../design/database.rst:817
 msgid "Table: annotations"
 msgstr ""
 
-#: ../../design/database.rst:818
+#: ../../design/database.rst:819
 msgid "This table contains `Annotations`_, this is distinct from `Metadata`_."
 msgstr ""
 
-#: ../../design/database.rst:822
+#: ../../design/database.rst:823
 msgid "**name\\_id** A link to the metastrings table defining the type of annotation."
 msgstr ""
 
-#: ../../design/database.rst:834
+#: ../../design/database.rst:835
 msgid "Table: relationships"
 msgstr ""
 
-#: ../../design/database.rst:836
+#: ../../design/database.rst:837
 msgid "This table defines `Relationships`_, these link one entity with another."
 msgstr ""
 
-#: ../../design/database.rst:838
+#: ../../design/database.rst:839
 msgid "**guid\\_one** The GUID of the subject entity."
 msgstr ""
 
-#: ../../design/database.rst:839
+#: ../../design/database.rst:840
 msgid "**relationship** The type of the relationship."
 msgstr ""
 
-#: ../../design/database.rst:840
+#: ../../design/database.rst:841
 msgid "**guid\\_two** The GUID of the target entity."
 msgstr ""
 
-#: ../../design/database.rst:843
+#: ../../design/database.rst:844
 msgid "Table: objects\\_entity"
 msgstr ""
 
-#: ../../design/database.rst:845
+#: ../../design/database.rst:846
 msgid "Extra information specifically relating to objects. These are split in order to reduce load on the metadata table and make an obvious difference between attributes and metadata."
 msgstr ""
 
-#: ../../design/database.rst:850
+#: ../../design/database.rst:851
 msgid "Table: sites\\_entity"
 msgstr ""
 
-#: ../../design/database.rst:852
+#: ../../design/database.rst:853
 msgid "Extra information specifically relating to sites. These are split in order to reduce load on the metadata table and make an obvious difference between attributes and metadata."
 msgstr ""
 
-#: ../../design/database.rst:857
+#: ../../design/database.rst:858
 msgid "Table: users\\_entity"
 msgstr ""
 
-#: ../../design/database.rst:859
+#: ../../design/database.rst:860
 msgid "Extra information specifically relating to users. These are split in order to reduce load on the metadata table and make an obvious difference between attributes and metadata."
 msgstr ""
 
-#: ../../design/database.rst:864
+#: ../../design/database.rst:865
 msgid "Table: groups\\_entity"
 msgstr ""
 
-#: ../../design/database.rst:866
+#: ../../design/database.rst:867
 msgid "Extra information specifically relating to groups. These are split in order to reduce load on the metadata table and make an obvious difference between attributes and metadata."
 msgstr ""
 
-#: ../../design/database.rst:871
+#: ../../design/database.rst:872
 msgid "Table: metastrings"
 msgstr ""
 
-#: ../../design/database.rst:873
+#: ../../design/database.rst:874
 msgid "Metastrings contain the actual string of metadata which is linked to by the metadata and annotations tables."
 msgstr ""
 
-#: ../../design/database.rst:876
+#: ../../design/database.rst:877
 msgid "This is to avoid duplicating strings, saving space and making database lookups more efficient."
 msgstr ""
 
-#: ../../design/database.rst:879
+#: ../../design/database.rst:880
 msgid "Core developers will place schema upgrades in ``/engine/schema/upgrades/*``."
 msgstr ""
 

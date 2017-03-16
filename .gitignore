@@ -1,5 +1,12 @@
+# Settings
+.htaccess
+.htaccess.swp
+engine/settings.php
+
 ### Carpeta Netbeans
 nbproject
+
+mod/login_as
 
 # Created by https://www.gitignore.io
 ### NetBeans ###
@@ -11,11 +18,6 @@ nbdist/
 nbactions.xml
 nb-configuration.xml
 .nb-gradle/
-
-# Settings
-.htaccess
-.htaccess.swp
-engine/settings.php
 
 
 # Created by https://www.gitignore.io/api/composer

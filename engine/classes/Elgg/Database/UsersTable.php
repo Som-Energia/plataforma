@@ -230,21 +230,6 @@ class UsersTable {
 	}
 	
 	/**
-	 * Get a user object from a GUID.
-	 *
-	 * This function returns an \ElggUser from a given GUID.
-	 *
-	 * @param int $guid The GUID
-	 *
-	 * @return \ElggUser|false
-	 */
-	function get($guid) {
-		$result = _elgg_services()->entityTable->get($guid);
-
-		return ($result instanceof \ElggUser) ? $result : false;
-	}
-	
-	/**
 	 * Get user by username
 	 *
 	 * @param string $username The user's username
@@ -461,7 +446,7 @@ class UsersTable {
 	 */
 	function generateInviteCode($username) {
 		$time = time();
-		return "{$time}." . _elgg_services()->crypto->getHmac($time . $username);
+		return "$time." . _elgg_services()->crypto->getHmac([(int)$time, $username])->getToken();
 	}
 
 	/**
@@ -475,14 +460,13 @@ class UsersTable {
 	 */
 	function validateInviteCode($username, $code) {
 		// validate the format of the token created by ->generateInviteCode()
-		if (!preg_match('~^(\d+)\.(\w+)$~', $code, $m)) {
+		if (!preg_match('~^(\d+)\.([a-zA-Z0-9\-_]+)$~', $code, $m)) {
 			return false;
 		}
 		$time = $m[1];
 		$mac = $m[2];
 
-		$crypto = _elgg_services()->crypto;
-		return $crypto->areEqual($mac, $crypto->getHmac($time . $username));
+		return _elgg_services()->crypto->getHmac([(int)$time, $username])->matchesToken($mac);
 	}
 	
 	/**

@@ -1,5 +1,6 @@
 <?php
 namespace Elgg;
+use Elgg\Database\Config;
 
 /**
  * An object representing a single Elgg database.
@@ -152,7 +153,7 @@ class Database {
 		}
 
 		// Set DB for UTF8
-		mysql_query("SET NAMES utf8");
+		mysql_query("SET NAMES utf8", $this->dbLinks[$dblinkname]);
 	}
 
 	/**
@@ -641,7 +642,24 @@ class Database {
 	 * @return string
 	 */
 	public function sanitizeString($value) {
+
+		// use resource if established, but don't open a connection to do it.
+		if (isset($this->dbLinks['read'])) {
+			return mysql_real_escape_string($value, $this->dbLinks['read']);
+		}
+
 		return mysql_real_escape_string($value);
+	}
+
+	/**
+	 * Get the server version number
+	 *
+	 * @param string $type Connection type (Config constants, e.g. Config::READ_WRITE)
+	 *
+	 * @return string
+	 */
+	public function getServerVersion($type) {
+		return mysql_get_server_info($this->getLink($type));
 	}
 }
 

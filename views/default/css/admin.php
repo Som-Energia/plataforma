@@ -525,6 +525,7 @@ select {
 }
 
 .elgg-button {
+	font-size: 100%;
 	text-decoration: none;
 	border-radius: 3px;
 	width: auto;
@@ -1024,6 +1025,8 @@ select {
 	z-index: 10000;
 
 	width: 165px;
+	padding-top: 20px;
+	padding-bottom: 20px;
 	border: solid 1px #E5E5E5;
 	border-color: #E5E5E5 #999 #999 #E5E5E5;
 	background-color: #FFF;
@@ -1594,6 +1597,8 @@ table.mceLayout {
 .elgg-output dd {
 	margin: 0 0 1em 2em;
 }
+
+<?php echo elgg_view('css/elements/misc/spinner.css') ?>
 
 /* ***************************************
 	HELPERS

@@ -362,13 +362,14 @@ class AccessCollections {
 	 * standard access levels. It does not return access collections that the user
 	 * belongs to such as the access collection for a group.
 	 *
-	 * @param int  $user_guid The user's GUID.
-	 * @param int  $site_guid The current site.
-	 * @param bool $flush     If this is set to true, this will ignore a cached access array
+	 * @param int   $user_guid    The user's GUID.
+	 * @param int   $site_guid    The current site.
+	 * @param bool  $flush        If this is set to true, this will ignore a cached access array
+	 * @param array $input_params Some parameters passed into an input/access view
 	 *
 	 * @return array List of access permissions
 	 */
-	function getWriteAccessArray($user_guid = 0, $site_guid = 0, $flush = false) {
+	function getWriteAccessArray($user_guid = 0, $site_guid = 0, $flush = false, array $input_params = array()) {
 		global $init_finished;
 		$cache = _elgg_services()->accessCache;
 	
@@ -394,20 +395,13 @@ class AccessCollections {
 		} else {
 			// @todo is there such a thing as public write access?
 			$access_array = array(
-				ACCESS_PRIVATE => _elgg_services()->translator->translate("PRIVATE"),
-				ACCESS_FRIENDS => _elgg_services()->translator->translate("access:friends:label"),
-				ACCESS_LOGGED_IN => _elgg_services()->translator->translate("LOGGED_IN"),
-				ACCESS_PUBLIC => _elgg_services()->translator->translate("PUBLIC")
+				ACCESS_PRIVATE => $this->getReadableAccessLevel(ACCESS_PRIVATE),
+				ACCESS_FRIENDS => $this->getReadableAccessLevel(ACCESS_FRIENDS),
+				ACCESS_LOGGED_IN => $this->getReadableAccessLevel(ACCESS_LOGGED_IN),
+				ACCESS_PUBLIC => $this->getReadableAccessLevel(ACCESS_PUBLIC)
 			);
 
-			$db = _elgg_services()->db;
-			$prefix = $db->getTablePrefix();
-			
-			$query = "SELECT ag.* FROM {$prefix}access_collections ag ";
-			$query .= " WHERE (ag.site_guid = $site_guid OR ag.site_guid = 0)";
-			$query .= " AND (ag.owner_guid = $user_guid)";
-	
-			$collections = $db->getData($query);
+			$collections = $this->getEntityCollections($user_guid, $site_guid);
 			if ($collections) {
 				foreach ($collections as $collection) {
 					$access_array[$collection->id] = $collection->name;
@@ -421,10 +415,10 @@ class AccessCollections {
 	
 		$options = array(
 			'user_id' => $user_guid,
-			'site_id' => $site_guid
+			'site_id' => $site_guid,
+			'input_params' => $input_params,
 		);
-		return _elgg_services()->hooks->trigger('access:collections:write', 'user',
-			$options, $access_array);
+		return _elgg_services()->hooks->trigger('access:collections:write', 'user', $options, $access_array);
 	}
 
 	/**
@@ -706,7 +700,7 @@ class AccessCollections {
 	 *
 	 * @return array|false
 	 */
-	function getUserCollections($owner_guid, $site_guid = 0) {
+	function getEntityCollections($owner_guid, $site_guid = 0) {
 		$owner_guid = (int) $owner_guid;
 		$site_guid = (int) $site_guid;
 	
@@ -760,5 +754,90 @@ class AccessCollections {
 		}
 	
 		return $collection_members;
-	}	
+	}
+	
+	/**
+	 * Return an array of database row objects of the access collections $entity_guid is a member of.
+	 * 
+	 * @param int $member_guid The entity guid
+	 * @param int $site_guid   The GUID of the site (default: current site).
+	 * 
+	 * @return array|false
+	 */
+	function getCollectionsByMember($member_guid, $site_guid = 0) {
+		$member_guid = (int) $member_guid;
+		$site_guid = (int) $site_guid;
+		
+		if (($site_guid == 0) && $this->site_guid) {
+			$site_guid = $this->site_guid;
+		}
+		
+		$db = _elgg_services()->db;
+		$prefix = $db->getTablePrefix();
+		
+		$query = "SELECT ac.* FROM {$prefix}access_collections ac
+				JOIN {$prefix}access_collection_membership m ON ac.id = m.access_collection_id
+				WHERE m.user_guid = {$member_guid}
+				AND ac.site_guid = {$site_guid}
+				ORDER BY name ASC";
+		
+		$collections = $db->getData($query);
+		
+		return $collections;
+	}
+	
+	/**
+	 * Return the name of an ACCESS_* constant or an access collection,
+	 * but only if the logged in user owns the access collection or is an admin.
+	 * Ownership requirement prevents us from exposing names of access collections
+	 * that current user has been added to by other members and may contain
+	 * sensitive classification of the current user (e.g. close friends vs acquaintances).
+	 *
+	 * Returns a string in the language of the user for global access levels, e.g.'Public, 'Friends', 'Logged in', 'Private';
+	 * or a name of the owned access collection, e.g. 'My work colleagues';
+	 * or a name of the group or other access collection, e.g. 'Group: Elgg technical support';
+	 * or 'Limited' if the user access is restricted to read-only, e.g. a friends collection the user was added to
+	 *
+	 * @param int $entity_access_id The entity's access id
+	 * 
+	 * @return string
+	 * @since 1.11
+	 */
+	function getReadableAccessLevel($entity_access_id) {
+		$access = (int) $entity_access_id;
+
+		$translator = _elgg_services()->translator;
+	
+		// Check if entity access id is a defined global constant
+		$access_array = array(
+			ACCESS_PRIVATE => $translator->translate("PRIVATE"),
+			ACCESS_FRIENDS => $translator->translate("access:friends:label"),
+			ACCESS_LOGGED_IN => $translator->translate("LOGGED_IN"),
+			ACCESS_PUBLIC => $translator->translate("PUBLIC"),
+		);
+	
+		if (array_key_exists($access, $access_array)) {
+			return $access_array[$access];
+		}
+	
+		$user_guid = _elgg_services()->session->getLoggedInUserGuid();
+		if (!$user_guid) {
+			// return 'Limited' if there is no logged in user
+			return $translator->translate('access:limited:label');
+		}
+		
+		// Entity access id is probably a custom access collection
+		// Check if the user has write access to it and can see it's label
+		// Admins should always be able to see the readable version	
+		$collection = $this->get($access);
+		
+		if ($collection) {
+			if (($collection->owner_guid == $user_guid) || _elgg_services()->session->isAdminLoggedIn()) {
+				return $collection->name;
+			}
+		}
+		
+		// return 'Limited' if the user does not have access to the access collection
+		return $translator->translate('access:limited:label');
+	}
 }

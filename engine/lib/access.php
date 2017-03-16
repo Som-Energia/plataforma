@@ -26,13 +26,13 @@
  * @warning This will not show disabled entities.
  * Use {@link access_show_hidden_entities()} to access disabled entities.
  * 
- * @internal The access override is checked in elgg_override_permissions(). It is
+ * @note Internal: The access override is checked in elgg_override_permissions(). It is
  * registered for the 'permissions_check' hooks to override the access system for
  * the canEdit() and canWriteToContainer() methods.
  * 
- * @internal This clears the access cache.
+ * @note Internal: This clears the access cache.
  *
- * @internal For performance reasons this is done at the database access clause level.
+ * @note Internal: For performance reasons this is done at the database access clause level.
  *
  * @param bool $ignore If true, disables all access checks.
  *
@@ -41,7 +41,7 @@
  * @see elgg_get_ignore_access()
  */
 function elgg_set_ignore_access($ignore = true) {
-	return _elgg_services()->access->setIgnoreAccess($ignore);
+	return _elgg_services()->session->setIgnoreAccess($ignore);
 }
 
 /**
@@ -52,7 +52,7 @@ function elgg_set_ignore_access($ignore = true) {
  * @see elgg_set_ignore_access()
  */
 function elgg_get_ignore_access() {
-	return _elgg_services()->access->getIgnoreAccess();
+	return _elgg_services()->session->getIgnoreAccess();
 }
 
 /**
@@ -86,7 +86,7 @@ function get_access_list($user_guid = 0, $site_guid = 0, $flush = false) {
  * to plus public and logged in access levels. If the user is an admin, it includes
  * the private access level.
  *
- * @internal this is only used in core for creating the SQL where clause when
+ * @note Internal: this is only used in core for creating the SQL where clause when
  * retrieving content from the database. The friends access level is handled by
  * _elgg_get_access_where_sql().
  *
@@ -110,11 +110,12 @@ function get_access_array($user_guid = 0, $site_guid = 0, $flush = false) {
  * If want you to change the default access based on group of other information,
  * use the 'default', 'access' plugin hook.
  *
- * @param \ElggUser $user Get the user's default access. Defaults to logged in user.
+ * @param ElggUser $user         The user for whom we're getting default access. Defaults to logged in user.
+ * @param array    $input_params Parameters passed into an input/access view
  *
  * @return int default access id (see ACCESS defines in elgglib.php)
  */
-function get_default_access(\ElggUser $user = null) {
+function get_default_access(ElggUser $user = null, array $input_params = array()) {
 	global $CONFIG;
 
 	// site default access
@@ -134,6 +135,7 @@ function get_default_access(\ElggUser $user = null) {
 	$params = array(
 		'user' => $user,
 		'default_access' => $default_access,
+		'input_params' => $input_params,
 	);
 	return _elgg_services()->hooks->trigger('default', 'access', $params, $default_access);
 }
@@ -257,14 +259,15 @@ function has_access_to_entity($entity, $user = null) {
  * standard access levels. It does not return access collections that the user
  * belongs to such as the access collection for a group.
  *
- * @param int  $user_guid The user's GUID.
- * @param int  $site_guid The current site.
- * @param bool $flush     If this is set to true, this will ignore a cached access array
+ * @param int   $user_guid    The user's GUID.
+ * @param int   $site_guid    The current site.
+ * @param bool  $flush        If this is set to true, this will ignore a cached access array
+ * @param array $input_params Some parameters passed into an input/access view
  *
  * @return array List of access permissions
  */
-function get_write_access_array($user_guid = 0, $site_guid = 0, $flush = false) {
-	return _elgg_services()->accessCollections->getWriteAccessArray($user_guid, $site_guid, $flush);
+function get_write_access_array($user_guid = 0, $site_guid = 0, $flush = false, array $input_params = array()) {
+	return _elgg_services()->accessCollections->getWriteAccessArray($user_guid, $site_guid, $flush, $input_params);
 }
 
 /**
@@ -293,7 +296,7 @@ function can_edit_access_collection($collection_id, $user_guid = null) {
  *
  * Triggers plugin hook 'access:collections:addcollection', 'collection'
  *
- * @internal Access collections are stored in the access_collections table.
+ * @note Internal: Access collections are stored in the access_collections table.
  * Memberships to collections are in access_collections_membership.
  *
  * @param string $name       The name of the collection.
@@ -400,7 +403,7 @@ function remove_user_from_access_collection($user_guid, $collection_id) {
  * @see get_members_of_access_collection()
  */
 function get_user_access_collections($owner_guid, $site_guid = 0) {
-	return _elgg_services()->accessCollections->getUserCollections($owner_guid, $site_guid);
+	return _elgg_services()->accessCollections->getEntityCollections($owner_guid, $site_guid);
 }
 
 /**
@@ -476,39 +479,12 @@ function elgg_list_entities_from_access_id(array $options = array()) {
  * or a name of the group or other access collection, e.g. 'Group: Elgg technical support';
  * or 'Limited' if the user access is restricted to read-only, e.g. a friends collection the user was added to
  * 
- * @uses get_write_access_array()
- * 
  * @param int $entity_access_id The entity's access id
  * @return string
  * @since 1.7.0
  */
 function get_readable_access_level($entity_access_id) {
-	$access = (int) $entity_access_id;
-
-	$translator = _elgg_services()->translator;
-
-	// Check if entity access id is a defined global constant
-	$access_array = array(
-		ACCESS_PRIVATE => $translator->translate("PRIVATE"),
-		ACCESS_FRIENDS => $translator->translate("access:friends:label"),
-		ACCESS_LOGGED_IN => $translator->translate("LOGGED_IN"),
-		ACCESS_PUBLIC => $translator->translate("PUBLIC"),
-	);
-
-	if (array_key_exists($access, $access_array)) {
-		return $access_array[$access];
-	}
-
-	// Entity access id is a custom access collection
-	// Check if the user has write access to it and can see it's label
-	$write_access_array = _elgg_services()->accessCollections->getWriteAccessArray();
-
-	if (array_key_exists($access, $write_access_array)) {
-		return $write_access_array[$access];
-	}
-
-	// return 'Limited' if the user does not have access to the access collection
-	return $translator->translate('access:limited:label');
+	return _elgg_services()->accessCollections->getReadableAccessLevel($entity_access_id);
 }
 
 /**
@@ -533,7 +509,7 @@ function elgg_check_access_overrides($user_guid = 0) {
 		$is_admin = elgg_is_admin_user($user_guid);
 	}
 
-	return ($is_admin || _elgg_services()->access->getIgnoreAccess());
+	return ($is_admin || _elgg_services()->session->getIgnoreAccess());
 }
 
 /**
@@ -624,12 +600,14 @@ function access_test($hook, $type, $value, $params) {
 	return $value;
 }
 
-// Tell the access functions the system has booted, plugins are loaded,
-// and the user is logged in so it can start caching
-elgg_register_event_handler('ready', 'system', 'access_init');
+return function(\Elgg\EventsService $events, \Elgg\HooksRegistrationService $hooks) {
+	// Tell the access functions the system has booted, plugins are loaded,
+	// and the user is logged in so it can start caching
+	$events->registerHandler('ready', 'system', 'access_init');
 
-// For overrided permissions
-elgg_register_plugin_hook_handler('permissions_check', 'all', 'elgg_override_permissions');
-elgg_register_plugin_hook_handler('container_permissions_check', 'all', 'elgg_override_permissions');
+	// For overrided permissions
+	$hooks->registerHandler('permissions_check', 'all', 'elgg_override_permissions');
+	$hooks->registerHandler('container_permissions_check', 'all', 'elgg_override_permissions');
 
-elgg_register_plugin_hook_handler('unit_test', 'system', 'access_test');
+	$hooks->registerHandler('unit_test', 'system', 'access_test');
+};

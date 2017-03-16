@@ -47,11 +47,15 @@ function get_uploaded_file($input_name) {
 	}
 
 	$file = $files->get($input_name);
-	if (elgg_extract('error', $file) !== 0) {
+	if (empty($file)) {
+		// a file input was provided but no file uploaded
+		return false;
+	}
+	if ($file->getError() !== 0) {
 		return false;
 	}
 
-	return file_get_contents(elgg_extract('tmp_name', $file));
+	return file_get_contents($file->getPathname());
 }
 
 /**
@@ -74,13 +78,17 @@ $square = false, $upscale = false) {
 	if (!$files->has($input_name)) {
 		return false;
 	}
-
+	
 	$file = $files->get($input_name);
-	if (elgg_extract('error', $file) !== 0) {
+	if (empty($file)) {
+		// a file input was provided but no file uploaded
+		return false;
+	}
+	if ($file->getError() !== 0) {
 		return false;
 	}
 
-	return get_resized_image_from_existing_file(elgg_extract('tmp_name', $file), $maxwidth,
+	return get_resized_image_from_existing_file($file->getPathname(), $maxwidth,
 		$maxheight, $square, 0, 0, 0, 0, $upscale);
 }
 
@@ -573,4 +581,6 @@ function _elgg_filestore_test($hook, $type, $value) {
 	return $value;
 }
 
-elgg_register_event_handler('init', 'system', '_elgg_filestore_init', 100);
+return function(\Elgg\EventsService $events, \Elgg\HooksRegistrationService $hooks) {
+	$events->registerHandler('init', 'system', '_elgg_filestore_init', 100);
+};

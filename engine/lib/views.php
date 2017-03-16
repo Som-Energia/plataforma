@@ -36,10 +36,10 @@
  * 'default' is a standard HTML view.  Types can be defined on the fly
  * and you can get the current viewtype with {@link elgg_get_viewtype()}.
  *
- * @internal Plugin views are autoregistered before their init functions
+ * @note Internal: Plugin views are autoregistered before their init functions
  * are called, so the init order doesn't affect views.
  *
- * @internal The file that determines the output of the view is the last
+ * @note Internal: The file that determines the output of the view is the last
  * registered by {@link elgg_set_view_location()}.
  *
  * @package Elgg.Core
@@ -81,7 +81,7 @@ function elgg_set_viewtype($viewtype = "") {
  * Viewtypes are automatically detected and can be set with $_REQUEST['view']
  * or {@link elgg_set_viewtype()}.
  *
- * @internal Viewtype is determined in this order:
+ * @note Internal: Viewtype is determined in this order:
  *  - $CURRENT_SYSTEM_VIEWTYPE Any overrides by {@link elgg_set_viewtype()}
  *  - $CONFIG->view  The default view as saved in the DB.
  *
@@ -290,7 +290,7 @@ function elgg_get_view_location($view, $viewtype = '') {
  * Views are expected to be in plugin_name/views/.  This function can
  * be used to change that location.
  *
- * @internal Core view locations are stored in $CONFIG->viewpath.
+ * @note Internal: Core view locations are stored in $CONFIG->viewpath.
  *
  * @tip This is useful to optionally register views in a plugin.
  *
@@ -386,7 +386,7 @@ function elgg_view_deprecated($view, array $vars, $suggestion, $version) {
  * Priority can be specified and affects the order in which extensions
  * are appended or prepended.
  *
- * @internal View extensions are stored in
+ * @note Internal: View extensions are stored in
  * $CONFIG->views->extensions[$view][$priority] = $view_extension
  *
  * @param string $view           The view to extend.
@@ -442,16 +442,20 @@ function elgg_view_page($title, $body, $page_shell = 'default', $vars = array())
 	array_shift($params['segments']);
 	$page_shell = elgg_trigger_plugin_hook('shell', 'page', $params, $page_shell);
 
+	$system_messages = _elgg_services()->systemMessages;
+
 	$messages = null;
-	if (count_messages()) {
-		// get messages - try for errors first
-		$messages = system_messages(null, "error");
-		if (count($messages["error"]) == 0) {
-			// no errors so grab rest of messages
-			$messages = system_messages(null, "");
-		} else {
-			// we have errors - clear out remaining messages
-			system_messages(null, "");
+	if ($system_messages->count()) {
+		$messages = $system_messages->dumpRegister();
+		
+		if (isset($messages['error'])) {
+			// always make sure error is the first type
+			$errors = array(
+				'error' => $messages['error']
+			);
+			
+			unset($messages['error']);
+			$messages = array_merge($errors, $messages);
 		}
 	}
 
@@ -689,7 +693,9 @@ function elgg_view_menu($menu_name, array $vars = array()) {
 	global $CONFIG;
 
 	$vars['name'] = $menu_name;
-
+	
+	$vars = elgg_trigger_plugin_hook('parameters', "menu:$menu_name", $vars, $vars);
+	
 	$sort_by = elgg_extract('sort_by', $vars, 'text');
 
 	if (isset($CONFIG->menus[$menu_name])) {
@@ -768,9 +774,6 @@ function elgg_view_menu_item(\ElggMenuItem $item, array $vars = array()) {
  * The entity view is called with the following in $vars:
  *  - \ElggEntity 'entity' The entity being viewed
  *
- * Other common view $vars paramters:
- *  - bool 'full_view' Whether to show a full or condensed view. (Default: true)
- *
  * @tip This function can automatically appends annotations to entities if in full
  * view and a handler is registered for the entity:annotate.  See https://github.com/Elgg/Elgg/issues/964 and
  * {@link elgg_view_entity_annotations()}.
@@ -778,6 +781,8 @@ function elgg_view_menu_item(\ElggMenuItem $item, array $vars = array()) {
  * @param \ElggEntity $entity The entity to display
  * @param array       $vars   Array of variables to pass to the entity view.
  *                            In Elgg 1.7 and earlier it was the boolean $full_view
+ *      'full_view'        Whether to show a full or condensed view. (Default: true)
+ *      'item_view'        Alternative view used to render this entity
  * @param boolean     $bypass If true, will not pass to a custom template handler.
  *                            {@link set_template_handler()}
  * @param boolean     $debug  Complain if views are missing
@@ -810,25 +815,25 @@ function elgg_view_entity(\ElggEntity $entity, $vars = array(), $bypass = false,
 
 	$vars['entity'] = $entity;
 
-
-	// if this entity has a view defined, use it
-	$view = $entity->view;
-	if (is_string($view)) {
-		return elgg_view($view, $vars, $bypass, $debug);
-	}
-
 	$entity_type = $entity->getType();
-
-	$subtype = $entity->getSubtype();
-	if (empty($subtype)) {
-		$subtype = 'default';
+	$entity_subtype = $entity->getSubtype();
+	if (empty($entity_subtype)) {
+		$entity_subtype = 'default';
 	}
+
+	$entity_views = array(
+		elgg_extract('item_view', $vars, ''),
+		$entity->view,
+		"$entity_type/$entity_subtype",
+		"$entity_type/default",
+	);
 
 	$contents = '';
-	if (elgg_view_exists("$entity_type/$subtype")) {
-		$contents = elgg_view("$entity_type/$subtype", $vars, $bypass, $debug);
-	} else {
-		$contents = elgg_view("$entity_type/default", $vars, $bypass, $debug);
+	foreach ($entity_views as $view) {
+		if (elgg_view_exists($view)) {
+			$contents = elgg_view($view, $vars, $bypass, $debug);
+			break;
+		}
 	}
 
 	// Marcus Povey 20090616 : Speculative and low impact approach for fixing #964
@@ -902,6 +907,7 @@ function elgg_view_entity_icon(\ElggEntity $entity, $size = 'medium', $vars = ar
  *
  * @param \ElggAnnotation $annotation The annotation to display
  * @param array           $vars       Variable array for view.
+ *      'item_view'  Alternative view used to render an annotation
  * @param bool            $bypass     If true, will not pass to a custom
  *                                    template handler. {@link set_template_handler()}
  * @param bool            $debug      Complain if views are missing
@@ -931,11 +937,21 @@ function elgg_view_annotation(\ElggAnnotation $annotation, array $vars = array()
 		return false;
 	}
 
-	if (elgg_view_exists("annotation/$name")) {
-		return elgg_view("annotation/$name", $vars, $bypass, $debug);
-	} else {
-		return elgg_view("annotation/default", $vars, $bypass, $debug);
+	$annotation_views = array(
+		elgg_extract('item_view', $vars, ''),
+		"annotation/$name",
+		"annotation/default",
+	);
+
+	$contents = '';
+	foreach ($annotation_views as $view) {
+		if (elgg_view_exists($view)) {
+			$contents = elgg_view($view, $vars, $bypass, $debug);
+			break;
+		}
 	}
+
+	return $contents;
 }
 
 /**
@@ -956,6 +972,7 @@ function elgg_view_annotation(\ElggAnnotation $annotation, array $vars = array()
  *      'full_view'        Display the full view of the entities?
  *      'list_class'       CSS class applied to the list
  *      'item_class'       CSS class applied to the list items
+ *      'item_view'        Alternative view to render list items
  *      'pagination'       Display pagination?
  *      'list_type'        List type: 'list' (default), 'gallery'
  *      'list_type_toggle' Display the list type toggle?
@@ -1037,6 +1054,7 @@ $list_type_toggle = true, $pagination = true) {
  *      'limit'      The number of annotations to display per page
  *      'full_view'  Display the full view of the annotation?
  *      'list_class' CSS Class applied to the list
+ *      'item_view'  Alternative view to render list items
  *      'offset_key' The url parameter key used for offset
  *      'no_results' Message to display if no results (string|Closure)
  *
@@ -1209,7 +1227,7 @@ function elgg_view_module($type, $title, $body, array $vars = array()) {
  *
  * @param \ElggRiverItem $item A river item object
  * @param array          $vars An array of variables for the view
- *
+ *      'item_view'  Alternative view to render the item
  * @return string returns empty string if could not be rendered
  */
 function elgg_view_river_item($item, array $vars = array()) {
@@ -1242,7 +1260,20 @@ function elgg_view_river_item($item, array $vars = array()) {
 
 	$vars['item'] = $item;
 
-	return elgg_view('river/item', $vars);
+	$river_views = array(
+		elgg_extract('item_view', $vars, ''),
+		"river/item",
+	);
+
+	$contents = '';
+	foreach ($river_views as $view) {
+		if (elgg_view_exists($view)) {
+			$contents = elgg_view($view, $vars);
+			break;
+		}
+	}
+
+	return $contents;
 }
 
 /**
@@ -1339,20 +1370,18 @@ function elgg_view_tagcloud(array $options = array()) {
  *
  * @param \ElggEntity|\ElggAnnotation $item
  * @param array  $vars Additional parameters for the rendering
- *
+ *      'item_view' Alternative view used to render list items
  * @return string
  * @since 1.8.0
  * @access private
  */
 function elgg_view_list_item($item, array $vars = array()) {
-	global $CONFIG;
-
-	$type = $item->getType();
-	if (in_array($type, $CONFIG->entity_types)) {
+	
+	if ($item instanceof \ElggEntity) {
 		return elgg_view_entity($item, $vars);
-	} else if ($type == 'annotation') {
+	} else if ($item instanceof \ElggAnnotation) {
 		return elgg_view_annotation($item, $vars);
-	} else if ($type == 'river') {
+	} else if ($item instanceof \ElggRiverItem) {
 		return elgg_view_river_item($item, $vars);
 	}
 
@@ -1364,20 +1393,42 @@ function elgg_view_list_item($item, array $vars = array()) {
  *
  * Shorthand for <span class="elgg-icon elgg-icon-$name"></span>
  *
- * @param string $name  The specific icon to display
- * @param string $class Additional class: float, float-alt, or custom class
+ * @param string $name The specific icon to display
+ * @param mixed  $vars The additional classname as a string ('float', 'float-alt' or a custom class) 
+ *                     or an array of variables (array('class' => 'float')) to pass to the icon view.
  *
  * @return string The html for displaying an icon
+ * @throws InvalidArgumentException
  */
-function elgg_view_icon($name, $class = '') {
-	if ($class === true) {
-		elgg_deprecated_notice("Using a boolean to float the icon is deprecated. Use the class float.", 1.9);
-		$class = 'float';
+function elgg_view_icon($name, $vars = array()) {
+	if (empty($vars)) {
+		$vars = array();
 	}
 	
-	$icon_class = array("elgg-icon-$name" , $class);
+	if ($vars === true) {
+		elgg_deprecated_notice("Using a boolean to float the icon is deprecated. Use the class float.", 1.9);
+		$vars = array('class' => 'float');
+	}
 	
-	return elgg_view("output/icon", array("class" => $icon_class));
+	if (is_string($vars)) {
+		$vars = array('class' => $vars);
+	}
+	
+	if (!is_array($vars)) {
+		throw new \InvalidArgumentException('$vars needs to be a string or an array');
+	}
+	
+	if (!array_key_exists('class', $vars)) {
+		$vars['class'] = array();
+	}
+	
+	if (!is_array($vars['class'])) {
+		$vars['class'] = array($vars['class']);
+	}
+	
+	$vars['class'][] = "elgg-icon-$name";
+	
+	return elgg_view("output/icon", $vars);
 }
 
 /**
@@ -1601,6 +1652,10 @@ function elgg_views_boot() {
 		'deps' => array('jquery'),
 		'exports' => 'jQuery.fn.ajaxForm',
 	));
+	elgg_define_js('jquery.ui', array(
+		'src' => '/vendors/jquery/jquery-ui-1.10.4.min.js',
+		'deps' => array('jquery'),
+	));
 
 	$elgg_js_url = elgg_get_simplecache_url('js', 'elgg');
 	elgg_register_js('elgg', $elgg_js_url, 'head');
@@ -1655,6 +1710,8 @@ function elgg_views_boot() {
 	}
 }
 
-elgg_register_event_handler('boot', 'system', 'elgg_views_boot');
-elgg_register_event_handler('init', 'system', 'elgg_views_handle_deprecated_views');
-elgg_register_event_handler('ready', 'system', '_elgg_views_deprecate_removed_views');
+return function(\Elgg\EventsService $events, \Elgg\HooksRegistrationService $hooks) {
+	$events->registerHandler('boot', 'system', 'elgg_views_boot');
+	$events->registerHandler('init', 'system', 'elgg_views_handle_deprecated_views');
+	$events->registerHandler('ready', 'system', '_elgg_views_deprecate_removed_views');
+};

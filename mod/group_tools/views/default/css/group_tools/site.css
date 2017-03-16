@@ -1,0 +1,62 @@
+/** Group tools CSS */
+#invite_to_group .ui-helper-hidden-accessible {
+	display: none;
+}
+
+#invite_to_group .group_tools_group_invite_autocomplete_autocomplete_result {
+	border: 1px solid transparent;
+	border-radius: 5px;
+	padding: 3px;
+}
+
+#invite_to_group .group_tools_group_invite_autocomplete_autocomplete_result:hover {
+	border: 1px solid #CCCCCC;
+}
+
+#invite_to_group .group_tools_group_invite_autocomplete_autocomplete_result img {
+	vertical-align: middle;
+}
+
+.group_tools_group_invite_autocomplete_autocomplete_result .elgg-icon-delete-alt {
+	cursor: pointer;
+}
+
+.group-tools-status-open {
+	color: green;
+}
+
+.group-tools-status-closed {
+	color: orange;
+}
+
+.group-tools-highlight {
+	border: 1px solid red;
+}
+
+.group-tools-suggested-groups .elgg-item {
+	width: 33%;
+	text-align: center;
+}
+
+.group-tools-suggested-groups .elgg-item:hover {
+	background: #EFEFEF;
+}
+
+.group-tools-suggested-groups .elgg-item h3 {
+	padding-bottom: 5px;
+}
+.group-tools-suggested-groups .elgg-item > div {
+	padding: 10px;
+}
+
+#group-tools-related-groups-form input.elgg-input-autocomplete {
+	width: 80%;
+}
+
+#group-tools-group-edit-tabbed ~ div {
+	display: none;
+}
+
+.group-tools-group-edit-section > div {
+	margin-bottom: 15px;
+}

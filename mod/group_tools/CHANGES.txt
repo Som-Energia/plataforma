@@ -1,5 +1,54 @@
-Version History
+Version history
 ===============
+
+6.0.3 (2016-05-26):
+
+- fixed: group owner transfer doesn't move icon
+- fixed: incorrect namespaced class
+- fixed: unable to select/unselect all group members on mail page
+- fixed: using wrong string format to output num_replies
+
+6.0.2 (2016-03-17):
+
+- fixed: correctly check for logged in user
+- fixed: group admins can't edit group
+- fixed: group mail now saves subject and body
+- fixed: incorrect header in group thumbnail
+
+6.0.1 (2016-03-03):
+
+- fixed: group decline membership request lightbox error
+- fixed: group members search not working
+- fixed: group status indicator in owner_block
+
+6.0 (2016-03-02):
+
+- added: featured groups can now be selected as a filter tab
+- added: you can now search for group members on the group members page
+- changed: always return user in group invite autocomplete
+- changed: group membership decline from prompt to lightbox
+- changed: offloaded group mail sending #65
+- changed: tool preset button has title
+- fixed: deprecated use of class var in menuitem factory
+- fixed: group default access can be more public than content access
+- fixed: group edit visual flickering on load
+- fixed: group invite all friends button styling
+- fixed: group invite text is now sticky
+- fixed: index widget for groups used wrong url
+- fixed: js module not loading
+- fixed: language key usage
+- fixed: not using variable for group check
+- fixed: syntax errors
+- fixed: user gets notification when removing own group membership request
+- js: refactors a lot of js into amd
+- removed: show widgets on closed groups
+- removed: unused language keys
+
+5.0 (2015-07-08):
+
+- changes for Elgg 1.11
+- added: option to give a reason for declining group membership request
+- fixed: group tool presets lost on failed save #73
 
 4.0 (2015-07-08):
 

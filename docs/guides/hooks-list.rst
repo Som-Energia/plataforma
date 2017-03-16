@@ -87,6 +87,9 @@ System hooks
 	Triggered in the ajax forward hook that is called for ajax requests. Allows plugins to alter the
 	output returned, including the forward URL, system messages, and errors.
 
+**parameters, menu:<menu_name>**
+	Triggered by ``elgg_view_menu()``. Used to change menu variables (like sort order) before it is generated.
+
 **register, menu:<menu_name>**
 	Triggered by ``elgg_view_menu()``. Used to add dynamic menu items.
 
@@ -110,6 +113,11 @@ System hooks
 		<user_guid2> => array('email', 'sms', 'ajax')
 	);
 
+**prepare, breadcrumbs**
+    In elgg_get_breadcrumbs(), this filters the registered breadcrumbs before
+    returning them, allowing a plugin to alter breadcrumb strategy site-wide.
+
+**add, river**
 
 User hooks
 ==========
@@ -132,7 +140,8 @@ User hooks
 	Return boolean for if the string in ``$params['email']`` is valid for an email address.
 
 **register, user**
-	Triggered after user registers. Return false to delete the user.
+	Triggered by the ``register`` action after the user registers. Return ``false`` to delete the user.
+	Note the function ``register_user`` does *not* trigger this hook.
 
 **login:forward, user**
     Filters the URL to which the user will be forwarded after login.
@@ -189,6 +198,9 @@ Permission hooks
 **permissions_check, <entity_type>**
 	Return boolean for if the user ``$params['user']`` can edit the entity ``$params['entity']``.
 
+**permissions_check:delete, <entity_type>**
+	Return boolean for if the user ``$params['user']`` can delete the entity ``$params['entity']``. Defaults to ``$entity->canEdit()``.
+
 **permissions_check, widget_layout**
 	Return boolean for if ``$params['user']`` can edit the widgets in the context passed as
 	``$params['context']`` and with a page owner of ``$params['page_owner']``.
@@ -202,7 +214,7 @@ Permission hooks
 
 **permissions_check:annotate**
 	Return boolean for if the user ``$params['user']`` can create an annotation with the name
-	``$params['annotation']`` on the entity ``$params['entity']``.
+	``$params['annotation_name']`` on the entity ``$params['entity']``.
 
 	.. warning:: This is functions differently than the ``permissions_check:metadata`` hook by passing the annotation name instead of the metadata object.
 
@@ -223,7 +235,12 @@ Permission hooks
 	.. warning:: The handler needs to either not use parts of the API that use the access system (triggering the hook again) or to ignore the second call. Otherwise, an infinite loop will be created.
 
 **access:collections:write, user**
-	Filters an array of access IDs that the user ``$params['user_id']`` can write to.
+	Filters an array of access IDs that the user ``$params['user_id']`` can write to. In
+	get_write_access_array(), this hook filters the return value, so it can be used to alter
+	the available options in the input/access view. For core plugins, the value "input_params"
+	has the keys "entity" (ElggEntity|false), "entity_type" (string), "entity_subtype" (string),
+	"container_guid" (int) are provided. An empty entity value generally means the form is to
+	create a new object.
 
 	.. warning:: The handler needs to either not use parts of the API that use the access system (triggering the hook again) or to ignore the second call. Otherwise, an infinite loop will be created.
 
@@ -250,8 +267,11 @@ Permission hooks
 Views
 =====
 
+**view_vars, <view_name>**
+	Filters the ``$vars`` array passed to the view
+
 **view, <view_name>**
-    Filters the returned content of views
+    Filters the returned content of the view
 
 **layout, page**
     In ``elgg_view_layout()``, filters the layout name
@@ -281,8 +301,15 @@ Files
 Other
 =====
 
+**config, comments_per_page**
+	Filters the number of comments displayed per page. Default is 25.
+
 **default, access**
-    In ``get_default_access()``, filters the return value.
+	In get_default_access(), this hook filters the return value, so it can be used to alter
+	the default value in the input/access view. For core plugins, the value "input_params" has
+	the keys "entity" (ElggEntity|false), "entity_type" (string), "entity_subtype" (string),
+	"container_guid" (int) are provided. An empty entity value generally means the form is to
+	create a new object.
 
 **entity:icon:url, <entity_type>**
 	Triggered when entity icon URL is requested, see :ref:`entity icons <guides/database#entity-icons>`. Callback should
@@ -429,6 +456,9 @@ Other
 
 **robots.txt, site**
 	Filter the robots.txt values for ``$params['site']``.
+
+**config, amd**
+	Filter the AMD config for the requirejs library.
 
 Plugins
 =======

@@ -6,9 +6,9 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Elgg 1.10\n"
+"Project-Id-Version: Elgg 1.11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-13 10:16-0500\n"
+"POT-Creation-Date: 2015-12-13 21:40-0500\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -473,23 +473,23 @@ msgid "Good comments describe the \"why.\"  Good code describes the \"how.\" E.g
 msgstr ""
 
 #: ../../contribute/code.rst:316
-#: ../../contribute/code.rst:470
-#: ../../contribute/code.rst:490
-#: ../../contribute/code.rst:505
-#: ../../contribute/code.rst:523
-#: ../../contribute/code.rst:545
-#: ../../contribute/code.rst:569
+#: ../../contribute/code.rst:471
+#: ../../contribute/code.rst:491
+#: ../../contribute/code.rst:506
+#: ../../contribute/code.rst:524
+#: ../../contribute/code.rst:546
+#: ../../contribute/code.rst:570
 msgid "Bad:"
 msgstr ""
 
 #: ../../contribute/code.rst:327
-#: ../../contribute/code.rst:455
-#: ../../contribute/code.rst:480
-#: ../../contribute/code.rst:496
-#: ../../contribute/code.rst:511
-#: ../../contribute/code.rst:531
-#: ../../contribute/code.rst:554
-#: ../../contribute/code.rst:577
+#: ../../contribute/code.rst:456
+#: ../../contribute/code.rst:481
+#: ../../contribute/code.rst:497
+#: ../../contribute/code.rst:512
+#: ../../contribute/code.rst:532
+#: ../../contribute/code.rst:555
+#: ../../contribute/code.rst:578
 msgid "Good:"
 msgstr ""
 
@@ -642,110 +642,106 @@ msgid "For PHP requirements, see ``composer.json``."
 msgstr ""
 
 #: ../../contribute/code.rst:442
-msgid "Do not use PHP shortcut tags (``<?`` or ``<?=`` or ``<%``)."
+msgid "Do not use PHP shortcut tags ``<?`` or ``<%``. It is OK to use ``<?=`` since it is always enabled as of PHP 5.4."
 msgstr ""
 
-#: ../../contribute/code.rst:444
+#: ../../contribute/code.rst:445
 msgid "When creating strings with variables:"
 msgstr ""
 
-#: ../../contribute/code.rst:446
+#: ../../contribute/code.rst:447
 msgid "use double-quoted strings"
 msgstr ""
 
-#: ../../contribute/code.rst:447
+#: ../../contribute/code.rst:448
 msgid "wrap variables with braces only when necessary."
 msgstr ""
 
-#: ../../contribute/code.rst:449
+#: ../../contribute/code.rst:450
 msgid "Bad (hard to read, misuse of quotes and {}s):"
 msgstr ""
 
-#: ../../contribute/code.rst:461
+#: ../../contribute/code.rst:462
 msgid "Remove trailing whitespace at the end of lines. An easy way to do this before you commit is to run ``php .scripts/fix_style.php`` from the installation root."
 msgstr ""
 
-#: ../../contribute/code.rst:465
+#: ../../contribute/code.rst:466
 msgid "CSS guidelines"
 msgstr ""
 
-#: ../../contribute/code.rst:468
+#: ../../contribute/code.rst:469
 msgid "Use shorthand where possible"
 msgstr ""
 
-#: ../../contribute/code.rst:488
+#: ../../contribute/code.rst:489
 msgid "Use hyphens, not underscores"
 msgstr ""
 
-#: ../../contribute/code.rst:503
+#: ../../contribute/code.rst:504
 msgid "One property per line"
 msgstr ""
 
-#: ../../contribute/code.rst:519
+#: ../../contribute/code.rst:520
 msgid "Property declarations"
 msgstr ""
 
-#: ../../contribute/code.rst:521
+#: ../../contribute/code.rst:522
 msgid "These should be spaced like so: `property: value;`"
 msgstr ""
 
-#: ../../contribute/code.rst:538
+#: ../../contribute/code.rst:539
 msgid "Vendor prefixes"
 msgstr ""
 
-#: ../../contribute/code.rst:540
+#: ../../contribute/code.rst:541
 msgid "Group vendor-prefixes for the same property together"
 msgstr ""
 
-#: ../../contribute/code.rst:541
+#: ../../contribute/code.rst:542
 msgid "Longest vendor-prefixed version first"
 msgstr ""
 
-#: ../../contribute/code.rst:542
+#: ../../contribute/code.rst:543
 msgid "Always include non-vendor-prefixed version"
 msgstr ""
 
-#: ../../contribute/code.rst:543
+#: ../../contribute/code.rst:544
 msgid "Put an extra newline between vendor-prefixed groups and other properties"
 msgstr ""
 
-#: ../../contribute/code.rst:567
+#: ../../contribute/code.rst:568
 msgid "Group subproperties"
 msgstr ""
 
-#: ../../contribute/code.rst:586
+#: ../../contribute/code.rst:587
 msgid "Javascript guidelines"
 msgstr ""
 
-#: ../../contribute/code.rst:588
+#: ../../contribute/code.rst:589
 msgid "Same formatting standards as PHP apply."
 msgstr ""
 
-#: ../../contribute/code.rst:590
+#: ../../contribute/code.rst:591
 msgid "All functions should be in the ``elgg`` namespace."
 msgstr ""
 
-#: ../../contribute/code.rst:592
+#: ../../contribute/code.rst:593
 msgid "Function expressions should end with a semi-colon."
 msgstr ""
 
-#: ../../contribute/code.rst:603
+#: ../../contribute/code.rst:604
 msgid "Deprecating APIs"
 msgstr ""
 
-#: ../../contribute/code.rst:605
-msgid "Occasionally, functions and classes must be deprecated in favor of newer replacements. Since 3rd party plugin authors rely on a consistent API, backward compatibility must be maintained, but will not be maintained indefinitely as plugin authors are expected to properly update their plugins. In order to maintain backward compatibility, deprecated APIs will follow these guidelines:"
+#: ../../contribute/code.rst:606
+msgid "Occasionally functions and classes must be deprecated in favor of newer replacements. Since 3rd party plugin authors rely on a consistent API, backward compatibility must be maintained, but will not be maintained indefinitely as plugin authors are expected to properly update their plugins. In order to maintain backward compatibility, deprecated APIs will follow these guidelines:"
 msgstr ""
 
 #: ../../contribute/code.rst:613
-msgid "The first minor version (1.7) with a deprecated API must include a wrapper function/class (or otherwise appropriate means) to maintain backward compatibility, including any bugs in the original function/class. This compatibility layer uses ``elgg_deprecated_notice('...', '1.7')`` to log that the function is deprecated."
+msgid "Minor version (1.x) that deprecates an API must include a wrapper function/class (or otherwise appropriate means) to maintain backward compatibility, including any bugs in the original function/class. This compatibility layer uses ``elgg_deprecated_notice('...', '1.11')`` to log that the function is deprecated."
 msgstr ""
 
 #: ../../contribute/code.rst:619
-msgid "The following minor versions (1.8+) maintain the backward compatibility layer, but ``elgg_deprecated_notice()`` will produce a visible warning."
-msgstr ""
-
-#: ../../contribute/code.rst:622
 msgid "The next major revision (2.0) removes the compatibility layer. Any use of the deprecated API should be corrected before this."
 msgstr ""
 
@@ -1216,7 +1212,7 @@ msgid "Commit access to http://github.com/Elgg/Elgg"
 msgstr ""
 
 #: ../../contribute/releases.rst:19
-msgid "Author access to http://blog.elgg.org"
+msgid "Admin access to https://community.elgg.org/"
 msgstr ""
 
 #: ../../contribute/releases.rst:20
@@ -1372,7 +1368,7 @@ msgid "This should be the very last thing you do."
 msgstr ""
 
 #: ../../contribute/releases.rst:122
-msgid "Sign in at http://blog.elgg.org/pg/login and compose a blog on with HTML version of CHANGELOG.md."
+msgid "Sign in at https://community.elgg.org/ and compose a blog on with HTML version of CHANGELOG.md."
 msgstr ""
 
 #: ../../contribute/releases.rst:123

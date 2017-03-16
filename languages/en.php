@@ -20,7 +20,8 @@ return array(
 	'logout' => "Log out",
 	'logoutok' => "You have been logged out.",
 	'logouterror' => "We couldn't log you out. Please try again.",
-	'session_expired' => "Your session has expired. Please reload the page to log in.",
+	'session_expired' => "Your session has expired. Please <a href='javascript:location.reload(true)'>reload</a> the page to log in.",
+	'session_changed_user' => "You have been logged in as another user. You should <a href='javascript:location.reload(true)'>reload</a> the page.",
 
 	'loggedinrequired' => "You must be logged in to view the requested page.",
 	'adminrequired' => "You must be an administrator to view the requested page.",
@@ -41,6 +42,7 @@ return array(
 	'actionunauthorized' => 'You are unauthorized to perform this action',
 	
 	'ajax:error' => 'Unexpected error while performing an AJAX call. Maybe the connection to the server is lost.',
+	'ajax:not_is_xhr' => 'You cannot access AJAX views directly',
 
 	'PluginException:MisconfiguredPlugin' => "%s (guid: %s) is a misconfigured plugin. It has been disabled. Please search the Elgg wiki for possible causes (http://learn.elgg.org/).",
 	'PluginException:CannotStart' => '%s (guid: %s) cannot start and has been deactivated.  Reason: %s',
@@ -86,6 +88,9 @@ return array(
 	
 	'ElggPlugin:Dependencies:ActiveDependent' => 'There are other plugins that list %s as a dependency.  You must disable the following plugins before disabling this one: %s',
 
+	'ElggMenuBuilder:Trees:NoParents' => 'Menu items found without parents to link them to',
+	'ElggMenuBuilder:Trees:OrphanedChild' => 'Menu item [%s] found with a missing parent[%s]',
+	'ElggMenuBuilder:Trees:DuplicateChild' => 'Duplicate registration found for menu item [%s]',
 
 	'RegistrationException:EmptyPassword' => 'The password fields cannot be empty',
 	'RegistrationException:PasswordMismatch' => 'Passwords must match',
@@ -109,6 +114,10 @@ return array(
 
 	'error:default:title' => 'Oops...',
 	'error:default:content' => 'Oops... something went wrong.',
+	'error:400:title' => 'Bad request',
+	'error:400:content' => 'Sorry. The request is invalid or incomplete.',
+	'error:403:title' => 'Forbidden',
+	'error:403:content' => 'Sorry. You are not allowed to access the requested page.',
 	'error:404:title' => 'Page not found',
 	'error:404:content' => 'Sorry. We could not find the page that you requested.',
 
@@ -150,6 +159,8 @@ return array(
 	'access:read' => "Read access",
 	'access:write' => "Write access",
 	'access:admin_only' => "Administrators only",
+	'access:missing_name' => "Missing access level name",
+	'access:comments:change' => "This discussion is currently visible to a limited audience. Be thoughtful about who you share it with.",
 
 /**
  * Dashboard and widgets
@@ -516,6 +527,8 @@ return array(
 	'admin:widget:banned_users:help' => 'Lists the banned users',
 	'admin:widget:content_stats' => 'Content statistics',
 	'admin:widget:content_stats:help' => 'Keep track of the content created by your users',
+	'admin:widget:cron_status' => 'Cron status',
+	'admin:widget:cron_status:help' => 'Shows the status of the last time cron jobs finished',
 	'widget:content_stats:type' => 'Content type',
 	'widget:content_stats:number' => 'Number',
 
@@ -705,6 +718,7 @@ These changes will only affect new users on the site.',
 	'admin:robots.txt:instructions' => "Edit this site's robots.txt file below",
 	'admin:robots.txt:plugins' => "Plugins are adding the following to the robots.txt file",
 	'admin:robots.txt:subdir' => "The robots.txt tool will not work because Elgg is installed in a sub-directory",
+	'admin:robots.txt:physical' => "The robots.txt tool will not work because a physical robots.txt is present",
 
 	'admin:maintenance_mode:default_message' => 'This site is down for maintenance',
 	'admin:maintenance_mode:instructions' => 'Maintenance mode should be used for upgrades and other large changes to the site.
@@ -752,6 +766,7 @@ These changes will only affect new users on the site.',
 	'river:friends' => 'Friends Activity',
 	'river:select' => 'Show %s',
 	'river:comments:more' => '+%u more',
+	'river:comments:all' => 'View all %u comments',
 	'river:generic_comment' => 'commented on %s %s',
 
 	'friends:widget:description' => "Displays some of your friends.",
@@ -1075,6 +1090,7 @@ Once you have logged in, we highly recommend that you change your password.
 	'installation:systemcache:description' => "The system cache decreases the loading time of Elgg by caching data to files.",
 	'installation:systemcache:label' => "Use system cache (recommended)",
 
+	'admin:legend:system' => 'System',
 	'admin:legend:caching' => 'Caching',
 	'admin:legend:content_access' => 'Content Access',
 	'admin:legend:site_access' => 'Site Access',
@@ -1124,6 +1140,7 @@ Once you have logged in, we highly recommend that you change your password.
 	// Strings specific for the comments upgrade
 	'admin:upgrades:comments' => 'Comments upgrade',
 	'upgrade:comment:create_failed' => 'Failed to convert comment id %s to an entity.',
+	'admin:upgrades:commentaccess' => 'Comments Access Upgrade',
 
 	// Strings specific for the datadir upgrade
 	'admin:upgrades:datadirs' => 'Data directory upgrade',
@@ -1210,7 +1227,8 @@ If you requested this, click on the link below. Otherwise ignore this email.
 	'generic_comment:updated' => "The comment was successfully updated.",
 	'generic_comment:deleted' => "The comment was successfully deleted.",
 	'generic_comment:blank' => "Sorry, you need to actually put something in your comment before we can save it.",
-	'generic_comment:notfound' => "Sorry, we could not find the specified item.",
+	'generic_comment:notfound' => "Sorry, we could not find the specified comment.",
+	'generic_comment:notfound_fallback' => "Sorry, we could not find the specified comment, but we've forwarded you to the page where it was left.",
 	'generic_comment:notdeleted' => "Sorry, we could not delete this comment.",
 	'generic_comment:failure' => "An unexpected error occurred when saving the comment.",
 	'generic_comment:none' => 'No comments',
@@ -1245,6 +1263,8 @@ Please do not reply to this email.",
 
 	'entity:delete:success' => 'Entity %s has been deleted',
 	'entity:delete:fail' => 'Entity %s could not be deleted',
+	
+	'entity:can_delete:invaliduser' => 'Can not check canDelete for user_guid [%s] as the user does not exist.',
 
 /**
  * Action gatekeeper
