@@ -20,7 +20,8 @@
 	"blackleg/threads": "1.9.3",
         "elgg/mentions": "dev-master",
         "coldtrick/group_tools": "v6.0.3",
-        "iionly/tidypics": "1.10.11"
+        "iionly/tidypics": "1.10.11",
+        "blackleg/threadsundo": "1.0"
     },
     "scripts": {
         "test": "phpunit",

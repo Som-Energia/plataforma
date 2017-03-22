@@ -3,7 +3,7 @@
     <id>somenergia-upgrade</id>
     <name>Som Energia Upgrade</name>
     <author>Hector Espert</author>
-    <version>1.12.15.1</version>
+    <version>1.12.15.0</version>
     <category>theme</category>
     <description>Som Energia Upgrade plugin</description>
     <website>https://www.somenergia.coop/es/</website>	
@@ -32,9 +32,5 @@
     <conflicts>
         <type>plugin</type>
         <name>group_operators</name>
-    </conflicts>
-    <conflicts>
-        <type>plugin</type>
-        <name>threads</name>
     </conflicts>
 </plugin_manifest>
