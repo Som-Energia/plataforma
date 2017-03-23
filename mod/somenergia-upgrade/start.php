@@ -13,11 +13,10 @@ function somenergia_upgrade_init() {
  */
 function somenergia_upgrade_launch() {
     error_log('=> Upgrading launched by Som Energia upgrade plugin');
-    
+
     if (!elgg_is_active_plugin('group_operators')) {
         upgrade_old_group_operators();
     }
-
 }
 
 /**

@@ -9,7 +9,7 @@
     <website>https://www.somenergia.coop/es/</website>	
     <requires>
         <type>elgg_release</type>
-        <version>1.9</version>
+        <version>1.12</version>
     </requires>
     <requires>
         <type>plugin</type>

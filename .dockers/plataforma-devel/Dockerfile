@@ -16,7 +16,7 @@ RUN echo "sendmail_path = /usr/bin/env $(which catchmail) -f test@local.dev" > /
 RUN cat /etc/php5/mods-available/mailcatcher.ini
 RUN php5enmod mailcatcher
 
-VOLUME ["/app"]
+VOLUME ["/app", "/var/lib/mysql"]
 EXPOSE 8000 3336 1080
 
 ADD .dockers/default.sql /default.sql

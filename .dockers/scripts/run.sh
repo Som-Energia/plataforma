@@ -22,6 +22,7 @@ if [[ ! -d "/var/lib/mysql/${DBNAME}" ]]; then
 
 else
     echo "=> Using an existing volume of MySQL"
+    rm /var/run/apache2/apache2.pid
 fi
 
 

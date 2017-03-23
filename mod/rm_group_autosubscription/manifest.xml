@@ -20,11 +20,6 @@
         <plugin>comment_tracker</plugin>
     </requires>
     <requires>
-        <type>priority</type>
-        <priority>after</priority>
-        <plugin>comment_tracker</plugin>
-    </requires>
-    <requires>
         <type>plugin</type>
         <name>groups</name>
     </requires>
@@ -32,10 +27,5 @@
         <type>priority</type>
         <priority>after</priority>
         <plugin>groups</plugin>
-    </requires>
-    <requires>
-        <type>priority</type>
-        <priority>before</priority>
-        <plugin>threads</plugin>
     </requires>
 </plugin_manifest>
