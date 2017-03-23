@@ -11,7 +11,7 @@ mod/group_tools
 mod/spam_login_filter
 mod/au_subgroups
 mod/comment_tracker
-mod/threads-undo
+mod/threadsundo
 
 ### Carpeta Netbeans
 nbproject
