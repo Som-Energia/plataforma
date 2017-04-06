@@ -44,6 +44,7 @@ mod/tidypics/
 mod/twitter_api
 mod/uservalidationbyemail
 mod/web_services
+mod/mentions
 
 # Settings
 /elgg-config/settings.php

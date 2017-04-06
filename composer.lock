@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "7fab0d8d70a5005d606246796b4f2feb",
-    "content-hash": "ad815198637758bf159032ed0bbda2de",
+    "hash": "ce2f583eb25e0b11d8794a438b518d22",
+    "content-hash": "005f02f006972d57cb6a7e48b19aa6f4",
     "packages": [
         {
             "name": "au/au_subgroups",
@@ -293,16 +293,16 @@
         },
         {
             "name": "bower-asset/jstree",
-            "version": "3.3.3",
+            "version": "3.3.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/vakata/jstree.git",
-                "reference": "9770c6711f0a155ec494f635aaf0add9b3cfb45c"
+                "reference": "a6a0d0dfb784d5ef0b3415d847ac7b6bfbab1f16"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vakata/jstree/zipball/9770c6711f0a155ec494f635aaf0add9b3cfb45c",
-                "reference": "9770c6711f0a155ec494f635aaf0add9b3cfb45c",
+                "url": "https://api.github.com/repos/vakata/jstree/zipball/a6a0d0dfb784d5ef0b3415d847ac7b6bfbab1f16",
+                "reference": "a6a0d0dfb784d5ef0b3415d847ac7b6bfbab1f16",
                 "shasum": ""
             },
             "require": {
@@ -1266,6 +1266,38 @@
                 "plugin"
             ],
             "time": "2015-09-03 12:18:17"
+        },
+        {
+            "name": "elgg/mentions",
+            "version": "2.3.x-dev",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Elgg/mentions.git",
+                "reference": "aff897f22d3566320652cf027a13e168affb39ee"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Elgg/mentions/zipball/aff897f22d3566320652cf027a13e168affb39ee",
+                "reference": "aff897f22d3566320652cf027a13e168affb39ee",
+                "shasum": ""
+            },
+            "require": {
+                "composer/installers": ">=1.0.8"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.7"
+            },
+            "type": "elgg-plugin",
+            "autoload": {
+                "psr-0": {
+                    "": "classes/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0"
+            ],
+            "time": "2017-01-10 14:18:14"
         },
         {
             "name": "fortawesome/font-awesome",
@@ -3726,7 +3758,9 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "elgg/mentions": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": [],

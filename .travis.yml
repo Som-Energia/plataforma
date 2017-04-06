@@ -13,9 +13,7 @@ before_install: composer global require fxp/composer-asset-plugin -vvv
  
 install:
  - composer self-update
- - composer config -g github-oauth.github.com ${GITHUB_TOKEN}
  - composer install
 
 script:
  - composer test
- - .dockers/build

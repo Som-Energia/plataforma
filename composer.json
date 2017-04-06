@@ -14,7 +14,8 @@
         "au/comment_tracker": "3.0.0",
         "au/au_subgroups": "v2.1.1",
         "beck24/elgg_recaptcha": "1.1.1",
-        "centillien/metatags": "2.3"
+        "centillien/metatags": "2.3",
+        "elgg/mentions": "2.3.x-dev"
     },
     "require-dev": {
         "srokap/code_review": "^1.0.5",
