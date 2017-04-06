@@ -1,33 +1,29 @@
 <?php
 /**
  * Elgg Groups css
- * 
+ *
  * @package groups
  */
 
 ?>
 .groups-profile > .elgg-image {
-	margin-right: 10px;
+	margin-right: 20px;
 }
-
 .groups-stats {
-  border: 1px solid #ccc;
-
-	background: #eee;
-	padding: 10px 15px;
 	margin-top: 10px;
-	
-	-webkit-border-radius: 3px;
-	-moz-border-radius: 3px;
-	border-radius: 3px;
+}
+.groups-stats p {
+	margin-bottom: 2px;
+}
+.groups-profile-fields div:first-child {
+	padding-top: 0;
 }
 
 .groups-profile-fields .odd,
 .groups-profile-fields .even {
-	background: #eee;
-	
-	padding: 3px 10px;
-	margin-bottom: 5px;
+	border-bottom: 1px solid #DCDCDC;
+	padding: 5px 0;
+	margin-bottom: 0;
 }
 
 .groups-profile-fields .elgg-output {
@@ -37,7 +33,7 @@
 #groups-tools > li {
 	width: 48%;
 	min-height: 200px;
-	margin-bottom: 20px;
+	margin-bottom: 40px;
 }
 
 #groups-tools > li:nth-child(odd) {
@@ -46,8 +42,18 @@
 
 .groups-widget-viewall {
 	float: right;
-	font-size: 90%;
+	font-size: 85%;
 }
 
-.groups-latest-reply {
+.elgg-menu-groups-my-status li a {
+	color: #444;
+	display: block;
+	margin: 3px 0 5px 0;
+	padding: 2px 4px 2px 0;
+}
+.elgg-menu-groups-my-status li a:hover {
+	color: #999;
+}
+.elgg-menu-groups-my-status li.elgg-state-selected > a {
+	color: #999;
 }

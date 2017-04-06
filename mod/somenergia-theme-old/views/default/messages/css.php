@@ -1,7 +1,7 @@
 <?php
 /**
  * Elgg Messages CSS
- *
+ * 
  * @package ElggMessages
  */
 ?>
@@ -10,7 +10,7 @@
 	min-height: 200px;
 }
 .message.unread a {
-	color: #D40005;
+	color: #f00;
 }
 .messages-buttonbank {
 	text-align: right;
@@ -18,6 +18,7 @@
 .messages-buttonbank input {
 	margin-left: 10px;
 }
+
 
 /*** message metadata ***/
 .messages-owner {
@@ -39,19 +40,27 @@
 	float: left;
 	width: 5%;
 }
+
+
 /*** topbar icon ***/
 .messages-new {
-	color: #FFF;
-	background-color: #FF0000;
+	color: #fff;
+	background-color: #f00;
+	
+	-webkit-border-radius: 10px; 
+	-moz-border-radius: 10px;
 	border-radius: 10px;
-	box-shadow: -2px 2px 4px rgba(0, 0, 0, 0.50);
+	
+	-webkit-box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.5);
+	-moz-box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.5);
+	box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.5);
+	
 	position: absolute;
 	text-align: center;
-	line-height: 14px;
-	top: 4px;
-	left: 26px;
-	min-width: 16px;
-	height: 16px;
-	font-size: 10px;
+	top: -5px;
+	left: 25px;
+	min-width: 18px;
+	height: 18px;
+	font-size: 11px;
 	font-weight: bold;
 }

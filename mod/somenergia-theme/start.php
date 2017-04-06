@@ -1,27 +1,116 @@
 <?php
+/**
+ * Som Energia theme plugin
+ *
+ * @package SomEnergia Theme
+ */
 
-elgg_register_event_handler('init', 'system', 'somenergia_theme_init');
+elgg_register_event_handler('init','system','somenergia_theme_init');
 
 function somenergia_theme_init() {
-    elgg_log('Som Energia theme init', 'INFO');
-    
-    elgg_unregister_menu_item('topbar', 'elgg_logo');
 
-    //Icono plugin custom_index_widgets
-    elgg_unextend_view('page/elements/footer', 'custom_index_widgets/footerlinks');
+	elgg_register_event_handler('pagesetup', 'system', 'somenergia_theme_pagesetup', 1000);
 
-    /** JAVASCRIPT */
-    //elgg_unregister_js('jquery');
-    //$jquery = 'https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js';
-    //elgg_register_js('jquery', $jquery);
-    //elgg_load_js('jquery');
+	// theme specific CSS
+	elgg_extend_view('elgg.css', 'somenergia-theme/css');
 
-    /** CSS */
-    elgg_register_css('somenergia_font_roboto', '//fonts.googleapis.com/css?family=Roboto:400,900,300,100,500');
-    elgg_load_css('somenergia_font_roboto');
-    elgg_register_css('somenergia_font_awesome', '//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css');
-    elgg_load_css('somenergia_font_awesome');
+	elgg_unextend_view('page/elements/header', 'search/header');
+	elgg_extend_view('page/elements/sidebar', 'search/header', 0);
+	
+	elgg_register_plugin_hook_handler('head', 'page', 'somenergia_theme_setup_head');
 
-    //elgg_register_css( 'bootstrap_css', 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css' );
-    //elgg_load_css( 'bootstrap_css' );
+	// non-members do not get visible links to RSS feeds
+	if (!elgg_is_logged_in()) {
+		elgg_unregister_plugin_hook_handler('output:before', 'layout', 'elgg_views_add_rss_link');
+	}
+
+}
+
+/**
+ * Rearrange menu items
+ */
+function somenergia_theme_pagesetup() {
+
+	if (elgg_is_logged_in()) {
+
+		elgg_register_menu_item('topbar', array(
+			'name' => 'account',
+			'text' => elgg_echo('account'),
+			'href' => "#",
+			'priority' => 100,
+			'section' => 'alt',
+			'link_class' => 'elgg-topbar-dropdown',
+		));
+
+		if (elgg_is_active_plugin('dashboard')) {
+			$item = elgg_unregister_menu_item('topbar', 'dashboard');
+			if ($item) {
+				$item->setText(elgg_echo('dashboard'));
+				$item->setSection('default');
+				elgg_register_menu_item('site', $item);
+			}
+		}
+		
+		$item = elgg_get_menu_item('topbar', 'usersettings');
+		if ($item) {
+			$item->setParentName('account');
+			$item->setText(elgg_echo('settings'));
+			$item->setPriority(103);
+		}
+
+		$item = elgg_get_menu_item('topbar', 'logout');
+		if ($item) {
+			$item->setParentName('account');
+			$item->setText(elgg_echo('logout'));
+			$item->setPriority(104);
+		}
+
+		$item = elgg_get_menu_item('topbar', 'administration');
+		if ($item) {
+			$item->setParentName('account');
+			$item->setText(elgg_echo('admin'));
+			$item->setPriority(101);
+		}
+
+		if (elgg_is_active_plugin('site_notifications')) {
+			$item = elgg_get_menu_item('topbar', 'site_notifications');
+			if ($item) {
+				$item->setParentName('account');
+				$item->setText(elgg_echo('site_notifications:topbar'));
+				$item->setPriority(102);
+			}
+		}
+
+		if (elgg_is_active_plugin('reportedcontent')) {
+			$item = elgg_unregister_menu_item('footer', 'report_this');
+			if ($item) {
+				$item->setText(elgg_view_icon('report-this'));
+				$item->setPriority(500);
+				$item->setSection('default');
+				elgg_register_menu_item('extras', $item);
+			}
+		}
+	}
+}
+
+/**
+ * Register items for the html head
+ *
+ * @param string $hook Hook name ('head')
+ * @param string $type Hook type ('page')
+ * @param array  $data Array of items for head
+ * @return array
+ */
+function somenergia_theme_setup_head($hook, $type, $data) {
+	$data['metas']['viewport'] = array(
+		'name' => 'viewport',
+		'content' => 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0',
+	);
+
+	$data['links']['apple-touch-icon'] = array(
+		'rel' => 'apple-touch-icon',
+		'href' => elgg_get_simplecache_url('somenergia-theme/homescreen.png'),
+	);
+
+	return $data;
 }

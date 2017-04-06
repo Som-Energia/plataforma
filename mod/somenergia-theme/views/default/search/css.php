@@ -1,63 +1,24 @@
 <?php
 /**
  * Elgg Search css
- * 
+ *
  */
 ?>
 
 /**********************************
 Search plugin
 ***********************************/
-.elgg-search-header fieldset {
-    margin: auto;
-    position: relative;
-    width: 990px;
+.elgg-search-header {
+	display: block;
+	position: relative;
+	margin-bottom: 15px;
 }
-
-.elgg-search-header input[type="text"] {
-    background-color: #c8c8c8 !important;
-    border: none !important;
-    font-size: 15px !important;
-    font-weight: 500 !important;
-    height: 25px !important;
-    line-height: 25px;
-    padding: 0 10px !important;
-    position: absolute;
-    right: 15px;
-    top: -31px;
-    width: 120px !important;
+.elgg-search input[type=text] {
+	width: 100%;
 }
-
-.elgg-search-header input[type="text"]:focus {
-    box-shadow: none;
-    color: white !important;
-    line-height: 25px;
-    font-weight: bold !important;
-}
-
 .elgg-search input[type=submit] {
 	display: none;
 }
-.elgg-search input[type=text] {
-	width: 225px;
-	height: 25px;
-
-	-webkit-border-radius: 3px;
-	-moz-border-radius: 3px;
-	border-radius: 3px;
-	
-	border: 1px solid rgba(0, 0, 0, 0.25);
-	color: #fff;
-  font-size: 13px;
-	font-weight: bold;
-	padding: 3px 15px;
-	background-color: rgba(0, 0, 0, 0.25);
-}
-.elgg-search input[type=text]:focus, .elgg-search input[type=text]:active {
-	background-color: #fff;
-	color: #05d;
-}
-
 .search-list li {
 	padding: 5px 0 0;
 }
@@ -67,10 +28,10 @@ Search plugin
 }
 
 .search-highlight {
-	background-color: #bbdaf7;
+	background-color: #BBDAF7;
 }
 .search-highlight-color1 {
-	background-color: #bbdaf7;
+	background-color: #BBDAF7;
 }
 .search-highlight-color2 {
 	background-color: #A0FFFF;
@@ -79,8 +40,8 @@ Search plugin
 	background-color: #FDFFC3;
 }
 .search-highlight-color4 {
-	background-color: #ccc;
+	background-color: #CCC;
 }
 .search-highlight-color5 {
-	background-color: #4690d6;
+	background-color: #08A7E7;
 }
