@@ -1,5 +1,0 @@
-#!/bin/bash
-APPPATH=$(realpath "./")
-DATAPATH="$APPPATH/../elggdata"
-docker run --name plataforma-devel -it -p 8000:8000 -p 3336:3336 -p 1080:1080  -v "${APPPATH}":/app -v "${DATAPATH}":/data somenergia/plataforma-devel
-

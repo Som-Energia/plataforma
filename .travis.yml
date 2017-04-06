@@ -1,20 +1,21 @@
+language: php
+
 sudo: required
 
-language: php
 php:
  - 5.6
 
 services:
- - mysql
  - docker
+ 
+before_install: composer global require fxp/composer-asset-plugin -vvv
 
-before_script:
+ 
+install:
+ - composer self-update
+ - composer config -g github-oauth.github.com ${GITHUB_TOKEN}
  - composer install
- - mysql -e 'create database elgg;'
- - echo "USE mysql; UPDATE user SET password=PASSWORD('password') WHERE user='root'; FLUSH PRIVILEGES;" | mysql -u root
- - mkdir "${HOME}/elgg_data/"
- - php -f ./install/cli/travis_installer.php
+
 script:
- - phpunit
- - php -f ./engine/tests/suite.php
+ - composer test
  - .dockers/build

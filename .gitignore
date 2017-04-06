@@ -1,17 +1,18 @@
-# Settings
-.htaccess
-.htaccess.swp
-engine/settings.php
-
 ## Mods
+!mod/export_users_csv
+!mod/rm_group_autosubscription
+!mod/rm_group_default_fields
+!mod/rm_group_reports
+!mod/tracker
+!mod/somenergia*
 
-mod/login_as
-mod/tidypics
-mod/group_tools
-mod/spam_login_filter
-mod/au_subgroups
-mod/comment_tracker
-mod/threadsundo
+# Settings
+/elgg-config/settings.php
+/cache
+/settings.php
+/mod
+/vendor
+.htaccess
 
 ### Carpeta Netbeans
 nbproject
