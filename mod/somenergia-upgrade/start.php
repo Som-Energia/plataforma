@@ -17,6 +17,25 @@ function somenergia_upgrade_launch() {
     if (!elgg_is_active_plugin('group_operators')) {
         upgrade_old_group_operators();
     }
+    
+    /* Fix old mods class subtypes */
+    update_old_mods_subtypes();
+}
+
+function update_old_mods_subtypes() {
+    if (!elgg_is_active_plugin('crud')) {
+        update_subtype('object', 'decision');
+        update_subtype('object', 'proposal');
+    }
+
+    if (!elgg_is_active_plugin('assemblies')) {
+        update_subtype('object', 'assembly');
+    }
+
+    if (!elgg_is_active_plugin('questions')) {
+        update_subtype('object', 'answer');
+        update_subtype('object', 'question');
+    }
 }
 
 /**
