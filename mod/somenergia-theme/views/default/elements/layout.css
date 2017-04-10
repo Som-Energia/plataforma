@@ -37,8 +37,8 @@
 
 /***** TOPBAR ******/
 .elgg-page-topbar {
-	background: #424242;
-	border-top: 1px solid #424242;
+	background: #5B5B5F;
+	border-top: 1px solid #5B5B5F;
 	border-bottom: 1px solid #000000;
 	padding: 0 20px;
 	position: relative;
@@ -65,7 +65,7 @@
 .elgg-page-header {
 	padding: 5px 20px 10px;
 	position: relative;
-	background: #60B8F7;
+	background: white;
 }
 .elgg-page-header > .elgg-inner {
 	position: relative;
@@ -74,7 +74,7 @@
 .elgg-page-navbar {
 	padding: 0 20px;
 	position: relative;
-	background: #4787B8;
+	background: #BBCA2B;
 }
 .elgg-page-navbar > .elgg-inner {
 	position: relative;
