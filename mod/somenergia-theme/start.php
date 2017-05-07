@@ -23,6 +23,15 @@ function somenergia_theme_init() {
 	if (!elgg_is_logged_in()) {
 		elgg_unregister_plugin_hook_handler('output:before', 'layout', 'elgg_views_add_rss_link');
 	}
+        
+        // Show fork me on github
+        elgg_register_menu_item('footer', \ElggMenuItem::factory(array(
+		'name' => 'forkmegithub',
+		'text' => "<span class=\"fa fa-github\"></span> Fork me on Github", // TODO: Translate
+		'href' => 'https://github.com/Som-Energia/plataforma',
+		'title' => 'Fork me on Github',
+		'section' => 'meta',
+	)));
 
 }
 
