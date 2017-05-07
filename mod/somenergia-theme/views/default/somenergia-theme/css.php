@@ -7,7 +7,7 @@
  */
 ?>
 /* <style> /**/
-    
+
     body {
         background-color: #EDEEF0;
     }
@@ -340,5 +340,54 @@
         .elgg-page-default .elgg-page-navbar > .elgg-inner {
             max-width: 1200px;
         }
+    }
+    
+    
+    .som-header {
+        position: relative;
+    }
+
+
+    .som-header-site {
+
+    }
+
+
+    .som-header-site img {
+        margin-top: 10px;
+        float: left;
+    }
+
+
+    .som-header-description {
+        margin-left: 105px;
+        padding-top: 10px;
+    }
+    
+    .som-header-tag {
+        background-color: #BAC92A;
+        border-radius: 3px;
+        color: white;
+        display: inline-block;
+        font-size: 10px;
+        font-weight: 900;
+        height: 15px;
+        letter-spacing: 1px;
+        line-height: 15px;
+        padding: 0 4px;
+    }
+    
+    .som-header-slogan {
+        padding-top: 10px;
+    }
+   
+    
+    
+    @media (max-width: 766px) {
+        
+        .som-header-slogan {
+            display: none;
+        }
+        
     }
 
