@@ -27,8 +27,7 @@ function export_csv_init() {
 
     // extend JS
     //elgg_extend_view("js/admin", "js/csv_exporter/admin");
-    // register events
-    elgg_register_event_handler("pagesetup", "system", "export_users_csv_admin_pagestup");
+    elgg_register_admin_menu_item("administer", "export", "users");
 
     // register plugin hooks
     //elgg_register_plugin_hook_handler("get_exportable_values", "export_csv", "csv_exporter_get_exportable_values_hook");
@@ -37,14 +36,4 @@ function export_csv_init() {
     //
 	$file = elgg_get_plugins_path() . "export_users_csv/actions/download.php";
     elgg_register_action("export_users_csv/download", $file, 'admin');
-}
-
-function export_users_csv_admin_pagestup() {
-
-
-
-    // add admin menu item
-    elgg_register_admin_menu_item("administer", "export", "users");
-    //elgg_extend_view('hello');
-    //echo elgg_view('hello');
 }
