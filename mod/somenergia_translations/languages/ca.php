@@ -449,21 +449,26 @@ Haz click debajo para ver las solicitudes de adhesión del grupo:
 %s",
     'group_tools:join_motivation:toggle' => "Mostrar motivación",
     'group_tools:join_motivation:listing' => "Razón para unirse:",
-    'mentions:notification:subject' => '%s te ha nombrado en %s',
-    'mentions:notification:body' => '%s te ha nombrado en %s.
-To see the full post, click on the link below:
+    'mentions:notification:subject' => '%s t\'ha nombrat a %s',
+    'mentions:notification:body' => '%s t\'ha nombrat a %s.
+
+
+Per veure la publicació complerta, fes clic a l\'enllaç següent:
 %s
 ',
-    'mentions:notification_types:object:blog' => 'a blog post',
-    'mentions:notification_types:object:bookmarks' => 'a bookmark',
-    'mentions:notification_types:object:groupforumtopic' => 'a group discussion post',
-    'mentions:notification_types:annotation:group_topic_post' => 'a group discussion reply',
-    'mentions:notification_types:object:thewire' => 'a wire post',
-    'mentions:notification_types:annotation:generic_comment' => 'un comentario',
-    'mentions:settings:send_notification' => 'Recibir notificaciones cuando alguien te @nombre ?',
+    'mentions:notification_types:object:blog' => 'una entrada al blog',
+    'mentions:notification_types:object:bookmarks' => 'un marcador',
+    'mentions:notification_types:object:groupforumtopic' => 'un missatge de debat al grup',
+    'mentions:notification_types:object:discussion_reply' => 'una resposta de debat al grup',
+    'mentions:notification_types:object:thewire' => 'un missatge a The Wire',
+    'mentions:notification_types:object:comment' => 'un comentari',
+    'mentions:settings:send_notification' => 'Rebre comunicacions quan algú et @nombri?',
     // admin
-    'mentions:fancy_links' => 'Replce @mentions with a small picture of the user in addition to the user\'s name',
-    'mentions:settings:failed' => 'Could not save mentions settings.',
+    'mentions:named_links' => 'Canviar @usuari pel nom d\'usuari',
+    'mentions:fancy_links' => 'Afegir imatge juntament amb el nom d\'usuari',
+    'mentions:restrict_group_search' => 'Dins un grup, suggerir només els membres del grup',
+    'mentions:friends_only_search' => 'Suggerir només els amics de l\'usuari',
+    'mentions:settings:failed' => 'No s\'ha guardat la configuració de les mencions.',
     'file_tools' => "Eines Fitxers",
     'file_tools:file:actions' => 'Accions',
     'file_tools:list:sort:type' => 'Tipus',

@@ -443,21 +443,25 @@ Haz click debajo para ver las solicitudes de adhesión del grupo:
 %s",
     'group_tools:join_motivation:toggle' => "Mostrar motivación",
     'group_tools:join_motivation:listing' => "Razón para unirse:",
-    'mentions:notification:subject' => '%s te ha nombrado en %s',
-    'mentions:notification:body' => '%s te ha nombrado en %s.
-To see the full post, click on the link below:
+    'mentions:notification:subject' => '%s -an aipatu zaitut %s',
+    'mentions:notification:body' => '%s -an aipatu zaitut %s.
+
+Argitaratze osoa ikusi ahal izateko, klikatu hurrengo estekan:
 %s
 ',
-    'mentions:notification_types:object:blog' => 'a blog post',
-    'mentions:notification_types:object:bookmarks' => 'a bookmark',
-    'mentions:notification_types:object:groupforumtopic' => 'a group discussion post',
-    'mentions:notification_types:annotation:group_topic_post' => 'a group discussion reply',
-    'mentions:notification_types:object:thewire' => 'a wire post',
-    'mentions:notification_types:annotation:generic_comment' => 'un comentario',
-    'mentions:settings:send_notification' => 'Recibir notificaciones cuando alguien te @nombre ?',
+    'mentions:notification_types:object:blog' => 'blogean sarrera bat',
+    'mentions:notification_types:object:bookmarks' => 'markatzailea',
+    'mentions:notification_types:object:groupforumtopic' => 'talde batean eztabaida-mezua',
+    'mentions:notification_types:object:discussion_reply' => 'talde batean eztabaida-erantzuna',
+    'mentions:notification_types:object:thewire' => 'The Wire mezua',
+    'mentions:notification_types:object:comment' => 'iruzkin bat',
+    'mentions:settings:send_notification' => 'Jakinarazpenak jasotzea norbaitek @izena aipatzen zaituenean?',
     // admin
-    'mentions:fancy_links' => 'Replce @mentions with a small picture of the user in addition to the user\'s name',
-    'mentions:settings:failed' => 'Could not save mentions settings.',
+    'mentions:named_links' => 'Ordezkatu @erabiltzaile erabiltzailearen izenagatik',
+    'mentions:fancy_links' => 'Gehitu irudia erabiltzailearen izenaren ondoan',
+    'mentions:restrict_group_search' => 'Talde baten barruan, iradoki taldearen izenak bakarrik',
+    'mentions:friends_only_search' => 'Iradoki erabiltzailearen lagunak bakarrik',
+    'mentions:settings:failed' => 'Ez da aipamenen konfiguraziorik gorde',
     'file_tools' => "Fitxategi Tresnak",
     'file_tools:file:actions' => "Ekintzak",
     'file_tools:list:sort:type' => "Mota",

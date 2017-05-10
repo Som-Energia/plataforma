@@ -443,21 +443,25 @@ Haz click debajo para ver las solicitudes de adhesión del grupo:
 %s",
     'group_tools:join_motivation:toggle' => "Mostrar motivación",
     'group_tools:join_motivation:listing' => "Razón para unirse:",
-    'mentions:notification:subject' => '%s te ha nombrado en %s',
-    'mentions:notification:body' => '%s te ha nombrado en %s.
-To see the full post, click on the link below:
+    'mentions:notification:subject' => '%s nomeoute en %s',
+    'mentions:notification:body' => '%s nomeoute en %s.
+
+Para ver a publicación completa, fai clic na ligazón seguinte:
 %s
 ',
-    'mentions:notification_types:object:blog' => 'a blog post',
-    'mentions:notification_types:object:bookmarks' => 'a bookmark',
-    'mentions:notification_types:object:groupforumtopic' => 'a group discussion post',
-    'mentions:notification_types:annotation:group_topic_post' => 'a group discussion reply',
-    'mentions:notification_types:object:thewire' => 'a wire post',
-    'mentions:notification_types:annotation:generic_comment' => 'un comentario',
-    'mentions:settings:send_notification' => 'Recibir notificaciones cuando alguien te @nombre ?',
+    'mentions:notification_types:object:blog' => 'unha entrada no blogue',
+    'mentions:notification_types:object:bookmarks' => 'un marcador',
+    'mentions:notification_types:object:groupforumtopic' => 'unha mensaxe de debate nun grupo',
+    'mentions:notification_types:object:discussion_reply' => 'unha resposta de debate nun grupo',
+    'mentions:notification_types:object:thewire' => 'unha mensaxe en The Wire',
+    'mentions:notification_types:object:comment' => 'un comentario',
+    'mentions:settings:send_notification' => 'Recibir notificacións cando alguén te @nomee?',
     // admin
-    'mentions:fancy_links' => 'Replce @mentions with a small picture of the user in addition to the user\'s name',
-    'mentions:settings:failed' => 'Could not save mentions settings.',
+    'mentions:named_links' => 'Substituír @usuario polo nome do usuario',
+    'mentions:fancy_links' => 'Engadir imaxe xunto ao nome do usuario',
+    'mentions:restrict_group_search' => 'Dentro dun grupo, suxerir só os membros do grupo',
+    'mentions:friends_only_search' => 'Suxerir só os amigos do usuario',
+    'mentions:settings:failed' => 'Non se gardou a configuración das mencións.',
     'file_tools' => "File Tools",
     'file_tools:file:actions' => 'Acciones',
     'file_tools:list:sort:type' => 'Tipo',
