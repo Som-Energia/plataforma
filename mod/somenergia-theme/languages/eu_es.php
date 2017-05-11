@@ -14,5 +14,5 @@ return array(
     'somenergia:somheader:Blog' => 'Blog',
     'somenergia:somheader:Ayuda' => 'Ayuda',
     'somenergia:somheader:Participa' => 'Participa',
-    'somenergia:somheader:OficinaVirtual' => 'Oficina Virtual',
+    'somenergia:somheader:OficinaVirtual' => 'Oficina Virtual'
 );

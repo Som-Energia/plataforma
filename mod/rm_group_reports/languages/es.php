@@ -1,7 +1,5 @@
 <?php
 
-$spanish = array(
+return array(
     'admin:statistics:groups' => 'Reporte de grupos',
 );
-
-add_translation('es', $spanish);

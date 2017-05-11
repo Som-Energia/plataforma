@@ -3,7 +3,7 @@ language: php
 sudo: required
 
 php:
- - 5.6
+ - '7.1'
 
 services:
  - docker
@@ -17,3 +17,10 @@ install:
 
 script:
  - composer test
+ - php .scripts/translations.php somenergia_translations
+ - php .scripts/translations.php somenergia-theme
+ - php .scripts/translations.php somenergia_calendar
+ - php .scripts/translations.php somenergia_drive
+ - php .scripts/translations.php somenergia_index
+ - php .scripts/translations.php somenergia-customization
+ - php .scripts/translations.php rm_group_autosubscription

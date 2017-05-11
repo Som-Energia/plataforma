@@ -3,7 +3,7 @@
 /**
  * Custom Index English language file
  */
-$english = array(
+return array(
     'somenergia_index:groups' => "Latest groups",
     'somenergia_index:members' => "Newest members",
     'somenergia_index:activity' => "Activity",
@@ -15,5 +15,3 @@ $english = array(
     'somenergia_index:intro_first' => "¡Présentate en el %s y participa en el %s para juntos mejorarla!",
     'somenergia_index:intro_second' => "Más información en la guía de introducción, en %s o en %s"
 );
-
-add_translation("en", $english);

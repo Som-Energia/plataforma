@@ -5,7 +5,7 @@
  * @package SomEnergia
  */
 
-$strings = array(
+return array(
     'item:object:somenergia_drive' => 'Fitxers',
     'item:object:somenergia_drive_menu' => 'Fitxers a Google Drive',
     'somenergia_drive:id_folder' => 'ID del directorio de Google Drive',
@@ -16,5 +16,3 @@ $strings = array(
     'somenergia_drive:widget' => 'Google drive',
     'somenergia_drive:id_groupid' => 'Añade los id de los grupos separados por ,  y añadiras Drive al grupo'
 );
-
-add_translation("ca", $strings);

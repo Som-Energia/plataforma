@@ -5,7 +5,7 @@
  *
  * @package SomEnergia
  */
-$strings = array(
+return array(
     'somenergia:theme:slogan' => 'La cooperativa de consumo y producción de energia verde',
     'somenergia:somheader:haztesocio' => 'Become a member',
     'somenergia:somheader:contrata' => 'Light Hire',
@@ -16,5 +16,3 @@ $strings = array(
     'somenergia:somheader:Participa' => 'Take part',
     'somenergia:somheader:OficinaVirtual' => 'Virtual Office',
 );
-
-add_translation("en", $strings);

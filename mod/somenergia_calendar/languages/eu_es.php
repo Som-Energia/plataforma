@@ -5,8 +5,6 @@
  * @package SomEnergia
  */
 
-$strings = array(
+return array(
     'item:object:somenergia_calendar' => 'Egutegi',
 );
-
-add_translation("eu", $strings);

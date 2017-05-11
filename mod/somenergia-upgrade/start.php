@@ -13,6 +13,7 @@ function somenergia_upgrade_init() {
  */
 function somenergia_upgrade_launch() {
     error_log('=> Upgrading launched by Som Energia upgrade plugin');
+    $dbprefix = elgg_get_config('dbprefix');
 
     if (!elgg_is_active_plugin('group_operators')) {
         upgrade_old_group_operators();
@@ -20,6 +21,19 @@ function somenergia_upgrade_launch() {
     
     /* Fix old mods class subtypes */
     update_old_mods_subtypes();
+    
+    /* Update euskera users translation from eu to eu_es*/
+    update_old_euskera_translation($dbprefix);
+}
+
+function update_old_euskera_translation($dbprefix) {
+    $euskeraUsers = count(get_data("SELECT guid, language FROM {$dbprefix}users_entity WHERE language = 'eu'"));
+    if ($euskeraUsers > 0) {
+        error_log('- Upgrading euskera users language: ' . $euskeraUsers);
+        if (!update_data("UPDATE {$dbprefix}users_entity SET language = 'eu_es' WHERE language = 'eu'")) {
+            error_log('Error upgrading euskera users language');
+        }
+    }  
 }
 
 function update_old_mods_subtypes() {

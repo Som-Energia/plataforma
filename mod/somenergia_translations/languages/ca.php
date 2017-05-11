@@ -1130,7 +1130,7 @@ o premeu per a veure les sol·licituds d'aquest grup:
     'LoginException:PasswordFailure' => "No s'ha pogut iniciar la sessi&oacute;. Si us plau, verifica el teu nom d'usuari i contrasenya",
     'LoginException:AccountLocked' => "El teu compte ha estat bloquejat per la quantitat d'intents erronis d'inici de sessi&oacute;",
     'memcache:notinstalled' => "M&ograve;dul memcache del PHP no instal&middot;lat, has d'instal&middot;lar el m&ograve;dul php5-memcache",
-    'memcache:noservers' => "No hi han servers memcache definits, si us plau popula la variable $CONFIG->memcache_servers",
+    'memcache:noservers' => 'No hi han servers memcache definits, si us plau popula la variable $CONFIG->memcache_servers',
     'memcache:versiontoolow' => "Memcache requereix com a m&iacute;nim la versi&oacute; %s per el seu funcionament, s'est&agrave; executant la versi&oacute; %s",
     'memcache:noaddserver' => "Suport per a m&uacute;ltiples servidors deshabilitat, has d'actualitzar la llibreria memcache PECL",
     'deprecatedfunction' => "Precauci&oacute;: Aquest codi utilitza la funci&oacute; obsoleta \"%s\" que no és compatible amb aquesta versi&oacute; d'Elgg",
