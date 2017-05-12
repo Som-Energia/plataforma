@@ -9,29 +9,30 @@ elgg_register_event_handler('init', 'system', 'somenergia_theme_init');
 
 function somenergia_theme_init() {
 
-    elgg_register_event_handler('pagesetup', 'system', 'somenergia_theme_pagesetup', 1000);
+	elgg_register_event_handler('pagesetup', 'system', 'somenergia_theme_pagesetup', 1000);
 
-    // theme specific CSS
-    elgg_extend_view('elgg.css', 'somenergia-theme/css');
+	// theme specific CSS
+	elgg_extend_view('elgg.css', 'somenergia-theme/css');
 
-    elgg_unextend_view('page/elements/header', 'search/header');
-    elgg_extend_view('page/elements/sidebar', 'search/header', 0);
+	elgg_unextend_view('page/elements/header', 'search/header');
+	elgg_extend_view('page/elements/sidebar', 'search/header', 0);
+	
+	elgg_register_plugin_hook_handler('head', 'page', 'somenergia_theme_setup_head');
 
-    elgg_register_plugin_hook_handler('head', 'page', 'somenergia_theme_setup_head');
+	// non-members do not get visible links to RSS feeds
+	if (!elgg_is_logged_in()) {
+		elgg_unregister_plugin_hook_handler('output:before', 'layout', 'elgg_views_add_rss_link');
+	}
+        
+        // Show fork me on github
+        elgg_register_menu_item('footer', \ElggMenuItem::factory(array(
+		'name' => 'forkmegithub',
+		'text' => "<span class=\"fa fa-github\"></span> Fork me on Github", // TODO: Translate
+		'href' => 'https://github.com/Som-Energia/plataforma',
+		'title' => 'Fork me on Github',
+		'section' => 'meta',
+	)));
 
-    // non-members do not get visible links to RSS feeds
-    if (!elgg_is_logged_in()) {
-        elgg_unregister_plugin_hook_handler('output:before', 'layout', 'elgg_views_add_rss_link');
-    }
-
-    // Show fork me on github
-    elgg_register_menu_item('footer', \ElggMenuItem::factory(array(
-                'name' => 'forkmegithub',
-                'text' => "<span class=\"fa fa-github\"></span> Fork me on Github", // TODO: Translate
-                'href' => 'https://github.com/Som-Energia/plataforma',
-                'title' => 'Fork me on Github',
-                'section' => 'meta',
-    )));
 }
 
 /**
@@ -119,7 +120,7 @@ function somenergia_theme_setup_head($hook, $type, $data) {
         'rel' => 'apple-touch-icon',
         'href' => elgg_get_simplecache_url('somenergia-theme/favicon-128.png'),
     );
-    
+
     $data['links']['icon-ico'] = array(
         'rel' => 'icon',
         'href' => elgg_get_simplecache_url('somenergia-theme/favicon.ico'),
