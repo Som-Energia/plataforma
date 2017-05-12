@@ -16,6 +16,7 @@
 
 $messages = elgg_view('page/elements/messages', array('object' => $vars['sysmessages']));
 
+$somenergiabar = elgg_view('page/elements/somenergiaheader', $vars);
 $header = elgg_view('page/elements/header', $vars);
 $navbar = elgg_view('page/elements/navbar', $vars);
 $content = elgg_view('page/elements/body', $vars);
@@ -31,6 +32,9 @@ __BODY;
 $body .= elgg_view('page/elements/topbar_wrapper', $vars);
 
 $body .= <<<__BODY
+	<div class="elgg-page-topnav">
+		$somenergiabar
+	</div>
 	<div class="elgg-page-header">
 		<div class="elgg-inner">
 			$header

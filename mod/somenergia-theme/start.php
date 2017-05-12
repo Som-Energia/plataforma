@@ -16,7 +16,9 @@ function somenergia_theme_init() {
 
 	elgg_unextend_view('page/elements/header', 'search/header');
 	elgg_extend_view('page/elements/sidebar', 'search/header', 0);
-	
+	elgg_extend_view('page/elements/navbar', 'search/header', 0);
+
+
 	elgg_register_plugin_hook_handler('head', 'page', 'somenergia_theme_setup_head');
 
 	// non-members do not get visible links to RSS feeds
