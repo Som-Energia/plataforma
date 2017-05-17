@@ -111,7 +111,7 @@ h1, h2, h3, h4, h5, h6 {
     .elgg-button-nav:hover {
         color: #FFF;
         text-decoration: none;
-        background-color: #60B8F7;
+        background-color: #a1ae25;
     }
     .elgg-button-nav .elgg-icon-bars {
         font-size: 18px;
@@ -303,7 +303,7 @@ h1, h2, h3, h4, h5, h6 {
         }
         .elgg-menu-site-more > li.elgg-state-selected > a,
         .elgg-menu-site-more > li > a:hover {
-            background-color: #60B8F7;
+            background-color: #7a841c;
             color: #FFF;
         }
     }
@@ -411,7 +411,7 @@ h1, h2, h3, h4, h5, h6 {
     height: 26px;
     line-height: 26px;
     position: relative;
-    z-index: 1;
+    z-index: 9999;
 }
 
 .elgg-page-topnav a {
@@ -503,22 +503,10 @@ h1, h2, h3, h4, h5, h6 {
     font-weight: normal;
 }
 
-
-
-/***** SEARCH MENU ******/
-.elgg-search input[type="text"] {
-    width: 100%;
-    width: 225px;
-    height: 25px;
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    border-radius: 3px;
-    border: 1px solid rgba(0, 0, 0, 0.25);
-    color: #fff;
-    font-size: 13px;
-    font-weight: bold;
-    padding: 3px 15px;
-    background-color: rgba(0, 0, 0, 0.25);
+@media (max-width: 1030px) {
+    .elgg-page-topnav {
+        display: none;
+    }
 }
 
 /***** HEADER ******/

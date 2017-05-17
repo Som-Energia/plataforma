@@ -27,6 +27,9 @@ $body = <<<__BODY
 	<div class="elgg-page-messages">
 		$messages
 	</div>
+	<div class="elgg-page-topnav">
+		$somenergiabar
+	</div>
 __BODY;
 
 $body .= elgg_view('page/elements/topbar_wrapper', $vars);
