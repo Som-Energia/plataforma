@@ -511,23 +511,6 @@ h1, h2, h3, h4, h5, h6 {
 
 /***** HEADER ******/
 
-.elgg-search-header input[type="text"] {
-    background-color: #c8c8c8 !important;
-    border: none !important;
-    font-size: 15px !important;
-    font-weight: 500 !important;
-    height: 25px !important;
-    line-height: 25px;
-    padding: 0 10px !important;
-    position: absolute;
-    right: 15px;
-    top: 10px;
-    width: 120px !important;
-}
-
-.elgg-search-header{
-    margin-bottom:0px;
-}
 
 /***** MENU ******/
 

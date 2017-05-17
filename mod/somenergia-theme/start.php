@@ -7,6 +7,7 @@
  */
 elgg_register_event_handler('init', 'system', 'somenergia_theme_init');
 
+
 function somenergia_theme_init() {
 
 	elgg_register_event_handler('pagesetup', 'system', 'somenergia_theme_pagesetup', 1000);
@@ -121,6 +122,7 @@ function somenergia_theme_setup_head($hook, $type, $data) {
         'rel' => 'apple-touch-icon',
         'href' => elgg_get_simplecache_url('somenergia-theme/favicon-128.png'),
     );
+    
 
     $data['links']['icon-ico'] = array(
         'rel' => 'icon',
