@@ -411,7 +411,7 @@ h1, h2, h3, h4, h5, h6 {
     height: 26px;
     line-height: 26px;
     position: relative;
-    z-index: 9999;
+    z-index: 9100;
 }
 
 .elgg-page-topnav a {
