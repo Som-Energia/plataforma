@@ -594,7 +594,7 @@ Para ver a publicación completa, fai clic na ligazón seguinte:
     'comment:notification:settings:linktext' => 'Ver todos os elementos nos que me subscribín',
     'comment:subscriptions' => 'Subscricións',
     'comment:subscriptions:none' => 'Actualmente non hai subscricións',
-    'comment_tracker:setting:notify_owner' => "¿Permitir que el rastreador maneje las notificaciones de los propietarios de los comentarios?",
+    'comment_tracker:setting:notify_owner' => "Permitir que o rastrexador manexe as notificacións dos propietarios dos comentarios?",
     'comment:subscribe:tooltip' => 'Subscríbete para recibir notificacións cando haxa comentarios sobre este contido',
     'allow:comment:notification' => 'Queres habilitar as notificacións? ',
     'email:content:type' => 'Desexas recibir correos en formato HTML? ',
@@ -614,24 +614,24 @@ Para ver a publicación completa, fai clic na ligazón seguinte:
     'comment:unsubscribe:not:valid:url' => 'Sentímolo! Esta non é unha url válida para cancelar a subscrición a este contido ou temática.',
     'comment:unsubscribe:entity:not:access' => "Sentímolo! Non puidemos atopar o contido ou temática.",
     'comment_tracker:setting:show_button' => "Amosar o botón de subscrición/cancelación por riba da vista de comentarios?",
-    'comment_tracker:setting:show_entity_button' => "¿Mostrar el botón de suscripción/cancelación arriba en los menús de los componentes?",
-    'comment_tracker:setting:show_river_button' => "¿Mostrar el botón de suscripción/cancelación arriba en los menús de los elementos del River?",
+    'comment_tracker:setting:show_entity_button' => "Amosar o botón de subscrición/cancelación enrriba nos menús dos compoñentes?",
+    'comment_tracker:setting:show_river_button' => "Amosar o botón de subscrición/cancelación enrriba nos menús dos elementos do River?",
     'comment_tracker:item' => "elemento",
     'comment_tracker:notify:subject' => '%s comentou no %s "%s"',
     'comment_tracker:notify:subject:group' => '%s comentou no %s "%s" no grupo %s',
-    'comment_tracker:notify:body' => "Hola %s
+    'comment_tracker:notify:body' => "Ola %s
 
-Hay un nuevo comentario en \"%s\".
+Hai un novo comentario en \"%s\".
 
-%s escribió:
+%s escribiu:
 \"%s\"
 
-Puedes responder a la entrada aquí:
+Podes responder á entrada aquí:
 %s
 
 
 --
-Has recibido esta notificación porque te has suscrito para recibir notificaciones sobre nuevos comentarios. Para cambiar las preferencias de notificación de este tipo de mensajes, haz clic aquí:
+Recibiches esta notificación porque te subscribiches para recibir notificacións sobre novos comentarios. Para cambiar as preferencias de notificación deste tipo de mensaxes, fai clic aquí:
 %s
 ",
     'au_subgroups' => "Subgrupos",
