@@ -6,7 +6,7 @@
     "prefer-stable": true,
     "minimum-stability": "dev",
     "require": {
-        "elgg/elgg": "2.3.2",
+        "elgg/elgg": "2.3.3",
         "iionly/tidypics": "2.3.3",
         "coldtrick/group_tools": "v9.0",
         "coldtrick/file_tools": "v3.0.0-rc.3",
