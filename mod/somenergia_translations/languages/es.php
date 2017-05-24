@@ -3018,4 +3018,7 @@ Ver y responder al debate:
 'developers:entity_explorer:delete_entity' => 'Eliminar esta entidad',
 'developers:elapsed_time' => 'Tiempo transcurrido (s)',
 'developers:label:submit' => 'Guardar y liberar cachés',
+'admin:develop_tools:entity_explorer' => 'Explorador de entidades',
+'developers:label:show_modules' => 'Mostrar los módulos AMD cargados en la consola',
+'developers:label:show_gear' => 'Usar %s fuera de la zona de administración',
 );
