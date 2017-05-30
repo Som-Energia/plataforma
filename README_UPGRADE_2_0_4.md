@@ -1,4 +1,4 @@
-# Checklist Actualización a la version 2.0.4
+# Checklist Actualización a la version 2.3.2
 
 ## 1. Backups
   1. Backup base de datos
@@ -15,13 +15,15 @@
   7. Desactivar mod proposals
   8. Desactivar mod assemblies
   9. Desactivar mod crud
-  
+  10. Desactivar mod IP Tracker
 
 ## 3. Actualización
-  1. Subir la actualización
-  2. Ejecutar composer install
-  2. Actualizar .htacces desde el nuevo htaccess_dist
-  3. Ejecutar upgrade.php desde el navegador
+  1. Subir la actualización con git
+  2. Crear backup archivo settings.php y mover al la carpeta elgg-config
+  3. Comprobar ficheros locales
+  4. Ejecutar composer install dos veces
+  5. Actualizar .htacces desde el nuevo htaccess_dist
+  6. Ejecutar upgrade.php desde el navegador
 
 ## 4. Post Actualización
   1. Desactivar modo manteniminento  
