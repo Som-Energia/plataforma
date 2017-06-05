@@ -36,13 +36,6 @@ return array(
 'code_review:fix_problems:warning' => 'Code analyzer will attempt to fix problem it encounters. Changes will be irreversible and do not guarantee compatibility with previous versions.
 		Make sure that you have backup version of the code. Using this feature requires write access to the whole installation directory. DO NOT USE ON PRODUCTION SITE!',
 'code_review:js:confirm_changes' => 'Are you sure you want to modify source code? That\'s the last chance to reconsider!',
-'metatags:mainpage:title' => 'Provide a catchy title for the index page',
-'metatags:mainpage:keywords' => 'Provide some keywords that would describe your site. They will be used for the frontpage',
-'metatags:mainpage:description' => 'Provide a catching description for your site. Tip, use existing words that are on the main page for better results',
-'metatags:mainpage:image' => 'Give the filename of an image that represents your site. This file must located be in the folder /_graphics',
-'metatags:cloudflare' => 'Do you want fixed avatar URLs ?',
-'market:message:description' => 'wants to share this offering',
-'market:title:preformat' => '%s - advertising',
 'admin:groups:auto_join' => 'Auto join',
 'group_tools:settings:simple_create_form' => 'Simple group create form',
 'group_tools:settings:simple_create_form:help' => 'Enabling this will change the way how the \'New Group\' form is displayed',
