@@ -1,10 +1,5 @@
 <?php
 return array(
-'ElggPluginPackage:InvalidPlugin:UnreadableConfig' => 'Plugin file "elgg-plugin.php" file is present but unreadable.',
-'ElggPlugin:Exception:IncludeFileThrew' => 'Threw exception including %s for plugin %s (guid: %s) at %s.',
-'ElggPlugin:activate:BadConfigFormat' => 'Plugin file "elgg-plugin.php" did not return a serializable array.',
-'ElggPlugin:activate:ConfigSentOutput' => 'Plugin file "elgg-plugin.php" sent output.',
-'installation:cache_symlink:paths' => 'Correctly configured symbolic link must link <i>%s</i> to <i>%s</i>',
 'admin:code:diagnostic' => 'Code diagnostic',
 'admin:code:diagnostic:deprecated_list' => 'Deprecated functions list',
 'admin:code:diagnostic:functions_list' => 'Defined functions',
