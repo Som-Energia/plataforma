@@ -3108,4 +3108,23 @@ Ver y responder al debate:
 'metatags:cloudflare' => '¿Quieres URL de avatar fijo?',
 'market:message:description' => 'Quiere compartir esta oferta',
 'market:title:preformat' => '%s - publicidad',
+'au_subgroups:move:edit:title' => 'Hacer de este grupo un subgrupo de otro grupo',
+'au_subgroups:transfer:help' => 'Puedes hacer de este grupo un subgrupo de cualquier otro grupo del que tengas permisos para editar. Si los usuarios no son miembros del nuevo grupo al que lo vas a asociar, se eliminaran del subgrupo y recibirán una invitación para añadirse en el nuevo grupo con todos sus subgrupos que tenga. Esta acción también va a transferir cualquier subgrupo de este grupo.</b>',
+'au_subgroups:search:text' => 'Buscar Grupos',
+'au_subgroups:search:noresults' => 'No se han encontrado grupos',
+'au_subgroups:error:timeout' => 'El tiempo de espera para esta busqueda ha finalizado',
+'au_subgroups:error:generic' => 'Ha ocurrido un error con esta busqueda',
+'au_subgroups:move:confirm' => 'Estas seguro o segura que quieres transformarlo en un subgrupo de otro grupo?',
+'au_subgroups:error:permissions' => 'Tienes que tener permisos de edición para el grupo y todos sus subgrupos. Por cierto, un grupo no se puede mover como un subgrupo del mismo grupo.',
+'au_subgroups:move:success' => 'Has movido correctamente este grupo. Felicidades.',
+'au_subgroups:error:invalid:group' => 'Identificador de grupo invalido',
+'au_subgroups:invite:body' => 'Hola %s,
+
+El administrador del grupo %s lo ha movido como subgrupo de otro grupo %s.
+No hemos podido moverte a la nueva ubicación del subgrupo porque no estabas en el grupo que ahora lo contiene. 
+Para poder solucionarlo te hemos mandado una invitación para entrar a formar parte de ese grupo y sus subgrupos. 
+
+Haz clic aqui para ver tus invitaciones:
+
+%s',
 );
