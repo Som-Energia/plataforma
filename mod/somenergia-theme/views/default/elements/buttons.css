@@ -20,6 +20,7 @@
 	color: #222;
 	border: 1px solid #888;
 }
+
 .elgg-button:hover,
 .elgg-button:focus {
 	border-color: #666;
@@ -33,9 +34,9 @@
 	border-color: #657A00;
 }
 
-
 .elgg-button-submit:hover,
 .elgg-button-submit:focus {
+    background-color: #EEEEEE;
 }
 .elgg-button-cancel {
 	border: 1px solid rgba(0, 0, 0, 0.2);
