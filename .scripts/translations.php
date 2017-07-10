@@ -29,9 +29,3 @@ echo "Test load Galician" . PHP_EOL;
 $galician = include $translationsDir . '/gl.php';
 echo "Galician Count: " . count($catalan) . PHP_EOL;
 
-//$spanishDiff = array_diff_key($english, $spanish);
-//echo "Keys not availables in Spanish" . PHP_EOL;
-//foreach ($spanishDiff as $key => $value) {
-//    echo $key . " : " . $value . PHP_EOL;
-//}
-
