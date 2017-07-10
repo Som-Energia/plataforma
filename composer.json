@@ -17,13 +17,8 @@
         "centillien/metatags": "2.3",
         "elgg/mentions": "2.3.x-dev"
     },
-    "require-dev": {
-        "srokap/code_review": "^1.0.5",
-        "phpunit/phpunit": "^4.7"
-    },
     "scripts": {
         "post-install-cmd": "\\Elgg\\Composer\\PostInstall::execute",
-        "post-package-update": "\\Elgg\\Composer\\PostUpdate::execute",
-        "test": "phpunit"
+        "post-package-update": "\\Elgg\\Composer\\PostUpdate::execute"
     }
 }

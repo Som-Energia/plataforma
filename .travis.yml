@@ -16,7 +16,6 @@ install:
  - composer install
 
 script:
- - composer test
  - php .scripts/translations.php somenergia_translations
  - php .scripts/translations.php somenergia-theme
  - php .scripts/translations.php somenergia_calendar
