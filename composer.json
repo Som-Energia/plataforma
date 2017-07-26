@@ -8,7 +8,7 @@
     "require": {
         "elgg/elgg": "2.3.3",
         "iionly/tidypics": "2.3.3",
-        "coldtrick/group_tools": "v9.1",
+        "coldtrick/group_tools": "v9.1.1",
         "coldtrick/file_tools": "v3.0.0-rc.3",
         "coldtrick/analytics": "v3.1.1",
         "au/comment_tracker": "3.0.0",
