@@ -1,0 +1,38 @@
+version: '2'
+services:
+  mysql:
+    build:
+      context: .
+      dockerfile: .docker/mysql/Dockerfile
+    ports:
+      - 3336:3306
+  email:
+    image: tophfr/mailcatcher:0.6.5_2
+    ports:
+      - 1080:80
+  cron:
+    build:
+      context: .
+      dockerfile: .docker/cron/Dockerfile
+  apache:
+    build:
+      context: .
+      dockerfile: .docker/apache/Dockerfile
+    ports:
+      - "8000:80"
+    depends_on:
+      - mysql
+      - email
+      - cron
+    volumes:
+      - './mod/export_users_csv:/var/www/html/mod/export_users_csv'
+      - './mod/rm_group_autosubscription:/var/www/html/mod/rm_group_autosubscription'
+      - './mod/rm_group_default_fields:/var/www/html/mod/rm_group_default_fields'
+      - './mod/rm_group_reports:/var/www/html/mod/rm_group_reports'
+      - './mod/somenergia-customization:/var/www/html/mod/somenergia-customization'
+      - './mod/somenergia-theme:/var/www/html/mod/somenergia-theme'
+      - './mod/somenergia-upgrade:/var/www/html/mod/somenergia-upgrade'
+      - './mod/somenergia_drive:/var/www/html/mod/somenergia_drive'
+      - './mod/somenergia_index:/var/www/html/mod/somenergia_index'
+      - './mod/somenergia_translations:/var/www/html/mod/somenergia_translations'
+    
