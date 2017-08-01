@@ -15,7 +15,8 @@
         "au/au_subgroups": "v2.1.1",
         "beck24/elgg_recaptcha": "1.1.1",
         "centillien/metatags": "2.3",
-        "elgg/mentions": "2.3.x-dev"
+        "elgg/mentions": "2.3.x-dev",
+        "hypejunction/elgg-cli": "^1.0"
     },
     "scripts": {
         "post-install-cmd": "\\Elgg\\Composer\\PostInstall::execute",
