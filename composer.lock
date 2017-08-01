@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "3cd1bc80a99bdb9fb5b9fa0e77883732",
-    "content-hash": "286cf2ce344c89f19f8e474bff8fe598",
+    "hash": "8b83c610f399395660f28e382382084a",
+    "content-hash": "f05d152ccf84c344919bcf89b03bb9a7",
     "packages": [
         {
             "name": "au/au_subgroups",
@@ -122,6 +122,37 @@
                 "spam"
             ],
             "time": "2016-01-14 23:06:39"
+        },
+        {
+            "name": "blackleg/phpmailer",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/blackleg/elgg-phpmailer.git",
+                "reference": "45c2d7471632d133a1e6f77e818ea1f6c425f9e6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/blackleg/elgg-phpmailer/zipball/45c2d7471632d133a1e6f77e818ea1f6c425f9e6",
+                "reference": "45c2d7471632d133a1e6f77e818ea1f6c425f9e6",
+                "shasum": ""
+            },
+            "require": {
+                "composer/installers": "^1.0.8",
+                "phpmailer/phpmailer": "^5.2"
+            },
+            "type": "elgg-plugin",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL-3.0"
+            ],
+            "description": "Use PHPMailer for sending email.",
+            "homepage": "https://www.blackleg.es",
+            "keywords": [
+                "elgg",
+                "plugin"
+            ],
+            "time": "2017-08-01 14:53:19"
         },
         {
             "name": "bower-asset/jquery",
@@ -1851,6 +1882,83 @@
             "time": "2017-06-08 17:49:34"
         },
         {
+            "name": "phpmailer/phpmailer",
+            "version": "v5.2.24",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/PHPMailer/PHPMailer.git",
+                "reference": "22d04c6a58145a244696f3f254c1875aa653b26a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/22d04c6a58145a244696f3f254c1875aa653b26a",
+                "reference": "22d04c6a58145a244696f3f254c1875aa653b26a",
+                "shasum": ""
+            },
+            "require": {
+                "ext-ctype": "*",
+                "php": ">=5.0.0"
+            },
+            "require-dev": {
+                "doctrine/annotations": "1.2.*",
+                "jms/serializer": "0.16.*",
+                "phpdocumentor/phpdocumentor": "2.*",
+                "phpunit/phpunit": "4.8.*",
+                "symfony/debug": "2.8.*",
+                "symfony/filesystem": "2.8.*",
+                "symfony/translation": "2.8.*",
+                "symfony/yaml": "2.8.*",
+                "zendframework/zend-cache": "2.5.1",
+                "zendframework/zend-config": "2.5.1",
+                "zendframework/zend-eventmanager": "2.5.1",
+                "zendframework/zend-filter": "2.5.1",
+                "zendframework/zend-i18n": "2.5.1",
+                "zendframework/zend-json": "2.5.1",
+                "zendframework/zend-math": "2.5.1",
+                "zendframework/zend-serializer": "2.5.*",
+                "zendframework/zend-servicemanager": "2.5.*",
+                "zendframework/zend-stdlib": "2.5.1"
+            },
+            "suggest": {
+                "league/oauth2-google": "Needed for Google XOAUTH2 authentication"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "class.phpmailer.php",
+                    "class.phpmaileroauth.php",
+                    "class.phpmaileroauthgoogle.php",
+                    "class.smtp.php",
+                    "class.pop3.php",
+                    "extras/EasyPeasyICS.php",
+                    "extras/ntlm_sasl_client.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL-2.1"
+            ],
+            "authors": [
+                {
+                    "name": "Jim Jagielski",
+                    "email": "jimjag@gmail.com"
+                },
+                {
+                    "name": "Marcus Bointon",
+                    "email": "phpmailer@synchromedia.co.uk"
+                },
+                {
+                    "name": "Andy Prevost",
+                    "email": "codeworxtech@users.sourceforge.net"
+                },
+                {
+                    "name": "Brent R. Matzelle"
+                }
+            ],
+            "description": "PHPMailer is a full-featured email creation and transfer class for PHP",
+            "time": "2017-07-26 21:00:20"
+        },
+        {
             "name": "psr/cache",
             "version": "1.0.1",
             "source": {
@@ -2886,7 +2994,8 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "elgg/mentions": 20
+        "elgg/mentions": 20,
+        "blackleg/phpmailer": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,

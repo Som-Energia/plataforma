@@ -45,6 +45,7 @@ mod/twitter_api
 mod/uservalidationbyemail
 mod/web_services
 mod/mentions
+mod/phpmailer
 
 # Settings
 /elgg-config/settings.php
