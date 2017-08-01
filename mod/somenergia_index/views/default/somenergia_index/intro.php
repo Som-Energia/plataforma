@@ -5,4 +5,5 @@ $second_paragraf_urls[0] = '<a target="_blank" href="'.elgg_get_site_url().'doku
 $second_paragraf_urls[1] = '<a target="_blank" href="'.elgg_get_site_url().'dokuwiki/64/doku.php?id=guia_d_introduccio">'.elgg_echo("somenergia_index:catalan").'</a>';
 ?>
 <p><?php echo elgg_echo("somenergia_index:intro_first", $first_paragraf_urls ); ?></p>
-<p><?php echo elgg_echo("somenergia_index:intro_second", $second_paragraf_urls ); ?></p>
+<!-- TODO: Fix limks -->
+<!--<p><?php echo elgg_echo("somenergia_index:intro_second", $second_paragraf_urls ); ?></p>-->
