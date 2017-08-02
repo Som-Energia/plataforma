@@ -15,6 +15,13 @@ RUN curl -sS https://getcomposer.org/installer -o composer-setup.php \
      && composer global require "fxp/composer-asset-plugin:~1.1.4" \
      && rm -rf composer-setup.php
 
+# Change listen port to 8000
+EXPOSE 8000
+RUN echo "Listen 8000" >> /etc/apache2/ports.conf
+RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
+COPY .docker/apache/default.conf /etc/apache2/sites-available/000-default-8000.conf
+RUN a2ensite 000-default-8000.conf
+
 # Enable mod rewrite
 RUN a2enmod rewrite
 
