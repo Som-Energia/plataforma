@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "8b83c610f399395660f28e382382084a",
-    "content-hash": "f05d152ccf84c344919bcf89b03bb9a7",
+    "hash": "bb5369c956baeb1e20cf1a9c9dbdcbe1",
+    "content-hash": "8239e317fb571ad7e14104a4e12efd82",
     "packages": [
         {
             "name": "au/au_subgroups",
@@ -124,17 +124,17 @@
             "time": "2016-01-14 23:06:39"
         },
         {
-            "name": "blackleg/phpmailer",
-            "version": "dev-master",
+            "name": "blackleg/elgg-phpmailer",
+            "version": "2.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/blackleg/elgg-phpmailer.git",
-                "reference": "45c2d7471632d133a1e6f77e818ea1f6c425f9e6"
+                "reference": "78b843eb3aae4849aaac2a2b2b069adc968de524"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/blackleg/elgg-phpmailer/zipball/45c2d7471632d133a1e6f77e818ea1f6c425f9e6",
-                "reference": "45c2d7471632d133a1e6f77e818ea1f6c425f9e6",
+                "url": "https://api.github.com/repos/blackleg/elgg-phpmailer/zipball/78b843eb3aae4849aaac2a2b2b069adc968de524",
+                "reference": "78b843eb3aae4849aaac2a2b2b069adc968de524",
                 "shasum": ""
             },
             "require": {
@@ -152,7 +152,7 @@
                 "elgg",
                 "plugin"
             ],
-            "time": "2017-08-01 14:53:19"
+            "time": "2017-08-02 20:44:23"
         },
         {
             "name": "bower-asset/jquery",
@@ -2239,16 +2239,16 @@
         },
         {
             "name": "symfony/console",
-            "version": "v3.3.5",
+            "version": "v3.3.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "a97e45d98c59510f085fa05225a1acb74dfe0546"
+                "reference": "b0878233cb5c4391347e5495089c7af11b8e6201"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/a97e45d98c59510f085fa05225a1acb74dfe0546",
-                "reference": "a97e45d98c59510f085fa05225a1acb74dfe0546",
+                "url": "https://api.github.com/repos/symfony/console/zipball/b0878233cb5c4391347e5495089c7af11b8e6201",
+                "reference": "b0878233cb5c4391347e5495089c7af11b8e6201",
                 "shasum": ""
             },
             "require": {
@@ -2304,20 +2304,20 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2017-07-03 13:19:36"
+            "time": "2017-07-29 21:27:59"
         },
         {
             "name": "symfony/debug",
-            "version": "v3.3.5",
+            "version": "v3.3.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/debug.git",
-                "reference": "63b85a968486d95ff9542228dc2e4247f16f9743"
+                "reference": "7c13ae8ce1e2adbbd574fc39de7be498e1284e13"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/debug/zipball/63b85a968486d95ff9542228dc2e4247f16f9743",
-                "reference": "63b85a968486d95ff9542228dc2e4247f16f9743",
+                "url": "https://api.github.com/repos/symfony/debug/zipball/7c13ae8ce1e2adbbd574fc39de7be498e1284e13",
+                "reference": "7c13ae8ce1e2adbbd574fc39de7be498e1284e13",
                 "shasum": ""
             },
             "require": {
@@ -2360,7 +2360,7 @@
             ],
             "description": "Symfony Debug Component",
             "homepage": "https://symfony.com",
-            "time": "2017-07-05 13:02:37"
+            "time": "2017-07-28 15:27:31"
         },
         {
             "name": "symfony/http-foundation",
@@ -2592,16 +2592,16 @@
         },
         {
             "name": "symfony/var-dumper",
-            "version": "v3.3.5",
+            "version": "v3.3.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/var-dumper.git",
-                "reference": "0f32b62d21991700250fed5109b092949007c5b3"
+                "reference": "b2623bccb969ad595c2090f9be498b74670d0663"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/0f32b62d21991700250fed5109b092949007c5b3",
-                "reference": "0f32b62d21991700250fed5109b092949007c5b3",
+                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/b2623bccb969ad595c2090f9be498b74670d0663",
+                "reference": "b2623bccb969ad595c2090f9be498b74670d0663",
                 "shasum": ""
             },
             "require": {
@@ -2656,7 +2656,7 @@
                 "debug",
                 "dump"
             ],
-            "time": "2017-07-10 14:18:27"
+            "time": "2017-07-28 06:06:09"
         },
         {
             "name": "tedivm/stash",
@@ -2994,8 +2994,7 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "elgg/mentions": 20,
-        "blackleg/phpmailer": 20
+        "elgg/mentions": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,
