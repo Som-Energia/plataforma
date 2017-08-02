@@ -14,6 +14,8 @@
  * @subpackage Configuration
  */
 
+date_default_timezone_set('Europe/Madrid');
+
 global $CONFIG;
 if (!isset($CONFIG)) {
 	$CONFIG = new stdClass;
@@ -35,7 +37,7 @@ if (!isset($CONFIG)) {
  * @global string $CONFIG->dbuser
  * @name $CONFIG->dbuser
  */		
-$CONFIG->dbuser = getenv("DBUSER");
+$CONFIG->dbuser = "plataforma";
 
 
 
@@ -44,14 +46,14 @@ $CONFIG->dbuser = getenv("DBUSER");
  *
  * @global string $CONFIG->dbpass
  */
-$CONFIG->dbpass = getenv("DBPASS");
+$CONFIG->dbpass = "plataforma";
 
 /**
  * The database name
  *
  * @global string $CONFIG->dbname
  */
-$CONFIG->dbname = getenv("DBNAME");
+$CONFIG->dbname = "plataforma";
 
 /**
  * The database host.
@@ -60,7 +62,7 @@ $CONFIG->dbname = getenv("DBNAME");
  *
  * @global string $CONFIG->dbhost
  */
-$CONFIG->dbhost = getenv("DBHOST");
+$CONFIG->dbhost = "mysql";
 
 /**
  * The database prefix
@@ -71,7 +73,7 @@ $CONFIG->dbhost = getenv("DBHOST");
  *
  * @global string $CONFIG->dbprefix
  */
-$CONFIG->dbprefix = getenv("DBPREFIX");
+$CONFIG->dbprefix = "elgg_";
 
 
 /**
@@ -116,6 +118,19 @@ $CONFIG->broken_mta = FALSE;
 $CONFIG->db_disable_query_cache = FALSE;
 
 /**
+ * Automatically disable plugins that are unable to boot
+ *
+ * Elgg will disable unbootable plugins. If you set this to false plugins
+ * will no longer be disabled if they are not bootable. This could cause requests
+ * to your site to fail as required views, classes or cached data could be missing.
+ *
+ * Setting this to false could be useful during deployment of new code.
+ *
+ * @global bool $CONFIG->auto_disable_plugins
+ */
+$CONFIG->auto_disable_plugins = true;
+
+/**
  * Minimum password length
  *
  * This value is used when validating a user's password during registration.
@@ -123,5 +138,23 @@ $CONFIG->db_disable_query_cache = FALSE;
  * @global int $CONFIG->min_password_length
  */
 $CONFIG->min_password_length = 6;
+
+
+/**
+ * This is an optional script used to override Elgg's default handling of
+ * uncaught exceptions.
+ *
+ * This should be an absolute file path to a php script that will be called
+ * any time an uncaught exception is thrown.
+ *
+ * The script will have access to the following variables as part of the scope
+ * global $CONFIG
+ * $exception - the unhandled exception
+ *
+ * @warning - the database may not be available
+ *
+ * @global string $CONFIG->exception_include
+ */
+$CONFIG->exception_include = '';
 
 

@@ -8,16 +8,4 @@
 - Admin Plataforma: admin Passwd: adminadmin
 - Admin Base datos: plataforma Passwd: plataforma
 
-## Construir imagen: 
-- Ejecutar script: .dockers/build
-
-## Iniciar Contenedor primera vez:
-- Ejecutar script: .dockers/run
-
-## Iniciar Contenedor:
-- Ejecutar script: .dockers/start
-
-## Parar Contenedor:
-- Ejecutar script: .dockers/stop
-
 

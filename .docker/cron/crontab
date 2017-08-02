@@ -1,0 +1,15 @@
+# The crontab
+# Don't edit below this line unless you know what you are doing
+* * * * * root /usr/bin/lwp-request -m GET -d http://apache:8000/cron/minute/
+*/5 * * * * root /usr/bin/lwp-request -m GET -d http://apache8000/cron/fiveminute/
+15,30,45,59 * * * * root /usr/bin/lwp-request -m GET -d http://apache:8000/cron/fifteenmin/
+30,59 * * * * root /usr/bin/lwp-request -m GET -d http://apache:8000/cron/halfhour/
+@hourly root /usr/bin/lwp-request -m GET -d http://apache:8000/cron/hourly/
+@daily root /usr/bin/lwp-request -m GET -d http://apache:8000/cron/daily/
+@weekly root /usr/bin/lwp-request -m GET -d http://apache:8000/cron/weekly/
+@monthly root /usr/bin/lwp-request -m GET -d http://apache:8000/cron/monthly/
+@yearly root /usr/bin/lwp-request -m GET -d http://apache:8000/cron/yearly/
+# reboot is deprecated and probably doesn't work
+@reboot root /usr/bin/lwp-request -m GET -d http://apache:8000/cron/reboot/
+
+# An empty line is required at the end of this file for a valid cron file.
