@@ -4,6 +4,7 @@ services:
     build:
       context: .
       dockerfile: .docker/mysql/Dockerfile
+    image: plataforma_mysql_backport
     ports:
       - 3336:3306
   email:
@@ -14,10 +15,12 @@ services:
     build:
       context: .
       dockerfile: .docker/cron/Dockerfile
+    image: plataforma_cron_backport
   apache:
     build:
       context: .
       dockerfile: .docker/apache/Dockerfile
+    image: plataforma_apache_backport
     ports:
       - "8000:8000"
     depends_on:
@@ -25,14 +28,5 @@ services:
       - email
       - cron
     volumes:
-      - './mod/export_users_csv:/var/www/html/mod/export_users_csv'
-      - './mod/rm_group_autosubscription:/var/www/html/mod/rm_group_autosubscription'
-      - './mod/rm_group_default_fields:/var/www/html/mod/rm_group_default_fields'
-      - './mod/rm_group_reports:/var/www/html/mod/rm_group_reports'
-      - './mod/somenergia-customization:/var/www/html/mod/somenergia-customization'
       - './mod/somenergia-theme:/var/www/html/mod/somenergia-theme'
-      - './mod/somenergia-upgrade:/var/www/html/mod/somenergia-upgrade'
-      - './mod/somenergia_drive:/var/www/html/mod/somenergia_drive'
-      - './mod/somenergia_index:/var/www/html/mod/somenergia_index'
-      - './mod/somenergia_translations:/var/www/html/mod/somenergia_translations'
     

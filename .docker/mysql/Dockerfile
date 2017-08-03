@@ -7,5 +7,5 @@ ENV MYSQL_PASSWORD "plataforma"
 ENV MYSQL_DATABASE "plataforma"
 
 # Add initial database
-COPY .docker/mysql/base.sql  /docker-entrypoint-initdb.d/base.sql
+#COPY .docker/mysql/base.sql  /docker-entrypoint-initdb.d/base.sql
 

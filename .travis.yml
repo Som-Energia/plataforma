@@ -17,4 +17,3 @@ before_script:
 script:
  - phpunit
  - php -f ./engine/tests/suite.php
- - docker-compose build
