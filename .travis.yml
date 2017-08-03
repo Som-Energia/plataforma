@@ -27,7 +27,7 @@ script:
  - php .scripts/translations.php somenergia-customization
  - php .scripts/translations.php rm_group_autosubscription
  - docker-compose up --build -d
- - sleep 5
+ - sleep 10
  - grunt integration
  
 after_script:
