@@ -7,10 +7,21 @@ module.exports = function (grunt) {
                     'mod/somenergia-theme/views/default/elements/*.css'],
                 nonnull: true
             }
+        },
+        casperjs: {
+            options: {
+                async: {
+                    parallel: false
+                }
+            },
+            files: ['.test/*.js']
         }
     });
 
     grunt.loadNpmTasks('grunt-contrib-csslint');
+    grunt.loadNpmTasks('grunt-casperjs');
 
     grunt.registerTask('default', ['csslint']);
+    grunt.registerTask('integration', ['casperjs']);
+    
 };
