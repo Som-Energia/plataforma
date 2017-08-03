@@ -8,11 +8,14 @@ php:
 services:
  - docker
  
-before_install: composer global require fxp/composer-asset-plugin -vvv
-
+before_install: 
+ - npm install -g grunt-cli
+ - npm install
+ - composer self-update
+ - composer global require fxp/composer-asset-plugin -vvv
  
 install:
- - composer self-update
+ - composer validate
  - composer install
 
 script:
