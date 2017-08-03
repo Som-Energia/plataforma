@@ -21,7 +21,8 @@
     },
     "scripts": {
         "post-install-cmd": "\\Elgg\\Composer\\PostInstall::execute",
-        "post-package-update": "\\Elgg\\Composer\\PostUpdate::execute"
+        "post-package-update": "\\Elgg\\Composer\\PostUpdate::execute",
+        "htaccess" : ".scripts/htaccess"
     },
     "extra": {
         "installer-paths": {
