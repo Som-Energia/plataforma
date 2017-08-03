@@ -27,3 +27,7 @@ script:
  - php .scripts/translations.php somenergia-customization
  - php .scripts/translations.php rm_group_autosubscription
  - docker-compose build
+ - docker-compose up -d
+ 
+after_script:
+  - docker-compose down
