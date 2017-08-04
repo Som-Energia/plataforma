@@ -1,6 +1,9 @@
 {
   "devDependencies": {
+    "casperjs": "^1.1.4",
     "grunt": "^1.0.1",
-    "grunt-contrib-csslint": "^2.0.0"
+    "grunt-casperjs": "^2.2.1",
+    "grunt-contrib-csslint": "^2.0.0",
+    "phantom": "^4.0.5"
   }
 }
