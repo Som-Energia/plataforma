@@ -6,7 +6,7 @@ RUN apt-get update && apt-get -y install git zlib1g-dev libpng-dev sendmail \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Enable zip extension
-RUN docker-php-ext-install zip mysqli pdo pdo_mysql gd
+RUN docker-php-ext-install zip mysql mysqli pdo pdo_mysql gd
 
 # Install composer
 RUN curl -sS https://getcomposer.org/installer -o composer-setup.php \
@@ -33,10 +33,6 @@ VOLUME ["/var/www/data"]
 # Create mod folder
 RUN mkdir /var/www/html/mod
 
-# Add core files
-COPY index.php /var/www/html/index.php
-COPY install.php /var/www/html/install.php
-COPY upgrade.php /var/www/html/upgrade.php
 
 ADD engine /var/www/html/engine
 COPY .docker/apache/settings.php /var/www/html/engine/settings.php
@@ -50,6 +46,7 @@ ADD views /var/www/html/views
 ADD htaccess_dist .htaccess
 ADD languages /var/www/html/languages
 ADD mod /app/mod
+ADD *.php /var/www/html/
 
 # Add composer dependencies
 COPY composer.json /var/www/html/composer.json

@@ -1,4 +1,4 @@
-FROM mysql:5.7
+FROM mysql:5.6
 MAINTAINER  Som Energia
 
 ENV MYSQL_ROOT_PASSWORD "toor"
