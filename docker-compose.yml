@@ -4,6 +4,8 @@ services:
     build:
       context: .
       dockerfile: .docker/mysql/Dockerfile
+    volumes:
+      - '.docker/mysql/data:/var/lib/mysql'
     ports:
       - 3336:3306
   email:
@@ -24,7 +26,10 @@ services:
       - mysql
       - email
       - cron
+    ulimits:
+      cpu: 2
     volumes:
+      - '.docker/apache/data:/var/www/data'
       - './mod/export_users_csv:/var/www/html/mod/export_users_csv'
       - './mod/rm_group_autosubscription:/var/www/html/mod/rm_group_autosubscription'
       - './mod/rm_group_default_fields:/var/www/html/mod/rm_group_default_fields'
