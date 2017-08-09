@@ -2,13 +2,20 @@
 	MISC
 *************************************** */
 #login-dropdown {
-	position: absolute;
-	top: 0;
-	right: 0;
-	z-index: 100;
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 100;
+    background-color: #c8c8c8;
 }
+
 #login-dropdown a {
-	padding: 14px 18px;
+    padding: 12px 20px;
+    font-size: 15px;
+}
+
+#login-dropdown a:hover {
+    color: black;
 }
 
 /* ***************************************
