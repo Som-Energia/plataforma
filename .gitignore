@@ -53,6 +53,7 @@ mod/phpmailer
 /settings.php
 /vendor
 .htaccess
+robots.txt
 
 ### Carpeta Netbeans
 nbproject
