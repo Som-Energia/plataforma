@@ -4,10 +4,12 @@ services:
     build:
       context: .
       dockerfile: .docker/mysql/Dockerfile
-    volumes:
-      - '.docker/mysql/data:/var/lib/mysql'
     ports:
       - 3336:3306
+    volumes:
+      - '../plataforma_mysql_data:/var/lib/mysql'
+    ulimits:
+      cpu: 2
   email:
     image: tophfr/mailcatcher:0.6.5_2
     ports:
@@ -16,6 +18,8 @@ services:
     build:
       context: .
       dockerfile: .docker/cron/Dockerfile
+    depends_on:
+      - apache
   apache:
     build:
       context: .
@@ -25,11 +29,10 @@ services:
     depends_on:
       - mysql
       - email
-      - cron
     ulimits:
       cpu: 2
     volumes:
-      - '.docker/apache/data:/var/www/data'
+      - '../plataforma_elgg_data:/var/www/data'
       - './mod/export_users_csv:/var/www/html/mod/export_users_csv'
       - './mod/rm_group_autosubscription:/var/www/html/mod/rm_group_autosubscription'
       - './mod/rm_group_default_fields:/var/www/html/mod/rm_group_default_fields'

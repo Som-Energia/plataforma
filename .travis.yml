@@ -26,9 +26,9 @@ script:
  - php .scripts/translations.php somenergia_index
  - php .scripts/translations.php somenergia-customization
  - php .scripts/translations.php rm_group_autosubscription
- - docker-compose up --build -d
+ - docker-compose -f .travis/docker-compose.yml --project-directory . up --build -d
  - sleep 10
  - grunt integration
  
 after_script:
-  - docker-compose down
+  - docker-compose -f .travis/docker-compose.yml --project-directory . down
