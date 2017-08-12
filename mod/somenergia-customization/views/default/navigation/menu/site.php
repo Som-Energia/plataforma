@@ -22,8 +22,11 @@ echo '<ul class="elgg-menu elgg-menu-site elgg-menu-site-more">';
 $welcome = elgg_echo('menu:howwork:welcome');
 echo '<li class="elgg-menu-item"><a href="' . elgg_get_site_url() . 'groups/profile/1117/bienvenida">' . $welcome . '</a></li>';
 
-$guide = elgg_echo('menu:howwork:guide');
-echo '<li class="elgg-menu-item"><a href="' . elgg_get_site_url() . 'dokuwiki/64/doku.php?id=guia_de_introduccion">' . $guide . '</a></li>';
+$guide_url = elgg_get_plugin_setting('somenergia_customization_guide_spanish', 'somenergia-customization');
+if ($guide_url) {
+    $guide = elgg_echo('menu:howwork:guide');
+    echo '<li class="elgg-menu-item"><a target="_blank" href="' . $guide_url . '">' . $guide . '</a></li>';
+}
 
 $general = elgg_echo('menu:howwork:general');
 echo '<li class="elgg-menu-item"><a href="' . elgg_get_site_url() . 'groups/profile/14318/som-energia-grupo-general">' . $general . '</a></li>';
@@ -153,7 +156,7 @@ $link = elgg_echo('menu:local:cantabria');
 echo "<li class='elgg-menu-item'><a href='${site_url}groups/search?tag=cantabria&limit=40'>$link</a></li>";
 
 $link = elgg_echo('menu:local:mancha');
-echo "<li class='elgg-menu-item'><a href=${site_url}groups/search?tag=castilla+la+mancha&limit=40'>$link</a></li>";
+echo "<li class='elgg-menu-item'><a href='${site_url}groups/search?tag=castilla+la+mancha&limit=40'>$link</a></li>";
 
 $link = elgg_echo('menu:local:leon');
 echo "<li class='elgg-menu-item'><a href='${site_url}groups/search?tag=castilla+y+leon&limit=40'>$link</a></li>";

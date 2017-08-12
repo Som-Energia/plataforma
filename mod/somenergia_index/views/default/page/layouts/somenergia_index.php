@@ -10,14 +10,12 @@ $mod_params = array('class' => 'elgg-module-highlight');
 ?>
 
 <div class="custom-index elgg-main elgg-grid clearfix">
-    <div class="elgg-col elgg-col-2of2">
-        <div class="elgg-inner pvm prl">
-            <?php
-            $intro = elgg_view('somenergia_index/intro');
-            echo elgg_view_module('featured', elgg_echo("somenergia_index:hello"), $intro, $mod_params);
-            ?>
-        </div>
-    </div>
+    <?php 
+        $pre_hook_value = elgg_trigger_plugin_hook('somenergia:index:pre', 'view');
+        if ($pre_hook_value) {
+            echo $pre_hook_value;
+        } 
+    ?>
     <div class="elgg-col elgg-col-2of3">
         <div class="elgg-inner pvm prl">
             <?php

@@ -3,13 +3,57 @@
     <id>somenergia-customization</id>
     <name>Som Energia Customization</name>
     <author>Hector Espert</author>
-    <version>1.1</version>
+    <version>1.2</version>
     <category>theme</category>
     <description>Som Energia Customization</description>
     <website>https://www.somenergia.coop/es/</website>	
     <requires>
         <type>elgg_release</type>
         <version>1.9</version>
+    </requires>
+    <requires>
+        <type>plugin</type>
+        <name>groups</name>
+    </requires>
+    <requires>
+        <type>priority</type>
+        <plugin>groups</plugin>
+        <priority>after</priority>
+    </requires>
+    <requires>
+        <type>priority</type>
+        <plugin>group_tools</plugin>
+        <priority>after</priority>
+    </requires>
+    <requires>
+        <type>priority</type>
+        <plugin>tidypics</plugin>
+        <priority>after</priority>
+    </requires>
+    <requires>
+        <type>priority</type>
+        <plugin>blogs</plugin>
+        <priority>after</priority>
+    </requires>
+    <requires>
+        <type>priority</type>
+        <plugin>bookmarks</plugin>
+        <priority>after</priority>
+    </requires>
+    <requires>
+        <type>priority</type>
+        <plugin>pages</plugin>
+        <priority>after</priority>
+    </requires>
+    <requires>
+        <type>priority</type>
+        <plugin>event_calendar</plugin>
+        <priority>after</priority>
+    </requires>
+    <requires>
+        <type>priority</type>
+        <plugin>file_tools</plugin>
+        <priority>after</priority>
     </requires>
     <requires>
         <type>priority</type>

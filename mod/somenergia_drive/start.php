@@ -55,10 +55,6 @@ function somenergia_drive_owner_block_menu($hook, $type, $return, $params) {
         $return[] = $item;
    
         }
-
-
     }
-
     return $return;
-
 }
