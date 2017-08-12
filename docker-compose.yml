@@ -8,8 +8,6 @@ services:
       - 3336:3306
     volumes:
       - '../plataforma_mysql_data:/var/lib/mysql'
-    ulimits:
-      cpu: 2
   email:
     image: tophfr/mailcatcher:0.6.5_2
     ports:
@@ -29,8 +27,6 @@ services:
     depends_on:
       - mysql
       - email
-    ulimits:
-      cpu: 2
     volumes:
       - '../plataforma_elgg_data:/var/www/data'
       - './mod/export_users_csv:/var/www/html/mod/export_users_csv'

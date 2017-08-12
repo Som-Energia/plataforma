@@ -228,8 +228,7 @@
 	background-color: #F0F0F0;
 	color: #444;
 }
-.elgg-more {
-}
+
 .elgg-more > a:after {
 	content: "\bb";
 	margin-left: 6px;
