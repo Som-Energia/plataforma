@@ -1,5 +1,8 @@
 <?php
 
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
+
 elgg_register_event_handler('init', 'system', 'somenergia_upgrade_init');
 
 elgg_register_event_handler('upgrade', 'system', 'somenergia_upgrade_launch');
@@ -14,16 +17,19 @@ function somenergia_upgrade_init() {
 function somenergia_upgrade_launch() {
     error_log('=> Upgrading launched by Som Energia upgrade plugin');
     $dbprefix = elgg_get_config('dbprefix');
+    $dataroot = elgg_get_config('dataroot');
 
     if (!elgg_is_active_plugin('group_operators')) {
         upgrade_old_group_operators();
     }
-    
+
     /* Fix old mods class subtypes */
     update_old_mods_subtypes();
-    
-    /* Update euskera users translation from eu to eu_es*/
+
+    /* Update euskera users translation from eu to eu_es */
     update_old_euskera_translation($dbprefix);
+
+    create_ckeditor_assets_folder($dataroot);
 }
 
 function update_old_euskera_translation($dbprefix) {
@@ -33,7 +39,7 @@ function update_old_euskera_translation($dbprefix) {
         if (!update_data("UPDATE {$dbprefix}users_entity SET language = 'eu_es' WHERE language = 'eu'")) {
             error_log('Error upgrading euskera users language');
         }
-    }  
+    }
 }
 
 function update_old_mods_subtypes() {
@@ -89,6 +95,18 @@ function upgrade_group_operators_user($group_id, $operator_id) {
             }
         } else {
             error_log('Fail upgrading operator');
+        }
+    }
+}
+
+function create_ckeditor_assets_folder($dataroot) {
+    $assets = $dataroot . 'ckeditor/assets';
+    $fs = new Filesystem();
+    if (!$fs->exists($assets)) {
+        try {
+            $fs->mkdir($assets);
+        } catch (IOExceptionInterface $e) {
+            error_log("An error occurred while creating ckeditor assets folder at " . $e->getPath());
         }
     }
 }

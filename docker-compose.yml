@@ -29,6 +29,7 @@ services:
       - email
     volumes:
       - '../plataforma_elgg_data:/var/www/data'
+      - './vendor:/var/www/html/vendor'
       - './mod/export_users_csv:/var/www/html/mod/export_users_csv'
       - './mod/rm_group_autosubscription:/var/www/html/mod/rm_group_autosubscription'
       - './mod/rm_group_default_fields:/var/www/html/mod/rm_group_default_fields'
