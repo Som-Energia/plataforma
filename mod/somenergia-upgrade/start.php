@@ -16,8 +16,11 @@ function somenergia_upgrade_init() {
  */
 function somenergia_upgrade_launch() {
     error_log('=> Upgrading launched by Som Energia upgrade plugin');
+
     $dbprefix = elgg_get_config('dbprefix');
     $dataroot = elgg_get_config('dataroot');
+    $path = elgg_get_config('path');
+    $filesystem = new Filesystem();
 
     if (!elgg_is_active_plugin('group_operators')) {
         upgrade_old_group_operators();
@@ -29,7 +32,9 @@ function somenergia_upgrade_launch() {
     /* Update euskera users translation from eu to eu_es */
     update_old_euskera_translation($dbprefix);
 
-    create_ckeditor_assets_folder($dataroot);
+    create_simple_cache_link($filesystem, $path, $dataroot);
+
+    create_ckeditor_assets_folder($filesystem, $dataroot);
 }
 
 function update_old_euskera_translation($dbprefix) {
@@ -99,9 +104,16 @@ function upgrade_group_operators_user($group_id, $operator_id) {
     }
 }
 
-function create_ckeditor_assets_folder($dataroot) {
+function create_simple_cache_link($filesystem, $path, $dataroot) {
+    try {
+        $filesystem->symlink($dataroot . 'views_simplecache', $path . 'cache');
+    } catch (IOExceptionInterface $e) {
+        error_log("An error occurred while creating simple cache link at " . $e->getPath());
+    }
+}
+
+function create_ckeditor_assets_folder($fs, $dataroot) {
     $assets = $dataroot . 'ckeditor/assets';
-    $fs = new Filesystem();
     if (!$fs->exists($assets)) {
         try {
             $fs->mkdir($assets);
