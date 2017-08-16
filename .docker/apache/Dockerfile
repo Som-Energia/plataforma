@@ -19,8 +19,6 @@ RUN composer install
 
 # Add somenergia mods
 COPY mod/export_users_csv /var/www/html/mod/export_users_csv
-COPY mod/rm_group_autosubscription /var/www/html/mod/rm_group_autosubscription
-COPY mod/rm_group_default_fields /var/www/html/mod/rm_group_default_fields
 COPY mod/rm_group_reports /var/www/html/mod/rm_group_reports
 COPY mod/somenergia-customization /var/www/html/mod/somenergia-customization
 COPY mod/somenergia-theme /var/www/html/mod/somenergia-theme

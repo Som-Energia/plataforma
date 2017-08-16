@@ -24,7 +24,8 @@
     "scripts": {
         "post-install-cmd": "\\Elgg\\Composer\\PostInstall::execute",
         "post-package-update": "\\Elgg\\Composer\\PostUpdate::execute",
-        "htaccess" : ".scripts/htaccess"
+        "htaccess" : ".scripts/htaccess",
+        "update-translations" : "@php .scripts/translationsupdate.php"
     },
     "extra": {
         "installer-paths": {

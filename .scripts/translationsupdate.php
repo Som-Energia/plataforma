@@ -20,8 +20,8 @@ define("FILE_END", ");");
 
 
 $modsToExclude = ['somenergia-upgrade', 'somenergia-customization',
-    'somenergia_calendar', 'somenergia-theme', 'rm_group_default_fields', 'export_users_csv',
-    'somenergia_drive', 'rm_group_autosubscription', 'somenergia-theme-old', 'rm_group_reports', 'somenergia_index'];
+    'somenergia_calendar', 'somenergia-theme', 'export_users_csv',
+    'somenergia_drive', 'rm_group_reports', 'somenergia_index'];
 
 echo "## Updating Mod Translations ##" . PHP_EOL;
 

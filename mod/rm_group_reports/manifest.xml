@@ -12,10 +12,6 @@
     </requires>
     <requires>
 	<type>plugin</type>
-	<name>comment_tracker</name>
-    </requires>
-    <requires>
-	<type>plugin</type>
 	<name>groups</name>
     </requires>
 </plugin_manifest>
