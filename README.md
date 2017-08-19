@@ -16,7 +16,17 @@
 - somenergia_calendar: Mod que muestra el calendario de Google Calendar.
 - somenergia_drive: Mod que muestra el drive de Som Energia
 
-# #Docker Desarrollo Plataforma
+## Scripts
+- Actualizar mod somenergia_translations con las ultimas traducciones de los mods. 
+```bash
+php .scripts/translationsupdate.php
+```
+- Test traducciones mod:
+```bash
+php .scripts/translations.php somenergia_translations
+```
+
+## Docker Desarrollo Plataforma
 - Puerto Web 8000
 - Puerto Mysql 3336
 - Puerto Mailcatcher 1080 (Para leer los correos) 
@@ -38,7 +48,6 @@ docker-compose up
 ```bash
 docker-compose stop
 ```
-
 
 ## Notas
 - [Elgg Cli](https://github.com/hypeJunction/elgg-cli)
