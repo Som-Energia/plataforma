@@ -35,6 +35,8 @@ function somenergia_upgrade_launch() {
     create_simple_cache_link($filesystem, $path, $dataroot);
 
     create_ckeditor_assets_folder($filesystem, $dataroot);
+
+    upgrade_create_translations_folder($filesystem, $dataroot);
 }
 
 function update_old_euskera_translation($dbprefix) {
@@ -119,6 +121,25 @@ function create_ckeditor_assets_folder($fs, $dataroot) {
             $fs->mkdir($assets);
         } catch (IOExceptionInterface $e) {
             error_log("An error occurred while creating ckeditor assets folder at " . $e->getPath());
+        }
+    }
+}
+
+/**
+ * Copy translations folder
+ * @param type $fs
+ * @param type $dataroot
+ */
+function upgrade_create_translations_folder($fs, $dataroot) {
+    $folder = $dataroot . 'translation_editor';
+    if (!$fs->exists($folder)) {
+        error_log("==> Creating translations editor folder");
+        $folderToClone = elgg_get_plugins_path() . 'somenergia-upgrade/translation_editor';
+        try {
+            $fs->mirror($folderToClone, $folder);
+            $fs->chown($folder, 'www-data');
+        } catch (IOException $ex) {
+            error_log("- !!!!!! Error cloning translations editor folder " . $e->getPath());
         }
     }
 }

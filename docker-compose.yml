@@ -37,5 +37,4 @@ services:
       - './mod/somenergia-upgrade:/var/www/html/mod/somenergia-upgrade'
       - './mod/somenergia_drive:/var/www/html/mod/somenergia_drive'
       - './mod/somenergia_index:/var/www/html/mod/somenergia_index'
-      - './mod/somenergia_translations:/var/www/html/mod/somenergia_translations'
     

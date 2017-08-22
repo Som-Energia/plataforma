@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "f7fe062462cc1d80f280f466d9dcccf5",
-    "content-hash": "80474e9c40cc1574894988d03947192c",
+    "hash": "0215428f96687b8123890fda6c79ce4b",
+    "content-hash": "58ee399060ed47ce145ca2baa210ead7",
     "packages": [
         {
             "name": "au/au_subgroups",
@@ -561,6 +561,43 @@
                 "plugin"
             ],
             "time": "2017-07-12 10:52:38"
+        },
+        {
+            "name": "coldtrick/translation_editor",
+            "version": "v6.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ColdTrick/translation_editor.git",
+                "reference": "a534ffeb4033a4edfd95459c0a0ba1f90d441f08"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ColdTrick/translation_editor/zipball/a534ffeb4033a4edfd95459c0a0ba1f90d441f08",
+                "reference": "a534ffeb4033a4edfd95459c0a0ba1f90d441f08",
+                "shasum": ""
+            },
+            "require": {
+                "composer/installers": "^1.0.8"
+            },
+            "conflict": {
+                "elgg/elgg": "<2.3"
+            },
+            "require-dev": {
+                "coldtrick/releases": "dev-master",
+                "coldtrick/sniffs": "dev-master"
+            },
+            "type": "elgg-plugin",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0"
+            ],
+            "description": "Provide an easy way to edit translations",
+            "keywords": [
+                "elgg",
+                "i18n",
+                "plugin"
+            ],
+            "time": "2017-07-31 07:29:19"
         },
         {
             "name": "composer/installers",
@@ -2152,7 +2189,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/9df1a9e73fc7caa573adaf98d159623048a7feed",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/f40f874cb7139abb9309fa63a31fd37bb49ddd3e",
                 "reference": "9df1a9e73fc7caa573adaf98d159623048a7feed",
                 "shasum": ""
             },

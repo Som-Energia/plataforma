@@ -19,13 +19,13 @@
         "hypejunction/elgg-cli": "^1.0",
         "blackleg/elgg-phpmailer": "^2.1",
         "hypejunction/ckeditor_addons": "^6.0",
-        "symfony/filesystem": "^3.3"
+        "symfony/filesystem": "^3.3",
+        "coldtrick/translation_editor": "^6.0"
     },
     "scripts": {
         "post-install-cmd": "\\Elgg\\Composer\\PostInstall::execute",
         "post-package-update": "\\Elgg\\Composer\\PostUpdate::execute",
-        "htaccess" : ".scripts/htaccess",
-        "update-translations" : "@php .scripts/translationsupdate.php"
+        "htaccess" : ".scripts/htaccess"
     },
     "extra": {
         "installer-paths": {

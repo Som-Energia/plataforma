@@ -19,7 +19,6 @@ install:
  - composer install
 
 script:
- - php .scripts/translations.php somenergia_translations
  - php .scripts/translations.php somenergia-theme
  - php .scripts/translations.php somenergia_calendar
  - php .scripts/translations.php somenergia_drive

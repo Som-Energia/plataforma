@@ -47,6 +47,7 @@ mod/web_services
 mod/mentions
 mod/phpmailer
 mod/ckeditor_addons
+mod/translation_editor
 
 # Settings
 /elgg-config/settings.php

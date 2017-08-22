@@ -25,4 +25,3 @@ COPY mod/somenergia-theme /var/www/html/mod/somenergia-theme
 COPY mod/somenergia-upgrade /var/www/html/mod/somenergia-upgrade
 COPY mod/somenergia_drive /var/www/html/mod/somenergia_drive
 COPY mod/somenergia_index /var/www/html/mod/somenergia_index
-COPY mod/somenergia_translations /var/www/html/mod/somenergia_translations
