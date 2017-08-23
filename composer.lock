@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "42792ad12d726911a76892b11859c694",
-    "content-hash": "d69e685308e267216f76b365940c4503",
+    "hash": "a4c97f7eb52a71fb969ddc997cae96c3",
+    "content-hash": "fc9cad97b93d16aa4a9a877c2f3aac68",
     "packages": [
         {
             "name": "au/au_subgroups",
@@ -507,6 +507,43 @@
                 "plugin"
             ],
             "time": "2016-11-22 14:05:16"
+        },
+        {
+            "name": "coldtrick/csv_exporter",
+            "version": "v4.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ColdTrick/csv_exporter.git",
+                "reference": "68859a88d6c86f39f7933f8fc91e5442888f6101"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ColdTrick/csv_exporter/zipball/68859a88d6c86f39f7933f8fc91e5442888f6101",
+                "reference": "68859a88d6c86f39f7933f8fc91e5442888f6101",
+                "shasum": ""
+            },
+            "require": {
+                "composer/installers": "^1.0.8"
+            },
+            "conflict": {
+                "elgg/elgg": "<2.3"
+            },
+            "require-dev": {
+                "coldtrick/releases": "dev-master",
+                "coldtrick/sniffs": "dev-master"
+            },
+            "type": "elgg-plugin",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0"
+            ],
+            "description": "export all searchable entities to a CSV",
+            "keywords": [
+                "elgg",
+                "export",
+                "plugin"
+            ],
+            "time": "2017-02-27 09:19:51"
         },
         {
             "name": "coldtrick/file_tools",

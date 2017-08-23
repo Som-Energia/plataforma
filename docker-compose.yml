@@ -30,7 +30,6 @@ services:
     volumes:
       - '../plataforma_elgg_data:/var/www/data'
       - './vendor:/var/www/html/vendor'
-      - './mod/export_users_csv:/var/www/html/mod/export_users_csv'
       - './mod/somenergia-customization:/var/www/html/mod/somenergia-customization'
       - './mod/somenergia-theme:/var/www/html/mod/somenergia-theme'
       - './mod/somenergia-upgrade:/var/www/html/mod/somenergia-upgrade'

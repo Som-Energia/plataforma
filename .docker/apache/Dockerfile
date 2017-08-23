@@ -18,7 +18,6 @@ COPY composer.lock /var/www/html/composer.lock
 RUN composer install
 
 # Add somenergia mods
-COPY mod/export_users_csv /var/www/html/mod/export_users_csv
 COPY mod/somenergia-customization /var/www/html/mod/somenergia-customization
 COPY mod/somenergia-theme /var/www/html/mod/somenergia-theme
 COPY mod/somenergia-upgrade /var/www/html/mod/somenergia-upgrade

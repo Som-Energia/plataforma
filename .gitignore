@@ -47,7 +47,11 @@ mod/web_services
 mod/mentions
 mod/phpmailer
 mod/ckeditor_addons
+<<<<<<< HEAD
+mod/csv_exporter
+=======
 mod/rm_group_reports
+>>>>>>> devel
 mod/translation_editor
 
 # Settings
