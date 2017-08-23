@@ -36,6 +36,15 @@ function somenergia_upgrade_launch() {
 
     create_ckeditor_assets_folder($filesystem, $dataroot);
 
+    error_log('==> Cleaning old objects in the database');
+    upgrade_delete_entities_by_subtype('question');
+    upgrade_delete_entities_by_subtype('assembly');
+    upgrade_delete_entities_by_subtype('proposal');
+    upgrade_delete_entities_by_subtype('decision');
+    upgrade_delete_entities_by_subtype('event_calendar');
+    
+    upgrade_clean_old_dokuwiky($filesystem, $dataroot);
+  
     upgrade_create_translations_folder($filesystem, $dataroot);
 }
 
@@ -114,15 +123,76 @@ function create_simple_cache_link($filesystem, $path, $dataroot) {
     }
 }
 
+/**
+ * Create ckeditor assets folder in data path
+ * @param type $fs
+ * @param type $dataroot
+ */
 function create_ckeditor_assets_folder($fs, $dataroot) {
     $assets = $dataroot . 'ckeditor/assets';
     if (!$fs->exists($assets)) {
         try {
             $fs->mkdir($assets);
+            error_log('==> Creating ckeditor assets folder');
         } catch (IOExceptionInterface $e) {
-            error_log("An error occurred while creating ckeditor assets folder at " . $e->getPath());
+            error_log("- !!!!! An error occurred while creating ckeditor assets folder at " . $e->getPath());
         }
     }
+}
+
+/**
+ * Delete entities by subtype
+ * @param type $subtype
+ */
+function upgrade_delete_entities_by_subtype($subtype) {
+    $entities = elgg_get_entities(["type" => "object", 'subtype' => $subtype, "limit" => 0]);
+    if ($entities) {
+        error_log("- Deleting $subtype entities");
+        foreach ($entities as $entity) {
+            upgrade_delete_entity($entity);
+        }
+    }
+}
+
+/**
+ * Delete entity
+ * @param type $entity
+ */
+function upgrade_delete_entity($entity) {
+    $guid = $entity->guid;
+    if ($entity->delete()) {
+        error_log('-- Entity deleted: ' . $guid);
+    } else {
+        error_log('-- !!!! Fail deleting entity: ' . $guid);
+    }
+}
+
+/**
+ * Delete old dokuwiki mod data
+ * @param type $filesystem
+ * @param type $dataroot
+ */
+function upgrade_clean_old_dokuwiky($filesystem, $dataroot) {
+    error_log('==> Clean old dokuwiky');
+    $wiki_folder = $dataroot . 'wiki';
+    if ($filesystem->exists($wiki_folder)) {
+        try {
+            $filesystem->remove($wiki_folder);
+            error_log('- Wiki folder in data path removed');
+        } catch (IOExceptionInterface $e) {
+            error_log("- !!!! Fail deleting Wiki folder in data path at " . $e->getPath());
+        }
+    }
+    $wikis_folder = $dataroot . 'wikis';
+    if ($filesystem->exists($wikis_folder)) {
+        try {
+            $filesystem->remove($wikis_folder);
+            error_log('- Wikis folder in data path removed');
+        } catch (IOExceptionInterface $e) {
+            error_log("- !!!! Fail deleting Wikis folder in data path at " . $e->getPath());
+        }
+    }
+    upgrade_delete_entities_by_subtype('dokuwiki');
 }
 
 /**
