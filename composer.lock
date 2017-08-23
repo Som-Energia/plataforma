@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "1152867793059d3987880608ba92ca26",
-    "content-hash": "efff4ed2642a3e5a535cd7cfa62f2097",
+    "hash": "33d13d043286ddbfb3fb1d62290403d4",
+    "content-hash": "cecf997977d0b456f76b64c8ee061a06",
     "packages": [
         {
             "name": "au/au_subgroups",
@@ -153,6 +153,38 @@
                 "plugin"
             ],
             "time": "2017-08-20 18:56:54"
+        },
+        {
+            "name": "blackleg/mentions",
+            "version": "0.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/blackleg/mentions.git",
+                "reference": "e8d8844adefe08460d2d1984a3904099b21e53b1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/blackleg/mentions/zipball/e8d8844adefe08460d2d1984a3904099b21e53b1",
+                "reference": "e8d8844adefe08460d2d1984a3904099b21e53b1",
+                "shasum": ""
+            },
+            "require": {
+                "composer/installers": ">=1.0.8"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.7"
+            },
+            "type": "elgg-plugin",
+            "autoload": {
+                "psr-0": {
+                    "": "classes/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0"
+            ],
+            "time": "2017-08-19 13:41:48"
         },
         {
             "name": "bower-asset/jquery",
@@ -1344,38 +1376,6 @@
                 "plugin"
             ],
             "time": "2015-09-03 12:18:17"
-        },
-        {
-            "name": "elgg/mentions",
-            "version": "2.3.x-dev",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/Elgg/mentions.git",
-                "reference": "aff897f22d3566320652cf027a13e168affb39ee"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/Elgg/mentions/zipball/aff897f22d3566320652cf027a13e168affb39ee",
-                "reference": "aff897f22d3566320652cf027a13e168affb39ee",
-                "shasum": ""
-            },
-            "require": {
-                "composer/installers": ">=1.0.8"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^4.7"
-            },
-            "type": "elgg-plugin",
-            "autoload": {
-                "psr-0": {
-                    "": "classes/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "GPL-2.0"
-            ],
-            "time": "2017-01-10 14:18:14"
         },
         {
             "name": "fortawesome/font-awesome",
@@ -3121,9 +3121,7 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": {
-        "elgg/mentions": 20
-    },
+    "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": [],

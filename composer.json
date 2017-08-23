@@ -15,7 +15,7 @@
         "au/au_subgroups": "v2.1.1",
         "beck24/elgg_recaptcha": "1.1.1",
         "centillien/metatags": "2.3",
-        "elgg/mentions": "2.3.x-dev",
+        "blackleg/mentions": "^0.1",
         "hypejunction/elgg-cli": "^1.0",
         "blackleg/elgg-phpmailer": "^2.1",
         "hypejunction/ckeditor_addons": "^6.0",
