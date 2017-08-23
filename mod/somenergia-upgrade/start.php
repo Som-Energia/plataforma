@@ -35,6 +35,8 @@ function somenergia_upgrade_launch() {
     create_simple_cache_link($filesystem, $path, $dataroot);
 
     create_ckeditor_assets_folder($filesystem, $dataroot);
+    
+    upgrade_remove_comment_tracker_relations();
 
     error_log('==> Cleaning old objects in the database');
     upgrade_delete_entities_by_subtype('question');
@@ -46,6 +48,7 @@ function somenergia_upgrade_launch() {
     upgrade_clean_old_dokuwiky($filesystem, $dataroot);
   
     upgrade_create_translations_folder($filesystem, $dataroot);
+
 }
 
 function update_old_euskera_translation($dbprefix) {
@@ -212,4 +215,35 @@ function upgrade_create_translations_folder($fs, $dataroot) {
             error_log("- !!!!!! Error cloning translations editor folder " . $e->getPath());
         }
     }
+}
+
+/**
+ * Remove old comment tracker relation ship
+ */
+function upgrade_remove_comment_tracker_relations() {
+    if (!elgg_is_active_plugin('comment_tracker')) {
+        error_log('==> Remove old Comment Tracker relations');
+        $subscribed = elgg_get_entities_from_relationship(array("relationship" => "comment_subscribe", "limit" => 0, 'inverse_relationship' => true));
+        error_log('- Subscribed ' . count($subscribed));
+        upgrade_remove_relations($subscribed, "comment_subscribe");
+        $unsubscribed = elgg_get_entities_from_relationship(array("relationship" => "comment_tracker_unsubscribed", "limit" => 0, 'inverse_relationship' => true));
+        error_log('- Unsubscribed ' . count($unsubscribed));
+        upgrade_remove_relations($unsubscribed, "comment_tracker_unsubscribed");
+    }
+
+}
+
+/**
+ * Remove entity relations
+ * @param type $entities
+ * @param type $relationship
+ */
+function upgrade_remove_relations($entities, $relationship) {
+    if ($entities && $relationship && $relationship != '') {
+        foreach ($entities as $entity) {
+            if(!remove_entity_relationships($entity->guid, $relationship)) {
+                error_log('- !!!!!! Fail removing entity ' . $entity->guid . ' ' . $relationship . ' relations');
+            }
+        }
+    }  
 }
