@@ -20,6 +20,7 @@
         "blackleg/elgg-phpmailer": "^2.1",
         "hypejunction/ckeditor_addons": "^6.0",
         "symfony/filesystem": "^3.3",
+        "blackleg/rm_group_reports": "^1.0",
         "coldtrick/translation_editor": "^6.0"
     },
     "scripts": {

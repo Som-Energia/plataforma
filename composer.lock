@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "33d13d043286ddbfb3fb1d62290403d4",
-    "content-hash": "cecf997977d0b456f76b64c8ee061a06",
+    "hash": "4fcfbd470fc7902f48524a66adc258ca",
+    "content-hash": "f09db234d84bc03e2dd6a2e8712c6332",
     "packages": [
         {
             "name": "au/au_subgroups",
@@ -185,6 +185,36 @@
                 "GPL-2.0"
             ],
             "time": "2017-08-19 13:41:48"
+        },
+        {
+            "name": "blackleg/rm_group_reports",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/blackleg/elgg-reports.git",
+                "reference": "1f7d71f9e05e772257856181375c8f72121485b8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/blackleg/elgg-reports/zipball/1f7d71f9e05e772257856181375c8f72121485b8",
+                "reference": "1f7d71f9e05e772257856181375c8f72121485b8",
+                "shasum": ""
+            },
+            "require": {
+                "composer/installers": "^1.0.8"
+            },
+            "type": "elgg-plugin",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0"
+            ],
+            "description": "Elgg Groups Reports",
+            "homepage": "http://www.blackleg.es",
+            "keywords": [
+                "elgg",
+                "plugin"
+            ],
+            "time": "2017-08-19 15:13:20"
         },
         {
             "name": "bower-asset/jquery",
