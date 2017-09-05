@@ -5,6 +5,10 @@ sudo: required
 php:
  - '7.0'
 
+cache:
+  directories:
+    - $HOME/.composer/cache/files
+
 services:
  - docker
  
