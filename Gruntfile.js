@@ -61,12 +61,17 @@ module.exports = function (grunt) {
                 }
             },
             files: ['.test/*.js']
+        },
+        watch: {
+            files: ['mod/somenergia-theme/less/*.less'],
+            tasks: ['build']
         }
     });
 
     grunt.loadNpmTasks('grunt-contrib-less');
     grunt.loadNpmTasks('grunt-contrib-csslint');
     grunt.loadNpmTasks('grunt-casperjs');
+    grunt.loadNpmTasks('grunt-contrib-watch');
 
     grunt.registerTask('build', ['less']);
     grunt.registerTask('default', ['csslint']);

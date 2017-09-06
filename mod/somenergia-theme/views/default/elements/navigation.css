@@ -137,9 +137,13 @@
   height: 20px;
 }
 .elgg-menu-topbar > li > a.elgg-topbar-avatar {
-  width: 18px;
-  height: 18px;
-  padding-top: 7px;
+  width: 20px;
+  height: 20px;
+}
+.elgg-menu-topbar > li > a.elgg-topbar-avatar > img {
+  width: 20px;
+  height: 20px;
+  border-radius: 3px;
 }
 .elgg-menu-site {
   font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
