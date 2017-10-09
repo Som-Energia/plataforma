@@ -3,7 +3,7 @@
     <id>somenergia-theme</id>
     <name>SomEnergia Theme</name>
     <author>Rubén Martín</author>
-    <version>2.0.0</version>
+    <version>2.0.1</version>
     <category>theme</category>
     <description>Som Energia Platform Theme</description>
     <website>https://www.somenergia.coop</website>
@@ -45,6 +45,16 @@
         <type>priority</type>
         <priority>after</priority>
         <plugin>custom_index_widgets</plugin>
+    </requires>
+    <requires>
+        <type>priority</type>
+        <priority>after</priority>
+        <plugin>ckeditor</plugin>
+    </requires>
+    <requires>
+        <type>priority</type>
+        <priority>after</priority>
+        <plugin>ckeditor_addons</plugin>
     </requires>
     <suggests>
         <type>plugin</type>
