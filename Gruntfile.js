@@ -54,6 +54,11 @@ module.exports = function (grunt) {
                 nonnull: true
             }
         },
+        jshint: {
+            all: ['Gruntfile.js', 
+              'mod/somenergia-theme/**/*.js', 
+              '.test/**/*.js']
+        },
         casperjs: {
             options: {
                 async: {
@@ -66,10 +71,11 @@ module.exports = function (grunt) {
 
     grunt.loadNpmTasks('grunt-contrib-less');
     grunt.loadNpmTasks('grunt-contrib-csslint');
+    grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-casperjs');
 
     grunt.registerTask('build', ['less']);
-    grunt.registerTask('default', ['csslint']);
+    grunt.registerTask('default', ['csslint', 'jshint']);
     grunt.registerTask('integration', ['casperjs']);
 
 };
